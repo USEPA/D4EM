@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SDPProjectBuilderPlugin</name>
+    </assembly>
+    <members>
+        <member name="F:SDPProjectBuilderPlugin.frmSDPProjectBuilderBatch.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.frmSDPProjectBuilderBatch.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.frmSDPProjectBuilderBatch.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:SDPProjectBuilderPlugin.frmSDPProjectBuilderProject.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.frmSDPProjectBuilderProject.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.frmSDPProjectBuilderProject.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.#ctor(DotSpatial.Controls.IMap)">
+            <summary>
+            Creates a new instance of SelectTool
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.OnDraw(DotSpatial.Controls.MapDrawArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.OnMouseDown(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            Handles the MouseDown 
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.OnMouseMove(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            Handles MouseMove
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.OnMouseUp(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            Handles the Mouse Up situation
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonSelector.FeatureSet">
+            <summary>
+            Gets or sets the featureset to modify
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnActivate">
+            <summary>
+            Forces this function to begin collecting points for building a new shape.
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnDraw(DotSpatial.Controls.MapDrawArgs)">
+            <summary>
+            Handles drawing of editing features
+            </summary>
+            <param name="e">The drawing args</param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnDeactivate">
+            <summary>
+            Allows for new behavior during deactivation.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnMouseMove(DotSpatial.Controls.GeoMouseArgs)" -->
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnMouseUp(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            Handles the Mouse-Up situation
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.OnUnload">
+            <summary>
+            Occurs when this function is removed.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.FeatureSet">
+            <summary>
+            Gets or sets the featureset to modify
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilderPlugin.SDPProjectBuilderCircleDrawer.Radius">
+            <summary>
+            Gets or sets the featureset to modify
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.OnActivate">
+            <summary>
+            Forces this function to begin collecting points for building a new shape.
+            </summary>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.OnDraw(DotSpatial.Controls.MapDrawArgs)">
+            <summary>
+            Handles drawing of editing features
+            </summary>
+            <param name="e">The drawing args</param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.OnMouseMove(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            updates the auto-filling X and Y coordinates
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.OnMouseUp(DotSpatial.Controls.GeoMouseArgs)">
+            <summary>
+            Handles the Mouse-Up situation
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.OnUnload">
+            <summary>
+            Occurs when this function is removed.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilderPlugin.SDPProjectBuilderPolygonDrawer.FeatureSet">
+            <summary>
+            Gets or sets the featureset to modify
+            </summary>
+        </member>
+    </members>
+</doc>

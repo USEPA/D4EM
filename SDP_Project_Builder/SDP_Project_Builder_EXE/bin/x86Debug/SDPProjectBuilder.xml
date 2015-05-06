@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SDPProjectBuilder</name>
+    </assembly>
+    <members>
+        <member name="T:DemoMap.MainForm">
+            <summary>
+            Form
+            </summary>
+            <summary>
+            A Form to test the map controls.
+            </summary>
+        </member>
+        <member name="F:DemoMap.MainForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DemoMap.MainForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:DemoMap.MainForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:DemoMap.MainForm.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DemoMap.MainForm"/> class.
+            </summary>
+        </member>
+        <member name="M:DemoMap.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:DemoMap.ProgressHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:DemoMap.ProgressHandler.Progress(System.String,System.Int32,System.String)">
+            <summary>
+            Progress is the method that should receive a progress message.
+            </summary>
+            <param name="key">The message string without any information about the status of completion.</param>
+            <param name="percent">An integer from 0 to 100 that indicates the condition for a status bar etc.</param>
+            <param name="message">A string containing both information on what the process is, as well as its completion status.</param>
+        </member>
+        <member name="T:SDPProjectBuilder.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilder.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilder.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilder.Properties.Resources.Error">
+            <summary>
+              Looks up a localized string similar to Error.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilder.Properties.Resources.MainForm_MapFiles">
+            <summary>
+              Looks up a localized string similar to Map Files.
+            </summary>
+        </member>
+        <member name="P:SDPProjectBuilder.Properties.Resources.MainForm_RemoveWithoutSelection">
+            <summary>
+              Looks up a localized string similar to No layers were selected in the legend, so no shapes could be removed.  Please select the layer or parent group in the legend to delete shapes..
+            </summary>
+        </member>
+    </members>
+</doc>

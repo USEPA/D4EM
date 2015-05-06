@@ -1,0 +1,121 @@
+#DataGroupName,VariableName
+SDPOutputData,Debug
+SDPOutputData,Fforage_beef
+SDPOutputData,Fforage_dairy
+SDPOutputData,Fgrain_beef
+SDPOutputData,Fgrain_dairy
+SDPOutputData,Fsilage_beef
+SDPOutputData,Fsilage_dairy
+SDPOutputData,Fw_exfruit
+SDPOutputData,Fw_exveg
+SDPOutputData,Fw_forage
+SDPOutputData,Fw_silage
+SDPOutputData,MAFExFruit
+SDPOutputData,MAFExveg
+SDPOutputData,MAFleaf
+SDPOutputData,MAFprofruit
+SDPOutputData,MAFproveg
+SDPOutputData,MAFroot
+SDPOutputData,Qp_forage_beef
+SDPOutputData,Qp_forage_dairy
+SDPOutputData,Qp_grain_beef
+SDPOutputData,Qp_grain_dairy
+SDPOutputData,Qp_silage_beef
+SDPOutputData,Qp_silage_dairy
+SDPOutputData,rho_leaf
+SDPOutputData,Rp_exfruit
+SDPOutputData,Rp_exveg
+SDPOutputData,Rp_forage
+SDPOutputData,Rp_silage
+SDPOutputData,tp_exfruit
+SDPOutputData,tp_exveg
+SDPOutputData,tp_forage
+SDPOutputData,tp_silage
+SDPOutputData,VapDdv
+SDPOutputData,VGag_exfruit
+SDPOutputData,VGag_exveg
+SDPOutputData,VGag_forage
+SDPOutputData,VGag_silage
+SDPOutputData,VGbg_root
+SDPOutputData,Yp_exfruit
+SDPOutputData,Yp_exveg
+SDPOutputData,Yp_forage
+SDPOutputData,Yp_silage
+Site Layout,AirID
+Site Layout,AirLocX
+Site Layout,AirLocXLong
+Site Layout,AirLocY
+Site Layout,AirLocYLat
+Site Layout,AquId
+Site Layout,AquWellGeoRefX
+Site Layout,AquWellGeoRefY
+Site Layout,AquWellId
+Site Layout,AquWellLocX
+Site Layout,AquWellLocY
+Site Layout,AquWellLatitude
+Site Layout,AquWellLongitude
+Site Layout,FarmAirFrac
+Site Layout,FarmAirIndex
+Site Layout,FarmAquIndex
+Site Layout,FarmAquWellFrac
+Site Layout,FarmAquWellIndex
+Site Layout,FarmId
+Site Layout,FarmLWSIndex
+Site Layout,FarmLWSSubAreaFrac
+Site Layout,FarmLWSSubAreaIndex
+Site Layout,FarmNumAir
+Site Layout,FarmNumAquWell
+Site Layout,FarmNumLWSSubArea
+Site Layout,FarmNumWBNRch
+Site Layout,FarmNumWSSub
+Site Layout,FarmWBNIndex
+Site Layout,FarmWBNRchFrac
+Site Layout,FarmWBNRchIndex
+Site Layout,FarmWSSubFrac
+Site Layout,FarmWSSubIndex
+Site Layout,focS
+Site Layout,HumRcpAirIndex
+Site Layout,HumRcpId
+Site Layout,HumRcpLWSIndex
+Site Layout,HumRcpLWSSubAreaInde
+Site Layout,HumRcpWSSubIndex
+Site Layout,NumAir
+Site Layout,NumAqu
+Site Layout,NumAquWell
+Site Layout,NumFarm
+Site Layout,NumHumRcp
+Site Layout,NumRing
+Site Layout,NumWBN
+Site Layout,NumWSSub
+Site Layout,RingDistance
+Site Layout,RingID
+Site Layout,SettingID
+Site Layout,SiteGeoRefX
+Site Layout,SiteGeoRefY
+Site Layout,SiteLatitude
+Site Layout,SiteLongitude
+Site Layout,SiteUTMZone
+Site Layout,SrcArea
+Site Layout,SrcLocX
+Site Layout,SrcLocY
+Site Layout,SrcLWS
+Site Layout,SrcLWSNumSubArea
+Site Layout,SrcLWSSubAreaID
+Site Layout,SrcNumLWS
+Site Layout,WB_Type
+Site Layout,WBNId
+Site Layout,WBNNumRch
+Site Layout,WBNRchArea
+Site Layout,WBNRchBodyType
+Site Layout,WBNRchId
+Site Layout,WBNRchLength
+Site Layout,WBNRchNumRch
+Site Layout,WBNRchOrder
+Site Layout,WBNRchRchFrac
+Site Layout,WBNRchRchIndex
+Site Layout,WBNRchType
+Site Layout,WSSubId
+Farm foodchain,Qs_beef
+Farm foodchain,Qs_dairy
+Farm foodchain,Qw_beef
+Farm foodchain,Qw_dairy

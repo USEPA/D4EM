@@ -1,0 +1,7 @@
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\bin\x86Debug\D4EM.Data.DBManager.dll
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\bin\x86Debug\D4EM.Data.DBManager.pdb
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\bin\x86Debug\MapWinUtility.dll
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\obj\x86\Debug\D4EM.Data.DBManager.dll
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\obj\x86\Debug\D4EM.Data.DBManager.pdb
+C:\RTI\Subversion\d4em\D4EM.Data.DBManager\bin\x86Debug\System.Data.SQLite.DLL

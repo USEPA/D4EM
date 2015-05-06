@@ -1,0 +1,19 @@
+<SFRendering>
+  <Layer Name="HUC-8" GroupName="Hydrology" Type="3" Path="huc250d3.shp" Tag="" LegendPicture="" Visible="True" LabelsVisible="True" Expanded="False">
+    <Image Type="">
+    </Image>
+    <ShapeFileProperties LabelsVisible="True" MapTooltipField="-1" MapTooltipsEnabled="False" VerticesVisible="False" Color="11186720" DrawFill="True" TransparencyPercent="0.2" FillStipple="0" LineOrPointSize="1" LineStipple="0" OutLineColor="11186720" PointType="0" CustomLineStipple="0" UseTransparency="False" TransparencyColor="0" FillStippleTransparent="True" FillStippleLineColor="-16777216">
+      <CustomPointType>
+        <Image Type="">
+        </Image>
+      </CustomPointType>
+      <Legend FieldIndex="3" Key="" NumberOfBreaks="2" SchemeCaption="HEADWATER">
+        <ColorBreaks>
+          <Break StartColor="16777215" EndColor="16777215" StartValue="N" EndValue="N" Caption="N" Visible="True" />
+          <Break StartColor="8454016" EndColor="8454016" StartValue="Y" EndValue="Y" Caption="Y" Visible="True" />
+        </ColorBreaks>
+      </Legend>
+    </ShapeFileProperties>
+    <DynamicVisibility UseDynamicVisibility="False" Scale="0" />
+  </Layer>
+</SFRendering>

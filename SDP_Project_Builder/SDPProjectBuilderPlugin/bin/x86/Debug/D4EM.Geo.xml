@@ -1,0 +1,306 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+D4EM.Geo
+</name>
+</assembly>
+<members>
+<member name="M:D4EM.Geo.NetworkOperations.ClipFlowLinesToCatchments(System.String,DotSpatial.Data.FeatureSet,System.String,D4EM.Geo.NetworkOperations.FieldIndexes)">
+	<summary>
+ Save a new shapefile as aNewFlowlinesFilename containing the subset of flowlines from aFlowLines that have a corresponding catchment
+ </summary>
+	<param name="aCatchmentsFilename">File name of layer containing catchments that we want to keep the flowlines of</param>
+	<param name="aFlowLines">All flowlines we have to choose from</param>
+	<param name="aNewFlowlinesFilename">Save this new shapefile</param>
+	<returns>True on success, False on failure</returns>
+	<remarks>Only .dbf of catchments is opened for searching, not .shp</remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.RemoveBraidedFlowlines(D4EM.Data.Layer,D4EM.Data.Layer,D4EM.Geo.NetworkOperations.FieldIndexes,System.Collections.Generic.List{System.Int64})">
+	<summary>
+ Eliminate secondary flowlines which are in the same catchment as another flowline
+ </summary>
+	<param name="aFlowlinesLayer">source flowlines shape layer</param>
+	<param name="aCatchmentLayer">source catchment shape layer</param>
+	<returns>True on success, False on failure</returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.CopyAndOpenNewShapefile(System.String,System.String)">
+	<summary>
+ Copy existing shape file to a new name and open the new one for editing
+ If new file already exists, it is removed first
+ </summary>
+	<param name="aOldFilename"></param>
+	<param name="aNewFilename"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.FindRecords(DotSpatial.Data.FeatureSet,System.Int32,System.Int64)">
+	<summary>
+ Return record indexes of shapes with value in aFieldIndex matching aValue
+ </summary>
+	<param name="aShapeFile">shapes to search</param>
+	<param name="aFieldIndex">field index to check</param>
+	<param name="aValue">value of field to match</param>
+	<returns>list of Integer record indexes</returns>
+</member><member name="M:D4EM.Geo.NetworkOperations.CombineFlowlines(DotSpatial.Data.FeatureSet,System.Int32,System.Int32,System.Boolean,System.Boolean,D4EM.Geo.NetworkOperations.FieldIndexes,System.Collections.Generic.List{System.Int64})">
+	<summary>
+ Combines NHDPlus flowline shapes and attributes
+ </summary>
+	<param name="aFlowlinesShapeFile">Flowline shape file</param>
+	<param name="aSourceBaseIndex">Record number of flowline to be kept</param>
+	<param name="aSourceDeletingIndex">Record number of flowline to be merged and deleted</param>
+	<param name="aMergeShapes">True to keep all flowline segments, False to keep only base segments</param>
+	<param name="aKeepCosmeticRemovedLine">True to keep a flowline in the layer even when it is removed from connectivity</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.CheckConnectivity(DotSpatial.Data.FeatureSet,D4EM.Geo.NetworkOperations.FieldIndexes)">
+	<summary>
+ Return keys of outlets from the network
+ </summary>
+	<param name="aFlowlinesShapeFile">Flowlines of stream network</param>
+	<param name="aFields">Field Indexes</param>
+</member><member name="M:D4EM.Geo.NetworkOperations.NearestNeighbor(DotSpatial.Topology.Coordinate,DotSpatial.Data.FeatureSet)">
+	<summary>
+ Given a point and a FeatureSet, find index of feature whose centroid is closest to this point
+ </summary>
+	<param name="aPoint"></param>
+	<param name="aPolygons"></param>
+	<returns>zero-based index of closest feature, or -1 if no feature found</returns>
+</member><member name="M:D4EM.Geo.NetworkOperations.Count(DotSpatial.Data.FeatureSet,System.Int32,System.Object)">
+	<summary>
+ Compute how many features have the value aFieldValue in the field aFieldIndex
+ </summary>
+</member><member name="M:D4EM.Geo.NetworkOperations.EnforceMinimumSize(DotSpatial.Data.FeatureSet,DotSpatial.Data.FeatureSet,System.Double,System.Double,System.Int64,System.Boolean,D4EM.Geo.NetworkOperations.FieldIndexes,System.Collections.Generic.List{System.Int64})">
+	<summary>
+ Combine flowlines and catchments upstream of given outlet if catchment smaller than aMinCatchmentKM2 or flowline shorter than aMinLengthKM
+ </summary>
+	<param name="aFlowlines">flowlines shapefile</param>
+	<param name="aCatchments">catchments shapefile</param>
+	<param name="aMinCatchmentKM2">Minimum area for a catchment (square kilometers)</param>
+	<param name="aMinLengthKM">Minimum length for a flowline (kilometers)</param>
+	<param name="aOutletComId">given outlet</param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.FindMainChannel(DotSpatial.Data.FeatureSet,System.Collections.Generic.List{System.Int64},System.Double@,System.Double@,System.Int32@,D4EM.Geo.NetworkOperations.FieldIndexes)">
+	<summary>
+ Find the flowline from the list aFlowLineComIds with the largest contributing area
+ </summary>
+	<param name="aFlowlines">flowlines shapefile</param>
+	<param name="aFlowLineComIds">list of ComIDs to search for the main one</param>
+	<param name="aTotalContribArea">on return this is set to the total contributing area from all upstream channels</param>
+	<param name="aMainChannelCumLen">on return this is set to the cumulative length of the main channel</param>
+	<param name="aMainChannelIndex">on return this is set to the shape index of the main channel in aFlowlines</param>
+	<returns>ComID of flowline from aFlowLinesUpstreamComIds with the largest contributing drainage area</returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.FindUpstreamKeys(System.Int64,DotSpatial.Data.Shapefile,System.Int32,System.Int32,System.Int32)">
+	<summary>
+ Find the COMIDs of flowlines that flow into the given outlet COMID
+ </summary>
+	<param name="aOutletKey">Key of flowline to look upstream of (COMID in NHDPlus)</param>
+	<param name="aFlowlines">Shapefile of flowlines</param>
+	<param name="aFlowlinesKey">Key field index for aFlowlines table</param>
+	<param name="aFlowlinesDownstreamKey">Downstream key field index for aFlowlines table</param>
+	<param name="aMaxNumFlowlines">Follow upstream at most this many segments along each path. 
+  1=find only flowlines that empty directly into aOutletCOMID
+  2=also find flowlines that flow directly into those</param>
+	<returns></returns>
+	<remarks>aMaxNumFlowlinesUpstream</remarks>
+</member><member name="M:D4EM.Geo.NetworkOperations.FieldIndexes.FieldIndex(DotSpatial.Data.IFeatureSet,System.String,System.Boolean)">
+	<summary>
+ Find a field (aka column) by case-insensitive search for the field name
+ </summary>
+	<param name="aFeatureSet">Layer to search</param>
+	<param name="aFieldName">Name of field to search for</param>
+	<returns>Zero-based index of field if found, -1 if not found</returns>
+</member><member name="T:D4EM.Geo.NetworkOperations.FieldIndexes">
+	<summary>
+ Indexes of fields needed for performing network operations
+ Fields are named using NHDPlus terminology. To use non-NHDPlus files, create a custom constructor.
+ </summary>
+</member><member name="P:D4EM.Geo.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:D4EM.Geo.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:D4EM.Geo.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:D4EM.Geo.OverlayReclassify.Overlay(System.String,D4EM.Data.Layer,System.Collections.Generic.List{D4EM.Data.Layer},System.Boolean)">
+	<summary>
+ Overlay the grid and/or shape layers in aLayers
+ For each unique combination, add an entry to Me.HruTable,
+ and put the index of the combination in Me.HruTable into a new grid named aGridOutputFilename
+ </summary>
+	<param name="aGridOutputFileName">Grid file name to write </param>
+	<param name="aGridSlopeValue"></param>
+	<param name="aLayers"></param>
+	<param name="aResume"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.OverlayReclassify.Simplify(System.Collections.Generic.List{System.String},atcUtility.atcCollection,System.String,System.Double,System.Double,System.String)">
+	<summary>
+ Simplify a collection of HRUs by dissolving those with areas below a threshold into similar HRUs
+ </summary>
+	<param name="aLayerTags">Tag names used for each field of the HRUs</param>
+	<param name="aSubBasinTable">Collection of clsHruTable items, one clsHruTable for each subbasin, obtainable from clsHruTable.SummarizeByTag("SubBasin")</param>
+	<param name="aTag">Tag of layer to dissolve, or "Area" to decide by area of HRU</param>
+	<param name="aIgnoreBelowFraction">Threshold as a fraction (between zero and 1) of the area of the subbasin</param>
+	<param name="aIgnoreBelowAbsolute">Threshold as an absolute area</param>
+	<param name="aGridOverlayFileName">Grid containing HRU indexes</param>
+	<returns>Table of HRUs from which those representing small [aTag] have been removed and remaining HRUs have been expanded to preserve total area</returns>
+	<remarks></remarks>
+</member><member name="T:D4EM.Geo.HRU">
+	<summary>
+ Hydrologic Response Unit test
+ </summary>
+	<remarks></remarks>
+</member><member name="F:D4EM.Geo.HRUTable.Tags">
+	<summary>
+ One tag for each layer contributing to HRU key, in same order as clsHru.Key and clsHru.Ids
+ </summary>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.HRUTable.#ctor(System.Collections.Generic.List{System.String})">
+	<summary>
+ Create empty HRU table with the given set of layer tags
+ </summary>
+	<param name="aTags">One tag for each layer contributing to HRU key, in same order as clsHru.Key and clsHru.Ids</param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.HRUTable.#ctor(System.String)">
+	<summary>
+ Create HRU table by reading saved table from file
+ </summary>
+	<param name="aFilename">full path of file to read</param>
+</member><member name="M:D4EM.Geo.HRUTable.GetKeyForItem(D4EM.Geo.HRU)">
+	<summary>
+ Get the key for the KeyedCollection base class
+ </summary>
+	<param name="aHru">item to get key of</param>
+</member><member name="M:D4EM.Geo.HRUTable.Id(D4EM.Geo.HRU,System.String)">
+	<summary>
+ Return the part of the key for the given HRU corresponding to the given layer tag
+ </summary>
+	<param name="aHru">HRU whose layer value is requested</param>
+	<param name="aTag">Tag of layer whose value for this HRU is requested</param>
+</member><member name="M:D4EM.Geo.HRUTable.Save(System.String)">
+	<summary>
+ Save contents of this table to a text file
+ </summary>
+	<param name="aFilename">Full path of file to save in</param>
+</member><member name="M:D4EM.Geo.HRUTable.Sort(System.Boolean,System.String)">
+	<summary>
+	</summary>
+	<param name="aDescending"></param>
+	<param name="aTag">Tag to sort by, if omitted sort by cell count</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.HRUTable.SplitByTag(System.String)">
+	<summary>
+ Split this table into a collection of smaller tables.
+ One new table is created for each unique value of aTag.
+ All elements sharing the same value of aTag are placed in the same resulting table.
+ </summary>
+	<param name="aTag">Name of tag to split by</param>
+	<remarks>returned collection is keyed by the unique tag value of each table</remarks>
+</member><member name="M:D4EM.Geo.HRUTable.SummarizeByTag(System.Collections.Generic.List{System.String})">
+	<summary>
+ Recursively split and sort by each given tag
+ If aSortTags contains only one tag, returns collection of tables from SplitByTag.
+ If aSortTags contains more than one tag, split by the first one then return a collection of collections
+ from recursive calls on tags after the first one.
+ </summary>
+	<param name="aSortTags">Tags to group by</param>
+	<returns>collection of resulting tables or collections for each value of the first aSortTag</returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.HRUTable.ReadReclassifyCSV(System.String,System.Collections.Generic.List{System.String}@,System.Collections.Generic.List{System.String}@,System.String)">
+	<summary>
+ Read a comma-separated values text file of IDs to change from and to
+ First column must contain values to change from and values must be unique.
+ Second column must contain values to change to and may contain duplicates.
+ </summary>
+	<param name="aCsvFileName">Full path of file to read</param>
+	<param name="aOriginalIDs">return parameter containing values to change from</param>
+	<param name="aNewIds">return parameter containing values to change to</param>
+	<remarks>useful before calling Reclassify</remarks>
+</member><member name="M:D4EM.Geo.HRUTable.Reclassify(System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String})">
+	<summary>
+ Change values in all HRUs with tag value
+ aTag=[a value in aChangeFromValues]
+ to 
+ aTag=[value at same index in aChangeToValues]
+ </summary>
+	<param name="aTag"></param>
+	<param name="aChangeFromValues"></param>
+	<param name="aChangeToValues"></param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.HRUTable.EnsureUnique">
+	<summary>
+ Scan all existing HRUs and consolidate any with matching keys
+ </summary>
+	<remarks>
+ When combining two HRUs:
+ Slope mean is recomputed as area-weighted average
+ Cell count and area are sums of existing values
+ </remarks>
+</member><member name="M:D4EM.Geo.SpatialOperations.ProjectAndClipShapeLayer(System.String@,D4EM.Data.LayerSpecification,DotSpatial.Projections.ProjectionInfo,DotSpatial.Projections.ProjectionInfo,D4EM.Data.Region,System.String)">
+	<summary>
+ Project (and optionally clip) all the shape files in aFolder or its subfolders
+ </summary>
+	<param name="aShapeFileName">shape file to process</param>
+	<param name="aNativeProjection">Projection of shape files before calling</param>
+	<param name="aDesiredProjection">New projection desired for shape files</param>
+	<param name="aClipRegion">area to clip to before projecting, Nothing to not clip</param>
+	<param name="aClipFolder">temporary folder to clip into</param>
+</member><member name="M:D4EM.Geo.SpatialOperations.ProjectAndClipShapeLayers(System.String,DotSpatial.Projections.ProjectionInfo,DotSpatial.Projections.ProjectionInfo,D4EM.Data.Region,System.Type)">
+	<summary>
+ Project (and optionally clip) all the shape files in aFolder or its subfolders
+ </summary>
+	<param name="aFolder">Folder containing shape files to process</param>
+	<param name="aNativeProjection">Projection of shape files before calling</param>
+	<param name="aDesiredProjection">New projection desired for shape files</param>
+	<param name="aClipRegion">Area to clip to before projecting, Nothing if clipping is not needed</param>
+</member><member name="M:D4EM.Geo.SpatialOperations.ProjectGrid(DotSpatial.Projections.ProjectionInfo,DotSpatial.Projections.ProjectionInfo,System.String,System.String,System.Boolean,System.Boolean)">
+	<summary>Project a grid using a new progress level</summary>
+	<param name="aNativeProjection">Native projection of grid (only used if it cannot be determined directly from the grid)</param>
+	<param name="aDesiredProjection">Projection to change grid into</param>
+	<param name="aLayerFilename">Path and file name of existing grid</param>
+	<param name="aProjectedFilename">Path and file name to save projected grid as</param>
+	<param name="aIncrementProgressAfter">True to increment logger progress after projecting</param>
+	<param name="aProgressSameLevel">True to keep same logger progress while reprojecting, False to create new logger progress level while reprojecting.</param>
+	<returns>True if grid was reprojected (or if projection was not needed and grid was copied), False if grid could not be reprojected</returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.SpatialOperations.HUC8List(System.String)">
+	<summary>
+ Returns the list of 8-digit HUCs in the given 2, 4, or 6-digit HUC
+ </summary>
+	<param name="aHUC">2, 4, or 6-digit HUC</param>
+	<returns>8-digit HUCs as Generic.List of String</returns>
+	<remarks>If aHUC is 8 digits or longer, returned list is just the one 8-digit HUC which is or which contains aHUC</remarks>
+</member><member name="M:D4EM.Geo.SpatialOperations.GetSlopeGrid(D4EM.Data.Layer,System.String,D4EM.Data.Region)">
+	<summary>
+ Use existing slope or compute from elevation
+ </summary>
+	<param name="aDemGridLayer">Elevation grid</param>
+	<param name="aClipRegion">Optional region to clip elevation to before computing slope</param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Geo.SpatialOperations.ComputeGridMeanInPolygon(D4EM.Data.Layer,DotSpatial.Data.Feature,DotSpatial.Data.ShapeRange,System.Int32,System.Double,System.Double)">
+	<summary>
+ Compute the mean of the grid cell values that fall within a polygon
+ </summary>
+	<param name="aGridLayer">Grid of values</param>
+	<param name="aShape">Shape to restrict which grid cells to include</param>
+	<param name="aMinGridValue">Skip grid values less than this (omit or use Double.NaN if there is no minimum grid value to include in computation)</param>
+	<param name="aMaxGridValue">Skip grid values greater than this (omit or use Double.NaN if there is no maximum grid value to include in computation)</param>
+	<returns>Mean of grid values of cells inside polygon and between aMinGridValue and aMaxGridValue</returns>
+</member><member name="M:D4EM.Geo.SpatialOperations.ClipGrid2Feature(DotSpatial.Data.IRaster,DotSpatial.Data.IFeature,System.String)">
+	<summary>
+ Executes cutting of a raster to a feature
+ </summary>
+	<param name="aRaster">The input raster.</param>
+	<param name="aPolygon">The input feature.</param>
+	<param name="aSaveAs">The Filename of output raster.</param>
+	<returns></returns>
+</member>
+</members>
+</doc>

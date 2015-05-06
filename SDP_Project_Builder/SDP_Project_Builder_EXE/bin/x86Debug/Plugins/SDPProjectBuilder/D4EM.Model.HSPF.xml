@@ -1,0 +1,461 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+D4EM.Model.HSPF
+</name>
+</assembly>
+<members>
+<member name="P:D4EM.Model.HSPF.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:D4EM.Model.HSPF.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:D4EM.Model.HSPF.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:D4EM.Model.HSPF.ManDelinPlugIn.CalculateSubbasinParameters(System.String,System.String,System.String,System.String)">
+	<summary>
+	</summary>
+	<param name="aSubBasinThemeName">Name of subbasin shapefile layer</param>
+	<param name="aElevationThemeName">Name of elevation grid layer</param>
+	<param name="aElevUnits">Elevation Units (Meters, Centimeters, Feet)</param>
+	<param name="aRegionName">Name of region, for naming Slope grid that is used for computation and will be created if it does not yet exist</param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Model.HSPF.ManDelinPlugIn.CalculateReachSubbasinIds(System.String,System.String,System.Int32@)">
+	<summary>
+ Assign subbasin numbers to each reach segment
+ </summary>
+	<param name="aStreamsLayerName"></param>
+	<param name="aSubbasinLayerName"></param>
+	<param name="aMinField"></param>
+	<remarks></remarks>
+</member><member name="T:D4EM.Model.HSPF.ManDelinPlugIn">
+	<summary>
+ This is an excerpt of atcManDelin from BASINS
+ </summary>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.MappingObject">
+	<summary>Map Window Object</summary>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.GetMappingObject">
+	<summary>Map Window Object</summary>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.FeatureIndexValid(System.Int32,D4EM.Data.Layer)">
+	<summary>Check to see if feature index is valid</summary>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.CurrentLayer">
+	<summary>Current Layer Index (Handle)</summary>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.ShapeFileFromIndex(System.Int32)">
+	<summary>Obtain pointer to a shape file from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of Layer containing ShapeFile</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.PolygonShapeFileFromIndex(System.Int32)">
+	<summary>Obtain pointer to a polygon shape file from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of Layer containing ShapeFile</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotPolygonShapeFile">Layer specified by aLayerIndex is not a polygon ShapeFile</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.GridFromIndex(System.Int32)">
+	<summary>Obtain pointer to a grid from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of desired layer containing grid (defaults to Current Layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotGrid">Layer specified by aLayerIndex is not a Grid</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.LayerFromIndex(System.Int32)">
+	<summary>Obtain pointer to a layer from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of desired layer (defaults to Current Layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.OverlappingPolygons(System.Int32,System.Int32,System.Int32,System.Int32)">
+	<summary>Determine if polygons overlap</summary>
+	<param name="aLayerIndex1">
+		<para>Index of first Layer containing ShapeFile</para>
+	</param>
+	<param name="aFeatureIndex1">
+		<para>Index of first feature</para>
+	</param>
+	<param name="aLayerIndex2">
+		<para>Index of second Layer containing ShapeFile</para>
+	</param>
+	<param name="aFeatureIndex2">
+		<para>Index of second feature</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotPolygonShapeFile">Layer specified by aLayerIndex is not a polygon ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.AssignContainingPolygons(System.Int32,System.Int32,System.Int32[]@)">
+	<summary>given a polygon layer (like dem shape) and a containing layer (like subbasins),
+  return which polygon in the containing layer each polygon lies within</summary>
+	<param name="aLayerIndex">Index of Layer containing polygon ShapeFile</param>
+	<param name="aLayerIndexContaining">Index of Layer containing polygon ShapeFile</param>
+	<param name="aIndex">Index of polygons from contained</param>
+	<exception cref="T:System.Exception" caption="LayerNotPolygonShapeFile">Layer specified by aLayerIndexContaining is not a polygon ShapeFile</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.NumFields(System.Int32)">
+	<summary>Obtain number of fields in a shape file from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of Layer containing ShapeFile</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.FieldIndexValid(System.Int32,D4EM.Data.Layer)">
+	<summary>Obtain name of a field in a shape file from a layer index and a field index</summary>
+	<param name="aFieldIndex">
+		<para>Index of field to obtain name for</para>
+	</param>
+	<param name="aSf">
+		<para>ShapeFile containing filed</para>
+	</param>
+	<exception cref="T:System.Exception" caption="FieldIndexOutOfRange">Field specified by aFieldIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.FieldName(System.Int32,System.Int32)">
+	<summary>Obtain name of a field in a shape file from a layer index and a field index</summary>
+	<param name="aFieldIndex">
+		<para>Index of field to obtain name for</para>
+	</param>
+	<param name="aLayerIndex">
+		<para>Index of layer containing shape file</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:System.Exception" caption="FieldIndexOutOfRange">Field specified by aFieldIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.FieldIndex(System.Int32,System.String)">
+	<summary>Obtain index of a field in a shape file from a layer index and a field name</summary>
+	<param name="aFieldName">
+		<para>Name of field to obtain index for</para>
+	</param>
+	<param name="aLayerIndex">
+		<para>Index of layer containing shape file</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:System.Exception" caption="FieldNameNotRecognized">Field specified by aFieldName is not recognized</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.AddField(System.Int32,System.String,System.Int32,System.Int32)">
+	<summary>Add a field in a shape file from a layer index and a field name</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing shape file</para>
+	</param>
+	<param name="aFieldName">
+		<para>Name of field to add</para>
+	</param>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.AddField(System.Int32,System.String,System.Int32,System.Int32,System.Int32)">
+	<summary>Add a field in a shape file from a layer index and a field name</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing shape file</para>
+	</param>
+	<param name="aFieldName">
+		<para>Name of field to add</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.RemoveField(System.Int32,System.Int32)">
+	<summary>Remove a field in a shape file from a layer index and a field name</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing shape file</para>
+	</param>
+	<param name="aFieldIndex">
+		<para>Index of field to remove</para>
+	</param>
+	<exception cref="T:System.Exception" caption="FieldIndexOutOfRange">Field specified by aFieldIndex does not exist</exception>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.NumLayers">
+	<summary>Returns the number of layers loaded in the MapWindow. Drawing layers are not counted. </summary>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.LayerName(System.Int32)">
+	<summary>Layer name from a layer index</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.LayerIndex(System.String)">
+	<summary>Index of a layer from a name</summary>
+	<param name="aLayerName">
+		<para>Name or filename of layer to obtain index for</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNameNameNotRecognized">Layer specified by aLayerName does not exist</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.LayerFileName(System.Int32)">
+	<summary>Layer file name from a layer index</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.NumFeatures(System.Int32)">
+	<summary>Number of features from a layer index</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.FieldValue(System.Int32,System.Int32,System.Int32)">
+	<summary>Value of a field from a field index, a feature index and a layer index</summary>
+	<param name="aFieldIndex">
+		<para>Index of field</para>
+	</param>
+	<param name="aFeatureIndex">
+		<para>Index of feature</para>
+	</param>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature specified by aFeatureIndex does not exist</exception>
+	<exception cref="T:System.Exception" caption="FieldIndexOutOfRange">Field specified by aFieldIndex does not exist</exception>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.GridLayerMinimum(System.Int32)">
+	<summary>Minimum value in a grid from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of desired layer containing grid (defaults to Current Layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotGrid">Layer specified by aLayerIndex is not a Grid</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.GridLayerMaximum(System.Int32)">
+	<summary>Maximum value in a grid from a LayerIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of desired layer containing grid (defaults to Current Layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotGrid">Layer specified by aLayerIndex is not a Grid</exception>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.FeatureArea(System.Int32,System.Int32)">
+	<summary>Area of a polygon from a LayerIndex and a FeatureIndex</summary>
+	<param name="aLayerIndex">
+		<para>Index of desired layer containing grid (defaults to Current Layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotPolygonShapeFile">Layer specified by aLayerIndex is not a polygon ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.EndPointsOfLine(System.Int32,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+	<summary>Determine end points of a shape</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing ShapeFile</para>
+	</param>
+	<param name="aFeatureIndex">
+		<para>Index of feature</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException" caption="MappingObjectNotSet">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.PointsOfLine(System.Int32,System.Int32,System.Double[]@,System.Double[]@)">
+	<summary>
+ Determine a points of a line
+ </summary>
+	<param name="aLayerIndex"></param>
+	<param name="aFeatureIndex"></param>
+	<param name="aX"></param>
+	<param name="aY"></param>
+	<remarks></remarks>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.PointXY(System.Int32,System.Int32,System.Double@,System.Double@)">
+	<summary>Determine first point of a shape</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing ShapeFile</para>
+	</param>
+	<param name="aFeatureIndex">
+		<para>Index of feature</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException" caption="MappingObjectNotSet">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.RemoveFeature(System.Int32,System.Int32)">
+	<summary>Remove feature from a ShapeFile</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing ShapeFile</para>
+	</param>
+	<param name="aFeatureIndex">
+		<para>Index of feature to be removed</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.SetFeatureValue(System.Int32,System.Int32,System.Int32,System.Object)">
+	<summary>Set value of a field in a feature in a ShapeFile</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer containing ShapeFile</para>
+	</param>
+	<param name="aFieldIndex">
+		<para>Index of field to change</para>
+	</param>
+	<param name="aFeatureIndex">
+		<para>Index of feature containing field to change</para>
+	</param>
+	<param name="aValue">
+		<para>New value for field</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerNotShapeFile">Layer specified by aLayerIndex is not a ShapeFile</exception>
+	<exception cref="T:System.Exception" caption="FeatureIndexOutOfRange">Feature Index Out of Range</exception>
+	<exception cref="T:System.Exception" caption="FieldIndexOutOfRange">Field specified by aFieldIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.ProjectProjection">
+	<summary>
+ Projection string describing the current map projection for the open project
+ </summary>
+	<returns>PROJ 4 string</returns>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.PointInPolygon(System.Int32,System.Int32,System.Int32)">
+	<summary>
+ Given a point layer and index and a polygon layer, return the index of the polygon this point is in (or -1 if is in none)
+ </summary>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.PointInPolygonXY(System.Double,System.Double,System.Int32)">
+	<summary>
+ Given a point xy and a polygon layer, return the index of the polygon this point is in (or -1 if is in none)
+ </summary>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.AddLayer(System.String,System.String)">
+	<summary>
+ Given a shape file name, add it to the map; Return true if the layer is already there or successfully added
+ </summary>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.IsLayer(System.String)">
+	<summary>Layer part of project?</summary>
+	<param name="aLayerName">
+		<para>Name of layer to compare to layeres in project</para>
+	</param>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.IsLayerByFileName(System.String)">
+	<summary>Layer part of project?</summary>
+	<param name="aLayerFileName">
+		<para>file name of layer to compare to layers in project</para>
+	</param>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.RemoveLayer(System.Int32)">
+	<summary>Remove layer</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.TabulateAreas(System.Int32,System.Int32,System.Double[0:,0:]@)">
+	<summary>Given a grid and a polygon layer, calculate the area of each grid category 
+          within each polygon.  Output array contains area of each grid category
+          and polygon combination.</summary>
+	<remark>This function can be accomplished in MapWindow by 
+         looping through each grid cell and counting the 
+         number of cells of each grid category within each 
+         feature. The MapWinGIS calls to use include the Grid 
+         Property Value, the GridHeader Properties dX, dY, XllCenter, 
+         and YllCenter, and the Shapefile Function PointInShapefile.</remark>
+	<param name="aGridLayerIndex">
+		<para>Index of grid layer containing values</para>
+	</param>
+	<param name="aPolygonLayerIndex">
+		<para>Index of polgon layer to calculate areas for</para>
+	</param>
+	<param name="aAreaGridPoly">
+		<para>2-D Array used to store output areas</para>
+	</param>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.GridMeanInPolygon(D4EM.Data.Layer,System.Int32,System.Int32)">
+	<summary>
+ Given a grid and a polygon layer, find the average grid value within the feature.
+ </summary>
+	<param name="aGrid"></param>
+	<param name="aPolygonLayerIndex"></param>
+	<param name="aPolygonFeatureIndex"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.Overlay(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+	<summary>Overlay Layer1 and Layer2 (eg landuse and subbasins), creating a polygon layer containing features from both layers</summary>
+	<param name="aLayer1Name">Name of first layer to overlay</param>
+	<param name="aLayer1FieldName">Name of field in first layer to overlay</param>
+	<param name="aLayer2Name">Name of second layer to overlay</param>
+	<param name="aLayer2FieldName">Name of field in second layer to overlay</param>
+	<param name="aOutputLayerName">Name of output layer</param>
+	<param name="aCreateNew">Flag, true if a new output shape file is desired, false if append existing file is desired</param>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.Overlay(System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.Boolean)">
+	<summary>Overlay Layer1 and Layer2 (eg landuse and subbasins), creating a polygon layer containing features from both layers</summary>
+	<param name="aLayer1Index">
+		<para>Index of first layer to overlay</para>
+	</param>
+	<param name="aLayer1FieldIndex">
+		<para>Index of field in first layer to overlay</para>
+	</param>
+	<param name="aLayer2Index">
+		<para>Index of second layer to overlay</para>
+	</param>
+	<param name="aLayer2FieldIndex">
+		<para>Index of field in second layer to overlay</para>
+	</param>
+	<param name="aOutputLayerName">
+		<para>Name of output layer</para>
+	</param>
+	<param name="aCreateNew">
+		<para>Flag, true if a new output shape file is desired, false if append existing file is desired</para>
+	</param>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.ShapefileProjectionString(System.Int32)">
+	<summary>Shapefile projection string from a layer index</summary>
+	<param name="aLayerIndex">
+		<para>Index of layer (Defaults to current layer)</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.LayerFileName(System.String)">
+	<summary>Layer file name from a layer name</summary>
+	<param name="aLayerName">
+		<para>Name of layer</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+	<remarks>Added by Chris Wilson 11/25/2008</remarks>
+</member><member name="P:D4EM.Model.HSPF.GisUtil.LayerType(System.String)">
+	<summary>Layer type from a layer name</summary>
+	<param name="aLayerName">
+		<para>Name of layer.</para>
+	</param>
+	<exception cref="T:System.Exception" caption="LayerIndexOutOfRange">Layer specified by aLayerIndex does not exist</exception>
+	<exception cref="T:D4EM.Model.HSPF.MappingObjectNotSetException">Mapping Object Not Set</exception>
+	<remarks>Added by Chris Wilson 11/25/2008</remarks>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.ZoomToLayerExtents(System.Int32)">
+	<summary>
+ Zoom to the extents of the specified layer
+ </summary>
+	<param name="aLayerIndex">Index of layer.</param>
+	<remarks>Added by Chris Wilson 11/25/2008</remarks>
+</member><member name="M:D4EM.Model.HSPF.GisUtil.ZoomToLayerExtents(System.String)">
+	<summary>
+ Zoom to the extents of the specified layer name
+ </summary>
+	<param name="aLayerName">Name of layer.</param>
+	<remarks>Added by Chris Wilson 11/25/2008</remarks>
+</member><member name="F:D4EM.Model.HSPF.GisUtil.Cancel">
+	<summary>
+ Can be used to cancel long-running calcs
+ </summary>
+	<remarks>Caller can monitor some event and set this true to cancel routine</remarks>
+</member><member name="E:D4EM.Model.HSPF.GisUtil.Progress">
+	<summary>
+ Can be used to report progress in long-running routine when logger.progress is not enough
+ </summary>
+	<remarks></remarks>
+</member><member name="T:D4EM.Model.HSPF.GisUtil">
+	<remarks>Copyright 2005 AQUA TERRA Consultants - Royalty-free use permitted under open source license</remarks>
+	<summary>GIS Utilities implemented thru MapWindow</summary>
+</member><member name="T:D4EM.Model.HSPF.MappingObjectNotSetException">
+	<remarks>Copyright 2006 AQUA TERRA Consultants - Royalty-free use permitted under open source license</remarks>
+	<summary>The Map Window Object has not been set with code like "GisUtil.MappingObject = ?"</summary>
+</member>
+</members>
+</doc>
