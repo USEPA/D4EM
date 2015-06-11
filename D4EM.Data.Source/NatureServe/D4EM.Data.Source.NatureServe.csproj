@@ -50,28 +50,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Analysis.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Data">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Projections">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Symbology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Symbology.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Topology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\..\Externals\AnyCPU\DotNetZip\Ionic.Zip.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Externals\AnyCPU\x86Debug\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -91,7 +85,6 @@
     <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
       <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
       <Name>D4EM.Data</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

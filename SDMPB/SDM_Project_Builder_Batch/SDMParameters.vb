@@ -46,9 +46,10 @@ Public Class SDMParameters
 
     Public ElevationGrid As D4EM.Data.LayerSpecification = D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid
     Public Shared ElevationGridOptions() As D4EM.Data.LayerSpecification =
-        {D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid,
-         D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneArcSecond,
-         D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneThirdArcSecond} 'TODO: custom/user-defined
+        {D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid, D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneArcSecond}
+
+    'D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneArcSecond,
+    'D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneThirdArcSecond} 'TODO: custom/user-defined
 
     Public KeepConnectingRemovedFlowLines As Boolean = True
 

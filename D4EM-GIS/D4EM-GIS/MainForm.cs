@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using DotSpatial.Controls;
 using DotSpatial.Controls.Header;
-using SDMProjectBuilder;
+using SDMPBPlugin;
 
 namespace D4EMProjectBuilder
 {
@@ -18,7 +18,7 @@ namespace D4EMProjectBuilder
         private string _cachePath = "";
         private string _D4EMProjectBuilder = "D4EMProjectBuilder";
 
-        SDMProjectBuilder.SDMProjectBuilderPlugin.SDMProjectBuilderPlugin _sdmPlugin = null;
+        SDMProjectBuilderPlugin _sdmPlugin = null;
 
 
         public MainForm()
@@ -28,10 +28,10 @@ namespace D4EMProjectBuilder
             if (DesignMode) return;
             Shell = this;
 
-            appManager.Map = map1;
-            appManager.Legend = legend1;
+            //appManager.Map = map1;
+            //appManager.Legend = legend1;
 
-            map1.GeoMouseMove += Map_GeoMouseMove;
+            //map1.GeoMouseMove += Map_GeoMouseMove;
 
             appManager.LoadExtensions();
 
@@ -46,7 +46,7 @@ namespace D4EMProjectBuilder
 
             appManager.HeaderControl.Add(new SimpleActionItem(D4EMMenuKey, "Options", ShowOptions_Click) { GroupCaption = HeaderControl.ApplicationMenuKey, SortOrder = 5, SmallImage = null, LargeImage = null, ToolTipText = "Options" });
 
-            map1.Projection = D4EM.Data.Globals.WebMercatorProjection();
+            //map1.Projection = D4EM.Data.Globals.WebMercatorProjection();
         }
 
         /// <summary>
@@ -166,13 +166,13 @@ namespace D4EMProjectBuilder
                 appManager.Map.Layers.ResumeEvents();
             }
 
-            _sdmPlugin = new SDMProjectBuilder.SDMProjectBuilderPlugin.SDMProjectBuilderPlugin();
+            _sdmPlugin = new SDMProjectBuilderPlugin();
             _sdmPlugin.Activate(appManager, _cachePath);
         }
 
         private void NavHelper_Click(object sender, System.EventArgs e)
         {
-            SDMProjectBuilder.frmNavHelper navHelper = new frmNavHelper(appManager);
+            SDMPBPlugin.frmNavHelper navHelper = new frmNavHelper(appManager);
             navHelper.Show();
         }
 
@@ -231,7 +231,7 @@ namespace D4EMProjectBuilder
 
         private void newD4EMProjectToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            SDMProjectBuilder.frmSpecifyProject specProj = new frmSpecifyProject();
+            SDMPBPlugin.frmSpecifyProject specProj = new frmSpecifyProject();
             specProj.Initialize();
             specProj.Show();
         }

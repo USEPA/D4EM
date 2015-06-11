@@ -138,7 +138,6 @@ Public Class frmMapMicrobes
                     g_Map.Layers.Add(lShapeFileName)
                 End If
             End If
-            Logger.Progress(1, 1)
         Catch ex As Exception
             Logger.MsgCustomOwned(ex.ToString, "Error opening Animals", Me, "Ok")
         End Try

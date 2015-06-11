@@ -53,39 +53,39 @@
   <ItemGroup>
     <Reference Include="atcUtility, Version=3.1.2.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Analysis, Version=0.11.9.6, Culture=neutral, PublicKeyToken=df3f45fb0fe4cb0c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Analysis.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Controls, Version=0.11.9.6, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Controls.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Data, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Data, Version=0.11.9.6, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Extensions.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Projections, Version=1.7.0.0, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Projections, Version=0.11.9.6, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Symbology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=6178c08da7998387, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Symbology.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Symbology.Forms, Version=0.11.9.6, Culture=neutral, PublicKeyToken=0544cdeefb662382, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.Forms.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Symbology.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Topology, Version=1.7.0.0, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Topology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
+      <HintPath>..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

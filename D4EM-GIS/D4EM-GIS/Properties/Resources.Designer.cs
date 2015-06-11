@@ -70,6 +70,25 @@ namespace D4EMProjectBuilder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legend.
+        /// </summary>
+        internal static string Legend {
+            get {
+                return ResourceManager.GetString("Legend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap legend_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("legend_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Files.
         /// </summary>
         internal static string MainForm_MapFiles {

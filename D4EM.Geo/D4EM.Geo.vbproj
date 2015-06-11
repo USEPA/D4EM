@@ -124,7 +124,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
-      <HintPath>..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
+      <HintPath>..\Externals\AnyCPU\DotSpatial\Windows Extensions\DotSpatial.Data.Rasters.GdalExtension\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Extensions">

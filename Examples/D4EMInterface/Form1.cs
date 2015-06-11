@@ -19,6 +19,7 @@ using System.Net;
 using Ionic;
 using DotSpatial.Analysis;
 using DotSpatial.Controls;
+using DotSpatial.Extensions;
 using DotSpatial.Data;
 using DotSpatial.Projections;
 using DotSpatial.Symbology;
@@ -27,6 +28,8 @@ using System.Diagnostics;
 using System.Threading;
 using atcData;
 using atcWDM;
+
+using D4EM_NRCS_Soil; 
 
 namespace testingNLCD
 {
@@ -67,8 +70,8 @@ namespace testingNLCD
         public Form1()
         {
             InitializeComponent();
-            D4EM.Data.Globals.Initialize();
             appManager.LoadExtensions(); //added 10 March 2013 - Nick Pope
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)

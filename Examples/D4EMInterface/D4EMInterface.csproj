@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <OutputPath>bin\x86Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -35,66 +35,58 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="atcData, Version=3.1.1.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="atcData">
+      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcData.dll</HintPath>
+    </Reference>
+    <Reference Include="atcSegmentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+      <HintPath>bin\x86Debug\atcSegmentation.dll</HintPath>
     </Reference>
-    <Reference Include="atcSegmentation">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcSegmentation.dll</HintPath>
+    <Reference Include="atcTimeseriesGDS">
+      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesGDS.dll</HintPath>
     </Reference>
-    <Reference Include="atcTimeseriesGDS, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="atcTimeseriesRDB">
+      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesRDB.dll</HintPath>
+    </Reference>
+    <Reference Include="atcUCI, Version=3.1.1.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesGDS.dll</HintPath>
+      <HintPath>bin\x86Debug\atcUCI.dll</HintPath>
     </Reference>
-    <Reference Include="atcTimeseriesRDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesRDB.dll</HintPath>
+    <Reference Include="atcUtility">
+      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcUtility.dll</HintPath>
     </Reference>
-    <Reference Include="atcUCI">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUCI.dll</HintPath>
-    </Reference>
-    <Reference Include="atcUtility, Version=3.1.2.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
-    </Reference>
-    <Reference Include="atcWDM, Version=3.1.1.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
+    <Reference Include="atcWDM">
+      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcWDM.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
+      <HintPath>..\..\..\..\dotspatial\DotSpatial.Analysis\obj\Debug\DotSpatial.Analysis.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Controls">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="DotSpatial.Data, Version=0.11.9.6, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Controls, Version=0.11.9.6, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
+      <HintPath>..\..\..\..\dotspatial\DotSpatial.Controls\obj\Debug\DotSpatial.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
+    <Reference Include="DotSpatial.Data">
+      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Projections, Version=0.11.9.6, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
+      <HintPath>..\..\..\..\dotspatial\DotSpatial.Extensions\obj\Debug\DotSpatial.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Symbology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
+    <Reference Include="DotSpatial.Projections">
+      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSpatial.Symbology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=6178c08da7998387, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\dotspatial\DotSpatial.Symbology\obj\Debug\DotSpatial.Symbology.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Tools">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Tools.dll</HintPath>
+      <HintPath>..\..\..\..\dotspatial\DotSpatial.Tools\obj\Debug\DotSpatial.Tools.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Topology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
+    <Reference Include="DotSpatial.Topology">
+      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotNetZip\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="MapWinUtility, Version=4.8.6.26489, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\Externals\x86Debug\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -106,9 +98,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDownload, Version=1.3.4559.29757, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\WebDownload.dll</HintPath>
+    <Reference Include="WebDownload">
+      <HintPath>..\..\Externals\x86Debug\WorldWind\WebDownload.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +211,10 @@
     <ProjectReference Include="..\..\Utility\EPAUtility\EPAUtility.csproj">
       <Project>{79EB8DAF-410E-4CB1-A0EA-01FAA5CC675C}</Project>
       <Name>EPAUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginSourceCode\D4EM_NRCS_Soil SourceCode\D4EM_NRCS_Soil\MapPlugin_NRCS_Soil.csproj">
+      <Project>{38CB16CA-7BE2-4B8D-AEF2-05EFAC8B4D62}</Project>
+      <Name>MapPlugin_NRCS_Soil</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

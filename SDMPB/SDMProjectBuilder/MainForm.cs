@@ -35,7 +35,6 @@ namespace SDMProjectBuilder
 
         private StatusPanel selectedPanel;
 
-
         public MainForm()
         {
             InitializeComponent();
@@ -193,30 +192,53 @@ namespace SDMProjectBuilder
             exePath = System.IO.Directory.GetParent(exePath).FullName;
 
             string searchPath = exePath;
-            string srcPath = "";
-            srcPath = System.IO.Path.Combine(searchPath, "Data", "NationalData");            
+            string srcNationalDataPath = "";
+            srcNationalDataPath = System.IO.Path.Combine(searchPath, "Data", "NationalData");
 
-            if (!System.IO.Directory.Exists(srcPath))
+            string srcMetData = "";
+            srcMetData = Path.Combine(searchPath, "Data", "met");
+
+
+            if (!System.IO.Directory.Exists(srcNationalDataPath))
             {
                 int lFilterIndex = -1;
-                srcPath = atcUtility.modFile.FindFile("Please locate national layer national_huc250d3.shp", "national_huc250d3.shp", "", "", false, false, ref lFilterIndex);
-                if (System.IO.File.Exists(srcPath))
+                srcNationalDataPath = atcUtility.modFile.FindFile("Please locate national layer national_huc250d3.shp", "national_huc250d3.shp", "", "", false, false, ref lFilterIndex);
+                if (System.IO.File.Exists(srcNationalDataPath))
                 {
-                    srcPath = System.IO.Path.GetDirectoryName(srcPath);
+                    srcNationalDataPath = System.IO.Path.GetDirectoryName(srcNationalDataPath);
+                }
+            }
+            
+
+            string destFilePath = System.IO.Path.GetDirectoryName(sfd.FileName);
+
+            //Copy the met.shp (and support files) into the {project}\met folder.  Having problems adding shapes to shapefiles created on the fly.
+            if (Directory.Exists(srcMetData))
+            {
+                DirectoryInfo dir = new DirectoryInfo(srcMetData);
+                string destDirName = Path.Combine(destFilePath, "met");
+                if (!Directory.Exists(destDirName))
+                    Directory.CreateDirectory(destDirName);
+                // Get the files in the directory and copy them to the new location.
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    string temppath = Path.Combine(destDirName, file.Name);
+                    file.CopyTo(temppath, true);
                 }
             }
 
-            string destFilePath = System.IO.Path.GetDirectoryName(sfd.FileName);
-            if (System.IO.Directory.Exists(srcPath))
+
+            if (System.IO.Directory.Exists(srcNationalDataPath))
             {
                 appManager.Map.Layers.SuspendEvents();               
                                 
-                string[] files = System.IO.Directory.GetFiles(srcPath);
+                string[] files = System.IO.Directory.GetFiles(srcNationalDataPath);
                 List<string> lstShapeFiles = new List<string>();
                 foreach (string file in files)
                 {
                     string fileNoPath = System.IO.Path.GetFileName(file);
-                    string srcFilePath = System.IO.Path.Combine(srcPath, fileNoPath);
+                    string srcFilePath = System.IO.Path.Combine(srcNationalDataPath, fileNoPath);
                     string destFile = System.IO.Path.Combine(destFilePath, fileNoPath);
                     System.IO.File.Copy(srcFilePath, destFile, true);
 
@@ -244,17 +266,17 @@ namespace SDMProjectBuilder
 
             //Copy over the MSM folder            
             searchPath = exePath;
-            srcPath = "";
-            srcPath = System.IO.Path.Combine(searchPath, "Data", "LocalData");
+            srcNationalDataPath = "";
+            srcNationalDataPath = System.IO.Path.Combine(searchPath, "Data", "LocalData");
             
-            if (Directory.Exists(srcPath))
+            if (Directory.Exists(srcNationalDataPath))
             {
                 appManager.ProgressHandler.Progress(string.Empty, (int)0, "Copying Local data template files.");
                 string destLocalDataPath = Path.Combine(destFilePath, "LocalData");
                 if (!Directory.Exists(destLocalDataPath))
                     Directory.CreateDirectory(destLocalDataPath);
 
-                DirectoryCopy(srcPath, destLocalDataPath, true);
+                DirectoryCopy(srcNationalDataPath, destLocalDataPath, true);
                 appManager.ProgressHandler.Progress(string.Empty, (int)0, "Ready");
             }
 

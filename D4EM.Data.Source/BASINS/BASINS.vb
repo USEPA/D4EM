@@ -259,8 +259,9 @@ Public Class BASINS
                                     Dim lPoint As New DotSpatial.Topology.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
                                     Dim lShape As New DotSpatial.Data.Shape(lPoint)
                                     DotSpatial.Projections.Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, Globals.GeographicProjection, aProject.DesiredProjection, 0, 1)
+                                    lStationsLayer.FilePath = aStationsShapeFilename.ToString()
+                                    lStationsLayer.Filename = lSaveIn.ToString()
                                     lStationsLayer.AddShape(lShape)
-
                                     If lDSNField > 0 AndAlso lNextDestinationDSN > 1 Then
                                         .Value(lDSNField) = .Value(lDSNField) + lNextDestinationDSN - 1
                                     End If

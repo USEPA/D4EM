@@ -52,36 +52,33 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="D4EM.Data.Source.WDNR">
-      <HintPath>..\..\..\..\D4EM.Data.Source\WDNR\bin\Debug\D4EM.Data.Source.WDNR.dll</HintPath>
-    </Reference>
     <Reference Include="DotSpatial.Analysis, Version=0.11.9.6, Culture=neutral, PublicKeyToken=df3f45fb0fe4cb0c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Analysis.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Controls, Version=0.11.9.6, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Controls.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Data, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Data, Version=0.11.9.6, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Projections, Version=1.7.0.0, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Projections, Version=0.11.9.6, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Symbology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=6178c08da7998387, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Symbology.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Topology, Version=1.7.0.0, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=MSIL">
+    <Reference Include="DotSpatial.Topology, Version=0.11.9.6, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
+      <HintPath>..\..\..\..\Externals\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -107,6 +104,10 @@
     <ProjectReference Include="..\..\..\..\D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj">
       <Project>{1A68540D-13CA-46AF-93E6-2C864E6627C7}</Project>
       <Name>D4EM.Data.Source.BASINS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\D4EM.Data.Source\WDNR\D4EM.Data.Source.WDNR.csproj">
+      <Project>{6616ECF9-EDD5-4B2F-9D01-F985734835DE}</Project>
+      <Name>D4EM.Data.Source.WDNR</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\D4EM.Data\D4EM.Data.vbproj">
       <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>

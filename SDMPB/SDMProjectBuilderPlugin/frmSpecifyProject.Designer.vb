@@ -44,6 +44,7 @@ Partial Class frmSpecifyProject
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.groupParameters = New System.Windows.Forms.GroupBox()
+        Me.lblSnow = New System.Windows.Forms.Label()
         Me.btnChemical = New System.Windows.Forms.Button()
         Me.chkLandAppliedChemical = New System.Windows.Forms.CheckBox()
         Me.btnMapMicrobes = New System.Windows.Forms.Button()
@@ -92,10 +93,9 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
-        Me.lblSnow = New System.Windows.Forms.Label()
-        Me.lblBoundariesOutputs1 = New System.Windows.Forms.Label()
         Me.lblBoundariesOutputs2 = New System.Windows.Forms.Label()
         Me.btnBoundariesOutputs = New System.Windows.Forms.Button()
+        Me.lblBoundariesOutputs1 = New System.Windows.Forms.Label()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -376,6 +376,15 @@ Partial Class frmSpecifyProject
         Me.groupParameters.TabStop = False
         Me.groupParameters.Text = "Parameters For Model Generation"
         Me.groupParameters.Visible = False
+        '
+        'lblSnow
+        '
+        Me.lblSnow.AutoSize = True
+        Me.lblSnow.Location = New System.Drawing.Point(60, 183)
+        Me.lblSnow.Name = "lblSnow"
+        Me.lblSnow.Size = New System.Drawing.Size(37, 13)
+        Me.lblSnow.TabIndex = 54
+        Me.lblSnow.Text = "Snow:"
         '
         'btnChemical
         '
@@ -956,24 +965,6 @@ Partial Class frmSpecifyProject
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
         '
-        'lblSnow
-        '
-        Me.lblSnow.AutoSize = True
-        Me.lblSnow.Location = New System.Drawing.Point(60, 183)
-        Me.lblSnow.Name = "lblSnow"
-        Me.lblSnow.Size = New System.Drawing.Size(37, 13)
-        Me.lblSnow.TabIndex = 54
-        Me.lblSnow.Text = "Snow:"
-        '
-        'lblBoundariesOutputs1
-        '
-        Me.lblBoundariesOutputs1.AutoSize = True
-        Me.lblBoundariesOutputs1.Location = New System.Drawing.Point(6, 173)
-        Me.lblBoundariesOutputs1.Name = "lblBoundariesOutputs1"
-        Me.lblBoundariesOutputs1.Size = New System.Drawing.Size(121, 13)
-        Me.lblBoundariesOutputs1.TabIndex = 47
-        Me.lblBoundariesOutputs1.Text = "Boundaries and Outputs"
-        '
         'lblBoundariesOutputs2
         '
         Me.lblBoundariesOutputs2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -995,6 +986,15 @@ Partial Class frmSpecifyProject
         Me.btnBoundariesOutputs.TabIndex = 49
         Me.btnBoundariesOutputs.Text = "..."
         Me.btnBoundariesOutputs.UseVisualStyleBackColor = True
+        '
+        'lblBoundariesOutputs1
+        '
+        Me.lblBoundariesOutputs1.AutoSize = True
+        Me.lblBoundariesOutputs1.Location = New System.Drawing.Point(6, 173)
+        Me.lblBoundariesOutputs1.Name = "lblBoundariesOutputs1"
+        Me.lblBoundariesOutputs1.Size = New System.Drawing.Size(121, 13)
+        Me.lblBoundariesOutputs1.TabIndex = 47
+        Me.lblBoundariesOutputs1.Text = "Boundaries and Outputs"
         '
         'frmSpecifyProject
         '

@@ -71,35 +71,27 @@
   <ItemGroup>
     <Reference Include="atcData">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesRDB">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesRDB.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="atcUtility">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="atcWDM">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Data">
       <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Projections">
       <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Topology">
       <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="MapWinUtility">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -218,12 +210,10 @@
     <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
       <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
       <Name>D4EM.Data</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj">
       <Project>{573A99FB-08DE-4B28-8628-AC7089348D96}</Project>
       <Name>D4EM.Geo</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

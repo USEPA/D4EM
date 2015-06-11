@@ -53,19 +53,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
+      <HintPath>..\..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Analysis.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Data">
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
+      <HintPath>..\..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Projections">
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
+      <HintPath>..\..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Symbology">
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
+      <HintPath>..\..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Symbology.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Topology">
-      <HintPath>..\..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
+      <HintPath>..\..\..\Externals\AnyCPU\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

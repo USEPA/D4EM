@@ -9,7 +9,7 @@
     </SchemaVersion>
     <ProjectGuid>{EE20175B-D30D-4997-B61F-63F498F658D7}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SDMProjectBuilder</RootNamespace>
+    <RootNamespace>SDMPBPlugin</RootNamespace>
     <AssemblyName>SDMProjectBuilderPlugin</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>

@@ -525,6 +525,8 @@ Public Class OverlayReclassify
         lResampled = aReferenceGrid.CreateSimilarRaster(aGridOutputFileName, lOriginalRaster.DataType)
         lResampled.NoDataValue = lOriginalRaster.NoDataValue
 
+
+
         Logger.Dbg("Resample Start " & lLastRow & " rows, " & lLastCol & " columns " & MemUsage() & " Creating " & aGridOutputFileName)
 
         For lRow = lStartRow To lLastRow

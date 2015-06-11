@@ -271,7 +271,7 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
             lSoilsLayer = aProject.LayerFromTag(D4EM.Data.Source.BASINS.LayerSpecifications.core31.statsgo.Tag)
         End If
 
-        If lResults IsNot Nothing AndAlso lResults.Length > 0 AndAlso lResults.Contains("<success>") Then
+        If lResults IsNot Nothing AndAlso lResults.Length > 0 AndAlso lResults.Contains("<success") Then
             Logger.Status("Step " & lStep & " of " & lLastStep & ": Processing Network", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
 
             'process the network 
@@ -709,8 +709,16 @@ TryNASStats:            Try
         Logger.Status("Step " & lStep & " of " & lLastStep & ": Getting NLCD Land Cover", True) : lStep += 1
         Using lLevel As New ProgressLevel(False)
 TryNLCD:    Try
-                CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "NLCD", D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover))
+                'CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "NLCD", D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover))
+                CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.GetNLCD(aProject, "NLCD",
+                                                                             aProject.DesiredProjection,
+                                                                             aProject.ProjectFolder,
+                                                                             aProject.CacheFolder,
+                                                                             aProject.Region,
+                                                                             True,
+                                                                             D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover))
                 IO.File.WriteAllText(aProject.ProjectFilename, aProject.AsMWPRJ)
+
             Catch ex As ApplicationException
                 If ex.Message = "Retry Query" Then GoTo TryNLCD Else Throw ex
             End Try
@@ -720,7 +728,14 @@ TryNLCD:    Try
             Using lLevel As New ProgressLevel(False)
 TrySeamlessElevation:
                 Try
-                    CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "Elevation", aParameters.ElevationGrid))
+                    'CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "Elevation", aParameters.ElevationGrid))
+                    CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.GetNLCD(aProject, "Elevation",
+                                                                             aProject.DesiredProjection,
+                                                                             aProject.ProjectFolder,
+                                                                             aProject.CacheFolder,
+                                                                             aProject.Region,
+                                                                             True,
+                                                                             D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NED.OneArcSecond))
                     IO.File.WriteAllText(aProject.ProjectFilename, aProject.AsMWPRJ)
                 Catch ex As ApplicationException
                     If ex.Message = "Retry Query" Then GoTo TrySeamlessElevation Else Throw ex

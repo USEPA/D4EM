@@ -2,25 +2,40 @@ Imports atcUtility
 Imports MapWinUtility
 Imports D4EM.Geo
 Imports D4EM.Data.LayerSpecification
+Imports System
+Imports System.Net
+Imports System.IO
+'Imports System.Object
+'Imports System.MarshalByRefObject
+Imports System.Drawing.Imaging
+Imports System.Drawing.Bitmap
+Imports System.Drawing
+Imports System.Drawing.Image
+Imports Newtonsoft.Json.Linq
+
+
 
 Public Class USGS_Seamless
 
     Public Class LayerSpecifications
         Public Class NLCD1992
-            Public Shared LandCover As New LayerSpecification(Name:="NLCD 1992 Land Cover", Tag:="NLCD1992", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_1992_landcover.tif", Name:="NLCD 1992 Land Cover", Tag:="NLCD1992", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
         Public Class NLCD2001
-            Public Shared LandCover As New LayerSpecification(Name:="NLCD 2001 Land Cover", Tag:="NLCD2001.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
-            Public Shared Canopy As New LayerSpecification(Name:="NLCD 2001 Canopy", Tag:="NLCD2001.Canopy", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
-            Public Shared Impervious As New LayerSpecification(Name:="NLCD 2001 Impervious", Tag:="NLCD2001.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2001_landcover.tif", Name:="NLCD 2001 Land Cover", Tag:="NLCD2001.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Canopy As New LayerSpecification(FilePattern:="NLCD_2001_canopy.tif", Name:="NLCD 2001 Canopy", Tag:="NLCD2001.Canopy", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2001_impervious.tif", Name:="NLCD 2001 Impervious", Tag:="NLCD2001.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
         Public Class NLCD2006
-            Public Shared LandCover As New LayerSpecification(Name:="NLCD 2006 Land Cover", Tag:="NLCD2006.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
-            Public Shared Impervious As New LayerSpecification(Name:="NLCD 2006 Impervious", Tag:="NLCD2006.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2006_landcover.tif", Name:="NLCD 2006 Land Cover", Tag:="NLCD2006.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2006_impervious.tif", Name:="NLCD 2006 Impervious", Tag:="NLCD2006.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        Public Class NLCD2011
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2011_landcover.tif", Name:="NLCD 2011 Land Cover", Tag:="NLCD2011.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
         Public Class NED
-            Public Shared OneArcSecond As New LayerSpecification(Name:="NED One Arc Second", Tag:="NED.OneArcSecond", Role:=Roles.Elevation, Source:=GetType(USGS_Seamless))
-            Public Shared OneThirdArcSecond As New LayerSpecification(Name:="NED One-Third Arc Second", Tag:="NED.OneThirdArcSecond", Role:=Roles.Elevation, Source:=GetType(USGS_Seamless))
+            Public Shared OneArcSecond As New LayerSpecification(FilePattern:="NED_2001_OneArcSecond.tif", Name:="NED One Arc Second", Tag:="NED.OneArcSecond", Role:=Roles.Elevation, Source:=GetType(USGS_Seamless))
+            Public Shared OneThirdArcSecond As New LayerSpecification(FilePattern:="NED_2001_OneThirdArcSecond.tif", Name:="NED One-Third Arc Second", Tag:="NED.OneThirdArcSecond", Role:=Roles.Elevation, Source:=GetType(USGS_Seamless))
         End Class
         'TODO: others from case statement in BuildURL
     End Class
@@ -28,6 +43,28 @@ Public Class USGS_Seamless
     'Tolerance for cached data
     Private Shared CacheWithinDegreesOutside As Double = 1
     Private Shared CacheWithinDegreesInside As Double = 0.001
+
+    Public Function test(ByVal aProject As Project,
+                                             ByVal aSaveFolder As String)
+        Dim val As Integer
+        val = 0
+        Dim rest As USGS_Seamless_Soap.ExportMapImageRequest
+        rest = New USGS_Seamless_Soap.ExportMapImageRequest
+        Dim ext As New USGS_Seamless_Soap.EnvelopeN
+        ext.XMax = -7087933.9106248
+        ext.YMax = 6960328.8817100283
+        ext.XMin = -14497453.9106248
+        ext.YMin = 2480608.8817100283
+        rest.MapDescription.MapArea.Extent = ext
+        rest.MapDescription.SpatialReference.WKID = 3857
+        rest.ImageDescription.ImageType.ImageReturnType = "tif"
+
+
+
+
+
+        Return (val)
+    End Function
 
     ''' <summary>
     ''' Download a layer from USGS Seamless Server
@@ -40,234 +77,410 @@ Public Class USGS_Seamless
     Public Overloads Shared Function Execute(ByVal aProject As Project,
                                              ByVal aSaveFolder As String,
                                              ByVal aDataType As LayerSpecification) As String
+
+        'Dim req As USGS_Seamless_Soap.GetServerInfoRequest
+        'Dim res As USGS_Seamless_Soap.GetServerInfoResponse
+        'Dim msp As New USGS_Seamless_Soap.MapServerPortClient("http://raster.nationalmap.gov/arcgis/rest/services/LandCover/USGS_EROS_LandCover_NLCD/MapServer")
+        'Dim msi As USGS_Seamless_Soap.MapServerInfo
+        'msi = msp.GetServerInfo(msp.GetDefaultMapName())
+        'Console.WriteLine("Got info" + msi.DefaultMapDescription.MapArea.Extent.ToString())
+
         Dim lSaveIn As String = aProject.ProjectFolder
-        If aSaveFolder IsNot Nothing AndAlso aSaveFolder.Length > 0 Then lSaveIn = IO.Path.Combine(lSaveIn, aSaveFolder)
+        'If aSaveFolder IsNot Nothing AndAlso aSaveFolder.Length > 0 Then lSaveIn = IO.Path.Combine(lSaveIn, aSaveFolder)
 
         Dim lCacheFolder As String = IO.Path.Combine(aProject.CacheFolder, "NLCD")
-StartOver:
+        'StartOver:
         Dim lResult As String = ""
         Dim lError As String = ""
         Dim lBaseFilename As String
 
-        If aProject.Region Is Nothing Then
-            lError = "Region not found"
-        Else
-            Dim lNorth As Double = 0
-            Dim lSouth As Double = 0
-            Dim lWest As Double = 0
-            Dim lEast As Double = 0
-            Dim lRC As String = ""
+        '        If aProject.Region Is Nothing Then
+        '            lError = "Region not found"
+        '        Else
 
-            aProject.Region.GetBounds(lNorth, lSouth, lWest, lEast, Globals.GeographicProjection)
-            Dim lNSEW As String = lNorth.ToString() + "_" + lSouth.ToString() + "_" + lEast.ToString() + "_" + lWest.ToString()
+        'Base Server Text
+        Dim NLCD_USGS_Server_Text As String = "http://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
-            Dim lDataType As String = aDataType.Tag
-            Dim lNativeProjection As DotSpatial.Projections.ProjectionInfo = D4EM.Data.Globals.AlbersProjection
-            Select Case aDataType
-                Case LayerSpecifications.NLCD1992.LandCover
-                    lDataType = "1992"
-                    lBaseFilename = "NLCD_LandCover_1992"
-                Case LayerSpecifications.NLCD2001.LandCover
-                    lDataType = "landcover"
-                    lBaseFilename = "NLCD_" & lDataType & "_2001"
-                Case LayerSpecifications.NLCD2001.Canopy
-                    lBaseFilename = "NLCD_" & lDataType & "_2001"
-                Case LayerSpecifications.NLCD2001.Impervious
-                    lDataType = "impervious"
-                    lBaseFilename = "NLCD_" & lDataType & "_2001"
-                Case LayerSpecifications.NLCD2006.LandCover
-                    lDataType = "landcover"
-                    lBaseFilename = "NLCD_" & lDataType & "_2006"
-                Case LayerSpecifications.NLCD2006.Impervious
-                    lDataType = "impervious"
-                    lBaseFilename = "NLCD_" & lDataType & "_2006"
-                Case LayerSpecifications.NED.OneArcSecond
-                    lBaseFilename = "NED_1ArcSecond"
-                    lNativeProjection = D4EM.Data.Globals.GeographicProjection
-                Case LayerSpecifications.NED.OneThirdArcSecond
-                    lBaseFilename = "NED_ThirdArcSecond"
-                    lNativeProjection = D4EM.Data.Globals.GeographicProjection
-                Case Else
-                    lBaseFilename = lDataType
-            End Select
+        'Area to grab from
+        Dim lNorth As Double = 0
+        Dim lSouth As Double = 0
+        Dim lWest As Double = 0
+        Dim lEast As Double = 0
+        Dim TempDouble As Double = 0.0
+        Dim lNSEW As String = lNorth.ToString() + "_" + lSouth.ToString() + "_" + lEast.ToString() + "_" + lWest.ToString()
 
-            Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, lBaseFilename & ".tif")
+        'Dim lNativeProjection As DotSpatial.Projections.ProjectionInfo = D4EM.Data.Globals.AlbersProjection
+        'project geographic into US Contiguous Albers NAD83
+        aProject.Region.GetBounds(lNorth, lSouth, lWest, lEast, Globals.WebMercatorProjection) 'Contiguous USA Contiguous Albers , NAD 83 Projection)
+        'Testing coords in US Albers - NAD 83
+        'lNorth = 1518177.68
+        'lSouth = 1512691.272
+        'lWest = 1293775.583
+        'lEast = 1299592.194
 
-            If IO.File.Exists(lFinalLayerName) Then
-                lResult &= "<message>Layer already exists: " & lFinalLayerName & vbCrLf & "Delete, move, or rename existing layer before downloading.</message>"
-            Else
-                Dim lCacheZipFile As String = IO.Path.Combine(lCacheFolder, "NLCD_" & lDataType & "_" & lNSEW & ".zip")
+        'Test reprojected coordinates for validity
+
+        If Not (Double.TryParse(lNorth, TempDouble) And Double.TryParse(lSouth, TempDouble) And Double.TryParse(lWest, TempDouble) And Double.TryParse(lEast, TempDouble)) Then
+            lError = "Coordinates are not valid."
+            Return ""
+        End If
+        If (lNorth <= lSouth) Or (lWest >= lEast) Then
+            lError = "Assumes conterminous US coordinates.  West value should be less than East and South less than North value"
+            Return ""
+        End If
+
+        'Dim lNSEW As String = lNorth.ToString() + "_" + lSouth.ToString() + "_" + lEast.ToString() + "_" + lWest.ToString()
+        Dim responseformat As String = "f=json"    '"f=image", "f=json"
+        Dim BoundingBox As String = "&bbox=" + lWest.ToString() + ", " + lSouth.ToString() + ", " + lEast.ToString() + ", " + lNorth.ToString()
+
+        'Determine the output size(rows, columns) of the image based on the area requested and assumed resolution & units of NLCD (i.e., 30 meter cells)
+        'Reproject to output projection to figure out size
+        aProject.Region.GetBounds(lNorth, lSouth, lWest, lEast, Globals.AlbersProjection) 
+        Dim XSize As Integer = (lEast - lWest) / 30              'assumes coordinate units are meters and that resolution of NLCD is 30 meters
+        Dim YSize As Integer = (lNorth - lSouth) / 30
+
+        'limiting size of output .tiff
+        If XSize > 50000 Then XSize = 50000
+        If XSize < 1 Then XSize = 10 ' min size
+        If YSize > 50000 Then YSize = 50000
+        If YSize < 1 Then YSize = 10
+
+        'size of result in pixels (e.g., 300x400 = size=300,400; default is 400x400)
+        Dim imagesize As String = "&size=" + XSize.ToString + "," + YSize.ToString
+
+        Dim BB_SR As String = "&bboxSR=3857"                 'Spatial Reference WKIDs: 3857 = Web Mercator, 4326 = WGS 84, 102003 = Contiguous USA albers
+        Dim ImageSR As String = "&imageSR=102003"            'NOTE: The server didn't return a correct imager (all zero values) when trying to use USA albers as the input coords and output projection
+
+        Dim imageformat As String = "&format=tiff"            'tif = "tiff" 
+        Dim pixelType As String = "&pixelType=U8"            'data has unsigned 8-bit values'
+        'Dim noData As String = "noData="                     'value considered as nodata values and rendered as transparent (Note:we are leaving this blank)
+        Dim image_compression As String = "&compression=L277"  'can use No compression if desired by replacing "L277" with "None"
+
+        Dim lDataType As String = aDataType.Tag
+        Dim lyear As String = "2011"
+        Dim lUSarea As String = "conus"  '  can be blank, conus, hi, ak, or pr (for 2001 NLCD)
+
+        Select Case aDataType
+            Case LayerSpecifications.NLCD1992.LandCover
+                'lDataType = "1992"
+                lDataType = "landcover"
+                lyear = "1992"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_LandCover_1992"
+            Case LayerSpecifications.NLCD2001.LandCover
+                lDataType = "landcover"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2001.Canopy
+                lDataType = "canopy"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2001.Impervious
+                lDataType = "impervious"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2006.LandCover
+                lDataType = "landcover"
+                lyear = "2006"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2006"
+            Case LayerSpecifications.NLCD2006.Impervious
+                lDataType = "impervious"
+                lyear = "2006"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2006"
+            Case LayerSpecifications.NLCD2011.LandCover
+                lDataType = "landcover"
+                lyear = "2011"
+                lUSarea = ""
+                lBaseFilename = "NLCD_" & lDataType & "_2011"
+                'Case LayerSpecifications.NED.OneArcSecond
+                '   lBaseFilename = "NED_1ArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneThirdArcSecond
+                '   lBaseFilename = "NED_ThirdArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+            Case Else
+                lBaseFilename = lDataType
+        End Select
+        Dim mosaicRule As String = "&mosaicRule={%22where%22%3A%22Name%3D%27" + lDataType + "_" + lyear + lUSarea + "%27%22}"    ' {"where":"Name='landcover_2011'"}
+
+        ''Create NLCD request URL string
+        Dim NLCD_GET_URL As String = NLCD_USGS_Server_Text + responseformat + BoundingBox + imagesize + BB_SR + ImageSR + imageformat + pixelType + image_compression + mosaicRule
+        Console.WriteLine("{0}:{1}", 1, NLCD_GET_URL)
+
+        'Read the json file to get the .tif URL from the "href"
+        Try
+            Dim request As System.Net.WebRequest = System.Net.WebRequest.Create(NLCD_GET_URL)
+            Dim response As System.Net.WebResponse = request.GetResponse()
+            Dim responseStream As System.IO.Stream = response.GetResponseStream()
+
+            Dim objReader As New StreamReader(responseStream)
+            Dim sLine As String = ""
+            Dim i As Integer = 0
+            Dim json As JObject
+            Dim MyTiffURL As String = ""
+            Do While Not sLine Is Nothing
+                i += 1
+                sLine = objReader.ReadLine
+                If Not sLine Is Nothing Then
+                    Console.WriteLine("{0}:{1}", i, sLine)
+                    json = JObject.Parse(sLine)
+                    MyTiffURL = json.SelectToken("href")
+                    Console.WriteLine("{0}:{1}", i, MyTiffURL)
+                    Exit Do
+                End If
+            Loop
+
+            'Then Download the .tif file using the URL found in the JSON response
+            'Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, "NLCD", lBaseFilename & ".tif")
+            Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, aDataType.FilePattern)
+            If MyTiffURL Is Nothing Then
+                lError = "URL for image in JSON reply is empty"
+                Logger.Dbg("Error downloading from USGS Seamless", lError)
+                Return "<error>" & lError & "</error>"
+            End If
+            If System.IO.File.Exists(lFinalLayerName) Then
                 Try
-                    If IsCached(lCacheZipFile) Then
-                        Logger.Dbg("UsingExisting1 " & lCacheZipFile)
-                        If aProject.CacheOnly Then
-                            Logger.Dbg("Already Cached " & lCacheZipFile)
-                        Else
-                            lResult &= ProcessDownloadedZip(aProject, lSaveIn, aDataType, lCacheZipFile, lBaseFilename, lNativeProjection)
-                        End If
-                    Else
-                        Dim wc As New System.Net.WebClient()
-                        wc.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials
-
-                        Dim lRequestSummary As String = wc.DownloadString(BuildURL(1, aDataType, lNorth, lSouth, lWest, lEast))
-
-                        Dim lFindForm As Integer
-                        Dim lStartSearch As Integer = 0
-
-                        Do
-                            lFindForm = lRequestSummary.IndexOf("<FORM", lStartSearch)
-                            If lFindForm < 0 Then
-                                If lStartSearch = 0 Then
-                                    If Logger.Msg("Seamless data not downloaded - View error message?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                                        Dim lErrMsgFile As String = GetTemporaryFileName("Seamless_Error", "html")
-                                        IO.File.WriteAllText(lErrMsgFile, lRequestSummary)
-                                        OpenFile(lErrMsgFile)
-                                    End If
-                                    If Logger.Msg("Retry Seamless download now?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                                        GoTo StartOver
-                                    End If
-                                    Throw New ApplicationException("Could not download from Seamless.USGS" & vbCrLf & "FORM METHOD not found")
-                                End If
-                                Exit Do
-                            Else
-                                Dim lForm As String = lRequestSummary.Substring(lFindForm)
-                                Dim lEndForm As Integer = lForm.IndexOf("</FORM>")
-                                If lEndForm > 0 Then lForm = lForm.Substring(0, lEndForm)
-                                lStartSearch = lFindForm + lForm.Length
-                                Dim lFormElements() As String = lForm.Split("<")
-
-                                lNorth = InputValueToDouble(lFormElements, "top")
-                                lSouth = InputValueToDouble(lFormElements, "bot")
-                                lWest = InputValueToDouble(lFormElements, "lft")
-                                lEast = InputValueToDouble(lFormElements, "rgt")
-                                lRC = InputValue(lFormElements, "RC")
-
-                                lNSEW = lNorth.ToString() + "_" + lSouth.ToString() + "_" + lEast.ToString() + "_" + lWest.ToString()
-                                lCacheZipFile = IO.Path.Combine(lCacheFolder, "NLCD_" & lDataType & "_" & lNSEW & ".zip")
-                                If IsCached(lCacheZipFile) Then
-                                    Logger.Dbg("UsingExisting2 " & lCacheZipFile)
-                                Else
-                                    For Each lResponseKey As String In wc.ResponseHeaders.Keys
-                                        Select Case lResponseKey
-                                            Case "Set-Cookie"
-                                                wc.Headers.Add("Cookie", wc.ResponseHeaders("Set-Cookie"))
-                                        End Select
-                                    Next
-                                    wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
-                                    Dim lUrl2 As String = BuildURL(2, aDataType, lNorth, lSouth, lWest, lEast) & lRC
-                                    Dim lUrl2ArgStart As Integer = lUrl2.IndexOf("?")
-                                    Dim lPostData() As Byte = System.Text.UTF8Encoding.UTF8.GetBytes(lUrl2.Substring(lUrl2ArgStart + 1))
-                                    Dim lStage2() As Byte = wc.UploadData(lUrl2.Substring(0, lUrl2ArgStart), lPostData)
-                                    Dim lStage3URL As String = Nothing
-                                    Dim contentType As String = ""
-                                    Dim data As Byte()
-                                    wc.Headers.Remove("Content-Type") 'No longer posting, don't need this header any more
-StartWaiting:
-                                    For Each lResponseKey As String In wc.ResponseHeaders.Keys
-                                        Select Case lResponseKey
-                                            Case "Refresh"
-                                                Dim lValue As String = wc.ResponseHeaders("Refresh")
-                                                Dim lUrlIndex As Integer = lValue.IndexOf("URL=")
-                                                If lUrlIndex >= 0 Then lStage3URL = lValue.Substring(lUrlIndex + 4)
-                                            Case "Set-Cookie"
-                                                wc.Headers.Add("Cookie", wc.ResponseHeaders("Set-Cookie"))
-                                        End Select
-                                    Next
-                                    If lStage3URL Is Nothing Then Throw New ApplicationException("Could not download from Seamless.USGS (No refresh URL found from stage 2)")
-                                    Dim lRetryCountIndex As Integer = 0
-                                    Dim lRetryCountMax As Integer = 120 ' 10 minutes
-                                    Dim lStartNumRequests As Integer = 0
-                                    Logger.Status("Waiting for Seamless to Process " & lDataType & " Request")
-                                    Dim lStage As String = "Start"
-                                    Do While lRetryCountIndex < lRetryCountMax
-                                        lRetryCountIndex += 1
-                                        data = wc.DownloadData(lStage3URL)
-                                        contentType = wc.ResponseHeaders("Content-Type")
-                                        If contentType.Contains("compressed") Then
-                                            Logger.Status("Saving " & lDataType)
-                                            IO.Directory.CreateDirectory(lCacheFolder)
-                                            IO.File.WriteAllBytes(lCacheZipFile, data)
-                                            Layer.AddProcessStepToFile("Downloaded from " & lUrl2, lCacheZipFile)
-                                            Exit Do
-                                        Else
-                                            Dim page As String = System.Text.UTF8Encoding.UTF8.GetString(data)
-                                            'Debug.Print(page)
-                                            Dim lRequestsPos As Integer = page.IndexOf("There are ")
-                                            If lRequestsPos > 0 Then
-                                                Dim lNumRequests As Integer = StrFirstInt(page.Substring(lRequestsPos + 10))
-                                                If lStartNumRequests < lNumRequests Then lStartNumRequests = lNumRequests + 1
-                                                If lNumRequests > 0 Then
-                                                    Logger.Status("Waiting for Seamless to Process " & lDataType & " Request.")
-                                                    Logger.Progress("MSG3 There are " & lNumRequests & " requests ahead of you.", lStartNumRequests - lNumRequests, lStartNumRequests)
-                                                Else
-                                                    If lStage <> "process" Then
-                                                        lStage = "process"
-                                                        Logger.Status("Waiting for Seamless to Process " & lDataType & " Request.")
-                                                        lRetryCountIndex = 1
-                                                    End If
-                                                    Logger.Progress(lRetryCountIndex, lRetryCountMax)
-                                                End If
-                                            ElseIf page.IndexOf("Extracting data") > 0 OrElse page.IndexOf("Extracting Metadata") > 0 Then
-                                                If lStage <> "extract" Then
-                                                    lStage = "extract"
-                                                    Logger.Status("Seamless is extracting data")
-                                                    lRetryCountIndex = 1
-                                                End If
-                                                Logger.Progress(lRetryCountIndex, lRetryCountMax)
-                                            ElseIf page.IndexOf("has completed") > 0 OrElse page.IndexOf("Creating the archive file") > 0 Then
-                                                If lStage <> "archive" Then
-                                                    lStage = "archive"
-                                                    Logger.Status("Seamless is creating the archive file")
-                                                    lRetryCountIndex = 1
-                                                End If
-                                                Logger.Progress(lRetryCountIndex, lRetryCountMax)
-                                            ElseIf page.IndexOf("error") >= 0 Then
-                                                Throw New ApplicationException("Could not download from Seamless.USGS" & vbCrLf & page.Replace("Please wait for the data to be returned.", ""))
-                                            ElseIf page.IndexOf("lease wait") > 0 Then
-                                                Logger.Progress(lRetryCountIndex, lRetryCountMax)
-                                            Else
-                                                Dim lMessage As String = page
-                                                If lMessage.IndexOf("<BODY>") > 0 Then
-                                                    lMessage = lMessage.Substring(lMessage.IndexOf("<BODY>") + 6)
-                                                End If
-
-                                                If Logger.Msg(StripHTMLtags(lMessage) & vbCrLf & "Continue waiting for result?", MsgBoxStyle.YesNo, "Unexpected result from seamless server") = MsgBoxResult.No Then
-                                                    Throw New ApplicationException("Could not download from Seamless.USGS" & vbCrLf & page)
-                                                End If
-                                            End If
-                                        End If
-                                        System.Threading.Thread.Sleep(5000)
-                                        Logger.Status("MSG3")
-                                    Loop
-                                    If lRetryCountIndex >= lRetryCountMax Then
-                                        Select Case Logger.Msg("Continue waiting for result?", MsgBoxStyle.YesNo, "Seamless server is slow to respond with results")
-                                            Case MsgBoxResult.Yes : GoTo StartWaiting
-                                            Case MsgBoxResult.No : Throw New ApplicationException("Could not download from Seamless.USGS" & vbCrLf & "Waiting time exceeded")
-                                        End Select
-                                    End If
-                                End If
-                                If IO.File.Exists(lCacheZipFile) Then
-                                    If aProject.CacheOnly Then
-                                        Logger.Dbg("Cached " & lCacheZipFile)
-                                    Else
-                                        Dim lProcessResult As String = ProcessDownloadedZip(aProject, lSaveIn, aDataType, lCacheZipFile, lBaseFilename, lNativeProjection)
-                                        'When merging tiles into one grid, we get duplicate "add_grid" results for each tile
-                                        If Not lResult.Contains(lProcessResult) Then
-                                            lResult &= lProcessResult
-                                        End If
-                                    End If
-                                End If
-                            End If
-                        Loop
-                    End If
-                    If Not aProject.CacheOnly AndAlso IO.File.Exists(lFinalLayerName) Then
-                        aProject.Layers.Add(New D4EM.Data.Layer(lFinalLayerName, aDataType, False))
-                    End If
+                    IO.File.Delete(lFinalLayerName)
                 Catch ex As Exception
-                    lError &= ex.Message
+                    lError = "Can't delete existing image file with the same name: " + lFinalLayerName
+                    Logger.Dbg("Error downloading from USGS Seamless", lError)
+                    Return "<error>" & lError & "</error>"
                 End Try
             End If
+
+            My.Computer.Network.DownloadFile(MyTiffURL, lFinalLayerName)
+
+
+
+        Catch ex As System.Net.WebException
+            Throw New ApplicationException("There was an error opening the image file. Check the URL")
+        End Try
+        Logger.Progress("", 0, 0)
+        If lError.Length = 0 Then
+            If lResult.Length > 0 Then
+                Return "<success>" & lResult & "</success>"
+            Else
+                Return "<success />"
+            End If
+        Else
+            Logger.Dbg("Error downloading from USGS Seamless", lError)
+            Return "<error>" & lError & "</error>"
         End If
+        Return ""
+    End Function
+    ''' <summary>
+    ''' Download a layer from USGS Seamless Server
+    ''' </summary>
+    ''' <param name="aSaveFolder"></param>
+    ''' <param name="DesiredProjection"></param>
+    ''' <param name="aSaveLoc"></param>
+    ''' <param name="cacheFolder"></param>
+    ''' <param name="aRegionToClip"></param>
+    ''' <param name="useCache"></param>
+    ''' <param name="aDataType"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Function GetNLCD(ByVal aProject As Project, ByVal aSaveFolder As String,
+                                   ByVal DesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                   ByVal aSaveLoc As String,
+                                   ByVal cacheFolder As String,
+                                   ByVal aRegionToClip As Region,
+                                   ByVal useCache As Boolean,
+                                   ByVal aDataType As LayerSpecification) As String
+        Dim lSaveIn As String = aSaveLoc
+        If aSaveFolder IsNot Nothing AndAlso aSaveFolder.Length > 0 Then lSaveIn = IO.Path.Combine(lSaveIn, aSaveFolder)
+
+        Dim lCacheFolder As String = IO.Path.Combine(cacheFolder, "NLCD")
+        Dim lResult As String = ""
+        Dim lError As String = ""
+        Dim lBaseFilename As String = ""
+        Dim lNorth As Double = 0
+        Dim lSouth As Double = 0
+        Dim lWest As Double = 0
+        Dim lEast As Double = 0
+        Dim TempDouble As Double = 0.0
+
+        If aRegionToClip Is Nothing Then
+            lError = "Region not found"
+        Else 'convert input dimensions to web-mercator projection
+            aRegionToClip.GetBounds(lNorth, lSouth, lWest, lEast, Globals.WebMercatorProjection)
+        End If
+
+        'Test reprojected coordinates for validity (assumes in Webmercator projection and in NW hemisphere)
+        If Not (Double.TryParse(lNorth, TempDouble) And Double.TryParse(lSouth, TempDouble) And Double.TryParse(lWest, TempDouble) And Double.TryParse(lEast, TempDouble)) Then
+            lError = "Coordinates are not valid."
+            Logger.Dbg("Error downloading from USGS Seamless", lError)
+            Return "<error>" & lError & "</error>"
+        End If
+        If (lNorth <= lSouth) Or (lWest >= lEast) Then
+            lError = "Assumes conterminous US coordinates.  West value should be less than East and South less than North value"
+            Logger.Dbg("Error downloading from USGS Seamless", lError)
+            Return "<error>" & lError & "</error>"
+        End If
+
+        Dim lNSEW As String = lNorth.ToString() + "_" + lSouth.ToString() + "_" + lEast.ToString() + "_" + lWest.ToString()   'Used for cache file name
+
+        'Build NLCD request URL (json with reference to .tiff file returned)
+
+        'Server location
+        Dim NLCD_USGS_Server_Text As String = "http://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+
+        'format can be an image or json with reference to an image
+        Dim responseformat As String = "f=json"    '"f=image", "f=json"
+
+        'box dimensions to clip
+        Dim BoundingBox As String = "&bbox=" + lWest.ToString() + ", " + lSouth.ToString() + ", " + lEast.ToString() + ", " + lNorth.ToString()
+
+        'length and width of output image
+        'Determine the output size(rows, columns) of the image based on the area requested and assumed resolution & units of NLCD (i.e., 30 meter cells)
+        'Reproject to output projection to figure out size
+        aRegionToClip.GetBounds(lNorth, lSouth, lWest, lEast, Globals.AlbersProjection)
+        Dim XSize As Integer = (lEast - lWest) / 30
+        Dim YSize As Integer = (lNorth - lSouth) / 30
+
+        'limiting size of output .tiff
+        If XSize > 50000 Then XSize = 50000 'limiting size of output .tiff
+        If XSize < 1 Then XSize = 10 'min size
+        If YSize > 50000 Then YSize = 50000
+        If YSize < 1 Then YSize = 10
+        'size of result in pixels (e.g., 300x400 = size=300,400; default is 400x400)
+        Dim imagesize As String = "&size=" + XSize.ToString + "," + YSize.ToString  'size of result in pixels (e.g., 300x400 = size=300,400; default is 400x400)
+
+        'input and output projections
+        Dim BB_SR As String = "&bboxSR=3857"                 'Spatial Reference WKIDs: 3857 = Web Mercator, 4326 = WGS 84, 102003 = Contiguous USA albers
+        Dim ImageSR As String = "&imageSR=7301"            'NOTE: The server didn't return a correct imager (all zero values) when trying to use USA albers as the input coords and output projection
+        'Dim ImageSR As String = "&imageSR=102008"               '102008 = Contiguous NorthAmerica  albers
+
+        'output file * pixel type
+        Dim imageformat As String = "&format=tiff"             'tif = "tiff" 
+        'Dim pixelType As String = "&pixelType=U8"              'data has unsigned 8-bit values'
+        Dim pixelType As String = "&pixelType=F64"              'data has unsigned 8-bit values'
+        Dim noData As String = "noData="                       'value considered as nodata values and rendered as transparent (Note:we are leaving this blank)
+        'compression used for output tiff file
+        Dim image_compression As String = "&compression=L277"  'can be L277 or None"
+        'Dim image_compression As String = "&compression=None"  'can be L277 or None"
+
+        'build moscaic rule that defines which year(1992, 2001, 2006, or 2011) and type of NLCD (landcover, canopy, impervious) we want to get 
+        Dim lDataType As String = aDataType.Tag
+        Dim lyear As String = "2011"
+        Dim lUSarea As String = "conus"  '  can be blank, conus, hi, ak, or pr (for 2001 NLCD)
+
+        Select Case aDataType
+            Case LayerSpecifications.NLCD1992.LandCover
+                'lDataType = "1992"
+                lDataType = "landcover"
+                lyear = "1992"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_LandCover_1992"
+            Case LayerSpecifications.NLCD2001.LandCover
+                lDataType = "landcover"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2001.Canopy
+                lDataType = "canopy"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2001.Impervious
+                lDataType = "impervious"
+                lyear = "2001"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2001"
+            Case LayerSpecifications.NLCD2006.LandCover
+                lDataType = "landcover"
+                lyear = "2006"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2006"
+            Case LayerSpecifications.NLCD2006.Impervious
+                lDataType = "impervious"
+                lyear = "2006"
+                lUSarea = "_conus"
+                lBaseFilename = "NLCD_" & lDataType & "_2006"
+            Case LayerSpecifications.NLCD2011.LandCover
+                lDataType = "landcover"
+                lyear = "2011"
+                lUSarea = ""
+                lBaseFilename = "NLCD_" & lDataType & "_2011"
+                'Case LayerSpecifications.NED.OneArcSecond
+                '   lBaseFilename = "NED_1ArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneThirdArcSecond
+                '   lBaseFilename = "NED_ThirdArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+            Case Else
+                '   lBaseFilename = lDataType
+        End Select
+
+        'Specifies which version of NLCD to request
+        Dim mosaicRule As String = "&mosaicRule={%22where%22%3A%22Name%3D%27" + lDataType + "_" + lyear + lUSarea + "%27%22}"    ' {"where":"Name='landcover_2011'"}
+
+        'combine request URL pieces into request URL
+        Dim NLCD_GET_URL As String = NLCD_USGS_Server_Text + responseformat + BoundingBox + imagesize + BB_SR + ImageSR + imageformat + pixelType + image_compression + mosaicRule
+        Console.WriteLine("{0}:{1}", 1, NLCD_GET_URL)                                   'request URL
+
+        ' define output .tif file name
+        'Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, lBaseFilename & ".tif")
+        Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, aDataType.FilePattern)
+
+        'Set up webrequest with NLCD_GETURL and create stream with JSON result (which should include a URL to the .tiff image we want)
+        Try
+            Dim request As System.Net.WebRequest = System.Net.WebRequest.Create(NLCD_GET_URL)
+            Dim response As System.Net.WebResponse = request.GetResponse()
+            Dim responseStream As System.IO.Stream = response.GetResponseStream()
+
+            'Read the json file to get the .tif URL from the "href"
+            Dim objReader As New StreamReader(responseStream)
+            Dim sLine As String = ""
+            Dim i As Integer = 0
+            Dim json As JObject
+            Dim MyTiffURL As String = Nothing
+            Do While Not sLine Is Nothing
+                i += 1
+                sLine = objReader.ReadLine                                              ' Should only need to read one line which should contain the href token plus rest of tokens
+                If Not sLine Is Nothing Then
+                    Console.WriteLine("{0}:{1}", i, sLine)                              'response JSON
+                    json = JObject.Parse(sLine)
+                    MyTiffURL = json.SelectToken("href")                                'The .tif URL should be in the href token
+                    Console.WriteLine("{0}:{1}", i, MyTiffURL)                           'just the href token to the .tif image that we want
+                    Exit Do
+                End If
+            Loop
+
+            'Download the .tif file using the URL found in the JSON response
+            If MyTiffURL Is Nothing Then
+                lError = "URL for image in JSON reply is empty"
+                Logger.Dbg("Error downloading from USGS Seamless", lError)
+                Return "<error>" & lError & "</error>"
+            End If
+
+            If System.IO.File.Exists(lFinalLayerName) = True Then
+                Try
+                    IO.File.Delete(lFinalLayerName)
+                Catch ex As Exception
+                    lError = "Can't delete existing image file with the same name: " + lFinalLayerName
+                    Logger.Dbg("Error downloading from USGS Seamless", lError)
+                    Return "<error>" & lError & "</error>"
+                End Try
+            End If
+
+            My.Computer.Network.DownloadFile(MyTiffURL, lFinalLayerName)
+
+            'Dim layerSpec As LayerSpecification = LayerSpecification.FromFilename(lFinalLayerName, GetType(USGS_Seamless.LayerSpecifications.NLCD2001))
+            Dim layerSpec As LayerSpecification = aDataType
+
+            Dim nlayer = New Layer(lFinalLayerName, layerSpec, False)
+            aProject.Layers.Add(nlayer)
+
+        Catch ex As System.Net.WebException
+            Throw New ApplicationException("There was an error opening the NLCD .tiff image file. Check the URL")
+        End Try
+
         Logger.Progress("", 0, 0)
         If lError.Length = 0 Then
             If lResult.Length > 0 Then
@@ -293,7 +506,7 @@ StartWaiting:
     ''' <param name="aDataType"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function GetNLCD(ByVal aSaveFolder As String,
+    Public Shared Function GetNLCDOLD(ByVal aSaveFolder As String,
                                    ByVal DesiredProjection As DotSpatial.Projections.ProjectionInfo,
                                    ByVal aSaveLoc As String,
                                    ByVal cacheFolder As String,
@@ -304,6 +517,9 @@ StartWaiting:
         If aSaveFolder IsNot Nothing AndAlso aSaveFolder.Length > 0 Then lSaveIn = IO.Path.Combine(lSaveIn, aSaveFolder)
 
         Dim lCacheFolder As String = IO.Path.Combine(cacheFolder, "NLCD")
+
+
+
 StartOver:
         Dim lResult As String = ""
         Dim lError As String = ""
@@ -433,7 +649,7 @@ StartWaiting:
                                                 wc.Headers.Add("Cookie", wc.ResponseHeaders("Set-Cookie"))
                                         End Select
                                     Next
-                                    If lStage3URL Is Nothing Then Throw New ApplicationException("Could not download from Seamless.USGS (No refresh URL found from stage 2)")
+                                    If lStage3URL Is Nothing Then Throw New ApplicationException("Could not download from Seamless.USGS (2)No refresh URL found from stage 2)")
                                     Dim lRetryCountIndex As Integer = 0
                                     Dim lRetryCountMax As Integer = 120 ' 10 minutes
                                     Dim lStartNumRequests As Integer = 0
@@ -651,11 +867,11 @@ StartWaiting:
         End Select
         Select Case aPhase
             Case 1
-                Return "http://extract.cr.usgs.gov/Website/distreq/RequestSummary.jsp?AL=" _
+                Return "http://landfire.cr.usgs.gov/Website/distreq/RequestSummary.jsp?AL=" _
                      & aNorth.ToString() + "," + aSouth.ToString() + "," + aEast.ToString() + "," + aWest.ToString() _
-                     & "&PL=" & lKey & lLayerFormat1 & lMetadataFormat1 & lArchiveFormat1
+                     & "&PL=" & lKey & lLayerFormat1 & lMetadataFormat1 & lArchiveFormat1 & "&ORIG=MRLC"
             Case 2 'http://igskmncngs086.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?zid=20120926.083203758.152061136002
-                Return "http://extract.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?siz=1" _
+                Return "http://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?siz=1" _
                      & "&key=" & lKey2 _
                      & "&ras=1&rsp=0" _
                      & "&pfm=" & lLayerFormat2 _
@@ -665,7 +881,7 @@ StartWaiting:
                      & "&rgt=" & aEast _
                      & "&top=" & aNorth _
                      & "&bot=" & aSouth _
-                     & "&wmd=1&mur=http://extract.cr.usgs.gov/distmeta/servlet/gov.usgs.edc.MetaBuilder" _
+                     & "&wmd=1&mur=http://landfire.cr.usgs.gov/distmeta/servlet/gov.usgs.edc.MetaBuilder" _
                      & "&mcd=" & lMCD _
                      & "&mdf=" & lMetadataFormat2 _
                      & "&arc=" & lArchiveFormat2 _
@@ -674,9 +890,10 @@ StartWaiting:
                      & "&zun=&prj=0" _
                      & "&csx=" & lCS _
                      & "&csy=" & lCS _
-                     & "&bnd=&bndnm=&RC="
+                     & "&bnd=&bndnm=&RC=&ORIG=MRLC"
+
             Case 3
-                Return "http://extract.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus"
+                Return "http://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus"
         End Select
         Return ""
     End Function

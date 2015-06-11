@@ -147,8 +147,7 @@ namespace D4EMInterface
                        lScenarioName,
                        aParameters.WQConstituents.ToArray(),
                        aParameters.HspfSnowOption,
-                       aParameters.HspfBacterialOption, 
-                       false, "", 0, new double[0], new double[0], new double[0]);
+                       aParameters.HspfBacterialOption);
 
             System.IO.File.WriteAllText(aProject.ProjectFilename, aProject.AsMWPRJ());
             foreach (D4EM.Data.Layer lLayer in aProject.Layers)
@@ -163,7 +162,7 @@ namespace D4EMInterface
             //temporarily change region to specify clostst for getting a met station
             D4EM.Data.LayerSpecification lSaveSpec = aProject.Region.RegionSpecification;
             aProject.Region.RegionSpecification = D4EM.Data.Region.RegionTypes.closest;
-            D4EM.Data.Source.BASINS.GetMetStations(aProject, ref lMetStationIDs, true, null, null, ""); //should add layer to aProject
+            D4EM.Data.Source.BASINS.GetMetStations(aProject, ref lMetStationIDs, true); //should add layer to aProject
             aProject.Region.RegionSpecification = lSaveSpec;
             System.IO.File.WriteAllText(aProject.ProjectFilename, aProject.AsMWPRJ());
             D4EM.Data.Source.BASINS.GetMetData(aProject, lMetStationIDs,

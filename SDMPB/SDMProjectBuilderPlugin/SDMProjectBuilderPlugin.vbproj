@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\bin\Debug\Plugins\SDMProjectBuilder\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DocumentationFile>SDMProjectBuilderPlugin.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -184,7 +184,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
+      <HintPath>..\..\Externals\AnyCPU\DotSpatial\Windows Extensions\DotSpatial.Data.Rasters.GdalExtension\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Projections">

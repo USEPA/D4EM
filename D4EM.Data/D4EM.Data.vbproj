@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -167,7 +167,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
-      <HintPath>..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
+      <HintPath>..\Externals\AnyCPU\DotSpatial\Windows Extensions\DotSpatial.Data.Rasters.GdalExtension\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Modeling.Forms">

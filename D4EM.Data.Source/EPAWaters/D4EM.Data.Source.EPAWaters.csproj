@@ -109,7 +109,6 @@
     <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
       <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
       <Name>D4EM.Data</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
