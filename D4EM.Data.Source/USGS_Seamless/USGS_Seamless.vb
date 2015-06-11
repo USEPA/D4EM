@@ -44,26 +44,22 @@ Public Class USGS_Seamless
     Private Shared CacheWithinDegreesOutside As Double = 1
     Private Shared CacheWithinDegreesInside As Double = 0.001
 
-    Public Function test(ByVal aProject As Project,
-                                             ByVal aSaveFolder As String)
-        Dim val As Integer
-        val = 0
-        Dim rest As USGS_Seamless_Soap.ExportMapImageRequest
-        rest = New USGS_Seamless_Soap.ExportMapImageRequest
-        Dim ext As New USGS_Seamless_Soap.EnvelopeN
-        ext.XMax = -7087933.9106248
-        ext.YMax = 6960328.8817100283
-        ext.XMin = -14497453.9106248
-        ext.YMin = 2480608.8817100283
-        rest.MapDescription.MapArea.Extent = ext
-        rest.MapDescription.SpatialReference.WKID = 3857
-        rest.ImageDescription.ImageType.ImageReturnType = "tif"
+    Public Function test(ByVal aProject As Project, ByVal aSaveFolder As String)
 
+        'Dim val As Integer
+        'val = 0
+        'Dim rest As USGS_Seamless_Soap.ExportMapImageRequest
+        'rest = New USGS_Seamless_Soap.ExportMapImageRequest
+        'Dim ext As New USGS_Seamless_Soap.EnvelopeN
+        'ext.XMax = -7087933.9106248
+        'ext.YMax = 6960328.8817100283
+        'ext.XMin = -14497453.9106248
+        'ext.YMin = 2480608.8817100283
+        'rest.MapDescription.MapArea.Extent = ext
+        'rest.MapDescription.SpatialReference.WKID = 3857
+        'rest.ImageDescription.ImageType.ImageReturnType = "tif"
 
-
-
-
-        Return (val)
+        'Return (val)
     End Function
 
     ''' <summary>

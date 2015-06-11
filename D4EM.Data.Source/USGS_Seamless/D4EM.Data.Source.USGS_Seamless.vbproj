@@ -124,11 +124,6 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service References\USGS_Seamless_Soap\Reference.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="USGS_Seamless.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -166,79 +161,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.AttachmentData.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.AttachmentInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.CacheControlInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.CacheDescriptionInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.CacheStorageInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.esriImageReturnType.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.FeatureRenderer.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.FIDSet.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.ImageResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.LayerDrawingDescription.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapImage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapServerFindResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapServerHyperlink.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapServerIdentifyResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapServerInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapServerLegendInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.MapTableSubtypeInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.Multipoint.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.PropertySet.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.QueryResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.RecordSet.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.SQLSyntaxInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.TileCacheInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\D4EM.Data.Source.USGS_Seamless_Soap.TileImageInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\USGS_Seamless_Soap\MapServer.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="USGS_SeamlessQuerySchema.xml" />
@@ -274,21 +196,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\USGS_Seamless_Soap\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\USGS_Seamless_Soap\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\USGS_Seamless_Soap\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\USGS_Seamless_Soap\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.vb</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
