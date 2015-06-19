@@ -1,0 +1,16 @@
+<DataExtension name='BASINS'>
+	<function name='GetBASINS' label='Retrieve BASINS data'>
+		<arguments>
+			<region            format='Region'  label='Region to download' />
+			<DataType          format='String'  label='Type of data to get' valid='census|core31|dem|DEMG|giras|lstoret|NED|nhd|pcs3|metstations|metdata|statsgo|303d|huc12' optional='true' default='core31' />
+			<DesiredProjection format='String'  label='PROJ 4 string describing desired projection' optional='true' />
+			<CacheFolder       format='folder'  label='Where to cache downloaded file' optional='true' />
+			<GetEvenIfCached   format='boolean' label='Get even if cached'             optional='true' default='false' />
+			<SaveIn            format='folder'  label='Save data in folder'            optional='false' />
+			<SaveWDM           format='filename' label='Save WDM data in file'         optional='true' default='' />
+			<Clip              format='boolean' label='Clip to Region' optional='true' default='false' />
+		</arguments>
+		<returns>
+		</returns>
+	</function>
+</DataExtension>

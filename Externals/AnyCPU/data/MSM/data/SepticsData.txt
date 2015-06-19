@@ -1,0 +1,2 @@
+TotalNumberOfSeptics,TotalNumberOfPeopleServedBySeptics,SepticFailureRate_Percent,FCConcentrationReachingStreamFromSepticOvercharge_CountsPer100ml,SepticOverchargeFlowRate_gallonsPerDayPerPerson
+787,2204,2.5,10000,70.0

@@ -1,0 +1,5 @@
+SubWatershedID,BeefCowCount,SwineCount,DairyCowCount,ChickenCount,HorseCount,SheepCount,OtherAgAnimalCount
+1,0,0,0,0,0,0,0
+2,0,0,625,0,0,0,0
+3,0,0,1100,0,0,0,0
+4,0,0,175,0,0,0,0

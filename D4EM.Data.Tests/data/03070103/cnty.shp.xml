@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd"[]>
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin />
+        <pubdate />
+        <title />
+        <geoform />
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract />
+      <purpose />
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>Unknown</begdate>
+          <enddate>Unknown</enddate>
+        </rngdates>
+      </timeinfo>
+      <current>
+      </current>
+    </timeperd>
+    <status>
+      <progress />
+      <update />
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-84.994</westbc>
+        <eastbc>-82.982</eastbc>
+        <northbc>34.244</northbc>
+        <southbc>32.228</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey />
+      </theme>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>None</useconst>
+  </idinfo>
+  <dataqual>
+    <logic />
+    <complete />
+    <lineage>
+      <procstep>
+        <procdesc>Downloaded from http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/03070103/03070103_core31.exe</procdesc>
+        <procdate>20110420</procdate>
+        <proctime>151543</proctime>
+      </procstep>
+      <procstep>
+        <procdesc>Read from cache file created 2011-04-20 15:15 'C:\Basins\cache\clsBASINS\03070103_core31.exe'</procdesc>
+        <procdate>20110524</procdate>
+        <proctime>154838</proctime>
+      </procstep>
+      <procstep>
+        <procdesc>Projected from ' +proj=longlat +ellps=GRS80 +no_defs' to ' +x_0=0 +y_0=0 +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +proj=aea +ellps=GRS80 +no_defs'</procdesc>
+        <procdate>20110524</procdate>
+        <proctime>154839</proctime>
+      </procstep>
+    </lineage>
+  </dataqual>
+  <metainfo>
+    <metd>20110524</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper />
+        </cntperp>
+        <cntaddr>
+          <addrtype />
+          <city />
+          <state />
+          <postal />
+        </cntaddr>
+        <cntvoice />
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+  </metainfo>
+</metadata>

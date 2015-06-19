@@ -1,0 +1,11 @@
+ProjectsPath,S:\BASINS\data
+SWAT2005Database,S:\Scratch\Downloads\Data\GerrySWATcompare\Projects-Area1Length3.5PrototypeHUCS\SWAT2005.mdb
+MinimumStreamLength,0.5
+MinimumCatchmentArea,0.5
+MinumumLandUsePercent,6
+SimulationStartYear,2001
+SimulationEndYear,2007
+RunSWAT,False
+RunHSPF,True
+HucList,040301010605
+HucLayer,s:\basins\data\national\huc12\04030101\huc12.shp

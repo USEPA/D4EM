@@ -1,0 +1,33 @@
+==Non-web D4EM (from Repository)==
+
+All of the non-web source code and applications can be checked out from the repository: https://d4em.googlecode.com/.  Make sure to check out to your C drive
+
+Compile by opening the solution file and building.  The solution file is 'D4EM - GIS, non-GIS, system testing, and map plugins.sln'
+
+Go to \d4em\Examples\D4EMInterface and open 'CopyExternals.bat'
+
+Go to \d4em\Examples\D4EMmap and open 'CopyExternals.bat'
+
+Go to \d4em\Examples\SystemTesting and open 'CopyExternals.bat'
+
+Go to \D4EMMay82013\Examples\SDM_Project_Builder_EXE and open 'CopyExternals.bat'
+
+The batch files to run the GIS interface, the non-GIS interface, and the System Testing are 'run D4EMmap.bat', 'run D4EMinterface.bat', and 'run SystemTesting.bat', respectively
+
+
+==Non-web D4EM (Without Repository)==
+
+The D4EM source code and applications is at L:\Public\Parmar\D4EM Ryan\D4EM 8-17-2012
+
+Copy the zip file to your local machine.  Unzip.
+
+The batch files to run the GIS interface, the non-GIS interface, and the System Testing are 'run D4EMmap.bat', 'run D4EMinterface.bat', and 'run SystemTesting.bat', respectively
+
+
+==D4EM Website==
+
+The D4EM Website source code is at L:\Public\Parmar\D4EM Ryan\D4EM Website 8-14-12  
+
+After copying and unzipping to your machine, there should be a solution file and a folder called 'D4EM Website'.  You will need to copy each of these to two separate places on your machine.  The solution file goes here: '\Net MyDocuments\Visual Studio 2010\Projects\D4EM Website' and the 'D4EM Website' folder goes here: 'C:\'.  
+
+Open the solution file.  Set the start page to 'UserHome.aspx'.  Click the play button to run the website.

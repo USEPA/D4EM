@@ -1,0 +1,68 @@
+#DataGroupName,VariableName
+SDPOutputData,Debug
+SDPOutputData,MetDir
+Site Layout,MapUID
+Site Layout,MetSta
+Site Layout,NumVad
+Site Layout,NyrMax
+Site Layout,SettingID
+Site Layout,SiteLatitude
+Site Layout,SiteSeed
+Site Layout,SoilTextureCol
+Site Layout,SrcArea
+Site Layout,SrcLWS
+Site Layout,SrcLWSNumSubArea
+Site Layout,SrcLWSSubAreaArea
+Site Layout,SrcLWSSubAreaID
+Site Layout,SrcLWSSubAreaIndex
+Site Layout,SrcNumLWS
+Site Layout,SrcType
+Site Layout,TermFrac
+Site Layout,VadSATK
+Site Layout,VadTemp
+Site Layout,VadWCS
+LF,asdm
+LF,bcm
+LF,BDw
+LF,deltDiv
+LF,DRZ_W
+LF,Capacity
+LF,effdust
+LF,fd
+LF,focC
+LF,focS_lf
+LF,focW
+LF,fwmu
+LF,Infild
+LF,KsatC
+LF,KsatW
+LF,Lc
+LF,load
+LF,mcW
+LF,mt
+LF,Nly
+LF,Nop
+LF,nv
+LF,nw
+LF,OpLife
+LF,Payload
+LF,porW
+LF,SMbC
+LF,SMbS
+LF,SMbW
+LF,SMFC_W
+LF,SMWP_W
+LF,Sw
+LF,thetawCd
+LF,thetawSd
+LF,thetawWd
+LF,veg
+LF,vs
+LF,vw
+LF,WCS_C
+LF,zava
+LF,zavb
+LF,zC
+LF,zruf
+LF,zS
+LF,zW

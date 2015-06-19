@@ -1,0 +1,105 @@
+<ColoringScheme SchemeType="Grid" GridName="NASS" GroupName="Data Layers">
+  <GridColoringScheme AmbientIntensity="0.7" Key="" LightSourceAzimuth="0" LightSourceElevation="1" LightSourceIntensity="0.7" NoDataColor="-16777216">
+    <Break Caption="Corn" LowValue="1" HighValue="1" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Cotton" LowValue="2" HighValue="2" LowColor="-55770" HighColor="-55770" ColoringType="0" GradientModel="1" />
+    <Break Caption="Rice" LowValue="3" HighValue="3" LowColor="-16733979" HighColor="-16733979" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sorghum" LowValue="4" HighValue="4" LowColor="-25076" HighColor="-25076" ColoringType="0" GradientModel="1" />
+    <Break Caption="Soybeans" LowValue="5" HighValue="5" LowColor="-14258176" HighColor="-14258176" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sunflowers" LowValue="6" HighValue="6" LowColor="-256" HighColor="-256" ColoringType="0" GradientModel="1" />
+    <Break Caption="7-9" LowValue="7" HighValue="9" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Peanuts" LowValue="10" HighValue="10" LowColor="-9394944" HighColor="-9394944" ColoringType="0" GradientModel="1" />
+    <Break Caption="Tobacco" LowValue="11" HighValue="11" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sweet Corn" LowValue="12" HighValue="12" LowColor="-2251508" HighColor="-2251508" ColoringType="0" GradientModel="1" />
+    <Break Caption="Popcorn or Ornamental Corn" LowValue="13" HighValue="13" LowColor="-2251508" HighColor="-2251508" ColoringType="0" GradientModel="1" />
+    <Break Caption="Mint" LowValue="14" HighValue="14" LowColor="-8399873" HighColor="-8399873" ColoringType="0" GradientModel="1" />
+    <Break Caption="15-20" LowValue="15" HighValue="20" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Barley" LowValue="21" HighValue="21" LowColor="-1965956" HighColor="-1965956" ColoringType="0" GradientModel="1" />
+    <Break Caption="Durum Wheat" LowValue="22" HighValue="22" LowColor="-7773356" HighColor="-7773356" ColoringType="0" GradientModel="1" />
+    <Break Caption="Spring Wheat" LowValue="23" HighValue="23" LowColor="-2574997" HighColor="-2574997" ColoringType="0" GradientModel="1" />
+    <Break Caption="Winter Wheat" LowValue="24" HighValue="24" LowColor="-5935104" HighColor="-5935104" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Small Grains" LowValue="25" HighValue="25" LowColor="-2711876" HighColor="-2711876" ColoringType="0" GradientModel="1" />
+    <Break Caption="Winter Wheat/Soybeans Dbl. Cropped" LowValue="26" HighValue="26" LowColor="-9408512" HighColor="-9408512" ColoringType="0" GradientModel="1" />
+    <Break Caption="Rye" LowValue="27" HighValue="27" LowColor="-5439364" HighColor="-5439364" ColoringType="0" GradientModel="1" />
+    <Break Caption="Oats" LowValue="28" HighValue="28" LowColor="-6268535" HighColor="-6268535" ColoringType="0" GradientModel="1" />
+    <Break Caption="Millet" LowValue="29" HighValue="29" LowColor="-9437111" HighColor="-9437111" ColoringType="0" GradientModel="1" />
+    <Break Caption="Speltz" LowValue="30" HighValue="30" LowColor="-2711876" HighColor="-2711876" ColoringType="0" GradientModel="1" />
+    <Break Caption="Canola" LowValue="31" HighValue="31" LowColor="-3014912" HighColor="-3014912" ColoringType="0" GradientModel="1" />
+    <Break Caption="Flaxseed" LowValue="32" HighValue="32" LowColor="-8414721" HighColor="-8414721" ColoringType="0" GradientModel="1" />
+    <Break Caption="Safflower" LowValue="33" HighValue="33" LowColor="-2697728" HighColor="-2697728" ColoringType="0" GradientModel="1" />
+    <Break Caption="Rape Seed" LowValue="34" HighValue="34" LowColor="-3014912" HighColor="-3014912" ColoringType="0" GradientModel="1" />
+    <Break Caption="Mustard" LowValue="35" HighValue="35" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Alfalfa" LowValue="36" HighValue="36" LowColor="-23070" HighColor="-23070" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Hays" LowValue="37" HighValue="37" LowColor="-5901684" HighColor="-5901684" ColoringType="0" GradientModel="1" />
+    <Break Caption="Camelina" LowValue="38" HighValue="38" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="39" LowValue="39" HighValue="39" LowColor="-2711876" HighColor="-2711876" ColoringType="0" GradientModel="1" />
+    <Break Caption="40" LowValue="40" HighValue="40" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sugarbeets" LowValue="41" HighValue="41" LowColor="-5766939" HighColor="-5766939" ColoringType="0" GradientModel="1" />
+    <Break Caption="Dry Beans" LowValue="42" HighValue="42" LowColor="-5963776" HighColor="-5963776" ColoringType="0" GradientModel="1" />
+    <Break Caption="Potatoes" LowValue="43" HighValue="43" LowColor="-9427456" HighColor="-9427456" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Crops" LowValue="44" HighValue="44" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sugarcane" LowValue="45" HighValue="45" LowColor="-5079041" HighColor="-5079041" ColoringType="0" GradientModel="1" />
+    <Break Caption="Sweet Potatoes" LowValue="46" HighValue="46" LowColor="-9427456" HighColor="-9427456" ColoringType="0" GradientModel="1" />
+    <Break Caption="Misc. Vegs. &amp; Fruits" LowValue="47" HighValue="47" LowColor="-39322" HighColor="-39322" ColoringType="0" GradientModel="1" />
+    <Break Caption="Watermelon" LowValue="48" HighValue="48" LowColor="-13210" HighColor="-13210" ColoringType="0" GradientModel="1" />
+    <Break Caption="Onions" LowValue="49" HighValue="49" LowColor="-13210" HighColor="-13210" ColoringType="0" GradientModel="1" />
+    <Break Caption="Pickles" LowValue="50" HighValue="50" LowColor="-39322" HighColor="-39322" ColoringType="0" GradientModel="1" />
+    <Break Caption="Chick Peas" LowValue="51" HighValue="51" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Lentils" LowValue="52" HighValue="52" LowColor="-16720465" HighColor="-16720465" ColoringType="0" GradientModel="1" />
+    <Break Caption="Peas" LowValue="53" HighValue="53" LowColor="-11206912" HighColor="-11206912" ColoringType="0" GradientModel="1" />
+    <Break Caption="Peas" LowValue="54" HighValue="54" LowColor="-875657" HighColor="-875657" ColoringType="0" GradientModel="1" />
+    <Break Caption="Caneberries" LowValue="55" HighValue="55" LowColor="-39322" HighColor="-39322" ColoringType="0" GradientModel="1" />
+    <Break Caption="Hops" LowValue="56" HighValue="56" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Herbs" LowValue="57" HighValue="57" LowColor="-8399873" HighColor="-8399873" ColoringType="0" GradientModel="1" />
+    <Break Caption="Clover/Wildflowers" LowValue="58" HighValue="58" LowColor="-1523713" HighColor="-1523713" ColoringType="0" GradientModel="1" />
+    <Break Caption="Seed/Sod Grass" LowValue="59" HighValue="59" LowColor="-5242915" HighColor="-5242915" ColoringType="0" GradientModel="1" />
+    <Break Caption="Switchgrass" LowValue="60" HighValue="60" LowColor="-16732340" HighColor="-16732340" ColoringType="0" GradientModel="1" />
+    <Break Caption="Fallow/Idle Cropland" LowValue="61" HighValue="61" LowColor="-4210825" HighColor="-4210825" ColoringType="0" GradientModel="1" />
+    <Break Caption="Grass/Pasture/Non-Ag" LowValue="62" HighValue="62" LowColor="-1507393" HighColor="-1507393" ColoringType="0" GradientModel="1" />
+    <Break Caption="Woodland" LowValue="63" HighValue="63" LowColor="-7091053" HighColor="-7091053" ColoringType="0" GradientModel="1" />
+    <Break Caption="Shrubland" LowValue="64" HighValue="64" LowColor="-3746146" HighColor="-3746146" ColoringType="0" GradientModel="1" />
+    <Break Caption="Barren" LowValue="65" HighValue="65" LowColor="-3358813" HighColor="-3358813" ColoringType="0" GradientModel="1" />
+    <Break Caption="Cherries" LowValue="66" HighValue="66" LowColor="-65281" HighColor="-65281" ColoringType="0" GradientModel="1" />
+    <Break Caption="Peaches" LowValue="67" HighValue="67" LowColor="-29014" HighColor="-29014" ColoringType="0" GradientModel="1" />
+    <Break Caption="Apples" LowValue="68" HighValue="68" LowColor="-4587441" HighColor="-4587441" ColoringType="0" GradientModel="1" />
+    <Break Caption="Grapes" LowValue="69" HighValue="69" LowColor="-9419639" HighColor="-9419639" ColoringType="0" GradientModel="1" />
+    <Break Caption="Christmas Trees" LowValue="70" HighValue="70" LowColor="-16746633" HighColor="-16746633" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Tree Nuts" LowValue="71" HighValue="71" LowColor="-5072016" HighColor="-5072016" ColoringType="0" GradientModel="1" />
+    <Break Caption="Citrus" LowValue="72" HighValue="72" LowColor="-129" HighColor="-129" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Tree Fruits" LowValue="73" HighValue="73" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Pecans" LowValue="74" HighValue="74" LowColor="-4886437" HighColor="-4886437" ColoringType="0" GradientModel="1" />
+    <Break Caption="Almonds" LowValue="75" HighValue="75" LowColor="-16734846" HighColor="-16734846" ColoringType="0" GradientModel="1" />
+    <Break Caption="Walnuts" LowValue="76" HighValue="76" LowColor="-1386833" HighColor="-1386833" ColoringType="0" GradientModel="1" />
+    <Break Caption="Pears" LowValue="77" HighValue="77" LowColor="-5072016" HighColor="-5072016" ColoringType="0" GradientModel="1" />
+    <Break Caption="78-79" LowValue="78" HighValue="79" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Other Non-Tree Fruit" LowValue="80" HighValue="80" LowColor="-855310" HighColor="-855310" ColoringType="0" GradientModel="1" />
+    <Break Caption="Clouds" LowValue="81" HighValue="81" LowColor="-855310" HighColor="-855310" ColoringType="0" GradientModel="1" />
+    <Break Caption="Urban/Developed" LowValue="82" HighValue="82" LowColor="-6579301" HighColor="-6579301" ColoringType="0" GradientModel="1" />
+    <Break Caption="Water" LowValue="83" HighValue="83" LowColor="-11767645" HighColor="-11767645" ColoringType="0" GradientModel="1" />
+    <Break Caption="Roads/Railroads" LowValue="84" HighValue="86" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Waterways/Ditches" LowValue="85" HighValue="85" LowColor="-11767645" HighColor="-11767645" ColoringType="0" GradientModel="1" />
+    <Break Caption="Buildings/Residential Areas" LowValue="86" HighValue="86" LowColor="-1767645" HighColor="-1767645" ColoringType="0" GradientModel="1" />
+    <Break Caption="Wetlands" LowValue="87" HighValue="87" LowColor="-8408398" HighColor="-8408398" ColoringType="0" GradientModel="1" />
+    <Break Caption="Nonag/Undefined" LowValue="88" HighValue="88" LowColor="-1507393" HighColor="-1507393" ColoringType="0" GradientModel="1" />
+    <Break Caption="Mixed Water/Crops" LowValue="90" HighValue="90" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Mixed Water/Clouds" LowValue="91" HighValue="91" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Aquaculture" LowValue="92" HighValue="92" LowColor="-16711681" HighColor="-16711681" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="93" HighValue="110" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Open Water" LowValue="111" HighValue="111" LowColor="-11767645" HighColor="-11767645" ColoringType="0" GradientModel="1" />
+    <Break Caption="Perennial Ice/Snow" LowValue="112" HighValue="112" LowColor="-2891015" HighColor="-2891015" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="113" HighValue="120" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="121" HighValue="124" LowColor="-6579301" HighColor="-6579301" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="125" HighValue="130" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Barren" LowValue="131" HighValue="131" LowColor="-3358813" HighColor="-3358813" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="132" HighValue="140" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Deciduous Forest" LowValue="141" HighValue="143" LowColor="-7091053" HighColor="-7091053" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="144" HighValue="151" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Shrubland" LowValue="152" HighValue="152" LowColor="-3746146" HighColor="-3746146" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="153" HighValue="170" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Grassland Herbaceous" LowValue="171" HighValue="171" LowColor="-1507393" HighColor="-1507393" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="172" HighValue="180" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="Pasture/Hay" LowValue="181" HighValue="181" LowColor="-1507393" HighColor="-1507393" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="182" HighValue="189" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+    <Break Caption="NLCD - Woody Wetlands" LowValue="190" HighValue="190" LowColor="-8408398" HighColor="-8408398" ColoringType="0" GradientModel="1" />
+    <Break Caption="" LowValue="191" HighValue="194" LowColor="-16777216" HighColor="-16777216" ColoringType="0" GradientModel="1" />
+  </GridColoringScheme>
+</ColoringScheme>

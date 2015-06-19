@@ -1,0 +1,13 @@
+Month,BeefCattleGrazingDays,HorseGrazingDays,SheepGrazingDays,OtherAgAnimalGrazingDays,FractionOfTimeBeefCattleInStreams
+January,0,3,31,0,0
+February,0,3,28,0,0
+March,0,3,31,0,0
+April,30,27,30,0,0.33
+May,31,28,31,0,0.33
+June,30,27,30,0,0.50
+July,31,28,31,0,0.50
+August,31,28,31,0,0.50
+September,30,27,30,0,0.33
+October,31,28,31,0,0.33
+November,30,27,30,0,0.17
+December,0,3,31,0,0

@@ -1,0 +1,52 @@
+#DataGroupName,VariableName
+SDPOutputData,Debug
+SDPOutputData,ISCOutDir
+SDPOutputData,MetDir
+SDPOutputData,PMSizeCategory
+SDPOutputData,PMSizeCategoryNum
+Site Layout,AirID
+Site Layout,AirLocX
+Site Layout,AirLocXLong
+Site Layout,AirLocY
+Site Layout,AirLocYLat
+Site Layout,ATIndex
+Site Layout,MetSta
+Site Layout,NumAir
+Site Layout,SettingID
+Site Layout,SiteGeoRefX
+Site Layout,SiteGeoRefY
+Site Layout,SiteLatitude
+Site Layout,SiteLongitude
+Site Layout,SiteUTMZone
+Site Layout,SrcArea
+Site Layout,SrcLocX
+Site Layout,SrcLocY
+Site Layout,SrcLWS
+Site Layout,SrcLWSSubAreaID
+Site Layout,SrcNumLWS
+Site Layout,SrcType
+Air,AirData
+Air,AirSplineAngle
+Air,AirSplineDistance
+Air,AnemHght
+Air,ArrayLen
+Air,DryDpStr
+Air,IceScav
+Air,LiqScav
+Air,MASSFRAX
+Air,MASSFRAXOption
+Air,NumAirSplineAngle
+Air,NumAirSplineDist
+Air,PARTDIAM
+Air,PartID
+Air,PARTSICE
+Air,PARTSLIQ
+Air,RuralStr
+Air,SCIMBYHR
+Air,ScimStr
+Air,ScrId
+Air,SHight
+Air,SplineOption
+Air,StartYr
+Air,SurfData
+Air,WetDpStr
