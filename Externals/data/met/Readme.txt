@@ -1,1 +1,0 @@
-Empty met.shp file.  Here because of a DotSpatial bug that prevents adding shapes to a newly created empty shapefile.
