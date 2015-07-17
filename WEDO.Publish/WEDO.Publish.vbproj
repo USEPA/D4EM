@@ -46,10 +46,49 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="atcData, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+    </Reference>
+    <Reference Include="atcHspfBinOut">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcHspfBinOut.dll</HintPath>
+    </Reference>
+    <Reference Include="atcMetCmp, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcMetCmp.dll</HintPath>
+    </Reference>
+    <Reference Include="atcSegmentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcSegmentation.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesMath">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesMath.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesStatistics">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesStatistics.dll</HintPath>
+    </Reference>
+    <Reference Include="atcUCI">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcUCI.dll</HintPath>
+    </Reference>
+    <Reference Include="atcUtility">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="atcWDM, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
+    </Reference>
+    <Reference Include="MapWinUtility">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="SwatObject">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\SwatObject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -77,6 +116,8 @@
       <DependentUpon>frmPublishMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="modPublishGlobal.vb" />
+    <Compile Include="modPublishHSPF.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
