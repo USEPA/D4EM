@@ -8,8 +8,6 @@ Imports System.IO.Compression.ZipFile
 Public Class frmPublishMain
 
     Private AllGroups As New List(Of GroupBox)
-    Private ChooseInputFilesText As String = "Choose Input Files to Publish"
-    Private ChooseOutputFilesText As String = "Choose Output Files to Include Data From"
     Private TimeseriesGroupToSave As atcTimeseriesGroup
 
     Private Sub btnHSPF_Click(sender As Object, e As EventArgs) Handles btnHSPF.Click
@@ -19,28 +17,13 @@ Public Class frmPublishMain
 
     Private Sub btnSWAT_Click(sender As Object, e As EventArgs) Handles btnSWAT.Click
         MetadataInfo.PublishingModelType = "SWAT"
-
-        If radioInputs.Checked Then
-            'lstFiles.Items.Add(UCIFilename, True)
-            'AddFilesToList(FilesInUCI(True, False, False, False))
-            grpChooseFiles.Text = ChooseInputFilesText
-            btnSaveFiles.Visible = True
-            btnSaveData.Visible = False
-        Else
-            'AddFilesToList(FilesInUCI(True, True, False, False))
-            grpChooseFiles.Text = ChooseOutputFilesText
-            btnSaveFiles.Visible = False
-            btnSaveData.Visible = True
-        End If
-
         ShowGroup(grpChooseFiles)
     End Sub
 
-    Private Sub AddFilesToList(aFiles As IEnumerable(Of String))
+    Private Sub AddFilesToList(aFiles As IEnumerable(Of String), lst As Windows.Forms.CheckedListBox)
         For Each lFileName In aFiles
-            Dim lAddedIndex As Integer = lstFiles.Items.Add(lFileName, True)
-            If Not IO.File.Exists(lFileName) Then
-                lstFiles.SetItemChecked(lAddedIndex, False)
+            If Not lst.Items.Contains(lFileName) Then
+                lst.Items.Add(lFileName, IO.File.Exists(lFileName))
             End If
         Next
     End Sub
@@ -69,19 +52,15 @@ Public Class frmPublishMain
                 End If
             End With
         End If
+        ShowGroup(grpProgress)
         If UCIFile() IsNot Nothing Then
-            If radioInputs.Checked Then
-                lstFiles.Items.Add(UCIFilename, True)
-                AddFilesToList(FilesInUCI(True, False, False, False))
-                grpChooseFiles.Text = ChooseInputFilesText
-                btnSaveFiles.Visible = True
-                btnSaveData.Visible = False
-            Else
-                AddFilesToList(FilesInUCI(True, True, False, False))
-                grpChooseFiles.Text = ChooseOutputFilesText
-                btnSaveFiles.Visible = False
-                btnSaveData.Visible = True
-            End If
+            lstInputFiles.Items.Clear()
+            lstInputFiles.Items.Add(UCIFilename, True)
+            AddFilesToList(FilesInUCI(True, False, False, False, False), lstInputFiles)
+
+            lstOutputFiles.Items.Clear()
+            AddFilesToList(FilesInUCI(True, True, False, False, True), lstOutputFiles)
+
             ShowGroup(grpChooseFiles)
         Else
             ShowGroup(grpChooseModel)
@@ -112,20 +91,30 @@ Public Class frmPublishMain
         ShowGroup(grpChooseModel)
     End Sub
 
-    Private Sub btnAddFiles_Click(sender As Object, e As EventArgs) Handles btnAddFiles.Click
+    Private Sub btnAddInputFiles_Click(sender As Object, e As EventArgs) Handles btnAddInputFiles.Click
         Dim lFileDialog As New Windows.Forms.OpenFileDialog()
         With lFileDialog
             .Title = "Select Files to Add"
             .Filter = "All Files|*.*"
             .FilterIndex = 0
-            .DefaultExt = ".uci"
             .CheckFileExists = True
             .CheckPathExists = True
-            .FileName = UCIFilename
             If .ShowDialog(Me) = DialogResult.OK Then
-                For Each lFileName In .FileNames
-                    lstFiles.Items.Add(lFileName, True)
-                Next
+                AddFilesToList(.FileNames, lstInputFiles)
+            End If
+        End With
+    End Sub
+
+    Private Sub btnAddOutputFiles_Click(sender As Object, e As EventArgs) Handles btnAddOutputFiles.Click
+        Dim lFileDialog As New Windows.Forms.OpenFileDialog()
+        With lFileDialog
+            .Title = "Select Files to Add"
+            .Filter = "All Files|*.*"
+            .FilterIndex = 0
+            .CheckFileExists = True
+            .CheckPathExists = True
+            If .ShowDialog(Me) = DialogResult.OK Then
+                AddFilesToList(.FileNames, lstOutputFiles)
             End If
         End With
     End Sub
@@ -138,7 +127,7 @@ Public Class frmPublishMain
                 OpenUCI(lAllFiles(0))
             Else
                 For Each lFileName As String In lAllFiles
-                    lstFiles.Items.Add(lFileName)
+                    lstInputFiles.Items.Add(lFileName)
                 Next
                 ShowGroup(grpChooseFiles)
             End If
@@ -165,7 +154,7 @@ Public Class frmPublishMain
 
     Private Sub btnChooseFilesNext_Click(sender As Object, e As EventArgs) Handles btnChooseFilesNext.Click
         If MetadataInfo.ModelRunDate < #1/1/1920# Then
-            For Each lDataFileName As String In lstFiles.CheckedItems
+            For Each lDataFileName As String In lstInputFiles.CheckedItems
                 If IO.File.Exists(lDataFileName) Then
                     Dim lFileDate As Date = IO.File.GetLastWriteTime(lDataFileName)
                     If lFileDate > MetadataInfo.ModelRunDate Then
@@ -175,19 +164,23 @@ Public Class frmPublishMain
             Next
         End If
 
-        If radioInputs.Checked Then
-            PopulateMetadata()
-            ShowGroup(grpMetadata)
-        Else
+        If lstOutputFiles.CheckedItems.Count > 0 Then
             lblProgress.Text = "Selecting Data to Upload"
             ShowGroup(grpProgress)
-            For Each lDataFileName As String In lstFiles.CheckedItems
+            For Each lDataFileName As String In lstOutputFiles.CheckedItems
+                lblProgress.Text = "Opening " & lDataFileName
+                ShowGroup(grpProgress)
                 atcDataManager.OpenDataSource(lDataFileName)
             Next
+            lblProgress.Text = "Selecting Output Datasets to Publish"
+            ShowGroup(grpProgress)
             TimeseriesGroupToSave = atcDataManager.UserSelectData("Select Data to Publish")
             Dim lAllLocations = TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
             PopulateLocations()
             ShowGroup(grpMapLocations)
+        Else
+            PopulateMetadata()
+            ShowGroup(grpMetadata)
         End If
     End Sub
 
@@ -332,30 +325,30 @@ AskUser:
         End With
     End Function
 
-    Private Sub btnSaveFiles_Click(sender As Object, e As EventArgs) Handles btnSaveFiles.Click
-        Try
-            Dim lZipFileName As String = AskForZipFileNameToSaveIn()
-            barProgress.Minimum = 0
-            barProgress.Value = 0
-            barProgress.Maximum = lstFiles.CheckedItems.Count
-            barProgress.Visible = True
-            Using lZipArchive As ZipArchive = ZipFile.Open(lZipFileName, ZipArchiveMode.Create)
-                AddMetadataToZipArchive(lZipArchive)
-                For Each lAddFileName As String In lstFiles.CheckedItems
-                    ZipFileExtensions.CreateEntryFromFile(lZipArchive, lAddFileName, IO.Path.GetFileName(lAddFileName))
-                    barProgress.Value += 1
-                    barProgress.Refresh()
-                    Application.DoEvents()
-                Next
-            End Using
-            lblProgress.Text = "Wrote " & lZipFileName
-            barProgress.Visible = False
-        Catch ex As Exception
-            If ex.Message <> "Cancel" Then
-                MsgBox("Error creating zip file: " & vbCrLf & ex.ToString)
-            End If
-        End Try
-    End Sub
+    'Private Sub btnSaveFiles_Click(sender As Object, e As EventArgs) Handles btnSaveFiles.Click
+    '    Try
+    '        Dim lZipFileName As String = AskForZipFileNameToSaveIn()
+    '        barProgress.Minimum = 0
+    '        barProgress.Value = 0
+    '        barProgress.Maximum = lstInputFiles.CheckedItems.Count
+    '        barProgress.Visible = True
+    '        Using lZipArchive As ZipArchive = ZipFile.Open(lZipFileName, ZipArchiveMode.Create)
+    '            AddMetadataToZipArchive(lZipArchive)
+    '            For Each lAddFileName As String In lstInputFiles.CheckedItems
+    '                ZipFileExtensions.CreateEntryFromFile(lZipArchive, lAddFileName, IO.Path.GetFileName(lAddFileName))
+    '                barProgress.Value += 1
+    '                barProgress.Refresh()
+    '                Application.DoEvents()
+    '            Next
+    '        End Using
+    '        lblProgress.Text = "Wrote " & lZipFileName
+    '        barProgress.Visible = False
+    '    Catch ex As Exception
+    '        If ex.Message <> "Cancel" Then
+    '            MsgBox("Error creating zip file: " & vbCrLf & ex.ToString)
+    '        End If
+    '    End Try
+    'End Sub
 
     Private Sub AddMetadataToZipArchive(aZipArchive As ZipArchive)
         Dim lMetadataEntry As ZipArchiveEntry = aZipArchive.CreateEntry("Metadata.txt")
@@ -364,7 +357,7 @@ AskUser:
         End Using
     End Sub
 
-    Private Sub btnSaveData_Click(sender As Object, e As EventArgs) Handles btnSaveData.Click
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Try
             Dim lZipFileName As String = AskForZipFileNameToSaveIn()
 
@@ -373,23 +366,37 @@ AskUser:
                 lLocationMap.Add(AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
                 'SaveSetting(g_AppNameShort, "LocationAssociations", AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
             Next
-
+            lblProgress.Text = "Saving " & lZipFileName
+            ShowGroup(grpProgress)
             barProgress.Minimum = 0
             barProgress.Value = 0
-            barProgress.Maximum = TimeseriesGroupToSave.Count
+            barProgress.Maximum = lstInputFiles.CheckedItems.Count + TimeseriesGroupToSave.Count
             barProgress.Visible = True
+
+            Dim lInputsZipFileName As String = GetTemporaryFileName(IO.Path.ChangeExtension(lZipFileName, ".inputs"), ".zip")
+            Using lZipStream As IO.FileStream = New IO.FileStream(lInputsZipFileName, IO.FileMode.CreateNew)
+                Using lZipArchive As ZipArchive = New ZipArchive(lZipStream, ZipArchiveMode.Create)
+                    AddMetadataToZipArchive(lZipArchive)
+                    For Each lAddFileName As String In lstInputFiles.CheckedItems
+                        ZipFileExtensions.CreateEntryFromFile(lZipArchive, lAddFileName, IO.Path.GetFileName(lAddFileName))
+                        barProgress.Value += 1
+                        barProgress.Refresh()
+                        Application.DoEvents()
+                    Next
+                End Using
+            End Using
 
             Using lZipStream As IO.FileStream = New IO.FileStream(lZipFileName, IO.FileMode.CreateNew)
                 Using lZipArchive As ZipArchive = New ZipArchive(lZipStream, ZipArchiveMode.Create)
                     AddMetadataToZipArchive(lZipArchive)
-
+                    ZipFileExtensions.CreateEntryFromFile(lZipArchive, lInputsZipFileName, "inputs.zip")
                     For Each lTs As atcTimeseries In TimeseriesGroupToSave
                         Dim lConstituent As String = lTs.Attributes.GetValue("Constituent")
                         Dim lLocation = lTs.Attributes.GetValue("Location")
                         Dim lNHDID As String = lLocationMap.ItemByKey(lLocation)
                         If lNHDID = "<none>" Then Throw New ApplicationException("Missing NHD ID for " & lLocation)
                         lTs.Attributes.SetValue("NHDReachCode", lNHDID)
-                        Dim lNewEntry As ZipArchiveEntry = lZipArchive.CreateEntry(lConstituent & "-" & lNHDID)
+                        Dim lNewEntry As ZipArchiveEntry = lZipArchive.CreateEntry(lConstituent & "-" & lNHDID & ".csv")
                         Using lEntryWriter As New IO.StreamWriter(lNewEntry.Open())
                             WriteAttributes(lTs, lEntryWriter)
                             WriteValues(lTs, lEntryWriter)
@@ -402,9 +409,10 @@ AskUser:
                     lZipArchive.Dispose()
                 End Using
             End Using
-
+            TryDelete(lInputsZipFileName)
             lblProgress.Text = "Wrote " & lZipFileName
             barProgress.Visible = False
+            btnClose.Visible = True
         Catch ex As Exception
             If ex.Message <> "Cancel" Then
                 MsgBox("Error creating zip file: " & vbCrLf & ex.ToString)
@@ -415,5 +423,19 @@ AskUser:
     Private Sub btnNHDPlusNext_Click(sender As Object, e As EventArgs) Handles btnNHDPlusNext.Click
         PopulateMetadata()
         ShowGroup(grpMetadata)
+    End Sub
+
+    Private Sub btnNHDLookup_Click(sender As Object, e As EventArgs) Handles btnNHDLookup.Click
+        If MsgBox("Zoom to your area of interest by selecting a state and county (optional) from the dropdown when prompted by EnviroAtlas." & vbCrLf & _
+               "Click on 'Supplemental Maps' tab at the top of the map." & vbCrLf & _
+               "Un-collapse 'Biophysical Data – Vector' panel from the list of supplemental maps." & vbCrLf & _
+               "Check 'National Hydrography Dataset (NHD) – Medium' checkbox." & vbCrLf & _
+               "You may have to zoom in further to see the streams network.", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+            OpenFile("http://enviroatlas.epa.gov/enviroatlas/InteractiveMapEntrance/InteractiveMap/index.html")
+        End If
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
     End Sub
 End Class

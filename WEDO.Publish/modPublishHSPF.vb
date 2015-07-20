@@ -50,7 +50,7 @@ Module modPublishHSPF
         End Set
     End Property
 
-    Public Function FilesInUCI(aIncludeWDM As Boolean, aIncludeHBN As Boolean, aIncludeECH As Boolean, aIncludeOUT As Boolean) As List(Of String)
+    Public Function FilesInUCI(aIncludeWDM As Boolean, aIncludeHBN As Boolean, aIncludeECH As Boolean, aIncludeOUT As Boolean, aOutputWDMOnly As Boolean) As List(Of String)
         Dim lFiles As New List(Of String)
         Dim lFilesBlock As HspfFilesBlk = UCIFile.FilesBlock
         Dim lUciFolder As String = IO.Path.GetDirectoryName(UCIFilename)
@@ -60,7 +60,25 @@ Module modPublishHSPF
             Dim lFullPathFromUCI As String = atcUtility.modFile.AbsolutePath(lFileName, lUciFolder)
             Select Case lExtension
                 Case ".wdm"
-                    If aIncludeWDM Then lFiles.Add(lFullPathFromUCI)
+                    If aIncludeWDM Then
+                        Dim lIncludeThisOne As Boolean = False
+                        If aOutputWDMOnly Then
+                            Dim lThisVolName As String = lFilesBlock.Value(lIndex).Typ
+                            For Each lOper As HspfOperation In UCIFile.OpnBlks("RCHRES").Ids
+                                For Each lConn As HspfConnection In lOper.Targets
+                                    If lConn.Target.VolName = lThisVolName Then
+                                        lIncludeThisOne = True
+                                        GoTo AddWDM
+                                    End If
+                                Next
+                            Next
+                        Else
+                            lIncludeThisOne = True
+                        End If
+                        If lIncludeThisOne Then
+AddWDM:                     lFiles.Add(lFullPathFromUCI)
+                        End If
+                    End If
                 Case ".hbn"
                     If aIncludeHBN Then lFiles.Add(lFullPathFromUCI)
                 Case ".ech"
@@ -73,6 +91,39 @@ Module modPublishHSPF
             End Select
         Next
         Return lFiles
+    End Function
+
+    Public Function OutputDatasetsInWDM(aWDM As atcWDM.atcDataSourceWDM, aOnlyDatasetsForWEDO As Boolean) As atcCollection
+        Dim lDSNs As New atcCollection
+        Dim lFilesBlock As HspfFilesBlk = UCIFile.FilesBlock
+        Dim lUciFolder As String = IO.Path.GetDirectoryName(UCIFilename)
+        For lIndex As Integer = 1 To lFilesBlock.Count
+            Dim lFileName As String = lFilesBlock.Value(lIndex).Name.Trim
+            Dim lExtension As String = IO.Path.GetExtension(lFileName).ToLowerInvariant()
+            Dim lFullPathFromUCI As String = atcUtility.modFile.AbsolutePath(lFileName, lUciFolder)
+            If lFullPathFromUCI.ToLowerInvariant() = aWDM.Specification.ToLowerInvariant() Then
+                Dim lThisVolName As String = lFilesBlock.Value(lIndex).Typ
+                For Each lOper As HspfOperation In UCIFile.OpnBlks("RCHRES").Ids
+                    For Each lConn As HspfConnection In lOper.Targets
+                        If lConn.Target.VolName = lThisVolName Then
+                            Dim lIncludeThisOne As Boolean = False
+                            Dim lWdmDsn As Integer = lConn.Target.VolId
+                            Dim lReachID As Integer = lOper.Id
+                            If aOnlyDatasetsForWEDO Then
+                                If lConn.Source.Member = "SSED" AndAlso lConn.Source.MemSub1 = 4 Then
+                                    'This is TSS
+                                    lIncludeThisOne = True
+                                End If
+                            Else
+                                lIncludeThisOne = True
+                            End If
+                            lDSNs.Add(lConn.Source.Member & ":" & lConn.Source.MemSub1, lWdmDsn)
+                        End If
+                    Next
+                Next
+            End If
+        Next
+        Return lDSNs
     End Function
 
 End Module

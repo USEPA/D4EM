@@ -23,40 +23,48 @@ Partial Class frmPublishMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.grpChooseModel = New System.Windows.Forms.GroupBox()
-        Me.radioOutputs = New System.Windows.Forms.RadioButton()
-        Me.radioInputs = New System.Windows.Forms.RadioButton()
         Me.btnSWAT = New System.Windows.Forms.Button()
         Me.btnHSPF = New System.Windows.Forms.Button()
-        Me.grpChooseFiles = New System.Windows.Forms.GroupBox()
-        Me.btnAddFiles = New System.Windows.Forms.Button()
-        Me.lstFiles = New System.Windows.Forms.CheckedListBox()
-        Me.btnChooseFilesNext = New System.Windows.Forms.Button()
-        Me.btnSaveFiles = New System.Windows.Forms.Button()
+        Me.grpChooseInputFiles = New System.Windows.Forms.GroupBox()
+        Me.btnAddInputFiles = New System.Windows.Forms.Button()
+        Me.lstInputFiles = New System.Windows.Forms.CheckedListBox()
         Me.grpProgress = New System.Windows.Forms.GroupBox()
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.barProgress = New System.Windows.Forms.ProgressBar()
         Me.grpMapLocations = New System.Windows.Forms.GroupBox()
+        Me.btnNHDLookup = New System.Windows.Forms.Button()
+        Me.btnNHDPlusNext = New System.Windows.Forms.Button()
         Me.txtLocationID2 = New System.Windows.Forms.TextBox()
         Me.txtLocationID1 = New System.Windows.Forms.TextBox()
         Me.lblLocation2 = New System.Windows.Forms.Label()
         Me.lblLocation1 = New System.Windows.Forms.Label()
         Me.lblLocationID = New System.Windows.Forms.Label()
         Me.lblLocation = New System.Windows.Forms.Label()
-        Me.btnSaveData = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me.grpMetadata = New System.Windows.Forms.GroupBox()
         Me.txtMetadata = New System.Windows.Forms.RichTextBox()
-        Me.btnNHDPlusNext = New System.Windows.Forms.Button()
+        Me.grpChooseFiles = New System.Windows.Forms.GroupBox()
+        Me.splitChooseFiles = New System.Windows.Forms.SplitContainer()
+        Me.grpChooseOutputFiles = New System.Windows.Forms.GroupBox()
+        Me.btnAddOutputFiles = New System.Windows.Forms.Button()
+        Me.lstOutputFiles = New System.Windows.Forms.CheckedListBox()
+        Me.btnChooseFilesNext = New System.Windows.Forms.Button()
+        Me.btnClose = New System.Windows.Forms.Button()
         Me.grpChooseModel.SuspendLayout()
-        Me.grpChooseFiles.SuspendLayout()
+        Me.grpChooseInputFiles.SuspendLayout()
         Me.grpProgress.SuspendLayout()
         Me.grpMapLocations.SuspendLayout()
         Me.grpMetadata.SuspendLayout()
+        Me.grpChooseFiles.SuspendLayout()
+        CType(Me.splitChooseFiles, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.splitChooseFiles.Panel1.SuspendLayout()
+        Me.splitChooseFiles.Panel2.SuspendLayout()
+        Me.splitChooseFiles.SuspendLayout()
+        Me.grpChooseOutputFiles.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpChooseModel
         '
-        Me.grpChooseModel.Controls.Add(Me.radioOutputs)
-        Me.grpChooseModel.Controls.Add(Me.radioInputs)
         Me.grpChooseModel.Controls.Add(Me.btnSWAT)
         Me.grpChooseModel.Controls.Add(Me.btnHSPF)
         Me.grpChooseModel.Location = New System.Drawing.Point(12, 12)
@@ -65,28 +73,6 @@ Partial Class frmPublishMain
         Me.grpChooseModel.TabIndex = 0
         Me.grpChooseModel.TabStop = False
         Me.grpChooseModel.Text = "Choose Model to Publish"
-        '
-        'radioOutputs
-        '
-        Me.radioOutputs.AutoSize = True
-        Me.radioOutputs.Location = New System.Drawing.Point(24, 67)
-        Me.radioOutputs.Name = "radioOutputs"
-        Me.radioOutputs.Size = New System.Drawing.Size(134, 17)
-        Me.radioOutputs.TabIndex = 5
-        Me.radioOutputs.Text = "Model Output Datasets"
-        Me.radioOutputs.UseVisualStyleBackColor = True
-        '
-        'radioInputs
-        '
-        Me.radioInputs.AutoSize = True
-        Me.radioInputs.Checked = True
-        Me.radioInputs.Location = New System.Drawing.Point(24, 37)
-        Me.radioInputs.Name = "radioInputs"
-        Me.radioInputs.Size = New System.Drawing.Size(105, 17)
-        Me.radioInputs.TabIndex = 4
-        Me.radioInputs.TabStop = True
-        Me.radioInputs.Text = "Model Input Files"
-        Me.radioInputs.UseVisualStyleBackColor = True
         '
         'btnSWAT
         '
@@ -106,65 +92,45 @@ Partial Class frmPublishMain
         Me.btnHSPF.Text = "HSPF"
         Me.btnHSPF.UseVisualStyleBackColor = True
         '
-        'grpChooseFiles
+        'grpChooseInputFiles
         '
-        Me.grpChooseFiles.Controls.Add(Me.btnAddFiles)
-        Me.grpChooseFiles.Controls.Add(Me.lstFiles)
-        Me.grpChooseFiles.Controls.Add(Me.btnChooseFilesNext)
-        Me.grpChooseFiles.Location = New System.Drawing.Point(199, 12)
-        Me.grpChooseFiles.Name = "grpChooseFiles"
-        Me.grpChooseFiles.Size = New System.Drawing.Size(237, 335)
-        Me.grpChooseFiles.TabIndex = 2
-        Me.grpChooseFiles.TabStop = False
-        Me.grpChooseFiles.Text = "Choose Files to Publish"
+        Me.grpChooseInputFiles.Controls.Add(Me.btnAddInputFiles)
+        Me.grpChooseInputFiles.Controls.Add(Me.lstInputFiles)
+        Me.grpChooseInputFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.grpChooseInputFiles.Location = New System.Drawing.Point(0, 0)
+        Me.grpChooseInputFiles.Name = "grpChooseInputFiles"
+        Me.grpChooseInputFiles.Size = New System.Drawing.Size(247, 158)
+        Me.grpChooseInputFiles.TabIndex = 2
+        Me.grpChooseInputFiles.TabStop = False
+        Me.grpChooseInputFiles.Text = "Input Files to Publish"
         '
-        'btnAddFiles
+        'btnAddInputFiles
         '
-        Me.btnAddFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnAddFiles.AutoSize = True
-        Me.btnAddFiles.Location = New System.Drawing.Point(6, 306)
-        Me.btnAddFiles.Name = "btnAddFiles"
-        Me.btnAddFiles.Size = New System.Drawing.Size(112, 23)
-        Me.btnAddFiles.TabIndex = 2
-        Me.btnAddFiles.Text = "Add More Files..."
-        Me.btnAddFiles.UseVisualStyleBackColor = True
+        Me.btnAddInputFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAddInputFiles.AutoSize = True
+        Me.btnAddInputFiles.Location = New System.Drawing.Point(6, 129)
+        Me.btnAddInputFiles.Name = "btnAddInputFiles"
+        Me.btnAddInputFiles.Size = New System.Drawing.Size(112, 23)
+        Me.btnAddInputFiles.TabIndex = 2
+        Me.btnAddInputFiles.Text = "Add Input Files..."
+        Me.btnAddInputFiles.UseVisualStyleBackColor = True
         '
-        'lstFiles
+        'lstInputFiles
         '
-        Me.lstFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.lstInputFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lstFiles.CheckOnClick = True
-        Me.lstFiles.FormattingEnabled = True
-        Me.lstFiles.IntegralHeight = False
-        Me.lstFiles.Location = New System.Drawing.Point(6, 19)
-        Me.lstFiles.Name = "lstFiles"
-        Me.lstFiles.Size = New System.Drawing.Size(225, 281)
-        Me.lstFiles.TabIndex = 0
-        '
-        'btnChooseFilesNext
-        '
-        Me.btnChooseFilesNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnChooseFilesNext.Location = New System.Drawing.Point(156, 306)
-        Me.btnChooseFilesNext.Name = "btnChooseFilesNext"
-        Me.btnChooseFilesNext.Size = New System.Drawing.Size(75, 23)
-        Me.btnChooseFilesNext.TabIndex = 3
-        Me.btnChooseFilesNext.Text = "Next"
-        Me.btnChooseFilesNext.UseVisualStyleBackColor = True
-        '
-        'btnSaveFiles
-        '
-        Me.btnSaveFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSaveFiles.Location = New System.Drawing.Point(232, 306)
-        Me.btnSaveFiles.Name = "btnSaveFiles"
-        Me.btnSaveFiles.Size = New System.Drawing.Size(75, 23)
-        Me.btnSaveFiles.TabIndex = 1
-        Me.btnSaveFiles.Text = "Save"
-        Me.btnSaveFiles.UseVisualStyleBackColor = True
-        Me.btnSaveFiles.Visible = False
+        Me.lstInputFiles.CheckOnClick = True
+        Me.lstInputFiles.FormattingEnabled = True
+        Me.lstInputFiles.IntegralHeight = False
+        Me.lstInputFiles.Location = New System.Drawing.Point(6, 19)
+        Me.lstInputFiles.Name = "lstInputFiles"
+        Me.lstInputFiles.Size = New System.Drawing.Size(235, 104)
+        Me.lstInputFiles.TabIndex = 0
         '
         'grpProgress
         '
+        Me.grpProgress.Controls.Add(Me.btnClose)
         Me.grpProgress.Controls.Add(Me.lblProgress)
         Me.grpProgress.Controls.Add(Me.barProgress)
         Me.grpProgress.Location = New System.Drawing.Point(3, 12)
@@ -195,6 +161,7 @@ Partial Class frmPublishMain
         '
         'grpMapLocations
         '
+        Me.grpMapLocations.Controls.Add(Me.btnNHDLookup)
         Me.grpMapLocations.Controls.Add(Me.btnNHDPlusNext)
         Me.grpMapLocations.Controls.Add(Me.txtLocationID2)
         Me.grpMapLocations.Controls.Add(Me.txtLocationID1)
@@ -208,6 +175,27 @@ Partial Class frmPublishMain
         Me.grpMapLocations.TabIndex = 4
         Me.grpMapLocations.TabStop = False
         Me.grpMapLocations.Text = "Specify NHDPlus Stream IDs"
+        '
+        'btnNHDLookup
+        '
+        Me.btnNHDLookup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnNHDLookup.AutoSize = True
+        Me.btnNHDLookup.Location = New System.Drawing.Point(6, 306)
+        Me.btnNHDLookup.Name = "btnNHDLookup"
+        Me.btnNHDLookup.Size = New System.Drawing.Size(132, 23)
+        Me.btnNHDLookup.TabIndex = 17
+        Me.btnNHDLookup.Text = "Find NHD Reach Codes"
+        Me.btnNHDLookup.UseVisualStyleBackColor = True
+        '
+        'btnNHDPlusNext
+        '
+        Me.btnNHDPlusNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnNHDPlusNext.Location = New System.Drawing.Point(303, 306)
+        Me.btnNHDPlusNext.Name = "btnNHDPlusNext"
+        Me.btnNHDPlusNext.Size = New System.Drawing.Size(75, 23)
+        Me.btnNHDPlusNext.TabIndex = 16
+        Me.btnNHDPlusNext.Text = "Next"
+        Me.btnNHDPlusNext.UseVisualStyleBackColor = True
         '
         'txtLocationID2
         '
@@ -249,9 +237,9 @@ Partial Class frmPublishMain
         Me.lblLocationID.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblLocationID.Location = New System.Drawing.Point(261, 19)
         Me.lblLocationID.Name = "lblLocationID"
-        Me.lblLocationID.Size = New System.Drawing.Size(118, 13)
+        Me.lblLocationID.Size = New System.Drawing.Size(108, 13)
         Me.lblLocationID.TabIndex = 9
-        Me.lblLocationID.Text = "NHDPlus Stream ID"
+        Me.lblLocationID.Text = "NHD Reach Code"
         '
         'lblLocation
         '
@@ -263,21 +251,20 @@ Partial Class frmPublishMain
         Me.lblLocation.TabIndex = 8
         Me.lblLocation.Text = "Location"
         '
-        'btnSaveData
+        'btnSave
         '
-        Me.btnSaveData.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSaveData.Location = New System.Drawing.Point(232, 306)
-        Me.btnSaveData.Name = "btnSaveData"
-        Me.btnSaveData.Size = New System.Drawing.Size(75, 23)
-        Me.btnSaveData.TabIndex = 1
-        Me.btnSaveData.Text = "Save"
-        Me.btnSaveData.UseVisualStyleBackColor = True
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.Location = New System.Drawing.Point(232, 306)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(75, 23)
+        Me.btnSave.TabIndex = 1
+        Me.btnSave.Text = "Save"
+        Me.btnSave.UseVisualStyleBackColor = True
         '
         'grpMetadata
         '
         Me.grpMetadata.Controls.Add(Me.txtMetadata)
-        Me.grpMetadata.Controls.Add(Me.btnSaveData)
-        Me.grpMetadata.Controls.Add(Me.btnSaveFiles)
+        Me.grpMetadata.Controls.Add(Me.btnSave)
         Me.grpMetadata.Location = New System.Drawing.Point(648, 12)
         Me.grpMetadata.Name = "grpMetadata"
         Me.grpMetadata.Size = New System.Drawing.Size(313, 335)
@@ -296,15 +283,91 @@ Partial Class frmPublishMain
         Me.txtMetadata.TabIndex = 0
         Me.txtMetadata.Text = ""
         '
-        'btnNHDPlusNext
+        'grpChooseFiles
         '
-        Me.btnNHDPlusNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNHDPlusNext.Location = New System.Drawing.Point(303, 306)
-        Me.btnNHDPlusNext.Name = "btnNHDPlusNext"
-        Me.btnNHDPlusNext.Size = New System.Drawing.Size(75, 23)
-        Me.btnNHDPlusNext.TabIndex = 16
-        Me.btnNHDPlusNext.Text = "Next"
-        Me.btnNHDPlusNext.UseVisualStyleBackColor = True
+        Me.grpChooseFiles.Controls.Add(Me.splitChooseFiles)
+        Me.grpChooseFiles.Location = New System.Drawing.Point(183, 12)
+        Me.grpChooseFiles.Name = "grpChooseFiles"
+        Me.grpChooseFiles.Size = New System.Drawing.Size(253, 335)
+        Me.grpChooseFiles.TabIndex = 6
+        Me.grpChooseFiles.TabStop = False
+        Me.grpChooseFiles.Text = "Choose Input and Output Files to Publish"
+        '
+        'splitChooseFiles
+        '
+        Me.splitChooseFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.splitChooseFiles.Location = New System.Drawing.Point(3, 16)
+        Me.splitChooseFiles.Name = "splitChooseFiles"
+        Me.splitChooseFiles.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'splitChooseFiles.Panel1
+        '
+        Me.splitChooseFiles.Panel1.Controls.Add(Me.grpChooseInputFiles)
+        '
+        'splitChooseFiles.Panel2
+        '
+        Me.splitChooseFiles.Panel2.Controls.Add(Me.grpChooseOutputFiles)
+        Me.splitChooseFiles.Size = New System.Drawing.Size(247, 316)
+        Me.splitChooseFiles.SplitterDistance = 158
+        Me.splitChooseFiles.TabIndex = 4
+        '
+        'grpChooseOutputFiles
+        '
+        Me.grpChooseOutputFiles.Controls.Add(Me.btnAddOutputFiles)
+        Me.grpChooseOutputFiles.Controls.Add(Me.lstOutputFiles)
+        Me.grpChooseOutputFiles.Controls.Add(Me.btnChooseFilesNext)
+        Me.grpChooseOutputFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.grpChooseOutputFiles.Location = New System.Drawing.Point(0, 0)
+        Me.grpChooseOutputFiles.Name = "grpChooseOutputFiles"
+        Me.grpChooseOutputFiles.Size = New System.Drawing.Size(247, 154)
+        Me.grpChooseOutputFiles.TabIndex = 3
+        Me.grpChooseOutputFiles.TabStop = False
+        Me.grpChooseOutputFiles.Text = "Output Files to Publish Data From"
+        '
+        'btnAddOutputFiles
+        '
+        Me.btnAddOutputFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAddOutputFiles.AutoSize = True
+        Me.btnAddOutputFiles.Location = New System.Drawing.Point(6, 125)
+        Me.btnAddOutputFiles.Name = "btnAddOutputFiles"
+        Me.btnAddOutputFiles.Size = New System.Drawing.Size(112, 23)
+        Me.btnAddOutputFiles.TabIndex = 2
+        Me.btnAddOutputFiles.Text = "Add Output Files..."
+        Me.btnAddOutputFiles.UseVisualStyleBackColor = True
+        '
+        'lstOutputFiles
+        '
+        Me.lstOutputFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lstOutputFiles.CheckOnClick = True
+        Me.lstOutputFiles.FormattingEnabled = True
+        Me.lstOutputFiles.IntegralHeight = False
+        Me.lstOutputFiles.Location = New System.Drawing.Point(6, 19)
+        Me.lstOutputFiles.Name = "lstOutputFiles"
+        Me.lstOutputFiles.Size = New System.Drawing.Size(235, 100)
+        Me.lstOutputFiles.TabIndex = 0
+        '
+        'btnChooseFilesNext
+        '
+        Me.btnChooseFilesNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnChooseFilesNext.Location = New System.Drawing.Point(166, 125)
+        Me.btnChooseFilesNext.Name = "btnChooseFilesNext"
+        Me.btnChooseFilesNext.Size = New System.Drawing.Size(75, 23)
+        Me.btnChooseFilesNext.TabIndex = 3
+        Me.btnChooseFilesNext.Text = "Next"
+        Me.btnChooseFilesNext.UseVisualStyleBackColor = True
+        '
+        'btnClose
+        '
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Location = New System.Drawing.Point(299, 217)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(75, 23)
+        Me.btnClose.TabIndex = 2
+        Me.btnClose.Text = "Close"
+        Me.btnClose.UseVisualStyleBackColor = True
+        Me.btnClose.Visible = False
         '
         'frmPublishMain
         '
@@ -312,38 +375,40 @@ Partial Class frmPublishMain
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(979, 359)
-        Me.Controls.Add(Me.grpMapLocations)
-        Me.Controls.Add(Me.grpChooseFiles)
-        Me.Controls.Add(Me.grpChooseModel)
         Me.Controls.Add(Me.grpProgress)
+        Me.Controls.Add(Me.grpChooseFiles)
+        Me.Controls.Add(Me.grpMapLocations)
+        Me.Controls.Add(Me.grpChooseModel)
         Me.Controls.Add(Me.grpMetadata)
         Me.Name = "frmPublishMain"
-        Me.Text = "WEDO Publish"
+        Me.Text = "WEDO Publishing Utility"
         Me.grpChooseModel.ResumeLayout(False)
-        Me.grpChooseModel.PerformLayout()
-        Me.grpChooseFiles.ResumeLayout(False)
-        Me.grpChooseFiles.PerformLayout()
+        Me.grpChooseInputFiles.ResumeLayout(False)
+        Me.grpChooseInputFiles.PerformLayout()
         Me.grpProgress.ResumeLayout(False)
         Me.grpProgress.PerformLayout()
         Me.grpMapLocations.ResumeLayout(False)
         Me.grpMapLocations.PerformLayout()
         Me.grpMetadata.ResumeLayout(False)
+        Me.grpChooseFiles.ResumeLayout(False)
+        Me.splitChooseFiles.Panel1.ResumeLayout(False)
+        Me.splitChooseFiles.Panel2.ResumeLayout(False)
+        CType(Me.splitChooseFiles, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.splitChooseFiles.ResumeLayout(False)
+        Me.grpChooseOutputFiles.ResumeLayout(False)
+        Me.grpChooseOutputFiles.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents grpChooseModel As System.Windows.Forms.GroupBox
     Friend WithEvents btnSWAT As System.Windows.Forms.Button
     Friend WithEvents btnHSPF As System.Windows.Forms.Button
-    Friend WithEvents grpChooseFiles As System.Windows.Forms.GroupBox
-    Friend WithEvents btnAddFiles As System.Windows.Forms.Button
-    Friend WithEvents btnSaveFiles As System.Windows.Forms.Button
-    Friend WithEvents lstFiles As System.Windows.Forms.CheckedListBox
+    Friend WithEvents grpChooseInputFiles As System.Windows.Forms.GroupBox
+    Friend WithEvents btnAddInputFiles As System.Windows.Forms.Button
+    Friend WithEvents lstInputFiles As System.Windows.Forms.CheckedListBox
     Friend WithEvents grpProgress As System.Windows.Forms.GroupBox
     Friend WithEvents lblProgress As System.Windows.Forms.Label
     Friend WithEvents barProgress As System.Windows.Forms.ProgressBar
-    Friend WithEvents radioOutputs As System.Windows.Forms.RadioButton
-    Friend WithEvents radioInputs As System.Windows.Forms.RadioButton
-    Friend WithEvents btnChooseFilesNext As System.Windows.Forms.Button
     Friend WithEvents grpMapLocations As System.Windows.Forms.GroupBox
     Friend WithEvents txtLocationID2 As System.Windows.Forms.TextBox
     Friend WithEvents txtLocationID1 As System.Windows.Forms.TextBox
@@ -351,9 +416,17 @@ Partial Class frmPublishMain
     Friend WithEvents lblLocation1 As System.Windows.Forms.Label
     Friend WithEvents lblLocationID As System.Windows.Forms.Label
     Friend WithEvents lblLocation As System.Windows.Forms.Label
-    Friend WithEvents btnSaveData As System.Windows.Forms.Button
+    Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents grpMetadata As System.Windows.Forms.GroupBox
     Friend WithEvents txtMetadata As System.Windows.Forms.RichTextBox
     Friend WithEvents btnNHDPlusNext As System.Windows.Forms.Button
+    Friend WithEvents btnNHDLookup As System.Windows.Forms.Button
+    Friend WithEvents grpChooseFiles As System.Windows.Forms.GroupBox
+    Friend WithEvents splitChooseFiles As System.Windows.Forms.SplitContainer
+    Friend WithEvents grpChooseOutputFiles As System.Windows.Forms.GroupBox
+    Friend WithEvents btnAddOutputFiles As System.Windows.Forms.Button
+    Friend WithEvents lstOutputFiles As System.Windows.Forms.CheckedListBox
+    Friend WithEvents btnChooseFilesNext As System.Windows.Forms.Button
+    Friend WithEvents btnClose As System.Windows.Forms.Button
 
 End Class

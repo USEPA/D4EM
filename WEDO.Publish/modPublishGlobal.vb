@@ -40,7 +40,8 @@ Module modPublishGlobal
                         If lType.Length > 0 Then
                             lValue = lAttribute.Value.ToString.TrimEnd
                             'lWriter.WriteLine("<att name=""" & lName & """ type=" & lType & " len=" & lValue.Length & ">" & lValue & "</att>")
-                            lWriter.WriteLine("<att name=""" & lName & """ type=" & lType & ">" & lValue & "</att>")
+                            'lWriter.WriteLine("<att name=""" & lName & """ type=" & lType & ">" & lValue & "</att>")
+                            lWriter.WriteLine(lName & ", " & lValue)
                         End If
                 End Select
             End If
@@ -50,10 +51,12 @@ Module modPublishGlobal
 
         lValue = lTimeseries.numValues
         'lWriter.WriteLine("<att name=""NumValues"" type=Int len=" & lValue.Length & ">" & lValue & "</att>")
-        lWriter.WriteLine("<att name=""NumValues"" type=Int>" & lValue & "</att>")
+        'lWriter.WriteLine("<att name=""NumValues"" type=Int>" & lValue & "</att>")
+        lWriter.WriteLine("NumValues, " & lValue)
 
         lValue = Format(Date.FromOADate(lTimeseries.Dates.Value(0)), "yyyy/MM/dd HH:mm")
-        lWriter.WriteLine("<att name=""Start Date"" type=Str>" & lValue & "</att>")
+        'lWriter.WriteLine("<att name=""Start Date"" type=Str>" & lValue & "</att>")
+        lWriter.WriteLine("Start Date, " & lValue)
 
         lWriter.WriteLine("</attributes>")
     End Sub
@@ -61,7 +64,8 @@ Module modPublishGlobal
     Public Sub WriteValues(ByVal aTimeseries As atcData.atcTimeseries, lWriter As IO.StreamWriter)
         lWriter.WriteLine("<values>")
         For lIndex As Integer = 1 To aTimeseries.numValues
-            lWriter.WriteLine(Format(Date.FromOADate(aTimeseries.Dates.Value(lIndex)), "yyyy-MM-dd hh:mm") & vbTab & DoubleToString(aTimeseries.Value(lIndex)))
+            'lWriter.WriteLine(Format(Date.FromOADate(aTimeseries.Dates.Value(lIndex)), "yyyy-MM-dd hh:mm") & vbTab & DoubleToString(aTimeseries.Value(lIndex)))
+            lWriter.WriteLine(Format(Date.FromOADate(aTimeseries.Dates.Value(lIndex)), "yyyy-MM-dd HH:mm") & ", " & aTimeseries.Value(lIndex).ToString())
         Next
         lWriter.WriteLine("</values>")
     End Sub
