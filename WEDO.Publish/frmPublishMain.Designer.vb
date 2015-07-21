@@ -29,6 +29,7 @@ Partial Class frmPublishMain
         Me.btnAddInputFiles = New System.Windows.Forms.Button()
         Me.lstInputFiles = New System.Windows.Forms.CheckedListBox()
         Me.grpProgress = New System.Windows.Forms.GroupBox()
+        Me.btnClose = New System.Windows.Forms.Button()
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.barProgress = New System.Windows.Forms.ProgressBar()
         Me.grpMapLocations = New System.Windows.Forms.GroupBox()
@@ -49,7 +50,9 @@ Partial Class frmPublishMain
         Me.btnAddOutputFiles = New System.Windows.Forms.Button()
         Me.lstOutputFiles = New System.Windows.Forms.CheckedListBox()
         Me.btnChooseFilesNext = New System.Windows.Forms.Button()
-        Me.btnClose = New System.Windows.Forms.Button()
+        Me.chkLocation1 = New System.Windows.Forms.CheckBox()
+        Me.chkLocation2 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.grpChooseModel.SuspendLayout()
         Me.grpChooseInputFiles.SuspendLayout()
         Me.grpProgress.SuspendLayout()
@@ -140,6 +143,17 @@ Partial Class frmPublishMain
         Me.grpProgress.TabStop = False
         Me.grpProgress.Text = "Processing"
         '
+        'btnClose
+        '
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Location = New System.Drawing.Point(299, 217)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(75, 23)
+        Me.btnClose.TabIndex = 2
+        Me.btnClose.Text = "Close"
+        Me.btnClose.UseVisualStyleBackColor = True
+        Me.btnClose.Visible = False
+        '
         'lblProgress
         '
         Me.lblProgress.AutoSize = True
@@ -161,6 +175,9 @@ Partial Class frmPublishMain
         '
         'grpMapLocations
         '
+        Me.grpMapLocations.Controls.Add(Me.Label1)
+        Me.grpMapLocations.Controls.Add(Me.chkLocation2)
+        Me.grpMapLocations.Controls.Add(Me.chkLocation1)
         Me.grpMapLocations.Controls.Add(Me.btnNHDLookup)
         Me.grpMapLocations.Controls.Add(Me.btnNHDPlusNext)
         Me.grpMapLocations.Controls.Add(Me.txtLocationID2)
@@ -171,10 +188,10 @@ Partial Class frmPublishMain
         Me.grpMapLocations.Controls.Add(Me.lblLocation)
         Me.grpMapLocations.Location = New System.Drawing.Point(442, 12)
         Me.grpMapLocations.Name = "grpMapLocations"
-        Me.grpMapLocations.Size = New System.Drawing.Size(384, 335)
+        Me.grpMapLocations.Size = New System.Drawing.Size(495, 335)
         Me.grpMapLocations.TabIndex = 4
         Me.grpMapLocations.TabStop = False
-        Me.grpMapLocations.Text = "Specify NHDPlus Stream IDs"
+        Me.grpMapLocations.Text = "Specify NHD Reach Code of Streams to Publish"
         '
         'btnNHDLookup
         '
@@ -190,7 +207,7 @@ Partial Class frmPublishMain
         'btnNHDPlusNext
         '
         Me.btnNHDPlusNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNHDPlusNext.Location = New System.Drawing.Point(303, 306)
+        Me.btnNHDPlusNext.Location = New System.Drawing.Point(414, 306)
         Me.btnNHDPlusNext.Name = "btnNHDPlusNext"
         Me.btnNHDPlusNext.Size = New System.Drawing.Size(75, 23)
         Me.btnNHDPlusNext.TabIndex = 16
@@ -199,17 +216,21 @@ Partial Class frmPublishMain
         '
         'txtLocationID2
         '
+        Me.txtLocationID2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtLocationID2.Location = New System.Drawing.Point(264, 65)
         Me.txtLocationID2.Name = "txtLocationID2"
-        Me.txtLocationID2.Size = New System.Drawing.Size(220, 20)
+        Me.txtLocationID2.Size = New System.Drawing.Size(225, 20)
         Me.txtLocationID2.TabIndex = 15
         Me.txtLocationID2.Visible = False
         '
         'txtLocationID1
         '
+        Me.txtLocationID1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtLocationID1.Location = New System.Drawing.Point(264, 38)
         Me.txtLocationID1.Name = "txtLocationID1"
-        Me.txtLocationID1.Size = New System.Drawing.Size(220, 20)
+        Me.txtLocationID1.Size = New System.Drawing.Size(225, 20)
         Me.txtLocationID1.TabIndex = 14
         '
         'lblLocation2
@@ -235,7 +256,7 @@ Partial Class frmPublishMain
         '
         Me.lblLocationID.AutoSize = True
         Me.lblLocationID.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLocationID.Location = New System.Drawing.Point(261, 19)
+        Me.lblLocationID.Location = New System.Drawing.Point(271, 19)
         Me.lblLocationID.Name = "lblLocationID"
         Me.lblLocationID.Size = New System.Drawing.Size(108, 13)
         Me.lblLocationID.TabIndex = 9
@@ -247,9 +268,9 @@ Partial Class frmPublishMain
         Me.lblLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblLocation.Location = New System.Drawing.Point(9, 19)
         Me.lblLocation.Name = "lblLocation"
-        Me.lblLocation.Size = New System.Drawing.Size(56, 13)
+        Me.lblLocation.Size = New System.Drawing.Size(101, 13)
         Me.lblLocation.TabIndex = 8
-        Me.lblLocation.Text = "Location"
+        Me.lblLocation.Text = "Model Stream ID"
         '
         'btnSave
         '
@@ -358,16 +379,33 @@ Partial Class frmPublishMain
         Me.btnChooseFilesNext.Text = "Next"
         Me.btnChooseFilesNext.UseVisualStyleBackColor = True
         '
-        'btnClose
+        'chkLocation1
         '
-        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.Location = New System.Drawing.Point(299, 217)
-        Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(75, 23)
-        Me.btnClose.TabIndex = 2
-        Me.btnClose.Text = "Close"
-        Me.btnClose.UseVisualStyleBackColor = True
-        Me.btnClose.Visible = False
+        Me.chkLocation1.AutoSize = True
+        Me.chkLocation1.Location = New System.Drawing.Point(243, 41)
+        Me.chkLocation1.Name = "chkLocation1"
+        Me.chkLocation1.Size = New System.Drawing.Size(15, 14)
+        Me.chkLocation1.TabIndex = 18
+        Me.chkLocation1.UseVisualStyleBackColor = True
+        '
+        'chkLocation2
+        '
+        Me.chkLocation2.AutoSize = True
+        Me.chkLocation2.Location = New System.Drawing.Point(243, 68)
+        Me.chkLocation2.Name = "chkLocation2"
+        Me.chkLocation2.Size = New System.Drawing.Size(15, 14)
+        Me.chkLocation2.TabIndex = 19
+        Me.chkLocation2.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(210, 19)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(48, 13)
+        Me.Label1.TabIndex = 20
+        Me.Label1.Text = "Publish"
         '
         'frmPublishMain
         '
@@ -428,5 +466,8 @@ Partial Class frmPublishMain
     Friend WithEvents lstOutputFiles As System.Windows.Forms.CheckedListBox
     Friend WithEvents btnChooseFilesNext As System.Windows.Forms.Button
     Friend WithEvents btnClose As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents chkLocation2 As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLocation1 As System.Windows.Forms.CheckBox
 
 End Class

@@ -185,6 +185,7 @@ Public Class frmPublishMain
     End Sub
 
     Dim AssociateLabels As New Generic.List(Of Label)
+    Dim AssociateCheckboxes As New Generic.List(Of CheckBox)
     Dim AssociateTextboxes As New Generic.List(Of TextBox)
 
     Private Sub PopulateMetadata()
@@ -212,32 +213,44 @@ Public Class frmPublishMain
 
     Private Sub PopulateLocations()
         Dim lLabel As Label
+        Dim lCheckbox As CheckBox
         Dim lTextBox As TextBox
         Dim lIndex As Integer = 0
         For Each lTextBox In AssociateTextboxes
             lLabel = AssociateLabels.Item(lIndex)
+            lCheckbox = AssociateCheckboxes(lIndex)
             If lTextBox.Equals(txtLocationID1) OrElse _
                 lTextBox.Equals(txtLocationID2) Then
                 lLabel.Visible = False
+                lCheckbox.Visible = False
                 lTextBox.Visible = False
             Else
+                RemoveHandler lTextBox.TextChanged, AddressOf txtLocationID_TextChanged
                 grpMapLocations.Controls.Remove(lLabel)
+                grpMapLocations.Controls.Remove(lCheckbox)
                 grpMapLocations.Controls.Remove(lTextBox)
+                lLabel.Dispose()
+                lCheckbox.Dispose()
+                lTextBox.Dispose()                
             End If
             lIndex += 1
         Next
         AssociateLabels.Clear()
+        AssociateCheckboxes.Clear()
         AssociateTextboxes.Clear()
 
         Dim lLabelTop As Integer = lblLocation1.Top
+        Dim lCheckboxTop As Integer = chkLocation1.Top
         Dim lComboTop As Integer = txtLocationID1.Top
         For Each lConstituent As String In TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
             Select Case AssociateTextboxes.Count
                 Case 0
                     lLabel = lblLocation1
+                    lCheckbox = chkLocation1
                     lTextBox = txtLocationID1
                 Case 1
                     lLabel = lblLocation2
+                    lCheckbox = chkLocation2
                     lTextBox = txtLocationID2
                 Case Else
                     lLabel = New Windows.Forms.Label()
@@ -245,16 +258,24 @@ Public Class frmPublishMain
                     lLabel.Top = lLabelTop
                     lLabel.Left = lblLocation1.Left
 
+                    lCheckbox = New Windows.Forms.CheckBox()
+                    grpMapLocations.Controls.Add(lCheckbox)
+                    lCheckbox.Top = lCheckboxTop
+                    lCheckbox.Left = chkLocation1.Left
+
                     lTextBox = New Windows.Forms.TextBox()
                     grpMapLocations.Controls.Add(lTextBox)
                     lTextBox.Top = lComboTop
                     lTextBox.Left = txtLocationID1.Left
                     lTextBox.Width = txtLocationID1.Width
+
+                    AddHandler lTextBox.TextChanged, AddressOf txtLocationID_TextChanged
             End Select
             lLabel.AutoSize = True
             lLabel.Text = lConstituent
             lLabel.Visible = True
             lLabelTop += (lblLocation2.Top - lblLocation1.Top)
+            lCheckboxTop += (chkLocation2.Top - chkLocation1.Top)
             lComboTop += (txtLocationID2.Top - txtLocationID1.Top)
             lTextBox.Visible = True
 
@@ -263,13 +284,25 @@ Public Class frmPublishMain
             If Not grpMapLocations.Controls.Contains(lLabel) Then
                 grpMapLocations.Controls.Add(lLabel)
             End If
+            If Not grpMapLocations.Controls.Contains(lCheckbox) Then
+                grpMapLocations.Controls.Add(lCheckbox)
+            End If
             If Not grpMapLocations.Controls.Contains(lTextBox) Then
                 grpMapLocations.Controls.Add(lTextBox)
             End If
 
             AssociateLabels.Add(lLabel)
+            AssociateCheckboxes.Add(lCheckbox)
             AssociateTextboxes.Add(lTextBox)
         Next
+    End Sub
+
+    Private Sub txtLocationID_TextChanged(sender As Object, e As EventArgs) Handles txtLocationID1.TextChanged, txtLocationID2.TextChanged
+        Dim lTextBox As TextBox = sender
+        Dim lIndex As Integer = AssociateTextboxes.IndexOf(lTextBox)
+        If lIndex >= 0 Then
+            AssociateCheckboxes(lIndex).Checked = (lTextBox.Text.Trim.Length > 0)
+        End If
     End Sub
 
     Public Sub New()
@@ -363,7 +396,9 @@ AskUser:
 
             Dim lLocationMap As New atcCollection
             For lIndex As Integer = 0 To AssociateTextboxes.Count - 1
-                lLocationMap.Add(AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
+                If AssociateCheckboxes(lIndex).Checked Then
+                    lLocationMap.Add(AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
+                End If
                 'SaveSetting(g_AppNameShort, "LocationAssociations", AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
             Next
             lblProgress.Text = "Saving " & lZipFileName
@@ -438,4 +473,5 @@ AskUser:
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
+
 End Class
