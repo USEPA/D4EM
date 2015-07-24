@@ -173,9 +173,21 @@ Public Class frmPublishMain
                 atcDataManager.OpenDataSource(lDataFileName)
             Next
             lblProgress.Text = "Selecting Output Datasets to Publish"
+            Dim lAvailable As New atcTimeseriesGroup
+            For Each lSource As atcDataSource In atcDataManager.DataSources
+                Select Case lSource.Name
+                    Case "Timeseries::WDM"
+                        'Look through UCI to see which WDM datasets might be of interest
+                        lAvailable.AddRange(modPublishHSPF.OutputDatasetsInWDM(lSource, True))
+                    Case "Timeseries::HSPF Binary Output"
+                        'Choose datasets of interest by constituent name
+                        lAvailable.AddRange(modPublishHSPF.OutputDatasetsInHBN(lSource, True))
+                    Case Else
+                        lAvailable.AddRange(lSource.DataSets)
+                End Select
+            Next
             ShowGroup(grpProgress)
-            TimeseriesGroupToSave = atcDataManager.UserSelectData("Select Data to Publish")
-            Dim lAllLocations = TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
+            TimeseriesGroupToSave = atcDataManager.UserSelectData("Select Data to Publish", , lAvailable)
             PopulateLocations()
             ShowGroup(grpMapLocations)
         Else
@@ -231,7 +243,7 @@ Public Class frmPublishMain
                 grpMapLocations.Controls.Remove(lTextBox)
                 lLabel.Dispose()
                 lCheckbox.Dispose()
-                lTextBox.Dispose()                
+                lTextBox.Dispose()
             End If
             lIndex += 1
         Next
@@ -242,7 +254,7 @@ Public Class frmPublishMain
         Dim lLabelTop As Integer = lblLocation1.Top
         Dim lCheckboxTop As Integer = chkLocation1.Top
         Dim lComboTop As Integer = txtLocationID1.Top
-        For Each lConstituent As String In TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
+        For Each lLocation As String In TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
             Select Case AssociateTextboxes.Count
                 Case 0
                     lLabel = lblLocation1
@@ -272,7 +284,7 @@ Public Class frmPublishMain
                     AddHandler lTextBox.TextChanged, AddressOf txtLocationID_TextChanged
             End Select
             lLabel.AutoSize = True
-            lLabel.Text = lConstituent
+            lLabel.Text = lLocation
             lLabel.Visible = True
             lLabelTop += (lblLocation2.Top - lblLocation1.Top)
             lCheckboxTop += (chkLocation2.Top - chkLocation1.Top)
@@ -461,13 +473,14 @@ AskUser:
     End Sub
 
     Private Sub btnNHDLookup_Click(sender As Object, e As EventArgs) Handles btnNHDLookup.Click
-        If MsgBox("Zoom to your area of interest by selecting a state and county (optional) from the dropdown when prompted by EnviroAtlas." & vbCrLf & _
-               "Click on 'Supplemental Maps' tab at the top of the map." & vbCrLf & _
-               "Un-collapse 'Biophysical Data – Vector' panel from the list of supplemental maps." & vbCrLf & _
-               "Check 'National Hydrography Dataset (NHD) – Medium' checkbox." & vbCrLf & _
-               "You may have to zoom in further to see the streams network.", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
-            OpenFile("http://enviroatlas.epa.gov/enviroatlas/InteractiveMapEntrance/InteractiveMap/index.html")
-        End If
+        'If MsgBox("Zoom to your area of interest by selecting a state and county (optional) from the dropdown when prompted by EnviroAtlas." & vbCrLf & _
+        '       "Click on 'Supplemental Maps' tab at the top of the map." & vbCrLf & _
+        '       "Un-collapse 'Biophysical Data – Vector' panel from the list of supplemental maps." & vbCrLf & _
+        '       "Check 'National Hydrography Dataset (NHD) – Medium' checkbox." & vbCrLf & _
+        '       "You may have to zoom in further to see the streams network.", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+        '    OpenFile("http://enviroatlas.epa.gov/enviroatlas/InteractiveMapEntrance/InteractiveMap/index.html")
+        'End If
+        OpenFile("http://arcg.is/1CLI2YX")
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click

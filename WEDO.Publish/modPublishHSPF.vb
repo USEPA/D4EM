@@ -1,4 +1,5 @@
-﻿Imports atcUCI
+﻿Imports atcData
+Imports atcUCI
 Imports atcUtility
 Imports MapWinUtility
 
@@ -93,8 +94,8 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
         Return lFiles
     End Function
 
-    Public Function OutputDatasetsInWDM(aWDM As atcWDM.atcDataSourceWDM, aOnlyDatasetsForWEDO As Boolean) As atcCollection
-        Dim lDSNs As New atcCollection
+    Public Function OutputDatasetsInWDM(aWDM As atcWDM.atcDataSourceWDM, aOnlyDatasetsForWEDO As Boolean) As atcData.atcTimeseriesGroup
+        Dim lOutputDatasets As New atcData.atcTimeseriesGroup
         Dim lFilesBlock As HspfFilesBlk = UCIFile.FilesBlock
         Dim lUciFolder As String = IO.Path.GetDirectoryName(UCIFilename)
         For lIndex As Integer = 1 To lFilesBlock.Count
@@ -107,23 +108,90 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
                     For Each lConn As HspfConnection In lOper.Targets
                         If lConn.Target.VolName = lThisVolName Then
                             Dim lIncludeThisOne As Boolean = False
+                            Dim lNewConstituentName As String = Nothing
                             Dim lWdmDsn As Integer = lConn.Target.VolId
                             Dim lReachID As Integer = lOper.Id
                             If aOnlyDatasetsForWEDO Then
-                                If lConn.Source.Member = "SSED" AndAlso lConn.Source.MemSub1 = 4 Then
-                                    'This is TSS
-                                    lIncludeThisOne = True
-                                End If
+                                Dim lConIndex As Integer = -1
+                                For Each lConstituentOfInterest In g_ConstituentsOfInterest
+                                    lConIndex += 1
+                                    Dim lUciConstituentName As String = g_UciConstituentsOfInterest(lConIndex)
+                                    Dim lMemSub1 As Integer = 0
+                                    Dim lColonIndex As Integer = lUciConstituentName.IndexOf(":")
+                                    If lColonIndex >= 0 Then
+                                        lMemSub1 = Integer.Parse(lUciConstituentName.Substring(lColonIndex + 1))
+                                        lUciConstituentName = lUciConstituentName.Substring(0, lColonIndex)
+                                    End If
+                                    If lConn.Source.Member = lUciConstituentName Then
+                                        If lMemSub1 = 0 OrElse lMemSub1 = lConn.Source.MemSub1 Then
+                                            lNewConstituentName = lConstituentOfInterest
+                                            Exit For
+                                        End If
+                                    End If
+                                Next
+
+                                'Select Case lConn.Source.Member
+                                '    Case "RO"
+                                '        lNewConstituentName = g_ConstituentsOfInterest(0) ' Flow
+                                '    Case "SSED"
+                                '        If lConn.Source.MemSub1 = 4 Then
+                                '            lNewConstituentName = g_ConstituentsOfInterest(1) 'TSS
+                                '        End If
+                                '    Case "PKST4"
+                                '        If lConn.Source.MemSub1 = 1 Then
+                                '            lNewConstituentName = g_ConstituentsOfInterest(2) 'TKN
+                                '        End If
+                                '    Case "DNUST"
+                                '        Select Case lConn.Source.MemSub1
+                                '            Case 1 : lNewConstituentName = g_ConstituentsOfInterest(4) 'NO3-N
+                                '            Case 2 : lNewConstituentName = g_ConstituentsOfInterest(3) 'NH3-N
+                                '            Case 3 : lNewConstituentName = g_ConstituentsOfInterest(5) 'NO2-N
+                                '        End Select
+                                '    Case "PKST3"
+                                '        If lConn.Source.MemSub1 = 4 Then
+                                '            lNewConstituentName = g_ConstituentsOfInterest(6) 'ORGN
+                                '        End If
+                                '    Case "PKST4"
+                                '        If lConn.Source.MemSub1 = 3 Then
+                                '            lNewConstituentName = g_ConstituentsOfInterest(7) 'P
+                                '        End If
+                                '    Case "DNUST"
+                                '        If lConn.Source.MemSub1 = 4 Then
+                                '            lNewConstituentName = g_ConstituentsOfInterest(8) 'PO4-P
+                                '        End If
+                                'End Select
+                                lIncludeThisOne = (lNewConstituentName IsNot Nothing)
                             Else
                                 lIncludeThisOne = True
                             End If
-                            lDSNs.Add(lConn.Source.Member & ":" & lConn.Source.MemSub1, lWdmDsn)
+                            If lIncludeThisOne Then
+                                Dim lFoundTsg As atcData.atcTimeseriesGroup = aWDM.DataSets.FindData("ID", lWdmDsn, 1)
+                                If lFoundTsg.Count > 0 Then
+                                    If (lNewConstituentName IsNot Nothing) Then
+                                        lFoundTsg(0).Attributes.SetValue("Constituent", lNewConstituentName)
+                                    End If
+                                    lOutputDatasets.Add(lFoundTsg(0))
+                                End If
+                            End If
                         End If
                     Next
                 Next
             End If
         Next
-        Return lDSNs
+        Return lOutputDatasets
+    End Function
+
+    Public Function OutputDatasetsInHBN(aHBN As atcHspfBinOut.atcTimeseriesFileHspfBinOut, aOnlyDatasetsForWEDO As Boolean) As atcData.atcTimeseriesGroup
+        Dim lOutputDatasets As New atcData.atcTimeseriesGroup
+        'Choose datasets of interest by constituent name
+        For Each lTs As atcTimeseries In aHBN.DataSets
+            Dim lConstituentIndex As Integer = Array.IndexOf(g_HbnConstituentsOfInterest, lTs.Attributes.GetValue("Constituent"))
+            If lConstituentIndex >= 0 Then
+                lTs.Attributes.SetValue("Constituent", g_ConstituentsOfInterest(lConstituentIndex))
+                lOutputDatasets.Add(lTs)
+            End If
+        Next
+        Return lOutputDatasets
     End Function
 
 End Module

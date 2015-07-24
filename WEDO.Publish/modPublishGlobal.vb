@@ -16,6 +16,11 @@ Module modPublishGlobal
 
     Public MetadataInfo As MetdataStruct
 
+    'Note: keep these arrays in sync!
+    Public g_ConstituentsOfInterest() As String = {"FLOW", "TSS", "TKN", "NH3-N", "NO3-N", "NO2-N", "ORGN", "P", "PO4-P"}
+    Public g_UciConstituentsOfInterest() As String = {"RO", "SSED:4", "PKST4:1", "DNUST:2", "DNUST:1", "DNUST:3", "PKST3:4", "PKST4:2", "DNUST:4"}
+    Public g_HbnConstituentsOfInterest() As String = {"RO", "SSED-TOT", "N-TOT-CONC", "TAM-CONCDIS", "NO3-CONCDIS", "NO2-CONCDIS", "N-TOTORG-CONC", "P-TOT-CONC", "PO4-CONCDIS"}
+
     Public Sub WriteAttributes(ByVal aDataSet As atcData.atcDataSet, lWriter As IO.StreamWriter)
         Dim lValue As String
         lWriter.WriteLine("<attributes>")
