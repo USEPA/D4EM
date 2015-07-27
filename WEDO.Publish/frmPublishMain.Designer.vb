@@ -33,6 +33,9 @@ Partial Class frmPublishMain
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.barProgress = New System.Windows.Forms.ProgressBar()
         Me.grpMapLocations = New System.Windows.Forms.GroupBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.chkLocation2 = New System.Windows.Forms.CheckBox()
+        Me.chkLocation1 = New System.Windows.Forms.CheckBox()
         Me.btnNHDLookup = New System.Windows.Forms.Button()
         Me.btnNHDPlusNext = New System.Windows.Forms.Button()
         Me.txtLocationID2 = New System.Windows.Forms.TextBox()
@@ -43,16 +46,35 @@ Partial Class frmPublishMain
         Me.lblLocation = New System.Windows.Forms.Label()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.grpMetadata = New System.Windows.Forms.GroupBox()
-        Me.txtMetadata = New System.Windows.Forms.RichTextBox()
         Me.grpChooseFiles = New System.Windows.Forms.GroupBox()
         Me.splitChooseFiles = New System.Windows.Forms.SplitContainer()
         Me.grpChooseOutputFiles = New System.Windows.Forms.GroupBox()
         Me.btnAddOutputFiles = New System.Windows.Forms.Button()
         Me.lstOutputFiles = New System.Windows.Forms.CheckedListBox()
         Me.btnChooseFilesNext = New System.Windows.Forms.Button()
-        Me.chkLocation1 = New System.Windows.Forms.CheckBox()
-        Me.chkLocation2 = New System.Windows.Forms.CheckBox()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblAuthorName = New System.Windows.Forms.Label()
+        Me.txtAuthor1 = New System.Windows.Forms.TextBox()
+        Me.txtAuthor2 = New System.Windows.Forms.TextBox()
+        Me.txtAuthor3 = New System.Windows.Forms.TextBox()
+        Me.lblAuthor3 = New System.Windows.Forms.Label()
+        Me.lblAuthor1 = New System.Windows.Forms.Label()
+        Me.lblAuthor2 = New System.Windows.Forms.Label()
+        Me.txtAuthorEmail = New System.Windows.Forms.TextBox()
+        Me.lblAuthorEmail = New System.Windows.Forms.Label()
+        Me.txtOrganization = New System.Windows.Forms.TextBox()
+        Me.lblOrganization = New System.Windows.Forms.Label()
+        Me.grpMetadataCalibration = New System.Windows.Forms.GroupBox()
+        Me.lblWasModelCalibrated = New System.Windows.Forms.Label()
+        Me.radioModelCalibratedYes = New System.Windows.Forms.RadioButton()
+        Me.radioModelCalibratedNo = New System.Windows.Forms.RadioButton()
+        Me.txtCalibrationConstituents = New System.Windows.Forms.TextBox()
+        Me.lblCalibrationConstituents = New System.Windows.Forms.Label()
+        Me.txtCorrelationCoefficients = New System.Windows.Forms.TextBox()
+        Me.lblCorrelationCoefficients = New System.Windows.Forms.Label()
+        Me.txtNashSutcliffe = New System.Windows.Forms.TextBox()
+        Me.lblNashSutcliffe = New System.Windows.Forms.Label()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
+        Me.lblDescription = New System.Windows.Forms.Label()
         Me.grpChooseModel.SuspendLayout()
         Me.grpChooseInputFiles.SuspendLayout()
         Me.grpProgress.SuspendLayout()
@@ -64,6 +86,7 @@ Partial Class frmPublishMain
         Me.splitChooseFiles.Panel2.SuspendLayout()
         Me.splitChooseFiles.SuspendLayout()
         Me.grpChooseOutputFiles.SuspendLayout()
+        Me.grpMetadataCalibration.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpChooseModel
@@ -79,7 +102,7 @@ Partial Class frmPublishMain
         '
         'btnSWAT
         '
-        Me.btnSWAT.Location = New System.Drawing.Point(24, 193)
+        Me.btnSWAT.Location = New System.Drawing.Point(9, 87)
         Me.btnSWAT.Name = "btnSWAT"
         Me.btnSWAT.Size = New System.Drawing.Size(116, 23)
         Me.btnSWAT.TabIndex = 2
@@ -88,7 +111,7 @@ Partial Class frmPublishMain
         '
         'btnHSPF
         '
-        Me.btnHSPF.Location = New System.Drawing.Point(24, 142)
+        Me.btnHSPF.Location = New System.Drawing.Point(9, 36)
         Me.btnHSPF.Name = "btnHSPF"
         Me.btnHSPF.Size = New System.Drawing.Size(116, 23)
         Me.btnHSPF.TabIndex = 0
@@ -193,6 +216,34 @@ Partial Class frmPublishMain
         Me.grpMapLocations.TabStop = False
         Me.grpMapLocations.Text = "Specify NHD Reach Code of Streams to Publish"
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(210, 19)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(48, 13)
+        Me.Label1.TabIndex = 20
+        Me.Label1.Text = "Publish"
+        '
+        'chkLocation2
+        '
+        Me.chkLocation2.AutoSize = True
+        Me.chkLocation2.Location = New System.Drawing.Point(243, 68)
+        Me.chkLocation2.Name = "chkLocation2"
+        Me.chkLocation2.Size = New System.Drawing.Size(15, 14)
+        Me.chkLocation2.TabIndex = 19
+        Me.chkLocation2.UseVisualStyleBackColor = True
+        '
+        'chkLocation1
+        '
+        Me.chkLocation1.AutoSize = True
+        Me.chkLocation1.Location = New System.Drawing.Point(243, 41)
+        Me.chkLocation1.Name = "chkLocation1"
+        Me.chkLocation1.Size = New System.Drawing.Size(15, 14)
+        Me.chkLocation1.TabIndex = 18
+        Me.chkLocation1.UseVisualStyleBackColor = True
+        '
         'btnNHDLookup
         '
         Me.btnNHDLookup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -275,7 +326,7 @@ Partial Class frmPublishMain
         'btnSave
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSave.Location = New System.Drawing.Point(232, 306)
+        Me.btnSave.Location = New System.Drawing.Point(381, 306)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(75, 23)
         Me.btnSave.TabIndex = 1
@@ -284,25 +335,27 @@ Partial Class frmPublishMain
         '
         'grpMetadata
         '
-        Me.grpMetadata.Controls.Add(Me.txtMetadata)
+        Me.grpMetadata.Controls.Add(Me.txtDescription)
+        Me.grpMetadata.Controls.Add(Me.grpMetadataCalibration)
+        Me.grpMetadata.Controls.Add(Me.txtOrganization)
+        Me.grpMetadata.Controls.Add(Me.lblOrganization)
+        Me.grpMetadata.Controls.Add(Me.txtAuthorEmail)
+        Me.grpMetadata.Controls.Add(Me.lblAuthorEmail)
+        Me.grpMetadata.Controls.Add(Me.lblAuthor2)
+        Me.grpMetadata.Controls.Add(Me.lblAuthor1)
+        Me.grpMetadata.Controls.Add(Me.lblAuthor3)
+        Me.grpMetadata.Controls.Add(Me.txtAuthor3)
+        Me.grpMetadata.Controls.Add(Me.txtAuthor2)
+        Me.grpMetadata.Controls.Add(Me.txtAuthor1)
+        Me.grpMetadata.Controls.Add(Me.lblAuthorName)
         Me.grpMetadata.Controls.Add(Me.btnSave)
-        Me.grpMetadata.Location = New System.Drawing.Point(648, 12)
+        Me.grpMetadata.Controls.Add(Me.lblDescription)
+        Me.grpMetadata.Location = New System.Drawing.Point(505, 12)
         Me.grpMetadata.Name = "grpMetadata"
-        Me.grpMetadata.Size = New System.Drawing.Size(313, 335)
+        Me.grpMetadata.Size = New System.Drawing.Size(462, 335)
         Me.grpMetadata.TabIndex = 5
         Me.grpMetadata.TabStop = False
         Me.grpMetadata.Text = "Metadata"
-        '
-        'txtMetadata
-        '
-        Me.txtMetadata.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMetadata.Location = New System.Drawing.Point(6, 19)
-        Me.txtMetadata.Name = "txtMetadata"
-        Me.txtMetadata.Size = New System.Drawing.Size(301, 281)
-        Me.txtMetadata.TabIndex = 0
-        Me.txtMetadata.Text = ""
         '
         'grpChooseFiles
         '
@@ -379,33 +432,233 @@ Partial Class frmPublishMain
         Me.btnChooseFilesNext.Text = "Next"
         Me.btnChooseFilesNext.UseVisualStyleBackColor = True
         '
-        'chkLocation1
+        'lblAuthorName
         '
-        Me.chkLocation1.AutoSize = True
-        Me.chkLocation1.Location = New System.Drawing.Point(243, 41)
-        Me.chkLocation1.Name = "chkLocation1"
-        Me.chkLocation1.Size = New System.Drawing.Size(15, 14)
-        Me.chkLocation1.TabIndex = 18
-        Me.chkLocation1.UseVisualStyleBackColor = True
+        Me.lblAuthorName.AutoSize = True
+        Me.lblAuthorName.Location = New System.Drawing.Point(6, 35)
+        Me.lblAuthorName.Name = "lblAuthorName"
+        Me.lblAuthorName.Size = New System.Drawing.Size(69, 13)
+        Me.lblAuthorName.TabIndex = 2
+        Me.lblAuthorName.Text = "Author Name"
         '
-        'chkLocation2
+        'txtAuthor1
         '
-        Me.chkLocation2.AutoSize = True
-        Me.chkLocation2.Location = New System.Drawing.Point(243, 68)
-        Me.chkLocation2.Name = "chkLocation2"
-        Me.chkLocation2.Size = New System.Drawing.Size(15, 14)
-        Me.chkLocation2.TabIndex = 19
-        Me.chkLocation2.UseVisualStyleBackColor = True
+        Me.txtAuthor1.Location = New System.Drawing.Point(84, 32)
+        Me.txtAuthor1.Name = "txtAuthor1"
+        Me.txtAuthor1.Size = New System.Drawing.Size(179, 20)
+        Me.txtAuthor1.TabIndex = 4
         '
-        'Label1
+        'txtAuthor2
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(210, 19)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 13)
-        Me.Label1.TabIndex = 20
-        Me.Label1.Text = "Publish"
+        Me.txtAuthor2.Location = New System.Drawing.Point(269, 32)
+        Me.txtAuthor2.Name = "txtAuthor2"
+        Me.txtAuthor2.Size = New System.Drawing.Size(31, 20)
+        Me.txtAuthor2.TabIndex = 6
+        '
+        'txtAuthor3
+        '
+        Me.txtAuthor3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtAuthor3.Location = New System.Drawing.Point(306, 32)
+        Me.txtAuthor3.Name = "txtAuthor3"
+        Me.txtAuthor3.Size = New System.Drawing.Size(150, 20)
+        Me.txtAuthor3.TabIndex = 8
+        '
+        'lblAuthor3
+        '
+        Me.lblAuthor3.AutoSize = True
+        Me.lblAuthor3.Location = New System.Drawing.Point(303, 16)
+        Me.lblAuthor3.Name = "lblAuthor3"
+        Me.lblAuthor3.Size = New System.Drawing.Size(27, 13)
+        Me.lblAuthor3.TabIndex = 9
+        Me.lblAuthor3.Text = "Last"
+        '
+        'lblAuthor1
+        '
+        Me.lblAuthor1.AutoSize = True
+        Me.lblAuthor1.Location = New System.Drawing.Point(81, 16)
+        Me.lblAuthor1.Name = "lblAuthor1"
+        Me.lblAuthor1.Size = New System.Drawing.Size(26, 13)
+        Me.lblAuthor1.TabIndex = 10
+        Me.lblAuthor1.Text = "First"
+        '
+        'lblAuthor2
+        '
+        Me.lblAuthor2.AutoSize = True
+        Me.lblAuthor2.Location = New System.Drawing.Point(266, 16)
+        Me.lblAuthor2.Name = "lblAuthor2"
+        Me.lblAuthor2.Size = New System.Drawing.Size(25, 13)
+        Me.lblAuthor2.TabIndex = 11
+        Me.lblAuthor2.Text = "M.I."
+        '
+        'txtAuthorEmail
+        '
+        Me.txtAuthorEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtAuthorEmail.Location = New System.Drawing.Point(84, 58)
+        Me.txtAuthorEmail.Name = "txtAuthorEmail"
+        Me.txtAuthorEmail.Size = New System.Drawing.Size(372, 20)
+        Me.txtAuthorEmail.TabIndex = 13
+        '
+        'lblAuthorEmail
+        '
+        Me.lblAuthorEmail.AutoSize = True
+        Me.lblAuthorEmail.Location = New System.Drawing.Point(6, 61)
+        Me.lblAuthorEmail.Name = "lblAuthorEmail"
+        Me.lblAuthorEmail.Size = New System.Drawing.Size(66, 13)
+        Me.lblAuthorEmail.TabIndex = 12
+        Me.lblAuthorEmail.Text = "Author Email"
+        '
+        'txtOrganization
+        '
+        Me.txtOrganization.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtOrganization.Location = New System.Drawing.Point(84, 84)
+        Me.txtOrganization.Name = "txtOrganization"
+        Me.txtOrganization.Size = New System.Drawing.Size(372, 20)
+        Me.txtOrganization.TabIndex = 15
+        '
+        'lblOrganization
+        '
+        Me.lblOrganization.AutoSize = True
+        Me.lblOrganization.Location = New System.Drawing.Point(6, 87)
+        Me.lblOrganization.Name = "lblOrganization"
+        Me.lblOrganization.Size = New System.Drawing.Size(66, 13)
+        Me.lblOrganization.TabIndex = 14
+        Me.lblOrganization.Text = "Organization"
+        '
+        'grpMetadataCalibration
+        '
+        Me.grpMetadataCalibration.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grpMetadataCalibration.Controls.Add(Me.txtNashSutcliffe)
+        Me.grpMetadataCalibration.Controls.Add(Me.lblNashSutcliffe)
+        Me.grpMetadataCalibration.Controls.Add(Me.txtCorrelationCoefficients)
+        Me.grpMetadataCalibration.Controls.Add(Me.lblCorrelationCoefficients)
+        Me.grpMetadataCalibration.Controls.Add(Me.txtCalibrationConstituents)
+        Me.grpMetadataCalibration.Controls.Add(Me.lblCalibrationConstituents)
+        Me.grpMetadataCalibration.Controls.Add(Me.radioModelCalibratedNo)
+        Me.grpMetadataCalibration.Controls.Add(Me.radioModelCalibratedYes)
+        Me.grpMetadataCalibration.Controls.Add(Me.lblWasModelCalibrated)
+        Me.grpMetadataCalibration.Location = New System.Drawing.Point(6, 177)
+        Me.grpMetadataCalibration.Name = "grpMetadataCalibration"
+        Me.grpMetadataCalibration.Size = New System.Drawing.Size(450, 123)
+        Me.grpMetadataCalibration.TabIndex = 16
+        Me.grpMetadataCalibration.TabStop = False
+        Me.grpMetadataCalibration.Text = "Model Calibration"
+        '
+        'lblWasModelCalibrated
+        '
+        Me.lblWasModelCalibrated.AutoSize = True
+        Me.lblWasModelCalibrated.Location = New System.Drawing.Point(6, 21)
+        Me.lblWasModelCalibrated.Name = "lblWasModelCalibrated"
+        Me.lblWasModelCalibrated.Size = New System.Drawing.Size(115, 13)
+        Me.lblWasModelCalibrated.TabIndex = 15
+        Me.lblWasModelCalibrated.Text = "Was model calibrated?"
+        '
+        'radioModelCalibratedYes
+        '
+        Me.radioModelCalibratedYes.AutoSize = True
+        Me.radioModelCalibratedYes.Location = New System.Drawing.Point(144, 19)
+        Me.radioModelCalibratedYes.Name = "radioModelCalibratedYes"
+        Me.radioModelCalibratedYes.Size = New System.Drawing.Size(43, 17)
+        Me.radioModelCalibratedYes.TabIndex = 16
+        Me.radioModelCalibratedYes.Text = "Yes"
+        Me.radioModelCalibratedYes.UseVisualStyleBackColor = True
+        '
+        'radioModelCalibratedNo
+        '
+        Me.radioModelCalibratedNo.AutoSize = True
+        Me.radioModelCalibratedNo.Checked = True
+        Me.radioModelCalibratedNo.Location = New System.Drawing.Point(194, 19)
+        Me.radioModelCalibratedNo.Name = "radioModelCalibratedNo"
+        Me.radioModelCalibratedNo.Size = New System.Drawing.Size(39, 17)
+        Me.radioModelCalibratedNo.TabIndex = 17
+        Me.radioModelCalibratedNo.TabStop = True
+        Me.radioModelCalibratedNo.Text = "No"
+        Me.radioModelCalibratedNo.UseVisualStyleBackColor = True
+        '
+        'txtCalibrationConstituents
+        '
+        Me.txtCalibrationConstituents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCalibrationConstituents.Enabled = False
+        Me.txtCalibrationConstituents.Location = New System.Drawing.Point(144, 42)
+        Me.txtCalibrationConstituents.Name = "txtCalibrationConstituents"
+        Me.txtCalibrationConstituents.Size = New System.Drawing.Size(300, 20)
+        Me.txtCalibrationConstituents.TabIndex = 19
+        Me.txtCalibrationConstituents.Text = "(comma-separated list)"
+        '
+        'lblCalibrationConstituents
+        '
+        Me.lblCalibrationConstituents.AutoSize = True
+        Me.lblCalibrationConstituents.Enabled = False
+        Me.lblCalibrationConstituents.Location = New System.Drawing.Point(6, 45)
+        Me.lblCalibrationConstituents.Name = "lblCalibrationConstituents"
+        Me.lblCalibrationConstituents.Size = New System.Drawing.Size(117, 13)
+        Me.lblCalibrationConstituents.TabIndex = 18
+        Me.lblCalibrationConstituents.Text = "Calibration Constituents"
+        '
+        'txtCorrelationCoefficients
+        '
+        Me.txtCorrelationCoefficients.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCorrelationCoefficients.Enabled = False
+        Me.txtCorrelationCoefficients.Location = New System.Drawing.Point(144, 68)
+        Me.txtCorrelationCoefficients.Name = "txtCorrelationCoefficients"
+        Me.txtCorrelationCoefficients.Size = New System.Drawing.Size(300, 20)
+        Me.txtCorrelationCoefficients.TabIndex = 21
+        Me.txtCorrelationCoefficients.Text = "(comma-separated list)"
+        '
+        'lblCorrelationCoefficients
+        '
+        Me.lblCorrelationCoefficients.AutoSize = True
+        Me.lblCorrelationCoefficients.Enabled = False
+        Me.lblCorrelationCoefficients.Location = New System.Drawing.Point(6, 71)
+        Me.lblCorrelationCoefficients.Name = "lblCorrelationCoefficients"
+        Me.lblCorrelationCoefficients.Size = New System.Drawing.Size(115, 13)
+        Me.lblCorrelationCoefficients.TabIndex = 20
+        Me.lblCorrelationCoefficients.Text = "Correlation Coefficients"
+        '
+        'txtNashSutcliffe
+        '
+        Me.txtNashSutcliffe.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtNashSutcliffe.Enabled = False
+        Me.txtNashSutcliffe.Location = New System.Drawing.Point(144, 94)
+        Me.txtNashSutcliffe.Name = "txtNashSutcliffe"
+        Me.txtNashSutcliffe.Size = New System.Drawing.Size(300, 20)
+        Me.txtNashSutcliffe.TabIndex = 23
+        Me.txtNashSutcliffe.Text = "(comma-separated list)"
+        '
+        'lblNashSutcliffe
+        '
+        Me.lblNashSutcliffe.AutoSize = True
+        Me.lblNashSutcliffe.Enabled = False
+        Me.lblNashSutcliffe.Location = New System.Drawing.Point(6, 97)
+        Me.lblNashSutcliffe.Name = "lblNashSutcliffe"
+        Me.lblNashSutcliffe.Size = New System.Drawing.Size(107, 13)
+        Me.lblNashSutcliffe.TabIndex = 22
+        Me.lblNashSutcliffe.Text = "Nash-Sutcliffe values"
+        '
+        'txtDescription
+        '
+        Me.txtDescription.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtDescription.Location = New System.Drawing.Point(84, 110)
+        Me.txtDescription.Multiline = True
+        Me.txtDescription.Name = "txtDescription"
+        Me.txtDescription.Size = New System.Drawing.Size(372, 61)
+        Me.txtDescription.TabIndex = 18
+        '
+        'lblDescription
+        '
+        Me.lblDescription.Location = New System.Drawing.Point(6, 113)
+        Me.lblDescription.Name = "lblDescription"
+        Me.lblDescription.Size = New System.Drawing.Size(72, 42)
+        Me.lblDescription.TabIndex = 17
+        Me.lblDescription.Text = "Description of run or study"
         '
         'frmPublishMain
         '
@@ -413,11 +666,11 @@ Partial Class frmPublishMain
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(979, 359)
+        Me.Controls.Add(Me.grpMetadata)
+        Me.Controls.Add(Me.grpChooseModel)
         Me.Controls.Add(Me.grpProgress)
         Me.Controls.Add(Me.grpChooseFiles)
         Me.Controls.Add(Me.grpMapLocations)
-        Me.Controls.Add(Me.grpChooseModel)
-        Me.Controls.Add(Me.grpMetadata)
         Me.Name = "frmPublishMain"
         Me.Text = "WEDO Publishing Utility"
         Me.grpChooseModel.ResumeLayout(False)
@@ -428,6 +681,7 @@ Partial Class frmPublishMain
         Me.grpMapLocations.ResumeLayout(False)
         Me.grpMapLocations.PerformLayout()
         Me.grpMetadata.ResumeLayout(False)
+        Me.grpMetadata.PerformLayout()
         Me.grpChooseFiles.ResumeLayout(False)
         Me.splitChooseFiles.Panel1.ResumeLayout(False)
         Me.splitChooseFiles.Panel2.ResumeLayout(False)
@@ -435,6 +689,8 @@ Partial Class frmPublishMain
         Me.splitChooseFiles.ResumeLayout(False)
         Me.grpChooseOutputFiles.ResumeLayout(False)
         Me.grpChooseOutputFiles.PerformLayout()
+        Me.grpMetadataCalibration.ResumeLayout(False)
+        Me.grpMetadataCalibration.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -456,7 +712,6 @@ Partial Class frmPublishMain
     Friend WithEvents lblLocation As System.Windows.Forms.Label
     Friend WithEvents btnSave As System.Windows.Forms.Button
     Friend WithEvents grpMetadata As System.Windows.Forms.GroupBox
-    Friend WithEvents txtMetadata As System.Windows.Forms.RichTextBox
     Friend WithEvents btnNHDPlusNext As System.Windows.Forms.Button
     Friend WithEvents btnNHDLookup As System.Windows.Forms.Button
     Friend WithEvents grpChooseFiles As System.Windows.Forms.GroupBox
@@ -469,5 +724,27 @@ Partial Class frmPublishMain
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents chkLocation2 As System.Windows.Forms.CheckBox
     Friend WithEvents chkLocation1 As System.Windows.Forms.CheckBox
-
+    Friend WithEvents txtDescription As TextBox
+    Friend WithEvents grpMetadataCalibration As GroupBox
+    Friend WithEvents txtNashSutcliffe As TextBox
+    Friend WithEvents lblNashSutcliffe As Label
+    Friend WithEvents txtCorrelationCoefficients As TextBox
+    Friend WithEvents lblCorrelationCoefficients As Label
+    Friend WithEvents txtCalibrationConstituents As TextBox
+    Friend WithEvents lblCalibrationConstituents As Label
+    Friend WithEvents radioModelCalibratedNo As RadioButton
+    Friend WithEvents radioModelCalibratedYes As RadioButton
+    Friend WithEvents lblWasModelCalibrated As Label
+    Friend WithEvents txtOrganization As TextBox
+    Friend WithEvents lblOrganization As Label
+    Friend WithEvents txtAuthorEmail As TextBox
+    Friend WithEvents lblAuthorEmail As Label
+    Friend WithEvents lblAuthor2 As Label
+    Friend WithEvents lblAuthor1 As Label
+    Friend WithEvents lblAuthor3 As Label
+    Friend WithEvents txtAuthor3 As TextBox
+    Friend WithEvents txtAuthor2 As TextBox
+    Friend WithEvents txtAuthor1 As TextBox
+    Friend WithEvents lblAuthorName As Label
+    Friend WithEvents lblDescription As Label
 End Class

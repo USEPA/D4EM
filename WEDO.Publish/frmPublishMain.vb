@@ -201,26 +201,27 @@ Public Class frmPublishMain
     Dim AssociateTextboxes As New Generic.List(Of TextBox)
 
     Private Sub PopulateMetadata()
-        Dim lConstituents As New atcCollection
-        If TimeseriesGroupToSave IsNot Nothing AndAlso TimeseriesGroupToSave.Count > 0 Then
-            For Each lTs As atcTimeseries In TimeseriesGroupToSave
-                lConstituents.Increment(lTs.Attributes.GetValue("Constituent"))
-            Next
-        End If
-        txtMetadata.Text = "Author Name (First, Middle Initial, Last): " & vbCrLf & _
-                           "Author Email: " & vbCrLf & _
-                           "Organization Name: " & vbCrLf & _
-                           "Was model calibrated: " & vbCrLf & _
-                           "Constituents used in model calibration (comma-separated): " & vbCrLf & _
-                           "Calibration correlation coefficient values (comma-separated): " & vbCrLf & _
-                           "Nash-Sutcliffe efficiency values (comma-separated): " & vbCrLf & _
-                           "Date model executed: " & Format(MetadataInfo.ModelRunDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
-                           "Model Start Date: " & Format(MetadataInfo.ModelStartDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
-                           "Model End Date: " & Format(MetadataInfo.ModelEndDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
-                           "Model Name: " & MetadataInfo.PublishingModelType & vbCrLf & _
-                           "Model version number: " & vbCrLf & _
-                           "Model run or study description: " & vbCrLf & _
-                           "Constituents published: " & String.Join(",", lConstituents.Keys.ToArray)
+        'Dim lConstituents As New atcCollection
+        'If TimeseriesGroupToSave IsNot Nothing AndAlso TimeseriesGroupToSave.Count > 0 Then
+        '    For Each lTs As atcTimeseries In TimeseriesGroupToSave
+        '        lConstituents.Increment(lTs.Attributes.GetValue("Constituent"))
+        '    Next
+        'End If
+        'TODO: save / restore metadata in registry
+        'txtMetadata.Text = "Author Name (First, Middle Initial, Last): " & vbCrLf & _
+        '                   "Author Email: " & vbCrLf & _
+        '                   "Organization Name: " & vbCrLf & _
+        '                   "Was model calibrated: " & vbCrLf & _
+        '                   "Constituents used in model calibration (comma-separated): " & vbCrLf & _
+        '                   "Calibration correlation coefficient values (comma-separated): " & vbCrLf & _
+        '                   "Nash-Sutcliffe efficiency values (comma-separated): " & vbCrLf & _
+        '                   "Date model executed: " & Format(MetadataInfo.ModelRunDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
+        '                   "Model Start Date: " & Format(MetadataInfo.ModelStartDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
+        '                   "Model End Date: " & Format(MetadataInfo.ModelEndDate, "yyyy/MM/dd HH:mm") & vbCrLf & _
+        '                   "Model Name: " & MetadataInfo.PublishingModelType & vbCrLf & _
+        '                   "Model version number: " & vbCrLf & _
+        '                   "Model run or study description: " & vbCrLf & _
+        '                   "Constituents published: " & String.Join(",", lConstituents.Keys.ToArray)
     End Sub
 
     Private Sub PopulateLocations()
@@ -398,7 +399,32 @@ AskUser:
     Private Sub AddMetadataToZipArchive(aZipArchive As ZipArchive)
         Dim lMetadataEntry As ZipArchiveEntry = aZipArchive.CreateEntry("Metadata.txt")
         Using lMetadataWriter As IO.StreamWriter = New IO.StreamWriter(lMetadataEntry.Open())
-            lMetadataWriter.WriteLine(txtMetadata.Text)
+
+            Dim lConstituents As New atcCollection
+            If TimeseriesGroupToSave IsNot Nothing AndAlso TimeseriesGroupToSave.Count > 0 Then
+                For Each lTs As atcTimeseries In TimeseriesGroupToSave
+                    lConstituents.Increment(lTs.Attributes.GetValue("Constituent"))
+                Next
+            End If
+            'TODO: save metadata as defaults for next session
+            lMetadataWriter.WriteLine("Author First: " & txtAuthor1.Text)
+            lMetadataWriter.WriteLine("Author Middle: " & txtAuthor2.Text)
+            lMetadataWriter.WriteLine("Author Last: " & txtAuthor3.Text)
+            lMetadataWriter.WriteLine("Organization: " & txtOrganization.Text)
+            If radioModelCalibratedYes.Checked Then
+                lMetadataWriter.WriteLine("Calibration Constituents: " & txtCalibrationConstituents.Text)
+                lMetadataWriter.WriteLine("CorrelationCoefficients: " & txtCorrelationCoefficients.Text)
+                lMetadataWriter.WriteLine("Nash-Sutcliffe: " & txtNashSutcliffe.Text)
+
+            End If
+            lMetadataWriter.WriteLine("Date model executed: " & Format(MetadataInfo.ModelRunDate, "yyyy/MM/dd HH:mm"))
+            lMetadataWriter.WriteLine("Model Start Date: " & Format(MetadataInfo.ModelStartDate, "yyyy/MM/dd HH:mm"))
+            lMetadataWriter.WriteLine("Model End Date: " & Format(MetadataInfo.ModelEndDate, "yyyy/MM/dd HH:mm"))
+            lMetadataWriter.WriteLine("Model Name: " & MetadataInfo.PublishingModelType)
+            lMetadataWriter.WriteLine("Model version number: ")
+            lMetadataWriter.WriteLine("Description: " & txtDescription.Text.Replace(vbCr, " ").Replace(vbLf, " ").Replace("  ", " "))
+            lMetadataWriter.WriteLine("Constituents: " & String.Join(",", lConstituents.Keys.ToArray))
+
         End Using
     End Sub
 
@@ -485,6 +511,19 @@ AskUser:
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
+    End Sub
+
+    Private Sub radioModelCalibratedYes_CheckedChanged(sender As Object, e As EventArgs) Handles radioModelCalibratedYes.CheckedChanged
+        EnableCalibration(radioModelCalibratedYes.Checked)
+    End Sub
+
+    Private Sub EnableCalibration(aEnable As Boolean)
+        lblCalibrationConstituents.Enabled = aEnable
+        lblCorrelationCoefficients.Enabled = aEnable
+        lblNashSutcliffe.Enabled = aEnable
+        txtCalibrationConstituents.Enabled = aEnable
+        txtCorrelationCoefficients.Enabled = aEnable
+        txtNashSutcliffe.Enabled = aEnable
     End Sub
 
 End Class
