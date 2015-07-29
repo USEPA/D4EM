@@ -7,16 +7,26 @@ Imports System.IO.Compression.ZipFile
 
 Public Class frmPublishMain
 
+    Dim LocationLabels As New Generic.List(Of Label)
+    Dim LocationCheckboxes As New Generic.List(Of CheckBox)
+    Dim LocationTextboxes As New Generic.List(Of TextBox)
+
+    Dim CalibrationLabels As New List(Of Label)
+    Dim CalibrationCoefficients As New List(Of TextBox)
+    Dim CalibrationNash As New List(Of TextBox)
+
     Private AllGroups As New List(Of GroupBox)
     Private TimeseriesGroupToSave As atcTimeseriesGroup
 
     Private Sub btnHSPF_Click(sender As Object, e As EventArgs) Handles btnHSPF.Click
-        MetadataInfo.PublishingModelType = "HSPF"
+        MetadataInfo.ModelType = "HSPF"
+        MetadataInfo.ModelVersion = "12.2"
         OpenUCI()
     End Sub
 
     Private Sub btnSWAT_Click(sender As Object, e As EventArgs) Handles btnSWAT.Click
-        MetadataInfo.PublishingModelType = "SWAT"
+        MetadataInfo.ModelType = "SWAT"
+        MetadataInfo.ModelVersion = "2005"
         ShowGroup(grpChooseFiles)
     End Sub
 
@@ -73,9 +83,15 @@ Public Class frmPublishMain
         Next
         aGroup.Visible = True
         aGroup.Dock = DockStyle.Fill
+
         aGroup.BringToFront()
         aGroup.Refresh()
         Application.DoEvents()
+        If Object.ReferenceEquals(aGroup, grpMetadata) Then
+            PopulateMetadata()
+            aGroup.Refresh()
+            Application.DoEvents()
+        End If
     End Sub
 
     Private Sub frmPublishMain_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
@@ -122,7 +138,7 @@ Public Class frmPublishMain
     Private Sub grpChooseModel_DragDrop(sender As Object, e As DragEventArgs) Handles grpChooseModel.DragDrop
         If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
             Dim lAllFiles As List(Of String) = GetAllDroppedFilenames(e.Data.GetData(Windows.Forms.DataFormats.FileDrop))
-            If lAllFiles.Count = 1 AndAlso _
+            If lAllFiles.Count = 1 AndAlso
                IO.Path.GetExtension(lAllFiles(0)).ToLowerInvariant().Equals(".uci") Then
                 OpenUCI(lAllFiles(0))
             Else
@@ -191,16 +207,19 @@ Public Class frmPublishMain
             PopulateLocations()
             ShowGroup(grpMapLocations)
         Else
-            PopulateMetadata()
             ShowGroup(grpMetadata)
         End If
     End Sub
 
-    Dim AssociateLabels As New Generic.List(Of Label)
-    Dim AssociateCheckboxes As New Generic.List(Of CheckBox)
-    Dim AssociateTextboxes As New Generic.List(Of TextBox)
-
     Private Sub PopulateMetadata()
+
+        For Each lControl As Object In grpMetadata.Controls
+            If lControl.GetType().Name = "TextBox" Then
+                Dim lTxt As TextBox = lControl
+                lTxt.Text = GetSetting(g_AppNameShort, "Defaults", lTxt.Name)
+            End If
+        Next
+
         'Dim lConstituents As New atcCollection
         'If TimeseriesGroupToSave IsNot Nothing AndAlso TimeseriesGroupToSave.Count > 0 Then
         '    For Each lTs As atcTimeseries In TimeseriesGroupToSave
@@ -222,6 +241,11 @@ Public Class frmPublishMain
         '                   "Model version number: " & vbCrLf & _
         '                   "Model run or study description: " & vbCrLf & _
         '                   "Constituents published: " & String.Join(",", lConstituents.Keys.ToArray)
+
+        If CalibrationLabels.Count = 0 Then
+            PopulateCalibration()
+        End If
+
     End Sub
 
     Private Sub PopulateLocations()
@@ -229,10 +253,10 @@ Public Class frmPublishMain
         Dim lCheckbox As CheckBox
         Dim lTextBox As TextBox
         Dim lIndex As Integer = 0
-        For Each lTextBox In AssociateTextboxes
-            lLabel = AssociateLabels.Item(lIndex)
-            lCheckbox = AssociateCheckboxes(lIndex)
-            If lTextBox.Equals(txtLocationID1) OrElse _
+        For Each lTextBox In LocationTextboxes
+            lLabel = LocationLabels.Item(lIndex)
+            lCheckbox = LocationCheckboxes(lIndex)
+            If lTextBox.Equals(txtLocationID1) OrElse
                 lTextBox.Equals(txtLocationID2) Then
                 lLabel.Visible = False
                 lCheckbox.Visible = False
@@ -248,15 +272,15 @@ Public Class frmPublishMain
             End If
             lIndex += 1
         Next
-        AssociateLabels.Clear()
-        AssociateCheckboxes.Clear()
-        AssociateTextboxes.Clear()
+        LocationLabels.Clear()
+        LocationCheckboxes.Clear()
+        LocationTextboxes.Clear()
 
         Dim lLabelTop As Integer = lblLocation1.Top
         Dim lCheckboxTop As Integer = chkLocation1.Top
         Dim lComboTop As Integer = txtLocationID1.Top
         For Each lLocation As String In TimeseriesGroupToSave.SortedAttributeValues("Location", "<missing>")
-            Select Case AssociateTextboxes.Count
+            Select Case LocationTextboxes.Count
                 Case 0
                     lLabel = lblLocation1
                     lCheckbox = chkLocation1
@@ -304,17 +328,100 @@ Public Class frmPublishMain
                 grpMapLocations.Controls.Add(lTextBox)
             End If
 
-            AssociateLabels.Add(lLabel)
-            AssociateCheckboxes.Add(lCheckbox)
-            AssociateTextboxes.Add(lTextBox)
+            LocationLabels.Add(lLabel)
+            LocationCheckboxes.Add(lCheckbox)
+            LocationTextboxes.Add(lTextBox)
         Next
+    End Sub
+
+    Private Sub PopulateCalibration()
+        Try
+            Dim lLabel As Label
+            Dim txtCoefficient As TextBox
+            Dim txtNash As TextBox
+            Dim lIndex As Integer = 0
+            Dim lMaxLabelWidth As Integer = 0
+            Dim lLabelTop As Integer = lblCalibration1.Top
+            Dim lLabelTopDelta As Integer = lblCalibration2.Top - lblCalibration1.Top
+            For Each lConstituent As String In modPublishGlobal.g_ConstituentsOfInterest
+                Select Case lIndex
+                    Case 0
+                        lLabel = lblCalibration1
+                    Case 1
+                        lLabel = lblCalibration2
+                    Case Else
+                        lLabel = New Windows.Forms.Label()
+                        lLabel.Top = lLabelTop
+                        lLabel.Left = lblCalibration1.Left
+                        grpMetadataCalibration.Controls.Add(lLabel)
+                End Select
+                lLabel.AutoSize = True
+                lLabel.Text = lConstituent
+                lLabel.Visible = True
+                lLabelTop += lLabelTopDelta
+                lMaxLabelWidth = Math.Max(lMaxLabelWidth, lLabel.Width)
+                CalibrationLabels.Add(lLabel)
+                lIndex += 1
+            Next
+
+            Dim lMargin As Integer = lblCalibration1.Left
+            Dim ltxtCoefficientLeft As Integer = lMargin * 2 + lMaxLabelWidth
+            Dim ltxtWidth As Integer = (grpMetadataCalibration.Width - ltxtCoefficientLeft - lMargin * 2) / 2
+            Dim ltxtNashLeft As Integer = ltxtCoefficientLeft + ltxtWidth + lMargin
+            Dim ltxtTop As Integer = txtCorrelationCoefficient1.Top
+            Dim ltxtTopDelta As Integer = (txtCorrelationCoefficient2.Top - txtCorrelationCoefficient1.Top)
+
+            lblCorrelationCoefficients.Left = ltxtCoefficientLeft
+            lblNashSutcliffe.Left = ltxtNashLeft
+            lIndex = 0
+            For Each lConstituent As String In modPublishGlobal.g_ConstituentsOfInterest
+                Select Case lIndex
+                    Case 0
+                        txtCoefficient = txtCorrelationCoefficient1
+                        txtNash = txtNashSutcliffe1
+                    Case 1
+                        txtCoefficient = txtCorrelationCoefficient2
+                        txtNash = txtNashSutcliffe2
+                    Case Else
+                        txtCoefficient = New Windows.Forms.TextBox()
+                        grpMetadataCalibration.Controls.Add(txtCoefficient)
+
+                        txtNash = New Windows.Forms.TextBox()
+                        grpMetadataCalibration.Controls.Add(txtNash)
+                End Select
+                txtCoefficient.Top = ltxtTop
+                txtCoefficient.Left = ltxtCoefficientLeft
+                txtCoefficient.Width = ltxtWidth
+                txtNash.Top = ltxtTop
+                txtNash.Left = ltxtNashLeft
+                txtNash.Width = ltxtWidth
+
+                txtCoefficient.Visible = True
+                txtNash.Visible = True
+
+                CalibrationCoefficients.Add(txtCoefficient)
+                CalibrationNash.Add(txtNash)
+
+                ltxtTop += ltxtTopDelta
+                lIndex += 1
+            Next
+            If ltxtTop > grpMetadataCalibration.Height Then
+                Dim lGroupTop As Integer = grpMetadataCalibration.Top
+                Me.Height += ltxtTop - grpMetadataCalibration.Height
+                grpMetadataCalibration.Height = ltxtTop
+                grpMetadataCalibration.Top = lGroupTop
+                txtDescription.Height = Math.Max(txtOrganization.Height, lGroupTop - lMargin - txtDescription.Top)
+            End If
+        Catch ex As Exception
+            Logger.Msg("Problem populating calibration interface:" & vbCrLf & ex.ToString, vbOKOnly, g_AppNameShort)
+        End Try
     End Sub
 
     Private Sub txtLocationID_TextChanged(sender As Object, e As EventArgs) Handles txtLocationID1.TextChanged, txtLocationID2.TextChanged
         Dim lTextBox As TextBox = sender
-        Dim lIndex As Integer = AssociateTextboxes.IndexOf(lTextBox)
+        Dim lIndex As Integer = LocationTextboxes.IndexOf(lTextBox)
         If lIndex >= 0 Then
-            AssociateCheckboxes(lIndex).Checked = (lTextBox.Text.Trim.Length > 0)
+            LocationCheckboxes(lIndex).Checked = (lTextBox.Text.Trim.Length > 0)
         End If
     End Sub
 
@@ -342,7 +449,7 @@ Public Class frmPublishMain
 
         atcTimeseriesStatistics.atcTimeseriesStatistics.InitializeShared()
 
-        MetadataInfo.PublishingModelType = "Unspecified"
+        MetadataInfo.ModelType = "Unspecified"
 
     End Sub
 
@@ -407,24 +514,34 @@ AskUser:
                 Next
             End If
             'TODO: save metadata as defaults for next session
-            lMetadataWriter.WriteLine("Author First: " & txtAuthor1.Text)
-            lMetadataWriter.WriteLine("Author Middle: " & txtAuthor2.Text)
-            lMetadataWriter.WriteLine("Author Last: " & txtAuthor3.Text)
+            lMetadataWriter.WriteLine("Author First: " & txtAuthor1.Text.Trim)
+            lMetadataWriter.WriteLine("Author Middle: " & txtAuthor2.Text.Trim)
+            lMetadataWriter.WriteLine("Author Last: " & txtAuthor3.Text.Trim)
+            lMetadataWriter.WriteLine("Author Email: " & txtAuthorEmail.Text.Trim)
+            Dim lPhoneNumber As String = ""
+            For Each lCh As Char In txtAuthorPhone.Text
+                If IsNumeric(lCh) Then lPhoneNumber &= lCh
+            Next
+            lMetadataWriter.WriteLine("Author Phone: " & lPhoneNumber)
             lMetadataWriter.WriteLine("Organization: " & txtOrganization.Text)
-            If radioModelCalibratedYes.Checked Then
-                lMetadataWriter.WriteLine("Calibration Constituents: " & txtCalibrationConstituents.Text)
-                lMetadataWriter.WriteLine("CorrelationCoefficients: " & txtCorrelationCoefficients.Text)
-                lMetadataWriter.WriteLine("Nash-Sutcliffe: " & txtNashSutcliffe.Text)
-
-            End If
             lMetadataWriter.WriteLine("Date model executed: " & Format(MetadataInfo.ModelRunDate, "yyyy/MM/dd HH:mm"))
             lMetadataWriter.WriteLine("Model Start Date: " & Format(MetadataInfo.ModelStartDate, "yyyy/MM/dd HH:mm"))
             lMetadataWriter.WriteLine("Model End Date: " & Format(MetadataInfo.ModelEndDate, "yyyy/MM/dd HH:mm"))
-            lMetadataWriter.WriteLine("Model Name: " & MetadataInfo.PublishingModelType)
+            lMetadataWriter.WriteLine("Model Name: " & MetadataInfo.ModelType)
             lMetadataWriter.WriteLine("Model version number: ")
             lMetadataWriter.WriteLine("Description: " & txtDescription.Text.Replace(vbCr, " ").Replace(vbLf, " ").Replace("  ", " "))
             lMetadataWriter.WriteLine("Constituents: " & String.Join(",", lConstituents.Keys.ToArray))
 
+            Dim lCalibrationCount As Integer = Math.Min(CalibrationLabels.Count, CalibrationCoefficients.Count)
+            lCalibrationCount = Math.Min(lCalibrationCount, CalibrationNash.Count)
+            For lIndex As Integer = 0 To lCalibrationCount - 1
+                If CalibrationCoefficients(lIndex).Text.Trim.Length > 0 Then
+                    lMetadataWriter.WriteLine("Correlation Coefficient " & CalibrationLabels(lIndex).Text & ": " & CalibrationCoefficients(lIndex).Text.Trim)
+                End If
+                If CalibrationCoefficients(lIndex).Text.Trim.Length > 0 Then
+                    lMetadataWriter.WriteLine("Nash-Sutcliffe " & CalibrationLabels(lIndex).Text & ": " & CalibrationNash(lIndex).Text.Trim)
+                End If
+            Next
         End Using
     End Sub
 
@@ -433,9 +550,9 @@ AskUser:
             Dim lZipFileName As String = AskForZipFileNameToSaveIn()
 
             Dim lLocationMap As New atcCollection
-            For lIndex As Integer = 0 To AssociateTextboxes.Count - 1
-                If AssociateCheckboxes(lIndex).Checked Then
-                    lLocationMap.Add(AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
+            For lIndex As Integer = 0 To LocationTextboxes.Count - 1
+                If LocationCheckboxes(lIndex).Checked Then
+                    lLocationMap.Add(LocationLabels(lIndex).Text, LocationTextboxes(lIndex).Text)
                 End If
                 'SaveSetting(g_AppNameShort, "LocationAssociations", AssociateLabels(lIndex).Text, AssociateTextboxes(lIndex).Text)
             Next
@@ -445,6 +562,13 @@ AskUser:
             barProgress.Value = 0
             barProgress.Maximum = lstInputFiles.CheckedItems.Count + TimeseriesGroupToSave.Count
             barProgress.Visible = True
+
+            For Each lControl As Object In grpMetadata.Controls
+                If lControl.GetType().Name = "TextBox" Then
+                    Dim lTxt As TextBox = lControl
+                    SaveSetting(g_AppNameShort, "Defaults", lTxt.Name, lTxt.Text)
+                End If
+            Next
 
             Dim lInputsZipFileName As String = GetTemporaryFileName(IO.Path.ChangeExtension(lZipFileName, ".inputs"), ".zip")
             Using lZipStream As IO.FileStream = New IO.FileStream(lInputsZipFileName, IO.FileMode.CreateNew)
@@ -494,7 +618,6 @@ AskUser:
     End Sub
 
     Private Sub btnNHDPlusNext_Click(sender As Object, e As EventArgs) Handles btnNHDPlusNext.Click
-        PopulateMetadata()
         ShowGroup(grpMetadata)
     End Sub
 
@@ -513,17 +636,17 @@ AskUser:
         Me.Close()
     End Sub
 
-    Private Sub radioModelCalibratedYes_CheckedChanged(sender As Object, e As EventArgs) Handles radioModelCalibratedYes.CheckedChanged
-        EnableCalibration(radioModelCalibratedYes.Checked)
-    End Sub
+    'Private Sub radioModelCalibratedYes_CheckedChanged(sender As Object, e As EventArgs)
+    '    EnableCalibration(radioModelCalibratedYes.Checked)
+    'End Sub
 
-    Private Sub EnableCalibration(aEnable As Boolean)
-        lblCalibrationConstituents.Enabled = aEnable
-        lblCorrelationCoefficients.Enabled = aEnable
-        lblNashSutcliffe.Enabled = aEnable
-        txtCalibrationConstituents.Enabled = aEnable
-        txtCorrelationCoefficients.Enabled = aEnable
-        txtNashSutcliffe.Enabled = aEnable
-    End Sub
+    'Private Sub EnableCalibration(aEnable As Boolean)
+    '    lblCalibrationConstituents.Enabled = aEnable
+    '    lblCorrelationCoefficients.Enabled = aEnable
+    '    lblNashSutcliffe.Enabled = aEnable
+    '    txtCalibrationConstituents.Enabled = aEnable
+    '    txtCorrelationCoefficient1.Enabled = aEnable
+    '    txtNashSutcliffe1.Enabled = aEnable
+    'End Sub
 
 End Class

@@ -8,7 +8,8 @@ Module modPublishGlobal
     Public Const g_AppNameLong As String = "WEDO Publish"
 
     Public Structure MetdataStruct
-        Dim PublishingModelType As String
+        Dim ModelType As String
+        Dim ModelVersion As String
         Dim ModelRunDate As Date
         Dim ModelStartDate As Date
         Dim ModelEndDate As Date
