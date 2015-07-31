@@ -7,13 +7,15 @@ Imports System.IO.Compression.ZipFile
 
 Public Class frmPublishMain
 
-    Dim LocationLabels As New Generic.List(Of Label)
-    Dim LocationCheckboxes As New Generic.List(Of CheckBox)
-    Dim LocationTextboxes As New Generic.List(Of TextBox)
+    Dim LocationLabels As New List(Of Label)
+    Dim LocationCheckboxes As New List(Of CheckBox)
+    Dim LocationTextboxes As New List(Of TextBox)
 
     Dim CalibrationLabels As New List(Of Label)
     Dim CalibrationCoefficients As New List(Of TextBox)
     Dim CalibrationNash As New List(Of TextBox)
+
+    Dim AllInputFiles As New List(Of String)
 
     Private AllGroups As New List(Of GroupBox)
     Private TimeseriesGroupToSave As atcTimeseriesGroup
@@ -27,13 +29,21 @@ Public Class frmPublishMain
     Private Sub btnSWAT_Click(sender As Object, e As EventArgs) Handles btnSWAT.Click
         MetadataInfo.ModelType = "SWAT"
         MetadataInfo.ModelVersion = "2005"
+        OpenSWAT()
         ShowGroup(grpChooseFiles)
     End Sub
 
     Private Sub AddFilesToList(aFiles As IEnumerable(Of String), lst As Windows.Forms.CheckedListBox)
         For Each lFileName In aFiles
-            If Not lst.Items.Contains(lFileName) Then
-                lst.Items.Add(lFileName, IO.File.Exists(lFileName))
+            Dim lModifiedFileName As String = lFileName
+            If MetadataInfo.ModelType = "SWAT" AndAlso aFiles.Count > 20 Then
+                Select Case IO.Path.GetExtension(lFileName)
+                    Case ".chm", ".gw", ".hru", ".lwq", ".mgt", ".sol", ".res"
+                        lModifiedFileName = IO.Path.Combine(IO.Path.GetDirectoryName(lFileName), "*" & IO.Path.GetExtension(lFileName))
+                End Select
+            End If
+            If Not lst.Items.Contains(lModifiedFileName) Then
+                lst.Items.Add(lModifiedFileName, IO.File.Exists(lFileName))
             End If
         Next
     End Sub
@@ -64,12 +74,56 @@ Public Class frmPublishMain
         End If
         ShowGroup(grpProgress)
         If UCIFile() IsNot Nothing Then
+            AllInputFiles.Clear()
+            AllInputFiles.Add(UCIFilename)
+            AllInputFiles.AddRange(FilesInUCI(True, False, False, False, False))
+
             lstInputFiles.Items.Clear()
-            lstInputFiles.Items.Add(UCIFilename, True)
-            AddFilesToList(FilesInUCI(True, False, False, False, False), lstInputFiles)
+            AddFilesToList(AllInputFiles, lstInputFiles)
 
             lstOutputFiles.Items.Clear()
             AddFilesToList(FilesInUCI(True, True, False, False, True), lstOutputFiles)
+
+            ShowGroup(grpChooseFiles)
+        Else
+            ShowGroup(grpChooseModel)
+        End If
+    End Sub
+
+    Private Sub OpenSWAT(Optional aFileNameCio As String = "")
+        'If IO.File.Exists(UCIFilename) AndAlso MsgBox("Use UCI file '" & UCIFilename & "'?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+        '    Return True
+        'End If
+        lblProgress.Text = "Opening SWAT model"
+        ShowGroup(grpProgress)
+        Dim lUCI As atcUCI.HspfUci = Nothing
+        If IO.File.Exists(aFileNameCio) Then
+            CioFilename = aFileNameCio
+        Else
+            Dim lFileDialog As New Windows.Forms.OpenFileDialog()
+            With lFileDialog
+                .Title = "Select SWAT file.cio"
+                .Filter = "CIO Files|*.cio"
+                .FilterIndex = 0
+                .DefaultExt = ".cio"
+                .CheckFileExists = True
+                .CheckPathExists = True
+                .FileName = UCIFilename
+                If .ShowDialog(Me) = DialogResult.OK Then
+                    CioFilename = .FileName
+                End If
+            End With
+        End If
+        ShowGroup(grpProgress)
+        If IO.File.Exists(CioFilename) Then
+            AllInputFiles.Clear()
+            AllInputFiles.AddRange(GetSwatInputFiles())
+
+            lstInputFiles.Items.Clear()
+            AddFilesToList(AllInputFiles, lstInputFiles)
+
+            lstOutputFiles.Items.Clear()
+            AddFilesToList(GetSwatTimeseriesOutputFiles(), lstOutputFiles)
 
             ShowGroup(grpChooseFiles)
         Else
@@ -94,10 +148,6 @@ Public Class frmPublishMain
         End If
     End Sub
 
-    Private Sub frmPublishMain_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
-        e.Effect = Windows.Forms.DragDropEffects.None
-    End Sub
-
     Private Sub frmPublishMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         AllGroups.Add(grpChooseModel)
         AllGroups.Add(grpChooseFiles)
@@ -116,6 +166,11 @@ Public Class frmPublishMain
             .CheckFileExists = True
             .CheckPathExists = True
             If .ShowDialog(Me) = DialogResult.OK Then
+                For Each lFileName As String In .FileNames
+                    If Not AllInputFiles.Contains(lFileName) Then
+                        AllInputFiles.Add(lFileName)
+                    End If
+                Next
                 AddFilesToList(.FileNames, lstInputFiles)
             End If
         End With
@@ -133,20 +188,46 @@ Public Class frmPublishMain
                 AddFilesToList(.FileNames, lstOutputFiles)
             End If
         End With
+        'Dim lPath As String = My.Computer.FileSystem.SpecialDirectories. ' Environment.GetFolderPath(Environment.SpecialFolder.t)
     End Sub
 
-    Private Sub grpChooseModel_DragDrop(sender As Object, e As DragEventArgs) Handles grpChooseModel.DragDrop
+    Private Sub frmPublishMain_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
+        If grpChooseModel.Visible AndAlso e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
+            e.Effect = Windows.Forms.DragDropEffects.All
+        End If
+    End Sub
+
+    Private Sub lstInputFiles_DragEnter(sender As Object, e As DragEventArgs) Handles lstInputFiles.DragEnter, lstOutputFiles.DragEnter
+        If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
+            e.Effect = Windows.Forms.DragDropEffects.All
+        End If
+    End Sub
+
+    Private Sub frmPublishMain_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop ' grpChooseModel.DragDrop
+        If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
+            If grpChooseModel.Visible Then
+                Dim lAllFiles As List(Of String) = GetAllDroppedFilenames(e.Data.GetData(Windows.Forms.DataFormats.FileDrop))
+                If lAllFiles.Count = 1 AndAlso IO.Path.GetExtension(lAllFiles(0)).ToLowerInvariant().Equals(".uci") Then
+                    MetadataInfo.ModelType = "HSPF"
+                    MetadataInfo.ModelVersion = "12.2"
+                    OpenUCI(lAllFiles(0))
+                ElseIf lAllFiles.Count = 1 AndAlso IO.Path.GetFileName(lAllFiles(0)).ToLowerInvariant().Equals("file.cio") Then
+                    MetadataInfo.ModelType = "SWAT"
+                    MetadataInfo.ModelVersion = "2005"
+                    OpenSWAT(lAllFiles(0))
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub lstFiles_DragDrop(sender As Object, e As DragEventArgs) Handles lstInputFiles.DragDrop, lstOutputFiles.DragDrop
         If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
             Dim lAllFiles As List(Of String) = GetAllDroppedFilenames(e.Data.GetData(Windows.Forms.DataFormats.FileDrop))
-            If lAllFiles.Count = 1 AndAlso
-               IO.Path.GetExtension(lAllFiles(0)).ToLowerInvariant().Equals(".uci") Then
-                OpenUCI(lAllFiles(0))
-            Else
-                For Each lFileName As String In lAllFiles
-                    lstInputFiles.Items.Add(lFileName)
-                Next
-                ShowGroup(grpChooseFiles)
-            End If
+            For Each lFileName As String In lAllFiles
+                If Not sender.Items.Contains(lFileName) Then
+                    sender.Items.Add(lFileName, True)
+                End If
+            Next
         End If
     End Sub
 
@@ -162,15 +243,28 @@ Public Class frmPublishMain
         Return lAllFiles
     End Function
 
-    Private Sub grpChooseModel_DragEnter(sender As Object, e As DragEventArgs) Handles grpChooseModel.DragEnter
-        If e.Data.GetDataPresent(Windows.Forms.DataFormats.FileDrop) Then
-            e.Effect = Windows.Forms.DragDropEffects.All
-        End If
-    End Sub
+    Private Function SelectedInputFiles() As List(Of String)
+        Dim lSelected As New List(Of String)
+        For Each lDataFileName As String In lstInputFiles.CheckedItems
+            Dim lAsteriskIndex As Integer = lDataFileName.IndexOf("*")
+            If lAsteriskIndex > -1 Then
+                Dim lStartsWith As String = lDataFileName.Substring(0, lAsteriskIndex)
+                Dim lEndsWith As String = lDataFileName.Substring(lAsteriskIndex)
+                For Each lEveryFile As String In AllInputFiles
+                    If lEveryFile.StartsWith(lStartsWith) AndAlso lEveryFile.EndsWith(lEndsWith) Then
+                        lSelected.Add(lDataFileName)
+                        Exit For
+                    End If
+                Next
+            Else
+                lSelected.Add(lDataFileName)
+            End If
+        Next
+    End Function
 
     Private Sub btnChooseFilesNext_Click(sender As Object, e As EventArgs) Handles btnChooseFilesNext.Click
         If MetadataInfo.ModelRunDate < #1/1/1920# Then
-            For Each lDataFileName As String In lstInputFiles.CheckedItems
+            For Each lDataFileName As String In SelectedInputFiles()
                 If IO.File.Exists(lDataFileName) Then
                     Dim lFileDate As Date = IO.File.GetLastWriteTime(lDataFileName)
                     If lFileDate > MetadataInfo.ModelRunDate Then
@@ -186,7 +280,12 @@ Public Class frmPublishMain
             For Each lDataFileName As String In lstOutputFiles.CheckedItems
                 lblProgress.Text = "Opening " & lDataFileName
                 ShowGroup(grpProgress)
-                atcDataManager.OpenDataSource(lDataFileName)
+                Select Case MetadataInfo.ModelType
+                    Case "SWAT"
+                        modPublishSWAT.OpenSwatOutput(lDataFileName)
+                    Case Else '"HSPF"
+                        atcDataManager.OpenDataSource(lDataFileName)
+                End Select
             Next
             lblProgress.Text = "Selecting Output Datasets to Publish"
             Dim lAvailable As New atcTimeseriesGroup
@@ -558,9 +657,12 @@ AskUser:
             Next
             lblProgress.Text = "Saving " & lZipFileName
             ShowGroup(grpProgress)
+
+            Dim lSaveFiles As List(Of String) = SelectedInputFiles()
+
             barProgress.Minimum = 0
             barProgress.Value = 0
-            barProgress.Maximum = lstInputFiles.CheckedItems.Count + TimeseriesGroupToSave.Count
+            barProgress.Maximum = lSaveFiles.Count + TimeseriesGroupToSave.Count
             barProgress.Visible = True
 
             For Each lControl As Object In grpMetadata.Controls
@@ -574,7 +676,7 @@ AskUser:
             Using lZipStream As IO.FileStream = New IO.FileStream(lInputsZipFileName, IO.FileMode.CreateNew)
                 Using lZipArchive As ZipArchive = New ZipArchive(lZipStream, ZipArchiveMode.Create)
                     AddMetadataToZipArchive(lZipArchive)
-                    For Each lAddFileName As String In lstInputFiles.CheckedItems
+                    For Each lAddFileName As String In lSaveFiles
                         ZipFileExtensions.CreateEntryFromFile(lZipArchive, lAddFileName, IO.Path.GetFileName(lAddFileName))
                         barProgress.Value += 1
                         barProgress.Refresh()

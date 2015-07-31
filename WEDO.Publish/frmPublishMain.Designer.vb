@@ -144,6 +144,7 @@ Partial Class frmPublishMain
         '
         'lstInputFiles
         '
+        Me.lstInputFiles.AllowDrop = True
         Me.lstInputFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -629,6 +630,7 @@ Partial Class frmPublishMain
         '
         'lstOutputFiles
         '
+        Me.lstOutputFiles.AllowDrop = True
         Me.lstOutputFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)

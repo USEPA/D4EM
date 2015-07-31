@@ -67,6 +67,9 @@
     <Reference Include="atcTimeseriesStatistics">
       <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesStatistics.dll</HintPath>
     </Reference>
+    <Reference Include="atcTimeseriesSWAT">
+      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesSWAT.dll</HintPath>
+    </Reference>
     <Reference Include="atcUCI">
       <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcUCI.dll</HintPath>
     </Reference>
@@ -79,9 +82,6 @@
     </Reference>
     <Reference Include="MapWinUtility">
       <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-    </Reference>
-    <Reference Include="SwatObject">
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\SwatObject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="modPublishGlobal.vb" />
     <Compile Include="modPublishHSPF.vb" />
+    <Compile Include="modPublishSWAT.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

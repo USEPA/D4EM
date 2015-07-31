@@ -210,19 +210,19 @@ Public Class HSPFmodel
                         If FileExists(pPSRCustomFile) Then
                             pPSRCustom = True
                         Else
-                            Logger.Msg("Point Source Data file does not exist." & vbCrLf & vbCrLf & pPSRCustomFile)
+                            Logger.Msg("Point Source Data file does not exist." & vbCrLf & vbCrLf & pPSRCustomFile, MsgBoxStyle.OkOnly, "HSPF")
                         End If
                     Else
-                        Logger.Msg("Point Source shapefile is not available." & vbCrLf & vbCrLf & pOutletsLayerName)
+                        Logger.Msg("Point Source shapefile is not available." & vbCrLf & vbCrLf & pOutletsLayerName, MsgBoxStyle.OkOnly, "HSPF")
                     End If
                 Else
-                    Logger.Msg("Point Source shapefile does not exist." & vbCrLf & vbCrLf & lShapeFilename)
+                    Logger.Msg("Point Source shapefile does not exist." & vbCrLf & vbCrLf & lShapeFilename, MsgBoxStyle.OkOnly, "HSPF")
                 End If
             Else
-                Logger.Msg("Point Source text file cannot be opened." & vbCrLf & vbCrLf & lPointSourceFileName)
+                Logger.Msg("Point Source text file cannot be opened." & vbCrLf & vbCrLf & lPointSourceFileName, MsgBoxStyle.OkOnly, "HSPF")
             End If
         Else
-            Logger.Msg("Point Source text file does not exist." & vbCrLf & vbCrLf & lPointSourceFileName)
+            Logger.Msg("Point Source text file does not exist." & vbCrLf & vbCrLf & lPointSourceFileName, MsgBoxStyle.OkOnly, "HSPF")
         End If
 
         'look at shapefile attributes for reaches to have intermediate output and boundary inflows
@@ -283,6 +283,8 @@ Public Class HSPFmodel
         End If
 
         Dim lLayer = New DotSpatial.Data.PointShapefile(lShpFileName)
+        lLayer.FilePath = lShpFileName
+        lLayer.Save() 'DotSpatial now wants it saved before adding points
 
         Dim lDBF As New atcTableDBF
         Dim lFieldLengths() As Integer = aTable.ComputeFieldLengths()
