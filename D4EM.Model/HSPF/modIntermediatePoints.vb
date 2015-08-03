@@ -21,10 +21,9 @@ Module modIntermediatePoints
 
         'this is the way the outlet flow is added
         If aRchID > 0 Then 'add output at this location
-            AddOutputWDMDataSet(aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "FLOW", lBaseDsn, 1, lTu, "", lDsn)
-            aUci.AddExtTarget("RCHRES", aRchID.ToString.Trim, "HYDR", "RO", 1, 1, 1.0#, "AVER", "WDM1", lDsn, "FLOW", 1, "ENGL", "AGGR", "REPL")
+            AddOutputWDMDataSet(aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "RO", lBaseDsn, 1, lTu, "", lDsn)
+            aUci.AddExtTarget("RCHRES", aRchID.ToString.Trim, "HYDR", "RO", 1, 1, 1.0#, "AVER", "WDM1", lDsn, "RO", 1, "ENGL", "AGGR", "REPL")
         End If
-
     End Sub
 
     Public Sub AddUpstreamInflow(ByVal aRchID As Integer, _

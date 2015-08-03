@@ -283,6 +283,10 @@ Public Class HSPFmodel
         End If
 
         Dim lLayer = New DotSpatial.Data.PointShapefile(lShpFileName)
+        lLayer.FilePath = lShpFileName
+        lLayer.Save() 'DotSpatial now wants it saved before adding points
+        lLayer.Close()
+        lLayer = New DotSpatial.Data.PointShapefile(lShpFileName)
 
         Dim lDBF As New atcTableDBF
         Dim lFieldLengths() As Integer = aTable.ComputeFieldLengths()

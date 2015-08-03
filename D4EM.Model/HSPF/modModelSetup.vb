@@ -1034,6 +1034,22 @@ Public Module modModelSetup
                 Next
             Next
 
+            'We added daily flow output at the outlet in CreateUciFromBASINS.
+            'Add OutputInterval flow output at the outlet too.
+            'But this does not need to be done if using BacterialOption because that always does OutputInterval flow output for all reaches.
+            If Not aBacterialOption AndAlso lHspfUci.OpnBlks.Contains("RCHRES") AndAlso lHspfUci.OpnBlks("RCHRES").Count > 0 Then
+                lProjectDataSource.Clear()
+                If Not lProjectDataSource.Open(lProjectWDMName) Then
+                    lProjectDataSource = Nothing
+                End If
+                Dim lOpn As HspfOperation = lHspfUci.OpnBlks("RCHRES").Ids(lHspfUci.OpnBlks("RCHRES").Count - 1)
+                Dim lScenario As String = System.IO.Path.GetFileNameWithoutExtension(lHspfUci.Name)
+                Dim lBaseDsn As Integer = 100
+                Dim lDsn As Integer = 0
+                AddOutputWDMDataSet(lProjectDataSource, lScenario, "RCH" & lOpn.Id.ToString, "RO", lBaseDsn, 1, aOutputInterval + 1, "", lDsn)
+                lHspfUci.AddExtTarget("RCHRES", lOpn.Id, "HYDR", "RO", 1, 1, 1.0#, "", "WDM1", lDsn, "RO", 1, "ENGL", "AGGR", "REPL")
+            End If
+
             If aBacterialOption Then
                 AddMicrobialSimulation(lHspfUci)
                 lProjectDataSource.Clear()
