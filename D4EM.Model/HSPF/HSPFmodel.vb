@@ -161,82 +161,80 @@ Public Class HSPFmodel
         Next
 
         Dim lOutputPath As String = IO.Path.Combine(pOutputPath, "HSPF")
-
-        'Let's look in the OutputPath folder first - this is likely the project folder
-        Dim lAnimalsFileName As String
-        Dim files As String() = Directory.GetFiles(pOutputPath, "AnimalsLL.txt", SearchOption.AllDirectories)
-        If IsNothing(files) Or files.Length < 1 Then
-            lAnimalsFileName = FindFile("", "AnimalsLL.txt", , , False)
-        Else
-            lAnimalsFileName = files(0)
-        End If
-
-        Try
-            Dim lAnimalsCSV As New atcTableDelimited
-            lAnimalsCSV.Delimiter = ","
-            If lAnimalsCSV.OpenFile(lAnimalsFileName) Then
-                Dim lShapeFilename As String = IO.Path.Combine(aProject.ProjectFolder, "AnimalsLL.shp")
-                lShapeFilename = CreateShapefileFromTable(lShapeFilename, lAnimalsCSV, 1, 2, aProject.DesiredProjection)
-                If IO.File.Exists(lShapeFilename) AndAlso Not GisUtil.IsLayer(lShapeFilename) Then
-                    GisUtil.AddLayer(lShapeFilename, "Animals")
-                End If
-            End If
-            Logger.Progress(1, 1)
-        Catch ex As Exception
-            Logger.Dbg(ex.ToString, "Error opening AnimalsLL")
-        End Try
-
-
-        'find file PointSourceLL.txt 
-        Dim lFolder As String = IO.Path.GetDirectoryName(IO.Path.GetDirectoryName(lOutputPath)) & IO.Path.DirectorySeparatorChar
-        Dim lPointSourceFileName As String = lFolder & "PointSourceLL.txt"
-        If FileExists(lPointSourceFileName) Then
-            'try to convert it to shapefile
-            Dim lPointSourceCSV As New atcTableDelimited
-            lPointSourceCSV.Delimiter = ","
-            If lPointSourceCSV.OpenFile(lPointSourceFileName) Then
-                Dim lShapeFilename As String = IO.Path.Combine(aProject.ProjectFolder, "PointSourceLL.shp")
-                lShapeFilename = CreateShapefileFromTable(lShapeFilename, lPointSourceCSV, 1, 2, aProject.DesiredProjection)
-                If IO.File.Exists(lShapeFilename) Then
-                    pOutletsLayerName = lShapeFilename
-                    pPointFieldName = "PtSrcId"
-                    pPSRCustomFile = lFolder & "PointSourceData.csv"
-                    If Not GisUtil.IsLayer(pOutletsLayerName) Then
-                        'add to map
-                        GisUtil.AddLayer(lShapeFilename, "Point Sources")
-                        'aProject.Layers.Add(New D4EM.Data.Layer(pOutletsLayerName, New D4EM.Data.LayerSpecification("PtSrc", "Point Sources", IdFieldName:="PtSrcId"), False))
-                    End If
-                    If GisUtil.IsLayer(pOutletsLayerName) Then
-                        If FileExists(pPSRCustomFile) Then
-                            pPSRCustom = True
+        Dim lLocalDataFolder As String = IO.Path.Combine(aProject.ProjectFolder, "LocalData")
+        If IO.Directory.Exists(lLocalDataFolder) Then
+            Dim lAnimalLocationsFileName As String = IO.Path.Combine(lLocalDataFolder, "AnimalLL.csv")
+            If FileExists(lAnimalLocationsFileName) Then
+                Try
+                    Dim lAnimalsCSV As New atcTableDelimited
+                    lAnimalsCSV.Delimiter = ","
+                    If lAnimalsCSV.OpenFile(lAnimalLocationsFileName) Then
+                        Dim lShapeFilename As String = IO.Path.ChangeExtension(lAnimalLocationsFileName, ".shp")
+                        lShapeFilename = CreateShapefileFromTable(lShapeFilename, lAnimalsCSV, 1, 2, aProject.DesiredProjection)
+                        If IO.File.Exists(lShapeFilename) AndAlso Not GisUtil.IsLayer(lShapeFilename) Then
+                            GisUtil.AddLayer(lShapeFilename, "Animals")
                         Else
-                            Logger.Msg("Point Source Data file does not exist." & vbCrLf & vbCrLf & pPSRCustomFile)
+                            Logger.Msg("Animal shapefile was not created:" & vbCrLf & vbCrLf & lShapeFilename, MsgBoxStyle.OkOnly, "HSPF")
                         End If
                     Else
-                        Logger.Msg("Point Source shapefile is not available." & vbCrLf & vbCrLf & pOutletsLayerName)
+                        Logger.Msg("Animal location file cannot be opened:" & vbCrLf & vbCrLf & lAnimalLocationsFileName, MsgBoxStyle.OkOnly, "HSPF")
                     End If
-                Else
-                    Logger.Msg("Point Source shapefile does not exist." & vbCrLf & vbCrLf & lShapeFilename)
-                End If
-            Else
-                Logger.Msg("Point Source text file cannot be opened." & vbCrLf & vbCrLf & lPointSourceFileName)
+                    Logger.Progress(1, 1) 'Clear progress
+                Catch ex As Exception
+                    Logger.Msg(ex.ToString, "Error opening Animal Locations " & lAnimalLocationsFileName)
+                End Try
             End If
-        Else
-            Logger.Msg("Point Source text file does not exist." & vbCrLf & vbCrLf & lPointSourceFileName)
+            Dim lPointSourceLocationsFileName As String = IO.Path.Combine(lLocalDataFolder, "PointSourceLL.csv")
+            If FileExists(lPointSourceLocationsFileName) Then
+                Try
+                    'try to convert it to shapefile
+                    Dim lPointSourceCSV As New atcTableDelimited
+                    lPointSourceCSV.Delimiter = ","
+                    If lPointSourceCSV.OpenFile(lPointSourceLocationsFileName) Then
+                        Dim lShapeFilename As String = IO.Path.ChangeExtension(lPointSourceLocationsFileName, ".shp")
+                        lShapeFilename = CreateShapefileFromTable(lShapeFilename, lPointSourceCSV, 1, 2, aProject.DesiredProjection)
+                        If IO.File.Exists(lShapeFilename) Then
+                            pOutletsLayerName = lShapeFilename
+                            pPointFieldName = "PtSrcId"
+                            pPSRCustomFile = IO.Path.Combine(lLocalDataFolder, "PointSourceData.csv")
+                            If Not GisUtil.IsLayer(pOutletsLayerName) Then
+                                'add to map
+                                GisUtil.AddLayer(lShapeFilename, "Point Sources")
+                                'aProject.Layers.Add(New D4EM.Data.Layer(pOutletsLayerName, New D4EM.Data.LayerSpecification("PtSrc", "Point Sources", IdFieldName:="PtSrcId"), False))
+                            End If
+                            If GisUtil.IsLayer(pOutletsLayerName) Then
+                                If FileExists(pPSRCustomFile) Then
+                                    pPSRCustom = True
+                                Else
+                                    'Logger.Msg("Point Source Data file does not exist:" & vbCrLf & vbCrLf & pPSRCustomFile, MsgBoxStyle.OkOnly, "HSPF")
+                                End If
+                            Else
+                                Logger.Msg("Point Source shapefile could not be added to map:" & vbCrLf & vbCrLf & pOutletsLayerName, MsgBoxStyle.OkOnly, "HSPF")
+                            End If
+                        Else
+                            Logger.Msg("Point Source shapefile was not created:" & vbCrLf & vbCrLf & lShapeFilename, MsgBoxStyle.OkOnly, "HSPF")
+                        End If
+                    Else
+                        Logger.Msg("Point Source text file cannot be opened:" & vbCrLf & vbCrLf & lPointSourceLocationsFileName, MsgBoxStyle.OkOnly, "HSPF")
+                    End If
+                Catch ex As Exception
+                    Logger.Msg("Error opening Point Source Locations " & vbCrLf & vbCrLf & lPointSourceLocationsFileName & vbCrLf & vbCrLf & ex.ToString)
+                End Try
+            Else
+                Logger.Msg("Point Source location file not found:" & vbCrLf & vbCrLf & lPointSourceLocationsFileName, MsgBoxStyle.OkOnly, "HSPF")
+            End If
         End If
-
         'look at shapefile attributes for reaches to have intermediate output and boundary inflows
-        Dim aIntermediateLocations As New atcCollection
-        Dim aUpstreamLocations As New atcCollection
+        Dim lIntermediateLocations As New atcCollection
+        Dim lUpstreamLocations As New atcCollection
         'Output field 1=intermediate output desired
         'Boundary field 1=boundary inflow desired
         UpstreamInstreamLocations(pStreamLayerName, pSubbasinFieldName, "Output",
-                                  aIntermediateLocations)
+                                  lIntermediateLocations)
         UpstreamInstreamLocations(pStreamLayerName, pSubbasinFieldName, "Boundary",
-                                  aUpstreamLocations)
+                                  lUpstreamLocations)
         'aIntermediateLocations.Add(3)  'for testing
         'aUpstreamLocations.Add(2)  'for testing
-
         'now start the processing
         'If PreProcessChecking(lOutputPath, pBaseOutputName, "HSPF", pLUType, pMetStations.Count, _
         '                      pSubbasinLayerName, pLandUseLayerName) Then 'early checks OK
@@ -260,7 +258,7 @@ Public Class HSPFmodel
                          aSnowOption, aBacterialOption, aChemicalOption,
                          aChemicalName, aChemicalMaximumSolubility,
                          aChemicalPartitionCoeff, aChemicalFreundlichExp, aChemicalDegradationRate,
-                         aIntermediateLocations, aUpstreamLocations) Then
+                         lIntermediateLocations, lUpstreamLocations) Then
                 Logger.Status("Completed HSPF Setup")
                 Logger.Dbg("UCIBuilder:  Created UCI file " & lOutputPath & "\" & pBaseOutputName & ".uci")
             Else
