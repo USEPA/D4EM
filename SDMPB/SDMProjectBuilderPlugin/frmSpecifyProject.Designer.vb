@@ -415,6 +415,7 @@ Partial Class frmSpecifyProject
         Me.btnMapMicrobes.TabIndex = 32
         Me.btnMapMicrobes.Text = "Map Microbes / Point Sources"
         Me.btnMapMicrobes.UseVisualStyleBackColor = True
+        Me.btnMapMicrobes.Visible = False
         '
         'comboHspfSnow
         '

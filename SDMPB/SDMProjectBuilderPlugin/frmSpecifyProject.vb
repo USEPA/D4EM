@@ -1055,15 +1055,15 @@ LoadedOtherLayer:
         lblSWAT2.Text = params.SWATDatabaseName
     End Sub
 
-    Friend pFrmMapBacteria As frmMapMicrobes
-    Private Sub btnMapMicrobes_Click(sender As System.Object, e As System.EventArgs) Handles btnMapMicrobes.Click
-        If FormIsOpen(pFrmMapBacteria) Then
-            pFrmMapBacteria.Activate()
-        Else
-            pFrmMapBacteria = New frmMapMicrobes
-            pFrmMapBacteria.Show(Me)
-        End If
-    End Sub
+    'Friend pFrmMapBacteria As frmMapMicrobes
+    'Private Sub btnMapMicrobes_Click(sender As System.Object, e As System.EventArgs) Handles btnMapMicrobes.Click
+    '    If FormIsOpen(pFrmMapBacteria) Then
+    '        pFrmMapBacteria.Activate()
+    '    Else
+    '        pFrmMapBacteria = New frmMapMicrobes
+    '        pFrmMapBacteria.Show(Me)
+    '    End If
+    'End Sub
 
     Friend pFrmChemicalProperties As frmChemical
     Private Sub btnChemical_Click(sender As System.Object, e As System.EventArgs) Handles btnChemical.Click

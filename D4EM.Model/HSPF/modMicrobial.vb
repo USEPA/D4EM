@@ -392,25 +392,25 @@ Module modMicrobial
     End Function
 
     Public Sub RunMicrobialSourceModule(ByRef aUci As HspfUci, ByVal aUciName As String)
-
-        Dim lFolder As String = IO.Path.GetDirectoryName(IO.Path.GetDirectoryName(IO.Path.GetDirectoryName(aUciName))) & IO.Path.DirectorySeparatorChar
+        'TODO: look in project folder, not assume this older folder structure
+        Dim lFolder As String = IO.Path.GetDirectoryName(IO.Path.GetDirectoryName(aUciName)) & IO.Path.DirectorySeparatorChar
         '- SDMPB writes the table with columns “Sub-watershedID, CroplandAcres, ForestAcres, PastureAcres, BuiltupAcres” 
         'to a comma-delimited file 
 
-        Dim animalFile As String = "AnimalsLL.txt"
+        Dim animalFile As String = "AnimalsLL.csv"
         Dim lAnimalLLFileName As String
 
-        'Looking for file - lets assume that we are in a folder structure like:
-        '   \ProjFolder\HSPF
-        ' assume MSM files are in:
-        '   \ProjFolder\MSM
-
         Dim projFolder As String = IO.Directory.GetParent(lFolder).FullName
-        Dim files As String() = Directory.GetFiles(projFolder, animalFile, SearchOption.AllDirectories)
-        If IsNothing(files) Or files.Length < 1 Then
-            lAnimalLLFileName = FindFile("Please locate AnimalLL.txt", lFolder & "AnimalLL.txt")
-        Else
-            lAnimalLLFileName = files(0)
+
+        lAnimalLLFileName = IO.Path.Combine(projFolder, "LocalData", animalFile)
+        If Not FileExists(lAnimalLLFileName) Then
+            Dim lTxtFileName As String = IO.Path.ChangeExtension(lAnimalLLFileName, ".txt")
+            If FileExists(lTxtFileName) Then
+                lAnimalLLFileName = lTxtFileName
+            End If
+        End If
+        If Not FileExists(lAnimalLLFileName) Then
+            lAnimalLLFileName = FindFile("Please locate AnimalLL", lAnimalLLFileName, aUserVerifyFileName:=True)
         End If
 
         If Not IO.File.Exists(lAnimalLLFileName) Then
