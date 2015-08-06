@@ -397,7 +397,7 @@ Module modMicrobial
         '- SDMPB writes the table with columns “Sub-watershedID, CroplandAcres, ForestAcres, PastureAcres, BuiltupAcres” 
         'to a comma-delimited file 
 
-        Dim animalFile As String = "AnimalsLL.csv"
+        Dim animalFile As String = "AnimalLL.csv"
         Dim lAnimalLLFileName As String
 
         Dim projFolder As String = IO.Directory.GetParent(lFolder).FullName
