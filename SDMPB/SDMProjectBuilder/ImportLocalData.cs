@@ -117,7 +117,6 @@ namespace SDMProjectBuilder
                 if (dt == null)
                     throw new Exception("DataTable is null.");
 
-
                 string xField = "Longitude";
                 string yField = "Latitude";
                 string fileName = csvFileName;
@@ -126,7 +125,8 @@ namespace SDMProjectBuilder
                 _fs = new FeatureSet(FeatureType.Point);                
                 //_fs = new PointShapefile(shpFileName);                
                 _fs.Name = fileName;
-                
+                _fs.Projection = _map.Projection;
+
                 for (int i = 0; i < dt.Columns.Count; i++)
                     _fs.DataTable.Columns.Add(dt.Columns[i].ColumnName);
 
