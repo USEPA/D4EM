@@ -260,6 +260,7 @@ Public Class frmPublishMain
                 lSelected.Add(lDataFileName)
             End If
         Next
+        Return lSelected
     End Function
 
     Private Sub btnChooseFilesNext_Click(sender As Object, e As EventArgs) Handles btnChooseFilesNext.Click
