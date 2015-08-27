@@ -1072,12 +1072,15 @@ Public Module modModelSetup
                 AddChemicalOutputToWDM(lHspfUci, lProjectDataSource, aOutputInterval + 1)
             End If
 
-            'add intermediate output locations specified by user
-            'Dim aIntermediateLocations As New atcCollection
-            'aIntermediateLocations.Add(3)  'for testing
-            For Each lRchID As Integer In aIntermediateLocations
-                AddIntermediateOutputToWDM(lRchID, lHspfUci, lProjectDataSource, aOutputInterval + 1)
-            Next
+            'Add intermediate output locations specified by user
+            'But this does not need to be done if using BacterialOption because that always does OutputInterval flow output for all reaches.
+            If Not aBacterialOption Then
+                'Dim aIntermediateLocations As New atcCollection
+                'aIntermediateLocations.Add(3)  'for testing
+                For Each lRchID As Integer In aIntermediateLocations
+                    AddIntermediateOutputToWDM(lRchID, lHspfUci, lProjectDataSource, aOutputInterval + 1)
+                Next
+            End If
 
             'add upstream inflow locations specified by user
             'Dim aUpstreamLocations As New atcCollection
