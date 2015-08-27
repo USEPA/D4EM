@@ -403,15 +403,15 @@ Module modMicrobial
         Dim projFolder As String = IO.Directory.GetParent(lFolder).FullName
 
         lAnimalLLFileName = IO.Path.Combine(projFolder, "LocalData", animalFile)
-        If Not FileExists(lAnimalLLFileName) Then
-            Dim lTxtFileName As String = IO.Path.ChangeExtension(lAnimalLLFileName, ".txt")
-            If FileExists(lTxtFileName) Then
-                lAnimalLLFileName = lTxtFileName
-            End If
-        End If
-        If Not FileExists(lAnimalLLFileName) Then
-            lAnimalLLFileName = FindFile("Please locate AnimalLL", lAnimalLLFileName, aUserVerifyFileName:=True)
-        End If
+        'If Not FileExists(lAnimalLLFileName) Then
+        '    Dim lTxtFileName As String = IO.Path.ChangeExtension(lAnimalLLFileName, ".txt")
+        '    If FileExists(lTxtFileName) Then
+        '        lAnimalLLFileName = lTxtFileName
+        '    End If
+        'End If
+        'If Not FileExists(lAnimalLLFileName) Then
+        '    lAnimalLLFileName = FindFile("Please locate AnimalLL", lAnimalLLFileName, aUserVerifyFileName:=True)
+        'End If
 
         If Not IO.File.Exists(lAnimalLLFileName) Then
             Exit Sub
@@ -419,7 +419,7 @@ Module modMicrobial
 
         lFolder = IO.Path.GetDirectoryName(lAnimalLLFileName) & IO.Path.DirectorySeparatorChar
 
-        Dim lAreaFileName As String = lFolder & "Area.txt"
+        Dim lAreaFileName As String = lFolder & "Area.csv"
         WriteMSMAreaFile(aUci, lAreaFileName)
 
         '- SDMPB looks/prompts for a file of animal numbers by lat/long; rewrites with subwatershed ids.  
@@ -427,11 +427,16 @@ Module modMicrobial
         'fall in a single catchment then SDMPB would sum of number of animals in the rows and make a single row (single catchment).  
         'In other words, the file produced by SDMPB has number of rows equal to or less than the number of rows in the user supplied file. 
 
-        Dim lAnimalSubFileName As String = lFolder & "AnimalSub.txt"
+        Dim lAnimalSubFileName As String = lFolder & "AnimalSub.csv"
+        Dim lSepticsLLFileName As String = lFolder & "SepticsLL.csv"
+        Dim lSepticsSubFileName As String = lFolder & "SepticsSub.csv"
         If GisUtil.IsLayer("NHDPlus Catchment Polygons") Then
             Dim lSubbasinLayerIndex As Integer = GisUtil.LayerIndex("NHDPlus Catchment Polygons")
             Dim lSubbasinSf As D4EM.Data.Layer = GisUtil.Layers(lSubbasinLayerIndex)
             RewriteLatLongAsSubbasins(lAnimalLLFileName, lAnimalSubFileName, lSubbasinSf)
+            If IO.File.Exists(lSepticsLLFileName) Then
+                RewriteLatLongAsSubbasins(lSepticsLLFileName, lSepticsSubFileName, lSubbasinSf)
+            End If
         End If
 
         '- Then SDMPB invokes the Microbial Module as a function call with fixed file names
@@ -442,11 +447,13 @@ Module modMicrobial
 
         'Invoke the Microbial Source Module 
         Dim lErrorMsg As String = ""
-        Dim lFCRatesFileName As String = lFolder & "FCProdRates.txt"
-        Dim lDensitiesFileName As String = lFolder & "WildlifeDensities.txt"
-        Dim lManureFileName As String = lFolder & "ManureApplication.txt"
-        Dim lGrazingFileName As String = lFolder & "GrazingDays.txt"
-        Dim lSepticsFileName As String = lFolder & "SepticsData.txt"
+        Dim lFCRatesFileName As String = lFolder & "FCProdRates.csv"
+        Dim lDensitiesFileName As String = lFolder & "WildlifeDensities.csv"
+        Dim lManureFileName As String = lFolder & "ManureApplication.csv"
+        Dim lGrazingFileName As String = lFolder & "GrazingDays.csv"
+        'Dim lSepticsFileName As String = lFolder & "SepticsData.csv"
+        Dim lSepticsFileName As String = lFolder & "SepticsDataWatershed.csv"
+        Dim lMonthlyFirstOrderDieOffRateConstantsFileName As String = lFolder & "MonthlyFirstOrderDieOffRateConstants.csv"
         Dim ldtBuiltup As New System.Data.DataTable
         Dim ldtCropland As New System.Data.DataTable
         Dim ldtPasture As New System.Data.DataTable
@@ -454,7 +461,7 @@ Module modMicrobial
         Dim ldtDirect As New System.Data.DataTable
         lErrorMsg = MSM.Watershed.getMicrobialLoadings(lAreaFileName, lFCRatesFileName, lAnimalSubFileName,
                                                        lDensitiesFileName, lManureFileName, lGrazingFileName,
-                                                       lSepticsFileName,
+                                                       lSepticsFileName, lSepticsSubFileName, lMonthlyFirstOrderDieOffRateConstantsFileName,
                                                        ldtBuiltup, ldtCropland, ldtPasture, ldtForest, ldtDirect)
 
         '- the Microbial Module writes a table for each land use category containing:
@@ -529,8 +536,8 @@ Module modMicrobial
         SaveFileString(aAreaFileName, lSB.ToString)
     End Sub
 
-    Public Sub RewriteLatLongAsSubbasins(ByVal lAnimalLLFileName As String, ByVal lAnimalSubFileName As String, ByVal lSubbasins As D4EM.Data.Layer)
-        If System.IO.File.Exists(lAnimalLLFileName) Then
+    Public Sub RewriteLatLongAsSubbasins(ByVal aLatLonFileName As String, ByVal aSubFileName As String, ByVal aSubbasinsLayer As D4EM.Data.Layer)
+        If System.IO.File.Exists(aLatLonFileName) Then
 
             Dim lDelim As String = ","
             Dim lQuote As String = """"
@@ -539,7 +546,7 @@ Module modMicrobial
             Dim lPolyIndex As Integer = 0
             Dim lRestOfLine As String = ""
             Dim lCurrentRecord As String
-            Dim lStreamReader As New IO.StreamReader(lAnimalLLFileName)
+            Dim lStreamReader As New IO.StreamReader(aLatLonFileName)
             Dim lFirstTime As Boolean = True
             Dim lHeader As String = ""
             Dim lSaveHeader As String = ""
@@ -547,7 +554,7 @@ Module modMicrobial
             Dim lNumRows As Integer = 0
             Dim lPolys() As Integer = {0}
             Dim lLines() As String = {""}
-            Dim lSubbasinFieldIndex As Integer = lSubbasins.FieldIndex("SUBBASIN")
+            Dim lSubbasinFieldIndex As Integer = aSubbasinsLayer.FieldIndex("SUBBASIN")
 
             Try
                 Do
@@ -571,13 +578,13 @@ Module modMicrobial
                             lLat = StrSplit(lCurrentRecord, lDelim, lQuote)
                             lLong = StrSplit(lCurrentRecord, lDelim, lQuote)
                             lRestOfLine = lCurrentRecord
-                            D4EM.Geo.SpatialOperations.ProjectPoint(lLong, lLat, DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984, lSubbasins.Projection)
-                            lPolyIndex = lSubbasins.CoordinatesInShapefile(lLong, lLat)
+                            D4EM.Geo.SpatialOperations.ProjectPoint(lLong, lLat, DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984, aSubbasinsLayer.Projection)
+                            lPolyIndex = aSubbasinsLayer.CoordinatesInShapefile(lLong, lLat)
                             ReDim Preserve lPolys(lNumRows + 1)
                             ReDim Preserve lLines(lNumRows + 1)
                             If lPolyIndex > -1 And lSubbasinFieldIndex > -1 Then
                                 'need to translate index into subbasin id
-                                lPolyIndex = lSubbasins.CellValue(lSubbasinFieldIndex, lPolyIndex)
+                                lPolyIndex = aSubbasinsLayer.CellValue(lSubbasinFieldIndex, lPolyIndex)
                             Else
                                 lPolyIndex = -1
                             End If
@@ -593,60 +600,86 @@ Module modMicrobial
 
             'parse remaining data into array
             Dim lData(,) As Integer
-            ReDim lData(lNumRows, lNumCols + 1)
+            If lNumCols > 0 Then
+                ReDim lData(lNumRows, lNumCols + 1)
+            Else 'Only have lat and long columns, assume each row is one instance to be counted
+                lSaveHeader = "SepticsCount"
+                ReDim lData(lNumRows, 2)
+            End If
             For lIndex As Integer = 0 To lNumRows - 1
                 lData(lIndex, 0) = lPolys(lIndex)
-                lRestOfLine = lLines(lIndex)
-                For lCol As Integer = 1 To lNumCols
-                    lData(lIndex, lCol) = StrSplit(lRestOfLine, lDelim, lQuote)
-                Next
+                If lNumCols > 0 Then
+                    lRestOfLine = lLines(lIndex)
+                    For lCol As Integer = 1 To lNumCols
+                        If Not Integer.TryParse(StrSplit(lRestOfLine, lDelim, lQuote), lData(lIndex, lCol)) Then
+                            Logger.Msg("Could not parse value in line '" & lLines(lIndex) & "' #" & lIndex & " in file " & aLatLonFileName, "RewriteLatLongAsSubbasins")
+                        End If
+                    Next
+                End If
             Next
 
             'combine rows of same subbasin id
             Dim lThisSubbasin As Integer = -1
             For lIndex As Integer = 0 To lNumRows - 1
                 lThisSubbasin = lData(lIndex, 0)
-                For lSearchIndex As Integer = lIndex + 1 To lNumRows - 1
-                    If lThisSubbasin = lData(lSearchIndex, 0) Then
-                        'found another one of these, combine
-                        lData(lSearchIndex, 0) = -1
-                        For lCol As Integer = 1 To lNumCols
-                            lData(lIndex, lCol) = lData(lIndex, lCol) + lData(lSearchIndex, lCol)
-                        Next
+                If lThisSubbasin > -1 Then
+                    If lNumCols = 0 Then 'Start count at one for the subbasin this row is in
+                        lData(lIndex, 1) = 1
                     End If
-                Next
+                    For lSearchIndex As Integer = lIndex + 1 To lNumRows - 1
+                        If lData(lSearchIndex, 0) = lThisSubbasin Then
+                            'found another row from this subbasin at lSearchIndex, add its values into row lIndex
+                            lData(lSearchIndex, 0) = -1 'clear the subbasin column in the found row to mark it as found
+                            If lNumCols > 0 Then
+                                For lCol As Integer = 1 To lNumCols
+                                    lData(lIndex, lCol) += lData(lSearchIndex, lCol)
+                                Next
+                            Else 'No data columns to add, so add one to count column instead
+                                lData(lIndex, 1) += 1
+                                Logger.Dbg("Add count(" & lThisSubbasin & ") = " & lData(lIndex, 1))
+                            End If
+                        End If
+                    Next
+                End If
             Next
 
-            'now write out animal file by subbasin
+            'now write out by subbasin
             Dim lSB2 As New StringBuilder
             lSB2.AppendLine("SubWatershedID," & lSaveHeader)
             Dim lThisSubbasinId As Integer = 0
             Dim lFound As Boolean = False
-            For lPolyIndex = 1 To lSubbasins.AsFeatureSet.NumRows
-                lThisSubbasinId = lSubbasins.CellValue(lSubbasinFieldIndex, lPolyIndex - 1)
+            For lPolyIndex = 1 To aSubbasinsLayer.AsFeatureSet.NumRows
+                lThisSubbasinId = aSubbasinsLayer.CellValue(lSubbasinFieldIndex, lPolyIndex - 1)
                 lRestOfLine = lThisSubbasinId
                 lFound = False
                 For lSearchIndex As Integer = 0 To lNumRows - 1
                     If lThisSubbasinId = lData(lSearchIndex, 0) Then
                         'found data for this one, write it
-                        For lCol As Integer = 1 To lNumCols
-                            lRestOfLine = lRestOfLine & "," & lData(lSearchIndex, lCol)
-                        Next
+                        If lNumCols > 0 Then
+                            For lCol As Integer = 1 To lNumCols
+                                lRestOfLine &= "," & lData(lSearchIndex, lCol)
+                            Next
+                        Else
+                            lRestOfLine &= "," & lData(lSearchIndex, 1)
+                        End If
                         lSB2.AppendLine(lRestOfLine)
                         lFound = True
                     End If
                 Next
                 If Not lFound Then
-                    For lCol As Integer = 1 To lNumCols
-                        lRestOfLine = lRestOfLine & "," & "0"
-                    Next
+                    If lNumCols > 0 Then
+                        For lCol As Integer = 1 To lNumCols
+                            lRestOfLine &= "," & "0"
+                        Next
+                    Else
+                        lRestOfLine &= "," & "0"
+                    End If
                     lSB2.AppendLine(lRestOfLine)
                 End If
             Next
-            SaveFileString(lAnimalSubFileName, lSB2.ToString)
-
+            SaveFileString(aSubFileName, lSB2.ToString)
         Else
-            Throw New Exception("Missing " & lAnimalLLFileName)
+            Throw New Exception("Missing " & aLatLonFileName)
         End If
     End Sub
 
