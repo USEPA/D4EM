@@ -172,7 +172,7 @@ Public Class SWATmodel
                     D4EM.Geo.OverlayReclassify.ReportByTag(lHruReportBuilder, New atcCollection(lHruTable), lHruTable.Tags) 'lDisplayTags)
                     IO.File.WriteAllText(IO.Path.GetDirectoryName(lHRUGridFileName) & "\Hrus.txt", lHruReportBuilder.ToString)
                     IO.File.WriteAllText(IO.Path.GetDirectoryName(lHRUGridFileName) & "\UniqueValuesSummary.txt", D4EM.Geo.OverlayReclassify.UniqueValuesSummary(lHruTable))
-                    IO.File.WriteAllText(IO.Path.GetDirectoryName(lHRUGridFileName) & "\LuCounts.txt", D4EM.Geo.OverlayReclassify.UniqueValuesSummary(lHruTable, "NLCD2001.LandCover")) '"LandUse"))
+                    IO.File.WriteAllText(IO.Path.GetDirectoryName(lHRUGridFileName) & "\LuCounts.txt", D4EM.Geo.OverlayReclassify.UniqueValuesSummary(lHruTable, "NLCD2011.LandCover")) '"LandUse"))
                 End If
                 Logger.Status("DoneGeoProcessing " & MemUsage())
             Else
