@@ -1,0 +1,44 @@
+C:\Basins41\models\HSPF\bin\
+C:\Users\gwhelan\iemTechnologies\SDMPB\TEST4_2020\HSPF\Flow\
+C:\PEST\
+1
+1
+9
+Water/Wetlands      
+Urban               
+Barren or Mining    
+Forest              
+Upland Shrub Land   
+Agriculture - Cropla
+Grass Land          
+Agriculture - Pastur
+Transitional
+
+KMELT
+0.0000         0.2000
+LZSN
+2.0000        15.0000
+INFILT
+0.001          0.5000
+KVARY
+0.0000         5.0000
+AGWRC
+0.8500         0.9990
+DEEPFR
+0.0000         0.5000
+BASETP
+0.0000         0.2000
+AGWETP
+0.0000         0.2000
+CEPSC
+0.01           0.4000
+UZSN
+0.0500         2.0000
+NSUR
+0.0500         0.5000
+INTFW
+1.0000        10.0000
+IRC
+0.3000         0.8500
+LZETP
+0.1000         0.9000
