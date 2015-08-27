@@ -93,9 +93,6 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
-        Me.lblBoundariesOutputs2 = New System.Windows.Forms.Label()
-        Me.btnBoundariesOutputs = New System.Windows.Forms.Button()
-        Me.lblBoundariesOutputs1 = New System.Windows.Forms.Label()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -945,9 +942,6 @@ Partial Class frmSpecifyProject
         '
         'groupData
         '
-        Me.groupData.Controls.Add(Me.lblBoundariesOutputs2)
-        Me.groupData.Controls.Add(Me.btnBoundariesOutputs)
-        Me.groupData.Controls.Add(Me.lblBoundariesOutputs1)
         Me.groupData.Controls.Add(Me.grpSoil)
         Me.groupData.Controls.Add(Me.txtSaveProjectAs)
         Me.groupData.Controls.Add(Me.comboDelineation)
@@ -965,37 +959,6 @@ Partial Class frmSpecifyProject
         Me.groupData.TabStop = False
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
-        '
-        'lblBoundariesOutputs2
-        '
-        Me.lblBoundariesOutputs2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblBoundariesOutputs2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblBoundariesOutputs2.Location = New System.Drawing.Point(133, 172)
-        Me.lblBoundariesOutputs2.Name = "lblBoundariesOutputs2"
-        Me.lblBoundariesOutputs2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblBoundariesOutputs2.Size = New System.Drawing.Size(246, 15)
-        Me.lblBoundariesOutputs2.TabIndex = 48
-        Me.lblBoundariesOutputs2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'btnBoundariesOutputs
-        '
-        Me.btnBoundariesOutputs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnBoundariesOutputs.Location = New System.Drawing.Point(382, 170)
-        Me.btnBoundariesOutputs.Name = "btnBoundariesOutputs"
-        Me.btnBoundariesOutputs.Size = New System.Drawing.Size(29, 20)
-        Me.btnBoundariesOutputs.TabIndex = 49
-        Me.btnBoundariesOutputs.Text = "..."
-        Me.btnBoundariesOutputs.UseVisualStyleBackColor = True
-        '
-        'lblBoundariesOutputs1
-        '
-        Me.lblBoundariesOutputs1.AutoSize = True
-        Me.lblBoundariesOutputs1.Location = New System.Drawing.Point(6, 173)
-        Me.lblBoundariesOutputs1.Name = "lblBoundariesOutputs1"
-        Me.lblBoundariesOutputs1.Size = New System.Drawing.Size(121, 13)
-        Me.lblBoundariesOutputs1.TabIndex = 47
-        Me.lblBoundariesOutputs1.Text = "Boundaries and Outputs"
         '
         'frmSpecifyProject
         '
@@ -1109,7 +1072,4 @@ Partial Class frmSpecifyProject
     Friend WithEvents chkLandAppliedChemical As System.Windows.Forms.CheckBox
     Friend WithEvents btnChemical As System.Windows.Forms.Button
     Friend WithEvents lblSnow As System.Windows.Forms.Label
-    Friend WithEvents lblBoundariesOutputs2 As System.Windows.Forms.Label
-    Friend WithEvents btnBoundariesOutputs As System.Windows.Forms.Button
-    Friend WithEvents lblBoundariesOutputs1 As System.Windows.Forms.Label
 End Class

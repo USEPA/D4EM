@@ -130,24 +130,6 @@ namespace SDMProjectBuilder
         /// <param name="e"></param>
         private void NewProject_Click(object sender, System.EventArgs e)
         {
-
-            string localDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string localSDMDataPath = System.IO.Path.Combine(localDataPath, _SDMProjectBuilder);
-            if (!System.IO.Directory.Exists(localSDMDataPath))
-                System.IO.Directory.CreateDirectory(localSDMDataPath);           
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            //sfd.RestoreDirectory = true;
-            //sfd.InitialDirectory = System.IO.Path.Combine(localDataPath, _SDMProjectBuilder);
-            sfd.Title = "Please select the name and location of the new project file.";
-            sfd.Filter = "Project files (*.dspx)|*.dspx";
-            sfd.CheckPathExists = true;
-
-            DialogResult dr = sfd.ShowDialog();
-            if (dr == DialogResult.Cancel) return;
-            if (string.IsNullOrWhiteSpace(sfd.FileName)) return;
-
-
             //if the map is empty or if the current project is already saved, start a new project directly
             if (!appManager.SerializationManager.IsDirty || appManager.Map.Layers == null || appManager.Map.Layers.Count == 0)
             {
@@ -183,6 +165,56 @@ namespace SDMProjectBuilder
                 appManager.SerializationManager.Deserializing += SerializationManager_Deserializing;
             }
 
+            string localDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string localSDMDataPath = System.IO.Path.Combine(localDataPath, _SDMProjectBuilder);
+            if (!System.IO.Directory.Exists(localSDMDataPath))
+                System.IO.Directory.CreateDirectory(localSDMDataPath);
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            //sfd.RestoreDirectory = true;
+            //sfd.InitialDirectory = System.IO.Path.Combine(localDataPath, _SDMProjectBuilder);
+            sfd.Title = "Specify the name and location of the new project file";
+            sfd.Filter = "Project files (*.dspx)|*.dspx";
+            sfd.CheckPathExists = false;
+            bool foundGoodPath = false;
+            string destFilePath = null;
+            do
+            {
+                if (sfd.ShowDialog() == DialogResult.Cancel) return;
+                if (string.IsNullOrWhiteSpace(sfd.FileName)) return;
+
+                destFilePath = System.IO.Path.GetDirectoryName(sfd.FileName);
+                if (System.IO.Directory.Exists(destFilePath))
+                    if (System.IO.Directory.GetFileSystemEntries(destFilePath).Length == 0)
+                        //If it exists and is empty, it is good
+                        foundGoodPath = true;
+                    else
+                    {  //It exists and is not empty, ask about making a subdirectory
+                        try
+                        {
+                            String proposedPath = atcUtility.modFile.GetNewFileName(System.IO.Path.Combine(destFilePath, System.IO.Path.GetFileNameWithoutExtension(sfd.FileName)), null);
+                            String proposedFileName = System.IO.Path.Combine(proposedPath, System.IO.Path.GetFileName(sfd.FileName));
+                            String answer = MapWinUtility.Logger.MsgCustomCheckbox("Folder is not empty, create new folder and save project as \n'" + proposedFileName + "' ?",
+                                "Create Project", "Always create new folder", "SDMPB", "Project", "AlwaysCreateFolder", "Yes", "Cancel");
+                            if (answer == "Cancel") return;
+                            sfd.FileName = proposedFileName;
+                            destFilePath = System.IO.Path.GetDirectoryName(proposedFileName);
+                        }
+                        catch
+                        { }
+                    }
+
+                if (!System.IO.Directory.Exists(destFilePath))
+                {
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(destFilePath);
+                        foundGoodPath = true;
+                    }
+                    catch
+                    { }
+                }
+            } while (!foundGoodPath);
             appManager.Map.Projection = DotSpatial.Projections.KnownCoordinateSystems.Projected.World.WebMercator;
 
             //Getting setup to copy files to the newly created project folder
@@ -198,7 +230,6 @@ namespace SDMProjectBuilder
             string srcMetData = "";
             srcMetData = Path.Combine(searchPath, "Data", "met");
 
-
             if (!System.IO.Directory.Exists(srcNationalDataPath))
             {
                 int lFilterIndex = -1;
@@ -207,10 +238,7 @@ namespace SDMProjectBuilder
                 {
                     srcNationalDataPath = System.IO.Path.GetDirectoryName(srcNationalDataPath);
                 }
-            }
-            
-
-            string destFilePath = System.IO.Path.GetDirectoryName(sfd.FileName);
+            }            
 
             //Copy the met.shp (and support files) into the {project}\met folder.  Having problems adding shapes to shapefiles created on the fly.
             if (Directory.Exists(srcMetData))

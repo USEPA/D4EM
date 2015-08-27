@@ -157,6 +157,8 @@ NoMatch:
         params.Project.ProjectFilename = lProjectFileFullPath
         params.Project.ProjectFolder = IO.Path.GetDirectoryName(lProjectFileFullPath)
         params.ProjectsPath = IO.Path.GetDirectoryName(IO.Path.GetDirectoryName(lProjectFileFullPath))
+        params.BoundariesLatLongCsvFileName = IO.Path.Combine(params.Project.ProjectFolder, "LocalData", "BoundaryPointsLL.csv")
+        params.OutputsLatLongCsvFileName = IO.Path.Combine(params.Project.ProjectFolder, "LocalData", "OutputPointsLL.csv")
 
         params.BasinsMetConstituents.Clear()
         If radioMetDataBASINS.Checked Then
@@ -1076,8 +1078,4 @@ LoadedOtherLayer:
         End If
     End Sub
 
-    Private Sub btnBoundariesOutputs_Click(sender As System.Object, e As System.EventArgs) Handles btnBoundariesOutputs.Click
-        params.BoundariesOutputs = FindFile("Locate optional shape file of boundary and/or output points", "*.shp", , , True)
-        lblBoundariesOutputs2.Text = params.BoundariesOutputs
-    End Sub
 End Class
