@@ -1034,6 +1034,20 @@ Public Module modModelSetup
                 Next
             Next
 
+            'make sure INFILT is no greater than 0.05
+            Dim lPerOperations As HspfOperations = lHspfUci.OpnBlks("PERLND").Ids
+            If lPerOperations IsNot Nothing Then
+                For lOperationIndex As Integer = 1 To lPerOperations.Count
+                    Dim lHspfOperation As HspfOperation = lPerOperations(lOperationIndex - 1)
+                    Dim lHspfTable As HspfTable = lHspfOperation.Tables("PWAT-PARM2")
+                    With lHspfTable
+                        If .ParmValue("INFILT") > 0.05 Then
+                            .ParmValue("INFILT") = 0.05
+                        End If
+                    End With
+                Next
+            End If
+
             'We added daily flow output at the outlet in CreateUciFromBASINS.
             'Add OutputInterval flow output at the outlet too.
             'But this does not need to be done if using BacterialOption because that always does OutputInterval flow output for all reaches.
