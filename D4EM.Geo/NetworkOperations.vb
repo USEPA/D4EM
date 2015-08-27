@@ -518,8 +518,8 @@ Public Class NetworkOperations
                             lNewFieldValues.Add(lValueFromBase)
                         Else
                             Select Case lFieldName
-                                Case "COMID"
-                                    If IsDBNull(lValueFromBase) Then
+                                Case "COMID", "BOUNDARY", "OUTPUT"
+                                    If IsDBNull(lValueFromBase) OrElse CStr(lValueFromBase).Length = 0 Then
                                         lNewFieldValues.Add(lValueFromDeleting)
                                     Else
                                         lNewFieldValues.Add(lValueFromBase)

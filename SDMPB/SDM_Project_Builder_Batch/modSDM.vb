@@ -58,7 +58,8 @@ Public Module modSDM
                               ByRef aSimplifiedFlowlinesLayer As D4EM.Data.Layer,
                               ByRef aSimplifiedCatchmentsLayer As D4EM.Data.Layer,
                               ByRef aFields As FieldIndexes,
-                              ByVal aBoundariesOutputsFilename As String)
+                              ByVal aBoundariesFilename As String, _
+                              ByVal aOutputsFilename As String)
         Dim lProblem As String = ""
 
         aSimplifiedFlowlinesLayer = Nothing
@@ -99,7 +100,7 @@ Public Module modSDM
                                            lSimplifiedFlowlinesFileName, _
                                            lSimplifiedCatchmentsFileName, _
                                            aMinCatchmentKM2, aMinFlowlineKM, _
-                                           aFields, aBoundariesOutputsFilename)
+                                           aFields, aBoundariesFilename, aOutputsFilename)
             If IO.File.Exists(lSimplifiedFlowlinesFileName) Then
                 aSimplifiedFlowlinesLayer = New D4EM.Data.Layer(lSimplifiedFlowlinesFileName, aOriginalFlowlinesLayer.Specification)
                 aProject.Layers.Remove(aOriginalFlowlinesLayer)
@@ -225,6 +226,8 @@ Public Module modSDM
     ''' <param name="aMinCatchmentKM2">Minimum area of a catchment (catchments smaller than this will be merged up or downstream)</param>
     ''' <param name="aMinLengthKM">Minimum length of a flowline (flowlines shorter than this will be merged up or downstream)</param>
     ''' <param name="aFields">Hydrologic field indexes of flowlines and catchments</param>
+    ''' <param name="aBoundariesFilename">Comma-separated file of locations of upstream boundary conditions</param>
+    ''' <param name="aOutputsFilename">Comma-separated file of locations of desired model outputs</param>
     ''' <returns>True indicates success</returns>
     Friend Function CombineShortOrBraidedFlowlines(ByVal aFlowlinesLayer As D4EM.Data.Layer, _
                                                    ByVal aCatchmentLayer As D4EM.Data.Layer, _
@@ -232,8 +235,9 @@ Public Module modSDM
                                                    ByVal aSimplifiedCatchmentFileName As String, _
                                                    ByVal aMinCatchmentKM2 As Double, _
                                                    ByVal aMinLengthKM As Double, _
-                                                   ByVal aFields As FieldIndexes,
-                                                   ByVal aBoundariesOutputsFilename As String) As Boolean
+                                                   ByVal aFields As FieldIndexes, _
+                                                   ByVal aBoundariesFilename As String, _
+                                                   ByVal aOutputsFilename As String) As Boolean
         Dim lSaveIntermediate As Integer = 500
 
         atcUtility.TryDeleteShapefile(aSimplifiedFlowlinesFileName)
@@ -259,60 +263,9 @@ Public Module modSDM
 
         'DumpFlowlinesCatchments(lSimplifiedFlowlines, lSimplifiedCatchments, aFields)
 
-        If FileExists(aBoundariesOutputsFilename) Then
-            Dim lBoundariesOutputsDBF As New atcUtility.atcTableDBF() ' D4EM.Data.Layer(aBoundariesOutputsFilename, New D4EM.Data.LayerSpecification("BoundariesOutputs", "Boundaries and Outputs"))
-            lBoundariesOutputsDBF.OpenFile(IO.Path.ChangeExtension(aBoundariesOutputsFilename, ".dbf"))
-            Dim lOutputsLatitudeField As Integer = lBoundariesOutputsDBF.FieldNumber("Latitude")
-            Dim lOutputsLongitudeField As Integer = lBoundariesOutputsDBF.FieldNumber("Longitude")
-            Dim lOutputsBoundaryField As Integer = lBoundariesOutputsDBF.FieldNumber("Boundary")
-            Dim lOutputsOutputField As Integer = lBoundariesOutputsDBF.FieldNumber("Output")
-
-            Dim lFlowlinesBoundaryField As Integer = FieldIndexes.EnsureFieldExists(aFlowlinesLayer.AsFeatureSet, "Boundary", GetType(String))
-            Dim lFlowlinesOutputField As Integer = FieldIndexes.EnsureFieldExists(aFlowlinesLayer.AsFeatureSet, "Output", GetType(String))
-
-            Dim lSimplifiedFlowlinesBoundaryField As Integer = FieldIndexes.EnsureFieldExists(lSimplifiedFlowlines, "Boundary", GetType(String))
-            Dim lSimplifiedFlowlinesOutputField As Integer = FieldIndexes.EnsureFieldExists(lSimplifiedFlowlines, "Output", GetType(String))
-
-            Dim lCurRecord As Integer = 1
-            With lBoundariesOutputsDBF
-                While Not .EOF
-                    .CurrentRecord = lCurRecord
-                    If IsNumeric(.Value(lOutputsLongitudeField)) AndAlso IsNumeric(.Value(lOutputsLatitudeField)) Then
-                        Dim lX As Double = .Value(lOutputsLongitudeField)
-                        Dim lY As Double = .Value(lOutputsLatitudeField)
-                        D4EM.Geo.SpatialOperations.ProjectPoint(lX, lY, D4EM.Data.Globals.GeographicProjection, aFlowlinesLayer.Projection)
-                        Dim lCatchmentIndex As Integer = aCatchmentLayer.CoordinatesInShapefile(lX, lY)
-                        If lCatchmentIndex < 0 Then
-                            Logger.Dbg("Boundary/Output shape not in any catchment: lon=" & .Value(lOutputsLongitudeField) & ", lat=" & .Value(lOutputsLatitudeField))
-                        Else
-                            Dim lComID As String = aCatchmentLayer.Feature(lCatchmentIndex).DataRow(aFields.CatchmentComId)
-                            For Each lFlowline In aFlowlinesLayer.AsFeatureSet.Features
-                                If lFlowline.DataRow(aFields.FlowlinesComId) = lComID Then
-                                    lFlowline.DataRow(lFlowlinesBoundaryField) = lBoundariesOutputsDBF.Value(lOutputsBoundaryField)
-                                    lFlowline.DataRow(lFlowlinesOutputField) = lBoundariesOutputsDBF.Value(lOutputsOutputField)
-                                    If lBoundariesOutputsDBF.Value(lOutputsOutputField) = "1" Then
-                                        lDontCombineComIDs.Add(lComID)
-                                    End If
-                                    Exit For
-                                End If
-                            Next
-                            'also loop through simplified flowlines, mark there as well
-                            For Each lFlowline In lSimplifiedFlowlines.Features
-                                If lFlowline.DataRow(aFields.FlowlinesComId) = lComID Then
-                                    lFlowline.DataRow(lFlowlinesBoundaryField) = lBoundariesOutputsDBF.Value(lOutputsBoundaryField)
-                                    lFlowline.DataRow(lFlowlinesOutputField) = lBoundariesOutputsDBF.Value(lOutputsOutputField)
-                                    Exit For
-                                End If
-                            Next
-                        End If
-                        lCurRecord += 1
-                    End If
-                End While
-            End With
-            'may have edited aflowlineslayer
-            aFlowlinesLayer.AsFeatureSet.Save()
-            lSimplifiedFlowlines.Save()
-        End If
+        SetBoundaryAndOutputFlags(aFlowlinesLayer, aCatchmentLayer, _
+                                  lSimplifiedFlowlines, lDontCombineComIDs, _
+                                  aFields, aBoundariesFilename, aOutputsFilename)
 
         'Logger.Status("Filling Missing Flowline CUMDRAINAG", True)
         'TODO: FillMissingFlowlineCUMDRAINAG(lSimplifiedFlowlines, lSimplifiedCatchment)
@@ -345,6 +298,99 @@ Public Module modSDM
         'End If
         Return True
     End Function
+
+    ''' <summary>
+    ''' Set Boundary field in aFlowlinesLayer and aSimplifiedFlowlines for catchments containing points in aBoundariesFilename.
+    ''' Set Output field in aFlowlinesLayer and aSimplifiedFlowlines for catchments containing points in aOutputsFilename and add their COMIDs to aDontCombineComIDs.
+    ''' </summary>
+    ''' <param name="aFlowlinesLayer">Flowlines Layer to set Boundary and Output fields in</param>
+    ''' <param name="aCatchmentLayer">Catchments Layer to overlay with points to determine which flowline is associates with each point</param>
+    ''' <param name="aSimplifiedFlowlines">Additional Flowlines layer to also set Boundary and Output fields in</param>
+    ''' <param name="aDontCombineComIDs">List of ComIDs, add outputs to this list</param>
+    ''' <param name="aFields">Field information for aFlowlinesLayer</param>
+    ''' <param name="aBoundariesFilename">Lat/Long CSV file of upstream boundary locations</param>
+    ''' <param name="aOutputsFilename">Lat/Long CSV file of desired model output locations such as gages</param>
+    ''' <remarks></remarks>
+    Private Sub SetBoundaryAndOutputFlags(ByVal aFlowlinesLayer As D4EM.Data.Layer, _
+                                          ByVal aCatchmentLayer As D4EM.Data.Layer, _
+                                          ByVal aSimplifiedFlowlines As DotSpatial.Data.FeatureSet, _
+                                          ByVal aDontCombineComIDs As Generic.List(Of Long), _
+                                          ByVal aFields As FieldIndexes, _
+                                          ByVal aBoundariesFilename As String, _
+                                          ByVal aOutputsFilename As String)
+        Dim lBoundariesTable As atcTableDelimited = Nothing
+        If FileExists(aBoundariesFilename) Then
+            lBoundariesTable = New atcTableDelimited()
+            lBoundariesTable.Delimiter = ","
+            lBoundariesTable.OpenFile(aBoundariesFilename)
+        End If
+
+        Dim lOutputsTable As atcTableDelimited = Nothing
+        If FileExists(aOutputsFilename) Then
+            lOutputsTable = New atcTableDelimited()
+            lOutputsTable.Delimiter = ","
+            lOutputsTable.OpenFile(aOutputsFilename)
+        End If
+
+        Dim lOutputsLatitudeField As Integer = 1 ' lBoundariesOutputsDBF.FieldNumber("Latitude")
+        Dim lOutputsLongitudeField As Integer = 2 ' lBoundariesOutputsDBF.FieldNumber("Longitude")
+
+        Dim lModifiedFlowlinesLayer As Boolean = False
+        Dim lModifiedSimplified As Boolean = False
+
+        For Each lTable As atcTableDelimited In {lBoundariesTable, lOutputsTable}
+            If lTable IsNot Nothing Then
+                Dim lFieldName As String
+                Dim lFlowlinesField As Integer
+                Dim lSimplifiedFlowlinesField As Integer
+                If Object.ReferenceEquals(lTable, lBoundariesTable) Then
+                    lFieldName = "Boundary"
+                Else
+                    lFieldName = "Output"
+                End If
+                Dim lCurRecord As Integer = 1
+                lFlowlinesField = FieldIndexes.EnsureFieldExists(aFlowlinesLayer.AsFeatureSet, lFieldName, GetType(String))
+                lSimplifiedFlowlinesField = FieldIndexes.EnsureFieldExists(aSimplifiedFlowlines, lFieldName, GetType(String))
+                With lTable
+                    While Not .EOF
+                        .CurrentRecord = lCurRecord
+                        If IsNumeric(.Value(lOutputsLongitudeField)) AndAlso IsNumeric(.Value(lOutputsLatitudeField)) Then
+                            Dim lX As Double = .Value(lOutputsLongitudeField)
+                            Dim lY As Double = .Value(lOutputsLatitudeField)
+                            D4EM.Geo.SpatialOperations.ProjectPoint(lX, lY, D4EM.Data.Globals.GeographicProjection, aFlowlinesLayer.Projection)
+                            Dim lCatchmentIndex As Integer = aCatchmentLayer.CoordinatesInShapefile(lX, lY)
+                            If lCatchmentIndex < 0 Then
+                                Logger.Dbg(lFieldName & " point not in any catchment: lat=" & .Value(lOutputsLatitudeField) & ", long=" & .Value(lOutputsLongitudeField))
+                            Else
+                                Dim lComID As String = aCatchmentLayer.Feature(lCatchmentIndex).DataRow(aFields.CatchmentComId)
+                                For Each lFlowline In aFlowlinesLayer.AsFeatureSet.Features
+                                    If lFlowline.DataRow(aFields.FlowlinesComId) = lComID Then
+                                        lFlowline.DataRow(lFlowlinesField) = "1"
+                                        lModifiedFlowlinesLayer = True
+                                        'If lFieldName = "Output" Then
+                                        aDontCombineComIDs.Add(lComID)
+                                        'End If
+                                        Exit For
+                                    End If
+                                Next
+                                'also loop through simplified flowlines, mark there as well
+                                For Each lFlowline In aSimplifiedFlowlines.Features
+                                    If lFlowline.DataRow(aFields.FlowlinesComId) = lComID Then
+                                        lFlowline.DataRow(lSimplifiedFlowlinesField) = "1"
+                                        lModifiedSimplified = True
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                            lCurRecord += 1
+                        End If
+                    End While
+                End With
+            End If
+        Next
+        If lModifiedFlowlinesLayer Then aFlowlinesLayer.AsFeatureSet.Save()
+        If lModifiedSimplified Then aSimplifiedFlowlines.Save()
+    End Sub
 
     Friend Sub SetStatus(ByVal aStatus As String)
         Logger.Dbg(aStatus)

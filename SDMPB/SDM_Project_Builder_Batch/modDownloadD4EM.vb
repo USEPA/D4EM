@@ -301,7 +301,7 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                 ProcessNetwork(aProject, aParameters.Catchments, aParameters.ClipCatchments,
                                aParameters.MinCatchmentKM2, aParameters.MinFlowlineKM,
                                lOriginalFlowlinesLayer, lOriginalCatchmentsLayer,
-                               lSimplifiedFlowlinesLayer, lSimplifiedCatchmentsLayer, lFields, aParameters.BoundariesOutputs)
+                               lSimplifiedFlowlinesLayer, lSimplifiedCatchmentsLayer, lFields, aParameters.BoundariesLatLongCsvFileName, aParameters.OutputsLatLongCsvFileName)
             End Using
             If lSimplifiedFlowlinesLayer Is Nothing Then Throw New ApplicationException("Simplified Flowlines not found after ProcessNetwork")
             If lSimplifiedCatchmentsLayer Is Nothing Then Throw New ApplicationException("Simplified Catchments not found after ProcessNetwork")
