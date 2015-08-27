@@ -392,7 +392,7 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                         aProject:=aProject,
                         aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
                         aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
-                        aLandUseLayer:=aProject.LayerFromTag(D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover.Tag),
+                        aLandUseLayer:=aProject.LayerFromTag(D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover.Tag),
                         aDemGridLayer:=aProject.LayerFromTag(aParameters.ElevationGrid.Tag),
                         aSoilsLayer:=lSoilsLayer,
                         aSoilProperties:=lSoils,
