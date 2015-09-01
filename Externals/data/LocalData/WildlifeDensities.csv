@@ -1,0 +1,7 @@
+Animal,DensityPerSqMile_Cropland,DensityPerSqMile_Pasture,DensityPerSqMile_Forest,DensityPerSqMile_Builtup
+Duck,0,0,0,0
+Goose,0,0,0,0
+Deer,5,5,5,0
+Beaver,0,0,0,0
+Raccoon,0,0,0,0
+OtherWildlife,0,0,0,0

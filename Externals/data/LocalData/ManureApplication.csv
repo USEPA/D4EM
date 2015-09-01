@@ -1,0 +1,5 @@
+ManureType,JanFractionApplied,FebFractionApplied,MarFractionApplied,AprFractionApplied,MayFractionApplied,JunFractionApplied,JulFractionApplied,AugFractionApplied,SepFractionApplied,OctFractionAppied,NovFractionApplied,DecFractionapplied,FractionIncorporatedIntoSoil
+SwineManure,0,0,0,0.1,0.1,0,0,0,0,0.4,0.4,0,0.80
+CattleManure,0.0375,0.0375,0.0375,0.05,0.05,0.0375,0.0375,0.0375,0.03750,0.3,0.3,0.0375,0.75
+HorseManue,0,0,0,0.1,0.1,0,0,0,0,0.4,0.4,0,0.75
+PoultryLitter,0,0,0,0.1,0.1,0,0,0,0,0.4,0.4,0,0.96

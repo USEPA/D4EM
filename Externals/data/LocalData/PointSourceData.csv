@@ -1,0 +1,5 @@
+PtSrcId, FacName, Load, Parm
+PT001, PointSource1, 1.00, FLOW
+PT001, PointSource1, 1000.00, Microbes
+PT002, PointSource2, 2.00, FLOW
+PT002, PointSource2, 2000.00, Microbes
