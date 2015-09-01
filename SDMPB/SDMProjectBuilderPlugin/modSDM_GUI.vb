@@ -381,10 +381,12 @@ Module modSDM_GUI
             If IO.File.Exists(lShapeFileName) Then
                 lLayerHandle = MapLayer(lShapeFileName)
                 If lLayerHandle IsNot Nothing Then
+                    Logger.Progress(100, 100)
                     Return lLayerHandle 'Layer is already on the map
                 End If
                 lLayerHandle = MapLayer(lShapeFileName.Replace(g_NationalProject.ProjectFolder, ""))
                 If lLayerHandle IsNot Nothing Then
+                    Logger.Progress(100, 100)
                     Return lLayerHandle 'Layer is already on the map
                 End If
             Else 'download layer
@@ -403,6 +405,7 @@ Module modSDM_GUI
             End If
             lLayerHandle = EnsureLayerOnMap(lShapeFileName, IO.Path.GetFileNameWithoutExtension(lShapeFileName) & " for " & aHUC8)
         Next
+        Logger.Progress(100, 100)
         Return lLayerHandle
     End Function
 
