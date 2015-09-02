@@ -205,7 +205,7 @@ Public Class SWATmodel
                     'lHruTable = D4EM.Geo.OverlayReclassify.Simplify(lHruTable.Tags, lHruTable.SplitByTag("SubBasin"),
                     '            "LandUse", aLandUseIgnoreBelowFraction, aLandUseIgnoreBelowAbsolute, lHRUGridFileName)
                     lHruTable = D4EM.Geo.OverlayReclassify.Simplify(lHruTable.Tags, lHruTable.SplitByTag("catchment"),
-                                "NLCD2001.LandCover", aLandUseIgnoreBelowFraction, aLandUseIgnoreBelowAbsolute, lHRUGridFileName)
+                                "NLCD2011.LandCover", aLandUseIgnoreBelowFraction, aLandUseIgnoreBelowAbsolute, lHRUGridFileName)
                     Logger.Status("CountOfHrusAfterSimplifyLandUse " & lHruTable.Count)
                 End If
 
