@@ -257,6 +257,47 @@ namespace SDMProjectBuilder
             }
 
 
+            string srcPESTFiles = "";
+            srcPESTFiles = Path.Combine(searchPath, "Data", "HSPF-PEST");
+            if (System.IO.Directory.Exists(srcPESTFiles))
+            {
+                string[] files = System.IO.Directory.GetFiles(srcPESTFiles);
+                List<string> lstFiles = new List<string>();
+                string destDirName = Path.Combine(destFilePath, "HSPF-PEST");
+                if (!Directory.Exists(destDirName))
+                    Directory.CreateDirectory(destDirName);
+
+                foreach (string file in files)
+                {
+                    string fileNoPath = System.IO.Path.GetFileName(file);
+                    string srcFilePath = System.IO.Path.Combine(srcPESTFiles, fileNoPath);
+                    string destFile = System.IO.Path.Combine(destDirName, fileNoPath);
+                    System.IO.File.Copy(srcFilePath, destFile, true);
+
+                    if (string.Compare(fileNoPath, "Input_flow.in", true) == 0)
+                    {
+                        StreamReader sr = new StreamReader(destFile);
+                        string fileContents = sr.ReadToEnd();
+                        sr.Close();
+                        sr.Dispose();
+                        sr = null;
+                        string[] lines = fileContents.Split('\n');
+                        lines[1] = destDirName;
+
+                        StreamWriter sw = new StreamWriter(destFile);
+                        foreach (string line in lines)
+                            sw.WriteLine(line);
+                        sw.Flush();
+                        sw.Close();
+                        sw.Dispose();
+                        sw = null;
+                    }
+                }
+            }
+
+
+
+
             if (System.IO.Directory.Exists(srcNationalDataPath))
             {
                 appManager.Map.Layers.SuspendEvents();               
