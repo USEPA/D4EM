@@ -77,9 +77,9 @@ Public Module modSwatDatabase
                         Throw New ApplicationException("Could not find catchment HRU tag")
                     End If
 
-                    Dim lHruLandUseIndex As Integer = aHruTable.Tags.IndexOf("NLCD2001.LandCover")
+                    Dim lHruLandUseIndex As Integer = aHruTable.Tags.IndexOf("NLCD2011.LandCover")
                     If lHruLandUseIndex < 0 Then
-                        Throw New ApplicationException("Could not find NLCD2001.LandCover HRU tag")
+                        Throw New ApplicationException("Could not find NLCD2011.LandCover HRU tag")
                     End If
 
                     Dim lHruSoilIndex As Integer = -1
