@@ -1,4 +1,4 @@
-Latitude,Longitude,BeefCowCount,SwineCount,DairyCowCount,ChickenCount,HorseCount,SheepCount,OtherAgAnimalCount
+Latitude,Longitude,BeefCow,Swine,DairyCow,Chicken,Horse,Sheep,OtherAg
 44.22581737,-88.03049124,0,0,0,0,0,0,0
 44.21140158,-88.08726864,0,0,0,0,0,0,0
 44.09547271,-88.02632371,0,0,0,0,0,0,0
