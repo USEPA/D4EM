@@ -49,17 +49,20 @@
             this.groupBox1.Controls.Add(this.btnOpenFile);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.lstboxDataFiles);
-            this.groupBox1.Location = new System.Drawing.Point(28, 26);
+            this.groupBox1.Location = new System.Drawing.Point(21, 21);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 349);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(330, 284);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
             // btnCloseFile
             // 
-            this.btnCloseFile.Location = new System.Drawing.Point(310, 301);
+            this.btnCloseFile.Location = new System.Drawing.Point(232, 245);
+            this.btnCloseFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCloseFile.Name = "btnCloseFile";
-            this.btnCloseFile.Size = new System.Drawing.Size(90, 23);
+            this.btnCloseFile.Size = new System.Drawing.Size(68, 19);
             this.btnCloseFile.TabIndex = 6;
             this.btnCloseFile.Text = "Close File";
             this.btnCloseFile.UseVisualStyleBackColor = true;
@@ -67,9 +70,10 @@
             // 
             // btnDeleteSelected
             // 
-            this.btnDeleteSelected.Location = new System.Drawing.Point(32, 299);
+            this.btnDeleteSelected.Location = new System.Drawing.Point(24, 243);
+            this.btnDeleteSelected.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDeleteSelected.Name = "btnDeleteSelected";
-            this.btnDeleteSelected.Size = new System.Drawing.Size(226, 27);
+            this.btnDeleteSelected.Size = new System.Drawing.Size(170, 22);
             this.btnDeleteSelected.TabIndex = 5;
             this.btnDeleteSelected.Text = "Delete Selected Point(s) on Map";
             this.btnDeleteSelected.UseVisualStyleBackColor = true;
@@ -77,9 +81,10 @@
             // 
             // btnAddPoint
             // 
-            this.btnAddPoint.Location = new System.Drawing.Point(32, 253);
+            this.btnAddPoint.Location = new System.Drawing.Point(24, 206);
+            this.btnAddPoint.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddPoint.Name = "btnAddPoint";
-            this.btnAddPoint.Size = new System.Drawing.Size(173, 27);
+            this.btnAddPoint.Size = new System.Drawing.Size(130, 22);
             this.btnAddPoint.TabIndex = 4;
             this.btnAddPoint.Text = "Start Adding Points";
             this.btnAddPoint.UseVisualStyleBackColor = true;
@@ -87,9 +92,10 @@
             // 
             // btnEditFile
             // 
-            this.btnEditFile.Location = new System.Drawing.Point(32, 204);
+            this.btnEditFile.Location = new System.Drawing.Point(24, 166);
+            this.btnEditFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnEditFile.Name = "btnEditFile";
-            this.btnEditFile.Size = new System.Drawing.Size(173, 27);
+            this.btnEditFile.Size = new System.Drawing.Size(130, 22);
             this.btnEditFile.TabIndex = 3;
             this.btnEditFile.Text = "Edit File";
             this.btnEditFile.UseVisualStyleBackColor = true;
@@ -97,9 +103,10 @@
             // 
             // btnOpenFile
             // 
-            this.btnOpenFile.Location = new System.Drawing.Point(32, 157);
+            this.btnOpenFile.Location = new System.Drawing.Point(24, 128);
+            this.btnOpenFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOpenFile.Name = "btnOpenFile";
-            this.btnOpenFile.Size = new System.Drawing.Size(173, 27);
+            this.btnOpenFile.Size = new System.Drawing.Size(130, 22);
             this.btnOpenFile.TabIndex = 2;
             this.btnOpenFile.Text = "Open File";
             this.btnOpenFile.UseVisualStyleBackColor = true;
@@ -108,32 +115,35 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 24);
+            this.label1.Location = new System.Drawing.Point(22, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 17);
+            this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Local Data Files";
             // 
             // lstboxDataFiles
             // 
             this.lstboxDataFiles.FormattingEnabled = true;
-            this.lstboxDataFiles.ItemHeight = 16;
             this.lstboxDataFiles.Items.AddRange(new object[] {
             "AnimalLL",
+            "BoundaryPointsLL",
+            "OutputPointsLL",
             "PointSourceLL",
-            "SepticLL",
-            "IntermediatePointLL",
-            "BoundaryPointLL"});
-            this.lstboxDataFiles.Location = new System.Drawing.Point(32, 44);
+            "SepticsLL",
+            ""});
+            this.lstboxDataFiles.Location = new System.Drawing.Point(24, 36);
+            this.lstboxDataFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lstboxDataFiles.Name = "lstboxDataFiles";
-            this.lstboxDataFiles.Size = new System.Drawing.Size(263, 84);
+            this.lstboxDataFiles.Size = new System.Drawing.Size(198, 69);
             this.lstboxDataFiles.TabIndex = 0;
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(211, 393);
+            this.btnClose.Location = new System.Drawing.Point(158, 319);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.Size = new System.Drawing.Size(56, 19);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -141,11 +151,12 @@
             // 
             // frmEditLocalData
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 428);
+            this.ClientSize = new System.Drawing.Size(387, 348);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.groupBox1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmEditLocalData";
             this.Text = "Edit Local Data";
             this.Load += new System.EventHandler(this.frmEditLocalData_Load);
