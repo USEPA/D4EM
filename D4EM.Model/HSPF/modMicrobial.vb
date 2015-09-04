@@ -601,6 +601,7 @@ Module modMicrobial
             'parse remaining data into array
             Dim lData(,) As Integer
             If lNumCols > 0 Then
+                lSaveHeader = "BeefCowCount,SwineCount,DairyCowCount,ChickenCount,HorseCount,SheepCount,OtherAgAnimalCount"
                 ReDim lData(lNumRows, lNumCols + 1)
             Else 'Only have lat and long columns, assume each row is one instance to be counted
                 lSaveHeader = "SepticsCount"
