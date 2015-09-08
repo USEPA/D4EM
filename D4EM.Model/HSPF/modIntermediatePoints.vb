@@ -48,27 +48,27 @@ Module modIntermediatePoints
         If aUci.OpnBlks("RCHRES").OperFromID(aRchID).Tables.Item("ACTIVITY").ParmValue("HTFG") = 1 Then
             'WDM1  1011 HEAT     ENGL              SAME RCHRES  2      INFLOW IHEAT  1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "HEAT", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "HEAT", 1.0, "SAME", aRchID, "INFLOW", "IHEAT", 1, 0)
+            AddInputExtSource(aUci, lDsn, 1, "HEAT", 1.0, "DIV", aRchID, "INFLOW", "IHEAT", 1, 0)
         End If
 
         'if sedmnt is on, ton/ivld
         If aUci.OpnBlks("RCHRES").OperFromID(aRchID).Tables.Item("ACTIVITY").ParmValue("SEDFG") = 1 Then
             'WDM1  1012 SED1     ENGL              SAME RCHRES  2      INFLOW ISED   1 1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "SED1", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "SED1", 1.0, "SAME", aRchID, "INFLOW", "ISED", 1, 1)
+            AddInputExtSource(aUci, lDsn, 1, "SED1", 1.0, "DIV", aRchID, "INFLOW", "ISED", 1, 1)
             'WDM1  1013 SED2     ENGL              SAME RCHRES  2      INFLOW ISED   2 1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "SED2", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "SED2", 1.0, "SAME", aRchID, "INFLOW", "ISED", 2, 1)
+            AddInputExtSource(aUci, lDsn, 1, "SED2", 1.0, "DIV", aRchID, "INFLOW", "ISED", 2, 1)
             'WDM1  1014 SED3     ENGL              SAME RCHRES  2      INFLOW ISED   3 1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "SED3", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "SED3", 1.0, "SAME", aRchID, "INFLOW", "ISED", 3, 1)
+            AddInputExtSource(aUci, lDsn, 1, "SED3", 1.0, "DIV", aRchID, "INFLOW", "ISED", 3, 1)
         End If
 
         'if microbes simulated, org/ivld
         If aBacterialOption Then
             'WDM1  1015 MICR     ENGL              SAME RCHRES  2      INFLOW IDQAL  1 1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "MICR", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "MICR", 1.0, "SAME", aRchID, "INFLOW", "IDQAL", 1, 1)
+            AddInputExtSource(aUci, lDsn, 1, "MICR", 1.0, "DIV", aRchID, "INFLOW", "IDQAL", 1, 1)
         End If
 
         'if land-applied chemical, lbs/ivld
@@ -77,16 +77,16 @@ Module modIntermediatePoints
             If aBacterialOption Then lGQCount = 2 'both land-applied chemical and microbes
             'WDM1  1016 PSTD     ENGL              SAME RCHRES  2      INFLOW IDQAL  2 1
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "PSTD", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "PSTD", 1.0, "SAME", aRchID, "INFLOW", "IDQAL", lGQCount, 1)
+            AddInputExtSource(aUci, lDsn, 1, "PSTD", 1.0, "DIV", aRchID, "INFLOW", "IDQAL", lGQCount, 1)
             'WDM1  1017 PSTS1    ENGL              SAME RCHRES  2      INFLOW ISQAL  1 2
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "PSTS1", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "PSTS1", 1.0, "SAME", aRchID, "INFLOW", "ISQAL", 1, lGQCount)
+            AddInputExtSource(aUci, lDsn, 1, "PSTS1", 1.0, "DIV", aRchID, "INFLOW", "ISQAL", 1, lGQCount)
             'WDM1  1018 PSTS2    ENGL              SAME RCHRES  2      INFLOW ISQAL  2 2
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "PSTS2", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "PSTS2", 1.0, "SAME", aRchID, "INFLOW", "ISQAL", 2, lGQCount)
+            AddInputExtSource(aUci, lDsn, 1, "PSTS2", 1.0, "DIV", aRchID, "INFLOW", "ISQAL", 2, lGQCount)
             'WDM1  1019 PSTS3    ENGL              SAME RCHRES  2      INFLOW ISQAL  3 2
             AddInputWDMDataSet(aUci, aDataSource, lScenario, "RCH" & aRchID.ToString.Trim, "PSTS3", lBaseDsn, 1, lTu, "", lDsn)
-            AddInputExtSource(aUci, lDsn, 1, "PSTS3", 1.0, "SAME", aRchID, "INFLOW", "ISQAL", 3, lGQCount)
+            AddInputExtSource(aUci, lDsn, 1, "PSTS3", 1.0, "DIV", aRchID, "INFLOW", "ISQAL", 3, lGQCount)
         End If
 
     End Sub
@@ -128,7 +128,7 @@ Module modIntermediatePoints
     End Sub
 
     Public Sub AddInputWDMDataSet(ByVal aUci As HspfUci, _
-                                  ByRef aDataSource As atcDataSource, _
+                                  ByRef aDataSource As atcWDM.atcDataSourceWDM, _
                                   ByRef aScenario As String, ByRef aLocation As String, ByRef aConstituent As String, _
                                   ByRef aBaseDsn As Integer, ByRef aWdmId As Integer, _
                                   ByRef aTUnit As Integer, ByRef aDescription As String, _
@@ -142,7 +142,7 @@ Module modIntermediatePoints
             .SetValue("Constituent", aConstituent.ToUpper)
             .SetValue("Location", aLocation.ToUpper)
             .SetValue("Description", aDescription)
-            .SetValue("TU", aTUnit)
+            .SetValue("TU", 4)
             .SetValue("TS", 1)
             .SetValue("TSTYPE", aConstituent.ToUpper)
             .SetValue("Data Source", aDataSource.Specification)
@@ -168,7 +168,7 @@ Module modIntermediatePoints
         Next
 
         lGenericTs.Values = lValues
-        Dim lAddedDsn As Boolean = aDataSource.AddDataSet(lGenericTs, 0)
+        Dim lAddedDsn As Boolean = aDataSource.AddDataSet(lGenericTs, atcDataSource.EnumExistAction.ExistNoAction)
         aDsn = lDsn
     End Sub
 

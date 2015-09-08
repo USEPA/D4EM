@@ -1100,7 +1100,7 @@ Public Module modModelSetup
             'Dim aUpstreamLocations As New atcCollection
             'aUpstreamLocations.Add(2)  'for testing
             For Each lRchID As Integer In aUpstreamLocations
-                AddUpstreamInflow(lRchID, lHspfUci, lProjectDataSource, aOutputInterval + 1, True, True)
+                AddUpstreamInflow(lRchID, lHspfUci, lProjectDataSource, aOutputInterval + 1, aBacterialOption, aChemicalOption)
             Next
 
             lHspfUci.Save()
