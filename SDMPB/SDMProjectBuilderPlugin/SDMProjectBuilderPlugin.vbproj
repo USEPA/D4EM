@@ -239,12 +239,6 @@
     <Compile Include="frmChemicalProperties.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMapMicrobes.Designer.vb">
-      <DependentUpon>frmMapMicrobes.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmMapMicrobes.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmNavHelper.Designer.vb">
       <DependentUpon>frmNavHelper.vb</DependentUpon>
     </Compile>
@@ -279,9 +273,6 @@
   <ItemGroup>
     <EmbeddedResource Include="frmChemicalProperties.resx">
       <DependentUpon>frmChemicalProperties.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMapMicrobes.resx">
-      <DependentUpon>frmMapMicrobes.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNavHelper.resx">
       <DependentUpon>frmNavHelper.vb</DependentUpon>

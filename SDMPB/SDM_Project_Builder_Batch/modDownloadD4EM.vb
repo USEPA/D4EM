@@ -425,6 +425,14 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                 End Using
             End If
 
+            For Each lLocalShapeFileName As String In IO.Directory.GetFiles(IO.Path.Combine(aProject.ProjectFolder, "LocalData"), "*.shp")
+                If aProject.LayerFromFileName(lLocalShapeFileName) Is Nothing Then
+                    Dim lAddLayer As New D4EM.Data.Layer(lLocalShapeFileName, New D4EM.Data.LayerSpecification(Name:=IO.Path.GetFileNameWithoutExtension(lLocalShapeFileName)))
+                    lAddLayer.Reproject(aProject.DesiredProjection)
+                    aProject.Layers.Add(lAddLayer)
+                End If
+            Next
+
             'Run FAMoS
             If (True) Then
                 'D4EM.Model.FAMoS.FAMoSTool.BuildFAMoSInput(aProject, lSimplifiedCatchmentsLayer, lSimplifiedFlowlinesLayer)

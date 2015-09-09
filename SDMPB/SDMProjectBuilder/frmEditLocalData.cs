@@ -58,12 +58,15 @@ namespace SDMProjectBuilder
             string fileLoc = Path.Combine(_appMgr.SerializationManager.CurrentProjectDirectory, "LocalData");
             ImportLocalData ild = new ImportLocalData(_appMgr);
             FeatureSet fs = ild.LoadShapefileFromCSV(fileNameWithExt, fileLoc);
-            fileNameWithExt = Path.ChangeExtension(fileName, "shp");
-            fs.SaveAs(Path.Combine(fileLoc, fileNameWithExt), true);
-            IMapFeatureLayer iMFL = _appMgr.Map.Layers.Add(fs);
-            _appMgr.Map.Layers.SelectedLayer = iMFL;
-            iMFL.IsSelected = true;
-            _appMgr.Map.ViewExtents = iMFL.Extent;            
+            if (fs != null)
+            {
+                fileNameWithExt = Path.ChangeExtension(fileName, "shp");
+                fs.SaveAs(Path.Combine(fileLoc, fileNameWithExt), true);
+                IMapFeatureLayer iMFL = _appMgr.Map.Layers.Add(fs);
+                _appMgr.Map.Layers.SelectedLayer = iMFL;
+                iMFL.IsSelected = true;
+                _appMgr.Map.ViewExtents = iMFL.Extent;
+            }
         }
 
         private void btnEditFile_Click(object sender, EventArgs e)

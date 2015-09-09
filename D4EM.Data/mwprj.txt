@@ -278,9 +278,33 @@
         <ChartsClass />
       </ShapefileClass>
     </Layer>
-    <Layer LayerType="Shapefile" LayerName="Animals" LayerVisible="1" LayerKey="" Filename="AnimalsLL.shp">
+    <Layer LayerType="Shapefile" LayerName="Animals" LayerVisible="1" LayerKey="" Filename="LocalData\AnimalLL.shp">
       <ShapefileClass>
         <DefaultDrawingOptions FillColor="4681581" LineColor="9868950" />
+        <ShapefileCategoriesClass />
+        <LabelsClass Alignment="5" Generated="0" AvoidCollisions="0" Positioning="0" TextRenderingHint="5" />
+        <ChartsClass />
+      </ShapefileClass>
+    </Layer>
+    <Layer LayerType="Shapefile" LayerName="Septic" LayerVisible="1" LayerKey="" Filename="LocalData\SepticsLL.shp">
+      <ShapefileClass>
+        <DefaultDrawingOptions FillColor="6065993" LineColor="9868950" />
+        <ShapefileCategoriesClass />
+        <LabelsClass Alignment="5" Generated="0" AvoidCollisions="0" Positioning="0" TextRenderingHint="5" />
+        <ChartsClass />
+      </ShapefileClass>
+    </Layer>
+    <Layer LayerType="Shapefile" LayerName="Output Points" LayerVisible="1" LayerKey="" Filename="LocalData\OutputPointsLL.shp">
+      <ShapefileClass>
+        <DefaultDrawingOptions FillColor="7044461" LineColor="9868950" />
+        <ShapefileCategoriesClass />
+        <LabelsClass Alignment="5" Generated="0" AvoidCollisions="0" Positioning="0" TextRenderingHint="5" />
+        <ChartsClass />
+      </ShapefileClass>
+    </Layer>
+    <Layer LayerType="Shapefile" LayerName="Boundary Points" LayerVisible="1" LayerKey="" Filename="LocalData\BoundaryPointsLL.shp">
+      <ShapefileClass>
+        <DefaultDrawingOptions FillColor="3959355" LineColor="9868950" />
         <ShapefileCategoriesClass />
         <LabelsClass Alignment="5" Generated="0" AvoidCollisions="0" Positioning="0" TextRenderingHint="5" />
         <ChartsClass />
