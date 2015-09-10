@@ -298,6 +298,8 @@ Public Class frmPublishMain
                     Case "Timeseries::HSPF Binary Output"
                         'Choose datasets of interest by constituent name
                         lAvailable.AddRange(modPublishHSPF.OutputDatasetsInHBN(lSource, True))
+                    Case "Timeseries::SWAT Data Files"
+                        lAvailable.AddRange(modPublishSWAT.OutputDatasets(lSource, True))
                     Case Else
                         lAvailable.AddRange(lSource.DataSets)
                 End Select
