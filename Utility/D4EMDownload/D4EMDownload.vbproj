@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{06EC9ADF-CC8A-4394-A186-FAEAEFF2C4FB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>D4EMDownload.frmD4EMDownload</StartupObject>
+    <RootNamespace>D4EMDownload</RootNamespace>
+    <AssemblyName>D4EMDownload</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>D4EMDownload.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>D4EMDownload.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DocumentationFile>D4EMDownload.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DocumentationFile>D4EMDownload.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="atcControls">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcControls.dll</HintPath>
+    </Reference>
+    <Reference Include="atcData">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcData.dll</HintPath>
+    </Reference>
+    <Reference Include="atcHspfBinOut">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcHspfBinOut.dll</HintPath>
+    </Reference>
+    <Reference Include="atcMetCmp">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcMetCmp.dll</HintPath>
+    </Reference>
+    <Reference Include="atcSegmentation">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcSegmentation.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesBinary">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesBinary.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesD4EM">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesD4EM.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesGDS">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesGDS.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesMath">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesMath.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesNCDC">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesNCDC.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesRDB">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesRDB.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesScript">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesScript.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesStatistics">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesStatistics.dll</HintPath>
+    </Reference>
+    <Reference Include="atcTimeseriesSWAT">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesSWAT.dll</HintPath>
+    </Reference>
+    <Reference Include="atcUtility">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="atcWDM">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\atcWDM.dll</HintPath>
+    </Reference>
+    <Reference Include="MapWinUtility">
+      <HintPath>..\..\..\Externals\x86Debug\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="modMain.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\D4EM.Data.MetCmp\D4EM.Data.MetCmp.vbproj">
+      <Project>{7e0e3306-36a9-4e26-bcf5-727d3c1336bb}</Project>
+      <Name>D4EM.Data.MetCmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj">
+      <Project>{1a68540d-13ca-46af-93e6-2c864e6627c7}</Project>
+      <Name>D4EM.Data.Source.BASINS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\NCDC\D4EM.Data.Source.NCDC.csproj">
+      <Project>{1a8bff0e-75fc-4dd8-affa-61d94ba0f369}</Project>
+      <Name>D4EM.Data.Source.NCDC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\NHDPlus\D4EM.Data.Source.NHDPlus.vbproj">
+      <Project>{6b7283c6-6dde-41e9-ba00-f3edd604b38b}</Project>
+      <Name>D4EM.Data.Source.NHDPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\NLDAS\D4EM.Data.Source.NLDAS.vbproj">
+      <Project>{b8e2d4b9-3ac3-4160-a4b7-6b9d0ae03fe0}</Project>
+      <Name>D4EM.Data.Source.NLDAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\NRCS_Soil\D4EM.Data.Source.NRCS_Soil.vbproj">
+      <Project>{7612f73d-72cd-4a3d-861a-401e0e5f72ba}</Project>
+      <Name>D4EM.Data.Source.NRCS_Soil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\NWIS\D4EM.Data.Source.NWIS.vbproj">
+      <Project>{e00c40d7-1eb7-44de-a196-619ac2016689}</Project>
+      <Name>D4EM.Data.Source.NWIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\Storet\D4EM.Data.Source.Storet.vbproj">
+      <Project>{b39b85b9-65f1-4fb7-b8e5-7a8559dfa368}</Project>
+      <Name>D4EM.Data.Source.Storet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data.Source\USGS_Seamless\D4EM.Data.Source.USGS_Seamless.vbproj">
+      <Project>{2cf5e4f7-8649-40f7-8481-cefe720262cf}</Project>
+      <Name>D4EM.Data.Source.USGS_Seamless</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Data\D4EM.Data.vbproj">
+      <Project>{06768e3a-87ae-4d46-a45a-c43c6109d43f}</Project>
+      <Name>D4EM.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\D4EM.Geo\D4EM.Geo.vbproj">
+      <Project>{573a99fb-08de-4b28-8628-ac7089348d96}</Project>
+      <Name>D4EM.Geo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
