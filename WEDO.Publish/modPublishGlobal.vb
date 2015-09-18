@@ -19,7 +19,7 @@ Module modPublishGlobal
 
     'Note: keep these arrays in sync!
     Public g_ConstituentsOfInterest() As String = {"FLOW", "TSS", "TKN", "NH3-N", "NO3-N", "NO2-N", "ORGN", "P", "PO4-P"}
-    Public g_UciConstituentsOfInterest() As String = {"RO", "SSED:4", "PKST4:1", "DNUST:2", "DNUST:1", "DNUST:3", "PKST3:4", "PKST4:2", "DNUST:4"}
+    Public g_WdmConstituentsOfInterest() As String = {"RO", "SSED:4", "PKST4:1", "DNUST:2", "DNUST:1", "DNUST:3", "PKST3:4", "PKST4:2", "DNUST:4"}
     Public g_HbnConstituentsOfInterest() As String = {"RO", "SSED-TOT", "N-TOT-CONC", "TAM-CONCDIS", "NO3-CONCDIS", "NO2-CONCDIS", "N-TOTORG-CONC", "P-TOT-CONC", "PO4-CONCDIS"}
     Public g_RchConstituentsOfInterest() As String = {"FLOW_OUT", "SEDCONC", "N/A", "NH4_OUT", "NO3_OUT", "NO2_OUT", "N/A", "ORGP_OUT", "N/A"}
     Public g_RchConstituentsOfInterestUnits() As String = {"cms", "mg/kg", "N/A", "kg", "kg", "NO2_OUT", "N/A", "kg", "N/A"}
