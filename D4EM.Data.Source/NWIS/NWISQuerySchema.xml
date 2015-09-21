@@ -21,6 +21,28 @@
       <NWISIdaDischarge format='text' label='NWIS IDA Discharge Values' />
     </returns>
   </function>
+  <function name='GetNWISDailyGW' label='NWIS Groundwater'>
+    <arguments>
+      <StartDate format='datestring' label='Starting date for values to retrieve' optional='true' default='1/1/1900' />
+      <EndDate   format='datestring' label='Ending date for values to retrieve'   optional='true' default='1/1/2100' />
+      <StationID format='string' label='Station ID'                               optional='false' multiple='true' />
+      <SaveIn    format='folder' label='Save data in folder' filter='Text Files (*.txt)|*.txt' />
+    </arguments>
+    <returns>
+      <NWISDailyGroundwater format='text' label='NWIS Daily Groundwater Values' />
+    </returns>
+  </function>
+  <function name='GetNWISPeriodicGW' label='NWIS Groundwater'>
+    <arguments>
+      <StartDate format='datestring' label='Starting date for values to retrieve' optional='true' default='1/1/1900' />
+      <EndDate   format='datestring' label='Ending date for values to retrieve'   optional='true' default='1/1/2100' />
+      <StationID format='string' label='Station ID'                               optional='false' multiple='true' />
+      <SaveIn    format='folder' label='Save data in folder' filter='Text Files (*.txt)|*.txt' />
+    </arguments>
+    <returns>
+      <NWISPeriodicGroundwater format='text' label='NWIS Periodic Groundwater Values' />
+    </returns>
+  </function>
   <function name='GetNWISMeasurements' label='NWIS Discharge'>
     <arguments>
       <StartDate format='datestring' label='Starting date for values to retrieve' optional='true' default='1/1/1900' />
@@ -29,7 +51,18 @@
       <SaveIn    format='folder' label='Save data in folder' filter='Text Files (*.txt)|*.txt' />
     </arguments>
     <returns>
-      <NWISDailyDischarge format='text' label='NWIS Daily Discharge Values' />
+      <NWISMeasurements format='text' label='NWIS Daily Discharge Values' />
+    </returns>
+  </function>
+  <function name='GetNWISPrecipitation' label='NWIS Weather'>
+    <arguments>
+      <StartDate format='datestring' label='Starting date for values to retrieve' optional='true' default='1/1/1900' />
+      <EndDate   format='datestring' label='Ending date for values to retrieve'   optional='true' default='1/1/2100' />
+      <StationID format='string' label='Station ID'                               optional='false' multiple='true' />
+      <SaveIn    format='folder' label='Save data in folder' filter='Text Files (*.txt)|*.txt' />
+    </arguments>
+    <returns>
+      <NWISPrecipitation format='text' label='NWIS Precipitation Values' />
     </returns>
   </function>
   <function name='GetNWISWQ' label='NWIS Water Quality'>

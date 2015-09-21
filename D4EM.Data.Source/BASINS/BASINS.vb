@@ -86,8 +86,10 @@ Public Class BASINS
 
     Private Shared pNativeProjection As DotSpatial.Projections.ProjectionInfo = Globals.GeographicProjection
 
-    Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
-    Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
+    'Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
+    'Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
+    Private Shared pBaseURL As String = "http://www3.epa.gov/ceampubl/basins/gis_data/huc/"
+    Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
 
     Public Shared MinRequiredConstituents() As String = {"PREC", "PEVT"}
     Public Shared MaxRequiredConstituents() As String = {"ATEM", "WIND", "SOLR", "DEWP", "CLOU", "PREC", "PEVT"} 'TODO: set based on HSPF model requirements

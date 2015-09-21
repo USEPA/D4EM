@@ -37,6 +37,12 @@ Partial Class NWIS
                 Select Case lFunctionName
                     Case "getnwisdailydischarge"
                         lResult &= GetDailyDischarge(lNode.FirstChild)
+                    Case "getnwisdailygw"
+                        lResult &= GetDailyGroundwater("gw", lNode.FirstChild)
+                    Case "getnwisprecipitation"
+                        lResult &= GetDailyGroundwater("precip", lNode.FirstChild)
+                    Case "getnwisperiodicgw"
+                        lResult &= GetPeriodicGroundwater(lNode.FirstChild)
                     Case "getnwisidadischarge"
                         lResult &= GetIDADischarge(lNode.FirstChild)
                     Case "getnwismeasurements"
@@ -314,4 +320,50 @@ Partial Class NWIS
                      aStartDate:=lStartDate,
                      aEndDate:=lEndDate)
     End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="aDataType">Precip or groundwater ("precip" vs "gw")</param>
+    ''' <param name="aArgs"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function GetDailyGroundwater(ByVal aDataType As String, ByVal aArgs As Xml.XmlNode) As String
+        Dim lStartDate As String = EarliestDate
+        Dim lEndDate As String = LatestDate
+        Dim lStationIDs As New Generic.List(Of String)
+        Dim lCacheFolder As String = IO.Path.GetTempPath
+        Dim lGetEvenIfCached As Boolean = False
+        Dim lCacheOnly As Boolean = False
+        Dim lSaveIn As String = ""
+        Dim lStationIndex As Integer = 1
+        Dim lWDMFilename As String = ""
+        Dim lRegion As Region = Nothing
+
+        Dim lArg As Xml.XmlNode = aArgs.FirstChild
+
+        While Not lArg Is Nothing
+            Select Case lArg.Name.ToLower
+                Case "region"
+                    Try
+                        lRegion = New Region(aArgs)
+                    Catch e As Exception
+                        Logger.Dbg("Exception reading Region from query: " & e.Message)
+                    End Try
+                Case "startdate" : lStartDate = lArg.InnerText
+                Case "enddate" : lEndDate = lArg.InnerText
+                Case "stationid" : If Not lStationIDs.Contains(lArg.InnerText) Then lStationIDs.Add(lArg.InnerText)
+                Case "cachefolder" : lCacheFolder = lArg.InnerText
+                Case "cacheonly" : lCacheOnly = True
+                Case "getevenifcached" : If Not lArg.InnerText.ToLower.Contains("false") Then lGetEvenIfCached = True
+                Case "savein" : lSaveIn = lArg.InnerText
+                Case "savewdm" : lWDMFilename = lArg.InnerText
+            End Select
+            lArg = lArg.NextSibling
+        End While
+        Return GetDailyGroundwater(New Project(D4EM.Data.Globals.GeographicProjection,
+                                 lCacheFolder, lSaveIn, lRegion, False, False,
+                                 lGetEvenIfCached, lCacheOnly), lSaveIn, lStationIDs, lStartDate, lEndDate, lWDMFilename, aDataType)
+    End Function
+
 End Class
