@@ -141,8 +141,14 @@ Public Class HSPFmodel
         'get met data ready
         Dim lUniqueModelSegmentIds As New atcCollection
         Dim lUniqueModelSegmentNames As New atcCollection
-        FindUniqueMetSegments(lUniqueModelSegmentNames, lUniqueModelSegmentIds, _
-                              pSubbasinLayerName, pSubbasinFieldName, pSubbasinSegmentName)
+        Dim lSubbasinsLayerIndex As Integer = GisUtil.LayerIndex(pSubbasinLayerName)
+        If GisUtil.IsField(lSubbasinsLayerIndex, pSubbasinSegmentName) Then
+            FindUniqueMetSegments(lUniqueModelSegmentNames, lUniqueModelSegmentIds, _
+                                  pSubbasinLayerName, pSubbasinFieldName, pSubbasinSegmentName)
+        Else
+            'if the ModelSeg field doesn't exist (using NCDC), set it to blank
+            pSubbasinSegmentName = ""
+        End If
 
         If lUniqueModelSegmentIds.Count = 0 Then
             'when using a single met station, make sure it has an ID
@@ -159,6 +165,10 @@ Public Class HSPFmodel
         For Each lModelSegmentID In lUniqueModelSegmentIds
             lMetWdmIds.Add(lMetWdmIds.Count, "WDM2")
         Next
+        If (lMetWdmIds.Count > lMetBaseDsns.Count) And lMetBaseDsns.Count = 0 Then
+            'special case for ncdc, need to set the base dsn
+            lMetBaseDsns.Add(1)
+        End If
 
         Dim lOutputPath As String = IO.Path.Combine(pOutputPath, "HSPF")
         Dim lLocalDataFolder As String = IO.Path.Combine(aProject.ProjectFolder, "LocalData")
