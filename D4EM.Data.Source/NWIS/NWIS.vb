@@ -7,8 +7,10 @@ Public Class NWIS
         Public Shared Measurement As New LayerSpecification(Tag:="measurements", Role:=Roles.Station, Source:=GetType(NWIS))
         Public Shared Discharge As New LayerSpecification(Tag:="discharge", Role:=Roles.Station, Source:=GetType(NWIS))
         Public Shared WaterQuality As New LayerSpecification(Tag:="qw", Role:=Roles.Station, Source:=GetType(NWIS))
-        Public Shared Groundwater As New LayerSpecification(Tag:="gw", Role:=Roles.Station, Source:=GetType(NWIS))
+        Public Shared GroundwaterDaily As New LayerSpecification(Tag:="gw_daily", Role:=Roles.Station, Source:=GetType(NWIS))
+        Public Shared GroundwaterPeriodic As New LayerSpecification(Tag:="gw_periodic", Role:=Roles.Station, Source:=GetType(NWIS))
         Public Shared Peak As New LayerSpecification(Tag:="peak", Role:=Roles.Station, Source:=GetType(NWIS))
+        Public Shared Precipitation As New LayerSpecification(Tag:="precipitation", Role:=Roles.Station, Source:=GetType(NWIS))
 
         'Public Shared StreamOrRiver As New LayerSpecification(Tag:="D4EM.Data.NWIS.StreamOrRiver", Role:=Roles.Station, Source:=GetType(NWIS))
         'Public Shared LakeOrReservoir As New LayerSpecification(Tag:="D4EM.Data.NWIS.LakeOrReservoir", Role:=Roles.Station, Source:=GetType(NWIS))
@@ -45,8 +47,8 @@ Public Class NWIS
         "____Y__", _
         "______Y"}
 
-    Private Shared pParameterName As String() = {"Temperature C", "Temperature F", "pH"}
-    Private Shared pParameterCode As String() = {"00010", "00011", "00400"}
+    'Private Shared pParameterName As String() = {"Temperature C", "Temperature F", "pH"}
+    'Private Shared pParameterCode As String() = {"00010", "00011", "00400"}
 
     'water quality parameters 
     '   > Temperature (\260C)

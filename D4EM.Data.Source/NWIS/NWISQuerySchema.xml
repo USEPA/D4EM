@@ -78,7 +78,7 @@
   </function>
   <function name='GetNWISStations' label='NWIS Stations'>
     <arguments>
-      <DataType       format='String'   label='Type of stations to get' valid='discharge|qw|gw|measurements|peak' optional='true' default='discharge' />
+      <DataType       format='String'   label='Type of stations to get' valid='discharge|qw|gw_daily|gw_periodic|measurements|peak|precipitation' optional='true' default='discharge' />
       <region         format='Region'   label='Region to download' />
       <ParameterCode  format='string*5' label='NWIS Parameter Code'   optional='true' default='' />
       <MinCount       format='Integer'  label='Minimum number of data values' optional='true' default='0' />

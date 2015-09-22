@@ -11,75 +11,86 @@ Module modMain
     Private pStatusMonitor As MonitorProgressStatus
 
     Sub Main()
-        If My.Application.CommandLineArgs.Count > 1 Then
-            Try
-                If My.Application.CommandLineArgs.Count > 2 Then
-                    If MsgBox("Proceed with download?", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
-                        Exit Sub
-                    End If
-                End If
-                D4EM.Data.Globals.Initialize()
-                InitStatusAndManager()
-                Dim lResultFilename As String = My.Application.CommandLineArgs(0)
-                Dim lInstructionsFilename As String = My.Application.CommandLineArgs(1)
-                Dim aQuery As String = System.IO.File.ReadAllText(lInstructionsFilename)
-                Dim lResult As String = ""
-                Dim lFunctionName As String = ""
-                Dim lQueryDoc As New Xml.XmlDocument
-                Dim lQueries As New Generic.List(Of String)
-                Dim lEndFunction As Integer = aQuery.ToLower.IndexOf("</function>")
-                While lEndFunction > 0
-                    lQueries.Add(aQuery.Substring(0, lEndFunction + 11))
-                    aQuery = aQuery.Substring(lEndFunction + 11)
-                    lEndFunction = aQuery.ToLower.IndexOf("</function>")
-                End While
-                Dim lSingleQuery As Boolean = True
-                If lQueries.Count > 1 Then
-                    lSingleQuery = False
-                    Logger.Progress(0, lQueries.Count)
-                End If
-                For Each lQuery As String In lQueries
-                    lQueryDoc.LoadXml(lQuery)
-                    Dim lFunction As Xml.XmlNode = lQueryDoc.FirstChild
-                    If lFunction.Name.ToLower = "function" Then
-                        lFunctionName = lFunction.Attributes.GetNamedItem("name").Value
-                        Logger.Dbg("Function " & lFunctionName)
-                        Dim lSource As D4EM.Data.SourceBase = GetSourceSupportingFunction(lFunctionName)
-                        'Select Case lFunctionName
-                        '    Case "GetBASINS" : lSource = New D4EM.Data.Source.BASINS()
-                        '    Case "GetNHDPlus" : lSource = New D4EM.Data.Source.NHDPlus()
-                        '    Case "GetNCDC" 'TODO: implement Execute for NCDC : lSource = New D4EM.Data.Source.NCDC()
-                        '    Case "GetNLDASParameter", "GetNLDASGrid" : lSource = New D4EM.Data.Source.NLDAS()
-                        '    Case "GetNRCS" 'TODO: implement Execute for NCDC : lSource = New D4EM.Data.Source.NRCS_Soil()
-                        '    Case "GetBASINS" : lSource = New D4EM.Data.Source.BASINS()
-                        '    Case Else
-                        '        Logger.Msg("Cannot find extension for function '" & lFunctionName & "'" & vbCrLf & vbCrLf & lQuery,  g_AppNameLong)
-
-                        'End Select
-                        'Dim lExtension As IDataExtension = GetSourceSupportingFunction(lFunctionName)
-                        If lSource IsNot Nothing Then
-                            Logger.Dbg("Source " & lSource.Name)
-                            Logger.Dbg("Query: " & lQuery)
-                            'TODO: how do defaults from lExtension.QuerySchema into query?
-                            Logger.Status(lFunctionName)
-                            Using lLevel As New ProgressLevel(Not lSingleQuery, lSingleQuery)
-                                lResult &= lSource.Execute(lQuery)
-                            End Using
-                        Else
-                            Logger.Msg("Cannot find extension for function '" & lFunctionName & "'" & vbCrLf & vbCrLf & lQuery, g_AppNameLong)
-                        End If
-                    Else
-                        Logger.Msg(lQuery, "Query does not start with function tag", g_AppNameLong)
-                        'TODO: handle queries that specify the end result by finding function(s) that can produce it
-                    End If
-                Next
-                IO.File.WriteAllText(lResultFilename, lResult)
-            Catch ex As Exception
-                MsgBox(ex.ToString, MsgBoxStyle.Critical, g_AppNameLong)
-            End Try
+        Dim lResultFilename As String
+        Dim lInstructionsFilename As String
+        If My.Application.CommandLineArgs.Count < 2 Then
+            lResultFilename = InputBox("Write results to: ", g_AppNameLong)
+            lInstructionsFilename = InputBox("File containing XML instructions: ", g_AppNameLong)
         Else
-            MsgBox("Command line was empty, expected results and XML instruction file names.", Title:=g_AppNameLong)
+            lResultFilename = My.Application.CommandLineArgs(0)
+            lInstructionsFilename = My.Application.CommandLineArgs(1)
         End If
+
+        Try
+            If My.Application.CommandLineArgs.Count > 2 Then
+                If MsgBox("Writing Results into: " & lResultFilename & vbCrLf _
+                        & "Reading Instructions: " & lInstructionsFilename & vbCrLf _
+                        & "Proceed with download?", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
+                    Exit Sub
+                End If
+            End If
+            D4EM.Data.Globals.Initialize()
+            InitStatusAndManager()
+            lResultFilename = lResultFilename.Replace("""", "")
+            lInstructionsFilename = lInstructionsFilename.Replace("""", "")
+            Dim aQuery As String = System.IO.File.ReadAllText(lInstructionsFilename)
+            Dim lResult As String = ""
+            Dim lFunctionName As String = ""
+            Dim lQueryDoc As New Xml.XmlDocument
+            Dim lQueries As New Generic.List(Of String)
+            Dim lEndFunction As Integer = aQuery.ToLower.IndexOf("</function>")
+            While lEndFunction > 0
+                lQueries.Add(aQuery.Substring(0, lEndFunction + 11))
+                aQuery = aQuery.Substring(lEndFunction + 11)
+                lEndFunction = aQuery.ToLower.IndexOf("</function>")
+            End While
+            Dim lSingleQuery As Boolean = True
+            If lQueries.Count > 1 Then
+                lSingleQuery = False
+                Logger.Progress(0, lQueries.Count)
+            End If
+            For Each lQuery As String In lQueries
+                lQueryDoc.LoadXml(lQuery)
+                Dim lFunction As Xml.XmlNode = lQueryDoc.FirstChild
+                If lFunction.Name.ToLower = "function" Then
+                    lFunctionName = lFunction.Attributes.GetNamedItem("name").Value
+                    Logger.Dbg("Function " & lFunctionName)
+                    Dim lSource As D4EM.Data.SourceBase = GetSourceSupportingFunction(lFunctionName)
+                    'Select Case lFunctionName
+                    '    Case "GetBASINS" : lSource = New D4EM.Data.Source.BASINS()
+                    '    Case "GetNHDPlus" : lSource = New D4EM.Data.Source.NHDPlus()
+                    '    Case "GetNCDC" 'TODO: implement Execute for NCDC : lSource = New D4EM.Data.Source.NCDC()
+                    '    Case "GetNLDASParameter", "GetNLDASGrid" : lSource = New D4EM.Data.Source.NLDAS()
+                    '    Case "GetNRCS" 'TODO: implement Execute for NCDC : lSource = New D4EM.Data.Source.NRCS_Soil()
+                    '    Case "GetBASINS" : lSource = New D4EM.Data.Source.BASINS()
+                    '    Case Else
+                    '        Logger.Msg("Cannot find extension for function '" & lFunctionName & "'" & vbCrLf & vbCrLf & lQuery,  g_AppNameLong)
+
+                    'End Select
+                    'Dim lExtension As IDataExtension = GetSourceSupportingFunction(lFunctionName)
+                    If lSource IsNot Nothing Then
+                        Logger.Dbg("Source " & lSource.Name)
+                        Logger.Dbg("Query: " & lQuery)
+                        'TODO: how do defaults from lExtension.QuerySchema into query?
+                        Logger.Status(lFunctionName)
+                        Using lLevel As New ProgressLevel(Not lSingleQuery, lSingleQuery)
+                            lResult &= lSource.Execute(lQuery)
+                        End Using
+                    Else
+                        Logger.Msg("Cannot find extension for function '" & lFunctionName & "'" & vbCrLf & vbCrLf & lQuery, g_AppNameLong)
+                    End If
+                Else
+                    Logger.Msg(lQuery, "Query does not start with function tag", g_AppNameLong)
+                    'TODO: handle queries that specify the end result by finding function(s) that can produce it
+                End If
+            Next
+            IO.File.WriteAllText(lResultFilename, lResult)
+            If pStatusMonitor IsNot Nothing Then
+                pStatusMonitor.StopMonitor()
+            End If
+        Catch ex As Exception
+            MsgBox(ex.ToString, MsgBoxStyle.Critical, g_AppNameLong)
+        End Try
     End Sub
 
     Private Sub InitStatusAndManager()

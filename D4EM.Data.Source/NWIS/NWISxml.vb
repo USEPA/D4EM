@@ -80,9 +80,11 @@ Partial Class NWIS
         Dim want_measurements As Boolean = False
         Dim want_discharge As Boolean = False
         Dim want_qw As Boolean = False
-        Dim want_gw As Boolean = False
+        Dim want_gw_daily As Boolean = False
+        Dim want_gw_periodic As Boolean = False
         Dim want_rt As Boolean = False
         Dim want_peak As Boolean = False
+        Dim want_precipitation As Boolean = False
         Dim lStartDate As String = "1/1/1900"
         Dim lEndDate As String = "1/1/2100"
         Dim lMinCount As Integer = 0
@@ -102,9 +104,11 @@ Partial Class NWIS
                         Case "measurement", "measurements" : want_measurements = True
                         Case "discharge" : want_discharge = True
                         Case "qw" : want_qw = True
-                        Case "gw" : want_gw = True
+                        Case "gw", "gw_daily" : want_gw_daily = True
+                        Case "gw_periodic" : want_gw_periodic = True
                         Case "rt" : want_rt = True
                         Case "peak" : want_peak = True
+                        Case "precipitation" : want_precipitation = True
                     End Select
                 Case "region"
                     Try
@@ -122,7 +126,7 @@ Partial Class NWIS
             lArg = lArg.NextSibling
         End While
 
-        If Not (want_discharge OrElse want_measurements OrElse want_qw OrElse want_gw OrElse want_peak) Then
+        If Not (want_discharge OrElse want_measurements OrElse want_qw OrElse want_gw_daily OrElse want_gw_periodic OrElse want_peak OrElse want_precipitation) Then
             want_discharge = True 'Default station type to get if none specified
         End If
 
@@ -139,9 +143,10 @@ Partial Class NWIS
         If want_measurements Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Measurement, lSaveAsBase, lMakeShape)
         If want_discharge Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Discharge, lSaveAsBase, lMakeShape)
         If want_qw Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.WaterQuality, lSaveAsBase, lMakeShape)
-        If want_gw Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Groundwater, lSaveAsBase, lMakeShape)
+        If want_gw_daily Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterDaily, lSaveAsBase, lMakeShape)
+        If want_gw_periodic Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterPeriodic, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
         If want_peak Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Peak, lSaveAsBase, lMakeShape)
-
+        If want_precipitation Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Precipitation, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
         Return lResults
     End Function
 
