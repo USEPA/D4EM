@@ -86,8 +86,10 @@ Public Class BASINS
 
     Private Shared pNativeProjection As DotSpatial.Projections.ProjectionInfo = Globals.GeographicProjection
 
-    Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
-    Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
+    'Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
+    'Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
+    Private Shared pBaseURL As String = "http://www3.epa.gov/ceampubl/basins/gis_data/huc/"
+    Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
 
     Public Shared MinRequiredConstituents() As String = {"PREC", "PEVT"}
     Public Shared MaxRequiredConstituents() As String = {"ATEM", "WIND", "SOLR", "DEWP", "CLOU", "PREC", "PEVT"} 'TODO: set based on HSPF model requirements
@@ -195,6 +197,11 @@ Public Class BASINS
                     lStationsLayer = DotSpatial.Data.PointShapefile.Open(aStationsShapeFilename)
                 Else
                     lStationsLayer = New DotSpatial.Data.PointShapefile(aStationsShapeFilename)
+                    lStationsLayer.FilePath = aStationsShapeFilename.ToString()
+                    lStationsLayer.Filename = aStationsShapeFilename.ToString() ' lSaveIn.ToString()
+                    lStationsLayer.SaveAs(aStationsShapeFilename, True)
+                    lStationsLayer.Close()
+                    lStationsLayer = DotSpatial.Data.PointShapefile.Open(aStationsShapeFilename)
                 End If
                 'lStationsLayer.StartEditingShapes()
             End If
@@ -259,8 +266,6 @@ Public Class BASINS
                                     Dim lPoint As New DotSpatial.Topology.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
                                     Dim lShape As New DotSpatial.Data.Shape(lPoint)
                                     DotSpatial.Projections.Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, Globals.GeographicProjection, aProject.DesiredProjection, 0, 1)
-                                    lStationsLayer.FilePath = aStationsShapeFilename.ToString()
-                                    lStationsLayer.Filename = lSaveIn.ToString()
                                     lStationsLayer.AddShape(lShape)
                                     If lDSNField > 0 AndAlso lNextDestinationDSN > 1 Then
                                         .Value(lDSNField) = .Value(lDSNField) + lNextDestinationDSN - 1

@@ -2008,58 +2008,62 @@ Public Module modModelSetup
                        "PevtWdmId PevtDsn PevtTstype PevtMFactPI PevtMFactR")
 
         For lIndex As Integer = 0 To aMetSegIds.Count - 1
-            Dim lBaseDsn As Integer = aMetBaseDsns(lIndex)
-            Dim lWdmId As String = aMetWdmIds(lIndex)
+            Dim lBaseDsn As Integer = 1
+            Dim lWdmId As String = ""
+            If IsInteger(aMetBaseDsns(lIndex)) Then
+                lBaseDsn = aMetBaseDsns(lIndex)
+                lWdmId = aMetWdmIds(lIndex)
 
-            'find the data source and location associated with this WdmId
-            Dim lDataSource As atcWDM.atcDataSourceWDM = Nothing
-            Dim lPrecLoc As String = ""
-            For Each lDataSourceGeneric As atcDataSource In atcDataManager.DataSources
-                If lDataSourceGeneric IsNot Nothing AndAlso lDataSourceGeneric.Name = "Timeseries::WDM" Then
-                    Dim lDataSourceWDM As atcWDM.atcDataSourceWDM = lDataSourceGeneric
-                    Dim lPrecFound As Boolean = False
-                    For Each lDataSet As atcTimeseries In lDataSourceWDM.DataSets
-                        If lDataSet.Attributes.GetValue("ID") = lBaseDsn Then
-                            If lDataSet.Attributes.GetValue("TSTYPE") = "PREC" Then
-                                lPrecFound = True
-                                lPrecLoc = lDataSet.Attributes.GetValue("LOCATION")
-                                lDataSource = lDataSourceWDM
-                                Exit For
+                'find the data source and location associated with this WdmId
+                Dim lDataSource As atcWDM.atcDataSourceWDM = Nothing
+                Dim lPrecLoc As String = ""
+                For Each lDataSourceGeneric As atcDataSource In atcDataManager.DataSources
+                    If lDataSourceGeneric IsNot Nothing AndAlso lDataSourceGeneric.Name = "Timeseries::WDM" Then
+                        Dim lDataSourceWDM As atcWDM.atcDataSourceWDM = lDataSourceGeneric
+                        Dim lPrecFound As Boolean = False
+                        For Each lDataSet As atcTimeseries In lDataSourceWDM.DataSets
+                            If lDataSet.Attributes.GetValue("ID") = lBaseDsn Then
+                                If lDataSet.Attributes.GetValue("TSTYPE") = "PREC" Then
+                                    lPrecFound = True
+                                    lPrecLoc = lDataSet.Attributes.GetValue("LOCATION")
+                                    lDataSource = lDataSourceWDM
+                                    Exit For
+                                End If
                             End If
+                        Next
+                        If lPrecFound Then
+                            Exit For
                         End If
-                    Next
-                    If lPrecFound Then
-                        Exit For
                     End If
-                End If
-            Next
-            If lDataSource Is Nothing Then Throw New ApplicationException("PREC data not found for " & lWdmId & " DSN " & lBaseDsn)
+                Next
+                If lDataSource Is Nothing Then Throw New ApplicationException("PREC data not found for " & lWdmId & " DSN " & lBaseDsn)
 
-            Dim lATEMdsn As Integer = lBaseDsn + 2
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "ATEM", lATEMdsn)
+                Dim lATEMdsn As Integer = lBaseDsn + 2
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "ATEM", lATEMdsn)
 
-            Dim lDEWPdsn As Integer = lBaseDsn + 6
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "DEWP", lDEWPdsn)
+                Dim lDEWPdsn As Integer = lBaseDsn + 6
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "DEWP", lDEWPdsn)
 
-            Dim lWINDdsn As Integer = lBaseDsn + 3
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "WIND", lWINDdsn)
+                Dim lWINDdsn As Integer = lBaseDsn + 3
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "WIND", lWINDdsn)
 
-            Dim lSOLRdsn As Integer = lBaseDsn + 4
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "SOLR", lSOLRdsn)
+                Dim lSOLRdsn As Integer = lBaseDsn + 4
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "SOLR", lSOLRdsn)
 
-            Dim lCLOUdsn As Integer = lBaseDsn + 7
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "CLOU", lCLOUdsn)
+                Dim lCLOUdsn As Integer = lBaseDsn + 7
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "CLOU", lCLOUdsn)
 
-            Dim lPEVTdsn As Integer = lBaseDsn + 5
-            FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "PEVT", lPEVTdsn)
+                Dim lPEVTdsn As Integer = lBaseDsn + 5
+                FindMatchingDSNatThisLocation(lDataSource, lPrecLoc, "PEVT", lPEVTdsn)
 
-            lSB.AppendLine(CStr(aMetSegIds(lIndex)) & " " & lWdmId & " " & lBaseDsn.ToString & " PREC 1 1" & _
-                                                      " " & lWdmId & " " & lATEMdsn.ToString & " ATEM 1 1" & _
-                                                      " " & lWdmId & " " & lDEWPdsn.ToString & " DEWP 1 1" & _
-                                                      " " & lWdmId & " " & lWINDdsn.ToString & " WIND 1 1" & _
-                                                      " " & lWdmId & " " & lSOLRdsn.ToString & " SOLR 1 1" & _
-                                                      " " & lWdmId & " " & lCLOUdsn.ToString & " CLOU 0 1" & _
-                                                      " " & lWdmId & " " & lPEVTdsn.ToString & " PEVT 1 1")
+                lSB.AppendLine(CStr(aMetSegIds(lIndex)) & " " & lWdmId & " " & lBaseDsn.ToString & " PREC 1 1" & _
+                                                          " " & lWdmId & " " & lATEMdsn.ToString & " ATEM 1 1" & _
+                                                          " " & lWdmId & " " & lDEWPdsn.ToString & " DEWP 1 1" & _
+                                                          " " & lWdmId & " " & lWINDdsn.ToString & " WIND 1 1" & _
+                                                          " " & lWdmId & " " & lSOLRdsn.ToString & " SOLR 1 1" & _
+                                                          " " & lWdmId & " " & lCLOUdsn.ToString & " CLOU 0 1" & _
+                                                          " " & lWdmId & " " & lPEVTdsn.ToString & " PEVT 1 1")
+            End If
         Next
         SaveFileString(aSegFileName, lSB.ToString)
     End Sub

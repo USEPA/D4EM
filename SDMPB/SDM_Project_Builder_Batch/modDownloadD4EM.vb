@@ -319,7 +319,8 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
             End If
 
             If aParameters.NLDASconstituents.Count > 0 Then
-                GetBasinsMet(aProject, aParameters, Nothing, lStep, lLastStep, lResults)
+                'GetBasinsMet(aProject, aParameters, Nothing, lStep, lLastStep, lResults) 'using the line below instead results in more BASINS met data available 
+                GetBasinsMet(aProject, aParameters, lSimplifiedCatchmentsLayer, lStep, lLastStep, lResults)
                 GetNLDAS(aProject, aParameters, lSimplifiedCatchmentsLayer, lStep, lLastStep, lResults)
             Else
                 GetBasinsMet(aProject, aParameters, lSimplifiedCatchmentsLayer, lStep, lLastStep, lResults)

@@ -91,6 +91,7 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
                     lFiles.Add(lFullPathFromUCI)
             End Select
         Next
+
         Return lFiles
     End Function
 
@@ -98,6 +99,7 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
         Dim lOutputDatasets As New atcData.atcTimeseriesGroup
         Dim lFilesBlock As HspfFilesBlk = UCIFile.FilesBlock
         Dim lUciFolder As String = IO.Path.GetDirectoryName(UCIFilename)
+        'Dim lUciUnitsFlag = UCIFile.GlobalBlock.EmFg
         For lIndex As Integer = 1 To lFilesBlock.Count
             Dim lFileName As String = lFilesBlock.Value(lIndex).Name.Trim
             Dim lExtension As String = IO.Path.GetExtension(lFileName).ToLowerInvariant()
@@ -115,7 +117,7 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
                                 Dim lConIndex As Integer = -1
                                 For Each lConstituentOfInterest In g_ConstituentsOfInterest
                                     lConIndex += 1
-                                    Dim lUciConstituentName As String = g_UciConstituentsOfInterest(lConIndex)
+                                    Dim lUciConstituentName As String = g_WdmConstituentsOfInterest(lConIndex)
                                     Dim lMemSub1 As Integer = 0
                                     Dim lColonIndex As Integer = lUciConstituentName.IndexOf(":")
                                     If lColonIndex >= 0 Then
@@ -169,6 +171,15 @@ AddWDM:                     lFiles.Add(lFullPathFromUCI)
                                 If lFoundTsg.Count > 0 Then
                                     If (lNewConstituentName IsNot Nothing) Then
                                         lFoundTsg(0).Attributes.SetValue("Constituent", lNewConstituentName)
+                                        Dim lUnits As String = "mg/l"
+                                        If lNewConstituentName = "FLOW" Then
+                                            Select Case lConn.Ssystem.ToUpperInvariant()
+                                                Case "ENGL" : lUnits = "cfs"
+                                                Case "METR" : lUnits = "cms"
+                                                Case Else : Throw New ApplicationException("Unknown units in Ssystem flag for flow in UCI: " & lConn.Ssystem)
+                                            End Select
+                                        End If
+                                        lFoundTsg(0).Attributes.SetValue("Units", lUnits)
                                     End If
                                     lOutputDatasets.Add(lFoundTsg(0))
                                 End If

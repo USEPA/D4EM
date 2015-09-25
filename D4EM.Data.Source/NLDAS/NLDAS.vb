@@ -448,10 +448,15 @@ Public Class NLDAS
 
                     If lWDM IsNot Nothing Then
                         If lGDS Is Nothing Then
-                            lGDS = New atcTimeseriesGDS.atcTimeseriesGDS
-                            If Not lGDS.Open(lCacheFilename) Then
-                                lGDS = Nothing
-                                Logger.Dbg("Unable to open '" & lCacheFilename & "' as timeseries so not adding data from it to WDM.")
+                            If IO.File.Exists(lCacheFilename) Then
+                                lGDS = New atcTimeseriesGDS.atcTimeseriesGDS
+                                If Not lGDS.Open(lCacheFilename) Then
+                                    lGDS = Nothing
+                                    Logger.Dbg("Unable to open '" & lCacheFilename & "' as timeseries so not adding data from it to WDM.")
+                                End If
+                            Else
+                                'file does not exist, there was a problem (over water?)
+                                Logger.Dbg(lCacheFilename & "' does not exist so not adding data from it to WDM.")
                             End If
                         End If
                         If lGDS IsNot Nothing Then
@@ -467,7 +472,7 @@ Public Class NLDAS
                                     .SetValue("STANAM", "NLDAS Lat=" & .GetValue("Latitude") & " Long=" & .GetValue("Longitude"))
                                     .SetValue("COMPFG", 1)
                                 End With
-                                If lWDM.AddDataset(lInchesTimeseries, atcData.atcDataSource.EnumExistAction.ExistNoAction) Then
+                                If lWDM.AddDataSet(lInchesTimeseries, atcData.atcDataSource.EnumExistAction.ExistNoAction) Then
                                     'lWDMAddCount += 1
                                 Else
                                     Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
