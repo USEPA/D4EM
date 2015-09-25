@@ -1,12 +1,12 @@
 Source,Value,Units
-DairyCow,100800000000,CountPerAnimalPerDay
-BeefCow,104000000000,CountPerAnimalPerDay
+DairyCow,1.008E+11,CountPerAnimalPerDay
+BeefCow,1.04E+11,CountPerAnimalPerDay
 Hog,10800000000,CountPerAnimalPerDay
 Sheep,12000000000,CountPerAnimalPerDay
 Horse,420000000,CountPerAnimalPerDay
 Chicken,136000000,CountPerAnimalPerDay
 Turkey,93000000,CountPerAnimalPerDay
-Duck,2430000000,CountsPerAnimalPerDay
+Duck,2430000000,CountPerAnimalPerDay
 Goose,49000000000,CountPerAnimalPerDay
 Deer,500000000,CountPerAnimalPerDay
 Beaver,250000000,CountPerAnimalPerDay
