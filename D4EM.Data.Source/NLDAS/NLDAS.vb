@@ -3,7 +3,7 @@ Imports atcUtility
 Imports MapWinUtility
 Imports MapWinUtility.Strings
 Imports D4EM.Geo
- 
+
 Public Class NLDAS
 
     Public Class LayerSpecifications
@@ -12,6 +12,26 @@ Public Class NLDAS
         Public Shared GridSquares As New LayerSpecification(
             Tag:="NLDAS.GridSquares", Role:=D4EM.Data.LayerSpecification.Roles.OtherBoundary, Source:=GetType(NLDAS))
     End Class
+
+    'Parameters available (Short_Name is used to specify)
+    'PDS_IDs Short_Name Full_Name [Unit]
+    '63      ACPCPsfc   Convective precipitation hourly total [kg/m^2]
+    '61      APCPsfc    Precipitation hourly total [kg/m^2]
+    '118     BRTMPsfc   Surface brightness temperature from GOES-UMD Pinker [K]
+    '157     CAPEsfc    Convective Available Potential Energy [J/kg]
+    '205     DLWRFsfc   LW radiation flux downwards (surface) [W/m^2]
+    '204     DSWRFsfc   SW radiation flux downwards (surface) [W/m^2]
+    '101     PARsfc     PAR Photosynthetically Active Radiation from GOES-UMD Pinker [W/m^2]
+    '201     PEDASsfc   Precipitation hourly total from EDAS [kg/m^2]
+    '202     PRDARsfc   Precipitation hourly total from StageII [kg/m^2]
+    '1       PRESsfc    Surface pressure [Pa]
+    '206     RGOESsfc   SW radiation flux downwards (surface) from GOES-UMD Pinker [W/m^2]
+    '51      SPFH2m     2-m above ground Specific humidity [kg/kg]
+    '11      TMP2m      2-m above ground Temperature [K]
+    '33      UGRD10m    10-m above ground Zonal wind speed [m/s]
+    '34      VGRD10m    10-m above ground Meridional wind speed [m/s]
+
+    Public DefaultParameters() As String = {"APCPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "DLWRFsfc", "PEVAPsfc"}
 
     Private Const pDefaultStationsBaseFilename As String = "NLDAS_Grid"
     Private Const pDegreesPerGridCell As Double = 1 / 8
@@ -223,9 +243,9 @@ Public Class NLDAS
     ''' <param name="aLayerType">Which layer to make: GridPoints or GridSquares (defined in LayerSpecifications)</param>
     ''' <param name="aAllCells">List of cells to include in shapefile</param>
     ''' <returns>XML string describing shapefile added or error message</returns>
-    Public Shared Function MakeStationShapefile(ByVal aProject As Project, _
-                                                ByVal aSaveAs As String, _
-                                                ByVal aLayerType As LayerSpecification, _
+    Public Shared Function MakeStationShapefile(ByVal aProject As Project,
+                                                ByVal aSaveAs As String,
+                                                ByVal aLayerType As LayerSpecification,
                                                 ByVal aAllCells As Generic.List(Of NLDASGridCoords)) As String
         Dim lResult As String = ""
 
@@ -316,9 +336,11 @@ Public Class NLDAS
         End If
 
         Select Case aDataType.ToLower
-            Case "apcpsfc" : aDataType = "APCPsfc"
+            Case "apcpsfc"
+                aDataType = "APCPsfc"
+
             Case Else
-                Return "<error>Unsupported NLDAS data type '" & aDataType & "'</error>"
+                'Return "<error>Unsupported NLDAS data type '" & aDataType & "'</error>"
         End Select
 
         If aStartDate < pFirstAvailableDate Then aStartDate = pFirstAvailableDate
@@ -431,7 +453,6 @@ Public Class NLDAS
 
                     If Not IO.File.Exists(lCacheFilename) Then
                         Using lLevel As New ProgressLevel(True)
-
                             Dim lURL As String = "http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:" & aDataType
                             If aStartDate > pFirstAvailableDate Then
                                 lURL &= "&startDate=" & lStartDateString
@@ -440,9 +461,7 @@ Public Class NLDAS
                                 lURL &= "&endDate=" & lEndDateString
                             End If
                             lURL &= "&location=NLDAS:X" & lX & "-Y" & lY & "&type=asc2"
-
                             D4EM.Data.Download.DownloadURL(lURL, lCacheFilename)
-
                         End Using
                     End If
 
@@ -461,47 +480,55 @@ Public Class NLDAS
                         End If
                         If lGDS IsNot Nothing Then
                             For Each lTimeseries As atcData.atcTimeseries In lGDS.DataSets
-                                Dim lInchesTimeseries As atcTimeseries = lTimeseries / 25.4
-                                With lInchesTimeseries.Attributes
-                                    .SetValue("ID", lNextDestinationDSN)
-                                    lNextDestinationDSN += 10
-                                    .SetValue("Constituent", "PREC")
-                                    .SetValue("Description", "Hourly Precip in Inches")
-                                    .SetValue("Location", lCell.ToString())
-                                    .SetValue("Scenario", "NLDAS")
-                                    .SetValue("STANAM", "NLDAS Lat=" & .GetValue("Latitude") & " Long=" & .GetValue("Longitude"))
-                                    .SetValue("COMPFG", 1)
-                                End With
-                                If lWDM.AddDataSet(lInchesTimeseries, atcData.atcDataSource.EnumExistAction.ExistNoAction) Then
-                                    'lWDMAddCount += 1
+                                If aDataType = "APCPsfc" Then
+                                    Dim lInchesTimeseries As atcTimeseries = lTimeseries / 25.4
+                                    With lInchesTimeseries.Attributes
+                                        .SetValue("ID", lNextDestinationDSN)
+                                        lNextDestinationDSN += 10
+                                        .SetValue("Constituent", "PREC")
+                                        .SetValue("Description", "Hourly Precip in Inches")
+                                        .SetValue("Location", lCell.ToString())
+                                        .SetValue("Scenario", "NLDAS")
+                                        .SetValue("STANAM", "NLDAS Lat=" & .GetValue("Latitude") & " Long=" & .GetValue("Longitude"))
+                                        .SetValue("COMPFG", 1)
+                                    End With
+                                    If lWDM.AddDataSet(lInchesTimeseries, atcData.atcDataSource.EnumExistAction.ExistNoAction) Then
+                                        'lWDMAddCount += 1
+                                    Else
+                                        Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
+                                    End If
                                 Else
-                                    Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
+                                    lWDM.AddDataSet(lTimeseries, atcData.atcDataSource.EnumExistAction.ExistRenumber)
                                 End If
                             Next
                         End If
                     ElseIf Not aProject.CacheOnly Then
-                        Dim lProjectGDS As atcTimeseriesGDS.atcTimeseriesGDS = Nothing
-                        Dim lProjectGDS_Opened As Boolean = False
-                        If aProject.Region IsNot Nothing Then
-                            'TODO: better test for whether caller wants us to open this file and add to aProject.TimeseriesSources, or integrate aProject.TimeseriesSources with atcDataManager.DataSources
-                            lProjectGDS = New atcTimeseriesGDS.atcTimeseriesGDS
-                        End If
-                        If String.IsNullOrEmpty(lSaveIn) Then 'No destination to save in, add data directly from cache
-                            lResults &= "<add_data type='NASA NLDAS'>" & lCacheFilename & "</add_data>" & vbCrLf
-                            If lProjectGDS IsNot Nothing Then lProjectGDS_Opened = lProjectGDS.Open(lCacheFilename)
-                        Else
-                            Dim lSaveFileName As String = IO.Path.Combine(lSaveIn, IO.Path.GetFileName(lCacheFilename))
-                            If TryCopy(lCacheFilename, lSaveFileName) Then
-                                TryCopy(lCacheFilename & ".xml", lSaveFileName & ".xml")
-                                lResults &= "<add_data type='NASA NLDAS'>" & lSaveFileName & "</add_data>" & vbCrLf
-                                If lProjectGDS IsNot Nothing Then lProjectGDS_Opened = lProjectGDS.Open(lSaveFileName)
-                            Else 'Could not copy to destination, add data directly from cache
+                        If FileExists(lCacheFilename) Then
+                            Dim lProjectGDS As atcTimeseriesGDS.atcTimeseriesGDS = Nothing
+                            Dim lProjectGDS_Opened As Boolean = False
+                            If aProject.Region IsNot Nothing Then
+                                'TODO: better test for whether caller wants us to open this file and add to aProject.TimeseriesSources, or integrate aProject.TimeseriesSources with atcDataManager.DataSources
+                                lProjectGDS = New atcTimeseriesGDS.atcTimeseriesGDS
+                            End If
+                            If String.IsNullOrEmpty(lSaveIn) Then 'No destination to save in, add data directly from cache
                                 lResults &= "<add_data type='NASA NLDAS'>" & lCacheFilename & "</add_data>" & vbCrLf
                                 If lProjectGDS IsNot Nothing Then lProjectGDS_Opened = lProjectGDS.Open(lCacheFilename)
+                            Else
+                                Dim lSaveFileName As String = IO.Path.Combine(lSaveIn, IO.Path.GetFileName(lCacheFilename))
+                                If TryCopy(lCacheFilename, lSaveFileName) Then
+                                    TryCopy(lCacheFilename & ".xml", lSaveFileName & ".xml")
+                                    lResults &= "<add_data type='NASA NLDAS'>" & lSaveFileName & "</add_data>" & vbCrLf
+                                    If lProjectGDS IsNot Nothing Then lProjectGDS_Opened = lProjectGDS.Open(lSaveFileName)
+                                Else 'Could not copy to destination, add data directly from cache
+                                    lResults &= "<add_data type='NASA NLDAS'>" & lCacheFilename & "</add_data>" & vbCrLf
+                                    If lProjectGDS IsNot Nothing Then lProjectGDS_Opened = lProjectGDS.Open(lCacheFilename)
+                                End If
                             End If
-                        End If
-                        If lProjectGDS_Opened Then
-                            aProject.TimeseriesSources.Add(lProjectGDS)
+                            If lProjectGDS_Opened Then
+                                aProject.TimeseriesSources.Add(lProjectGDS)
+                            End If
+                        Else
+                            lResults = "<error>Failed to retrieve " & IO.Path.GetFileName(lCacheFilename) & "</error>"
                         End If
                     End If
 

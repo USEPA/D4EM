@@ -19,6 +19,9 @@ Public Class BASINS
             Public Shared tract1990 As New LayerSpecification(Name:="Census 1990 Tracts", FilePattern:="*_tr90.shp", Role:=Roles.OtherBoundary, IdFieldName:="NAME", Source:=GetType(BASINS))
             Public Shared tract2000 As New LayerSpecification(Name:="Census 2000 Tracts", FilePattern:="*_tr00.shp", Role:=Roles.OtherBoundary, IdFieldName:="NAME", Source:=GetType(BASINS))
             Public Shared zipcode2000 As New LayerSpecification(Name:="Census 2000 ZIP", FilePattern:="*_zt00.shp", Role:=Roles.ZIP, IdFieldName:="NAME", Source:=GetType(BASINS))
+            'Public Shared bg1990 As New LayerSpecification(Name:="Census 1990 Block Groups", FilePattern:="*_bg90.shp", Role:=Roles.OtherBoundary, IdFieldName:="NAME", Source:=GetType(BASINS))
+            'Public Shared bg2000 As New LayerSpecification(Name:="Census 2000 Block Groups", FilePattern:="*_bg00.shp", Role:=Roles.OtherBoundary, IdFieldName:="NAME", Source:=GetType(BASINS))
+            'Public Shared tigerc2002 As New LayerSpecification(Name:="Census 2002 Roads", FilePattern:="*_tgr_a.shp", Role:=Roles.Road, IdFieldName:="TLID", Source:=GetType(BASINS))
             'TODO: add other Census layers
         End Class
 
@@ -999,7 +1002,12 @@ Retry:
                 Else
                     Select Case IO.Path.GetExtension(lFileName).ToLower
                         Case ".shp", ".tif"
-                            Logger.Msg("No layer specification found for " & lFileName.Substring(lTempFolder.Length))
+                            If lFileName.Contains("census") Then
+                                'Skip adding the obsure census layers with no specification
+                                Logger.Dbg("No layer specification found for " & lFileName.Substring(lTempFolder.Length))
+                            Else
+                                Logger.Msg("No layer specification found for " & lFileName.Substring(lTempFolder.Length))
+                            End If
                     End Select
                 End If
             End If

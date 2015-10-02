@@ -209,7 +209,8 @@ NoMatch:
         g_Map.Projection = params.DesiredProjection
         SpecifyAndCreateNewProjectsWithLayerCollectionChanged(params)
         Me.Close()
-        'TODO: exit SDM Project Builder?
+        'Exit SDM Project Builder, leaving it open causes trouble
+        System.Windows.Forms.Application.Exit()
     End Sub
 
     Private Function IsRegionSelected() As Boolean

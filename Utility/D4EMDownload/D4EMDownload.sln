@@ -27,6 +27,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Data.MetCmp", "..\..\D
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EMDownload", "D4EMDownload.vbproj", "{06EC9ADF-CC8A-4394-A186-FAEAEFF2C4FB}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Model.HSPF", "..\..\D4EM.Model\HSPF\D4EM.Model.HSPF.vbproj", "{D84BAE9D-AE01-490A-856E-56DB6E846629}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +183,18 @@ Global
 		{06EC9ADF-CC8A-4394-A186-FAEAEFF2C4FB}.Release|x64.Build.0 = Release|Any CPU
 		{06EC9ADF-CC8A-4394-A186-FAEAEFF2C4FB}.Release|x86.ActiveCfg = Release|x86
 		{06EC9ADF-CC8A-4394-A186-FAEAEFF2C4FB}.Release|x86.Build.0 = Release|x86
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|x64.ActiveCfg = Debug|x64
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|x64.Build.0 = Debug|x64
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|x86.ActiveCfg = Debug|x86
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Debug|x86.Build.0 = Debug|x86
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|x64.ActiveCfg = Release|x64
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|x64.Build.0 = Release|x64
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|x86.ActiveCfg = Release|x86
+		{D84BAE9D-AE01-490A-856E-56DB6E846629}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

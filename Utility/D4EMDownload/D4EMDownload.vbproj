@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modMain.vb" />
+    <Compile Include="modNCDC.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -312,6 +313,10 @@
       <Project>{573a99fb-08de-4b28-8628-ac7089348d96}</Project>
       <Name>D4EM.Geo</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\D4EM.Model\HSPF\D4EM.Model.HSPF.vbproj">
+      <Project>{d84bae9d-ae01-490a-856e-56db6e846629}</Project>
+      <Name>D4EM.Model.HSPF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
