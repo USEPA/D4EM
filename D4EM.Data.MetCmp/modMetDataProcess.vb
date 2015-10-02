@@ -1497,6 +1497,12 @@ Public Module modMetDataProcess
 
     End Sub
 
+    ''' <summary>
+    ''' Read CSV files in aPath from NCDC or WDM, translate constituent name and units for HSPF, and return group of converted timeseries
+    ''' </summary>
+    ''' <param name="aPath">Look in this folder for met data files to read</param>
+    ''' <param name="aSource">Read from: 1 = NCDC .csv, 2 = WDM</param>
+    ''' <returns></returns>
     Public Function ReadData(ByVal aPath As String, ByVal aSource As Integer) As atcTimeseriesGroup
 
         Dim lRawDataGroup As New atcTimeseriesGroup

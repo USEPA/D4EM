@@ -50,10 +50,10 @@ Partial Class Storet
                                         lRegion, _
                                         lClip, _
                                         lGetEvenIfCached) Then
-                            lResult &= GetSTORET(lDataTypes, lStationIDs, _
-                                                 DotSpatial.Projections.ProjectionInfo.FromProj4String(lDesiredProjection), lCacheFolder, lSaveIn, _
-                                                 lRegion, _
-                                                 lClip, _
+                            lResult &= GetSTORET(lDataTypes, lStationIDs,
+                                                 Globals.FromProj4(lDesiredProjection), lCacheFolder, lSaveIn,
+                                                 lRegion,
+                                                 lClip,
                                                  lGetEvenIfCached)
                         End If
                     Case Else

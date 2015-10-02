@@ -91,7 +91,7 @@ Public Class SpatialOperations
                         TryDeleteGroup(aFromFilename, TifExtensions)
                     Else
                         Logger.Status("Merging grid " & IO.Path.GetFileNameWithoutExtension(aFromFilename))
-                        Logger.Dbg("Merging '" & aFromFilename & "' and existing" & vbCrLf & _
+                        Logger.Dbg("Merging '" & aFromFilename & "' and existing" & vbCrLf &
                                    "'" & aDestinationFilename & "'")
 
                         Dim lMergedFilename As String = IO.Path.ChangeExtension(aDestinationFilename, ".merged" & IO.Path.GetExtension(aDestinationFilename))
@@ -248,8 +248,8 @@ UnknownFileType:
     ''' <param name="destProjection">Desired new projection</param>
     ''' <returns>True to indicate success</returns>
     ''' <remarks>To project using proj4 strings, ProjectPoint(x, y, D4EM.Data.Globals.FromProj4(srcPrj4String), D4EM.Data.Globals.FromProj4(destPrj4String))</remarks>
-    Public Shared Function ProjectPoint(ByRef x As Double, ByRef y As Double, _
-                                        ByVal srcProjection As DotSpatial.Projections.ProjectionInfo, _
+    Public Shared Function ProjectPoint(ByRef x As Double, ByRef y As Double,
+                                        ByVal srcProjection As DotSpatial.Projections.ProjectionInfo,
                                         ByVal destProjection As DotSpatial.Projections.ProjectionInfo) As Boolean
         Dim xy As Double() = {x, y}
         DotSpatial.Projections.Reproject.ReprojectPoints(xy, Nothing, srcProjection, destProjection, 0, 1)
@@ -294,17 +294,17 @@ UnknownFileType:
         End If
     End Sub
 
-    Public Shared Sub ProjectAndClipGridLayers(ByVal aFolder As String, _
-                                               ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo, _
-                                               ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
+    Public Shared Sub ProjectAndClipGridLayers(ByVal aFolder As String,
+                                               ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo,
+                                               ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
                                                ByVal aClipRegion As Region)
         ProjectAndClipGridLayers(aFolder, aNativeProjection, aDesiredProjection, aClipRegion, "*.tif")
     End Sub
 
-    Public Shared Sub ProjectAndClipGridLayers(ByVal aFolder As String, _
-                                               ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo, _
-                                               ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
-                                               ByVal aClipRegion As Region, _
+    Public Shared Sub ProjectAndClipGridLayers(ByVal aFolder As String,
+                                               ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo,
+                                               ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                               ByVal aClipRegion As Region,
                                                ByVal aFilter As String)
         'Project geotiff layers
         Dim lAllFilesToProject As New Collections.Specialized.NameValueCollection
@@ -329,10 +329,10 @@ UnknownFileType:
         End If
     End Sub
 
-    Public Shared Sub ProjectAndClipGridLayer(ByRef aGridFilename As String, _
-                                              ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo, _
-                                              ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
-                                              ByVal aClipRegion As Region, _
+    Public Shared Sub ProjectAndClipGridLayer(ByRef aGridFilename As String,
+                                              ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo,
+                                              ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                              ByVal aClipRegion As Region,
                                               ByVal aClipFolder As String)
         Logger.Status("Processing " & IO.Path.GetFileName(aGridFilename), True)
 
@@ -356,6 +356,10 @@ UnknownFileType:
         Dim lProjectedProjectionFileName As String = IO.Path.ChangeExtension(lProjectedFilename, "prj")
         If IO.Path.GetExtension(aGridFilename).ToLower.Equals(".tif") AndAlso aNativeProjection.Equals(aDesiredProjection) Then
             TryCopyGroup(aGridFilename, lProjectedFilename, TifExtensions)
+            If Not IO.File.Exists(lProjectedProjectionFileName) OrElse IO.File.ReadAllText(IO.Path.ChangeExtension(lProjectedFilename, "prj")).Length = 0 Then
+                IO.File.WriteAllText(lProjectedProjectionFileName, aDesiredProjection.ToEsriString)
+            End If
+            IO.File.WriteAllText(IO.Path.ChangeExtension(lProjectedProjectionFileName, "proj4"), aDesiredProjection.ToProj4String)
         Else
 ProjectIt:
             If ProjectGrid(aNativeProjection, aDesiredProjection, aGridFilename, lProjectedFilename) Then
@@ -363,12 +367,22 @@ ProjectIt:
                 If Not IO.File.Exists(lProjectedProjectionFileName) OrElse IO.File.ReadAllText(IO.Path.ChangeExtension(lProjectedFilename, "prj")).Length = 0 Then
                     IO.File.WriteAllText(lProjectedProjectionFileName, aDesiredProjection.ToEsriString)
                 End If
+                IO.File.WriteAllText(IO.Path.ChangeExtension(lProjectedProjectionFileName, "proj4"), aDesiredProjection.ToProj4String)
             Else
                 'If Now.Subtract(lFirstTryTime).Seconds < 60 Then
                 '    System.Threading.Thread.Sleep(10000)
                 '    Logger.Status("Retrying grid projection " & aGridFilename.Substring(lFolderLength))
                 '    GoTo ProjectIt
                 'End If
+
+                'Since we could not reproject, copy unprojected file into place along with native projection
+                If IO.Path.GetExtension(aGridFilename).ToLower.Equals(".tif") Then
+                    TryCopyGroup(aGridFilename, lProjectedFilename, TifExtensions)
+                    IO.File.WriteAllText(lProjectedProjectionFileName, aNativeProjection.ToEsriString)
+                    IO.File.WriteAllText(IO.Path.ChangeExtension(lProjectedProjectionFileName, "proj4"), aNativeProjection.ToProj4String)
+                Else
+                    'TryCopy(aGridFilename, lProjectedFilename)
+                End If
             End If
         End If
 
@@ -396,12 +410,12 @@ ProjectIt:
     ''' <param name="aDesiredProjection">New projection desired for shape files</param>
     ''' <param name="aClipRegion">area to clip to before projecting, Nothing to not clip</param>
     ''' <param name="aClipFolder">temporary folder to clip into</param>
-    <CLSCompliant(False)> _
-    Public Shared Function ProjectAndClipShapeLayer(ByRef aShapeFileName As String, _
-                                                    ByVal aLayerSpecification As LayerSpecification, _
-                                                    ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo, _
-                                                    ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
-                                                    ByVal aClipRegion As Region, _
+    <CLSCompliant(False)>
+    Public Shared Function ProjectAndClipShapeLayer(ByRef aShapeFileName As String,
+                                                    ByVal aLayerSpecification As LayerSpecification,
+                                                    ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo,
+                                                    ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                                    ByVal aClipRegion As Region,
                                                     ByVal aClipFolder As String) As Layer
         Dim lShapeFile As New D4EM.Data.Layer(aShapeFileName, aLayerSpecification, False)
         Dim lUnClippedFilename As String = ""
@@ -457,10 +471,10 @@ ProjectIt:
     ''' <param name="aNativeProjection">Projection of shape files before calling</param>
     ''' <param name="aDesiredProjection">New projection desired for shape files</param>
     ''' <param name="aClipRegion">Area to clip to before projecting, Nothing if clipping is not needed</param>
-    Public Shared Function ProjectAndClipShapeLayers(ByVal aFolder As String, _
-                                                     ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo, _
-                                                     ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
-                                                     ByVal aClipRegion As Region, _
+    Public Shared Function ProjectAndClipShapeLayers(ByVal aFolder As String,
+                                                     ByVal aNativeProjection As DotSpatial.Projections.ProjectionInfo,
+                                                     ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                                     ByVal aClipRegion As Region,
                                                      ByVal aLayerSpecifications As Type) As Generic.List(Of Layer)
         Dim lLayers As New Generic.List(Of Layer)
         Dim lFolderLength As Integer = aFolder.TrimEnd(g_PathChar).Length + 1
@@ -521,101 +535,97 @@ ProjectIt:
 
         Globals.RepairAlbers(aNativeProjection)
         Globals.RepairAlbers(aDesiredProjection)
-        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(aProjectedFilename))
-        'If IO.Path.GetExtension(aLayerFilename).ToLower.Equals(".tif") AndAlso SameProjection(aNativeProjection, aDesiredProjection) Then
-        '    TryCopyGroup(IO.Path.GetFileNameWithoutExtension(aLayerFilename), IO.Path.GetFileNameWithoutExtension(aProjectedFilename), TifExtensions)
-        'Else
-        Dim lNumTries As Integer = 0
-        Dim lFirstTryTime As Date = Date.Now
-        Logger.Status("Projecting " & IO.Path.GetFileName(aLayerFilename))
-        System.Threading.Thread.Sleep(5000)
-ProjectIt:
-        'Dim lProjectFromFolder As String = NewTempDir("ProjectFrom")
-        'For Each lFilename As String In IO.Directory.GetFiles(IO.Path.GetDirectoryName(aLayerFilename))
-        '    If Not TryCopy(lFilename, IO.Path.Combine(lProjectFromFolder, IO.Path.GetFileName(lFilename))) Then
-        '        If Now.Subtract(lFirstTryTime).TotalSeconds > 120 Then
-        '            Throw New ApplicationException("CopyGrid Failed")
+        '        IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(aProjectedFilename))
+        '        'If IO.Path.GetExtension(aLayerFilename).ToLower.Equals(".tif") AndAlso SameProjection(aNativeProjection, aDesiredProjection) Then
+        '        '    TryCopyGroup(IO.Path.GetFileNameWithoutExtension(aLayerFilename), IO.Path.GetFileNameWithoutExtension(aProjectedFilename), TifExtensions)
+        '        'Else
+        '        Dim lNumTries As Integer = 0
+        '        Dim lFirstTryTime As Date = Date.Now
+        '        Logger.Status("Projecting " & IO.Path.GetFileName(aLayerFilename))
+        '        System.Threading.Thread.Sleep(5000)
+        'ProjectIt:
+        '        'Dim lProjectFromFolder As String = NewTempDir("ProjectFrom")
+        '        'For Each lFilename As String In IO.Directory.GetFiles(IO.Path.GetDirectoryName(aLayerFilename))
+        '        '    If Not TryCopy(lFilename, IO.Path.Combine(lProjectFromFolder, IO.Path.GetFileName(lFilename))) Then
+        '        '        If Now.Subtract(lFirstTryTime).TotalSeconds > 120 Then
+        '        '            Throw New ApplicationException("CopyGrid Failed")
+        '        '        Else
+        '        '            System.Threading.Thread.Sleep(10000)
+        '        '            Logger.Status("Retrying grid copy " & aLayerFilename)
+        '        '            GoTo ProjectIt
+        '        '        End If
+        '        '    End If
+        '        'Next
+        '        'aLayerFilename = IO.Path.Combine(lProjectFromFolder, IO.Path.GetFileName(aLayerFilename))
+
+        '        Dim lProjectToFolder As String = NewTempDir("Projecting")
+        '        Dim lProjectedFilename As String = IO.Path.Combine(lProjectToFolder, IO.Path.GetFileName(aProjectedFilename))
+        '        If ProjectGrid(aNativeProjection.ToProj4String, aDesiredProjection.ToProj4String, aLayerFilename, lProjectedFilename) Then
+        '            lReturn = True
+        '            TryCopyGroup(lProjectedFilename, IO.Path.GetDirectoryName(aProjectedFilename), TifExtensions)
+
+        '            Dim lProjectedProjectionFileName As String = IO.Path.ChangeExtension(aProjectedFilename, "prj")
+        '            If Not IO.File.Exists(lProjectedProjectionFileName) OrElse IO.File.ReadAllText(IO.Path.ChangeExtension(aProjectedFilename, "prj")).Length = 0 Then
+        '                IO.File.WriteAllText(lProjectedProjectionFileName, aDesiredProjection.ToEsriString)
+        '            End If
+        '            IO.File.WriteAllText(IO.Path.ChangeExtension(aProjectedFilename, "proj4"), aDesiredProjection.ToProj4String)
+        '            'TODO: move this metadata handling into ProjectGrid
+        '            Dim lMetadataFilename As String = aProjectedFilename & ".xml"
+        '            Dim lMetadata As New Metadata(lMetadataFilename)
+        '            lMetadata.AddProcessStep("Projected from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "'")
+        '            'TODO: lMetadata.SetBoundingBox(.Extents.xMin, .Extents.xMax, .Extents.yMax, .Extents.yMin)
+        '            lMetadata.Save()
         '        Else
-        '            System.Threading.Thread.Sleep(10000)
-        '            Logger.Status("Retrying grid copy " & aLayerFilename)
-        '            GoTo ProjectIt
+        '            lNumTries += 1
+        '            If lNumTries > 2 AndAlso Now.Subtract(lFirstTryTime).TotalSeconds > 240 Then
+        '                Throw New ApplicationException("ProjectGrid Failed, attempts=" & lNumTries)
+        '            Else
+        '                Logger.Status("Waiting for grid projection, attempt " & lNumTries & " for " & IO.Path.GetFileName(aLayerFilename), 1)
+        '                Dim lDelaySeconds As Integer = 8 + 2 * lNumTries
+        '                For lDelay As Integer = 1 To lDelaySeconds
+        '                    System.Threading.Thread.Sleep(1000)
+        '                    Logger.Progress(lDelay, lDelaySeconds)
+        '                Next
+        '                Logger.Status("Retrying projection " & aLayerFilename, 1)
+        '                GoTo ProjectIt
+        '            End If
         '        End If
-        '    End If
-        'Next
-        'aLayerFilename = IO.Path.Combine(lProjectFromFolder, IO.Path.GetFileName(aLayerFilename))
+        '        'End If
 
-        Dim lProjectToFolder As String = NewTempDir("Projecting")
-        Dim lProjectedFilename As String = IO.Path.Combine(lProjectToFolder, IO.Path.GetFileName(aProjectedFilename))
-        If ProjectGrid(aNativeProjection.ToProj4String, aDesiredProjection.ToProj4String, aLayerFilename, lProjectedFilename) Then
-            lReturn = True
-            TryCopyGroup(lProjectedFilename, IO.Path.GetDirectoryName(aProjectedFilename), TifExtensions)
+        '        'Logger.Status("Projecting " & aGridFilename.Substring(lFolderLength))
+        '        'Logger.Dbg("Projecting '" & aGridFilename & "' from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "' as '" & lProjectedFilename & "'")
+        '        'Using lLevel As New ProgressLevel(aIncrementProgressAfter, aProgressSameLevel)
+        '        '    Dim rst = DotSpatial.Data.Raster.Open(aLayerFilename)
+        '        '    If rst.Projection Is Nothing OrElse Not rst.Projection.IsValid Then
+        '        '        rst.Projection = aNativeProjection
+        '        '        If rst.Projection Is Nothing OrElse Not rst.Projection.IsValid Then 'no project information in layer or argument, assume USGS Albers
+        '        '            rst.Projection = Globals.AlbersProjection
+        '        '        End If
+        '        '    End If
 
-            Dim lProjectedProjectionFileName As String = IO.Path.ChangeExtension(aProjectedFilename, "prj")
-            If Not IO.File.Exists(lProjectedProjectionFileName) OrElse IO.File.ReadAllText(IO.Path.ChangeExtension(aProjectedFilename, "prj")).Length = 0 Then
-                IO.File.WriteAllText(lProjectedProjectionFileName, aDesiredProjection.ToEsriString)
-            End If
-            IO.File.WriteAllText(IO.Path.ChangeExtension(aProjectedFilename, "proj4"), aDesiredProjection.ToProj4String)
-            'TODO: move this metadata handling into ProjectGrid
-            Dim lMetadataFilename As String = aProjectedFilename & ".xml"
-            Dim lMetadata As New Metadata(lMetadataFilename)
-            lMetadata.AddProcessStep("Projected from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "'")
-            'TODO: lMetadata.SetBoundingBox(.Extents.xMin, .Extents.xMax, .Extents.yMax, .Extents.yMin)
-            lMetadata.Save()
-        Else
-            lNumTries += 1
-            If lNumTries > 2 AndAlso Now.Subtract(lFirstTryTime).TotalSeconds > 240 Then
-                Throw New ApplicationException("ProjectGrid Failed, attempts=" & lNumTries)
-            Else
-                Logger.Status("Waiting for grid projection, attempt " & lNumTries & " for " & IO.Path.GetFileName(aLayerFilename), 1)
-                Dim lDelaySeconds As Integer = 8 + 2 * lNumTries
-                For lDelay As Integer = 1 To lDelaySeconds
-                    System.Threading.Thread.Sleep(1000)
-                    Logger.Progress(lDelay, lDelaySeconds)
-                Next
-                Logger.Status("Retrying projection " & aLayerFilename, 1)
-                GoTo ProjectIt
-            End If
-        End If
-        'End If
+        '        '    Globals.RepairAlbers(rst.Projection)
+        '        '    Globals.RepairAlbers(aDesiredProjection)
+        '        '    If rst.Projection.Matches(aDesiredProjection) Then
+        '        '        rst.Copy(aProjectedFilename, True)
+        '        '        rst.Close()
+        '        '        lReturn = True
+        '        '    ElseIf rst.CanReproject Then
+        '        '        rst.Reproject(aDesiredProjection)
+        '        '        rst.Projection = aDesiredProjection 'TODO: move assigning new projection into Reproject
+        '        '        rst.SaveAs(aProjectedFilename)
+        '        '        rst.Close()
 
-        'Logger.Status("Projecting " & aGridFilename.Substring(lFolderLength))
-        'Logger.Dbg("Projecting '" & aGridFilename & "' from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "' as '" & lProjectedFilename & "'")
-        'Using lLevel As New ProgressLevel(aIncrementProgressAfter, aProgressSameLevel)
-        '    Dim rst = DotSpatial.Data.Raster.Open(aLayerFilename)
-        '    If rst.Projection Is Nothing OrElse Not rst.Projection.IsValid Then
-        '        rst.Projection = aNativeProjection
-        '        If rst.Projection Is Nothing OrElse Not rst.Projection.IsValid Then 'no project information in layer or argument, assume USGS Albers
-        '            rst.Projection = Globals.AlbersProjection
-        '        End If
-        '    End If
-
-        '    Globals.RepairAlbers(rst.Projection)
-        '    Globals.RepairAlbers(aDesiredProjection)
-        '    If rst.Projection.Matches(aDesiredProjection) Then
-        '        rst.Copy(aProjectedFilename, True)
-        '        rst.Close()
-        '        lReturn = True
-        '    ElseIf rst.CanReproject Then
-        '        rst.Reproject(aDesiredProjection)
-        '        rst.Projection = aDesiredProjection 'TODO: move assigning new projection into Reproject
-        '        rst.SaveAs(aProjectedFilename)
-        '        rst.Close()
-
-        '        'TODO: move metadata handling into Reproject
-        '        Dim lMetadataFilename As String = aProjectedFilename & ".xml"
-        '        Dim lMetadata As New Metadata(lMetadataFilename)
-        '        lMetadata.AddProcessStep("Projected from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "'")
-        '        'TODO: lMetadata.SetBoundingBox(.Extents.xMin, .Extents.xMax, .Extents.yMax, .Extents.yMin)
-        '        lMetadata.Save()
-        '        lReturn = True
-        '    End If
-        'End Using
+        '        '        'TODO: move metadata handling into Reproject
+        '        '        Dim lMetadataFilename As String = aProjectedFilename & ".xml"
+        '        '        Dim lMetadata As New Metadata(lMetadataFilename)
+        '        '        lMetadata.AddProcessStep("Projected from '" & aNativeProjection.ToProj4String & "' to '" & aDesiredProjection.ToProj4String & "'")
+        '        '        'TODO: lMetadata.SetBoundingBox(.Extents.xMin, .Extents.xMax, .Extents.yMax, .Extents.yMin)
+        '        '        lMetadata.Save()
+        '        '        lReturn = True
+        '        '    End If
+        '        'End Using
         If Not lReturn Then
-            Logger.Dbg("Failed to project " & aLayerFilename)
-            Dim lPrjFileName As String = IO.Path.ChangeExtension(aLayerFilename, "prj")
-            IO.File.WriteAllText(lPrjFileName, aNativeProjection.ToEsriString)
-            lPrjFileName = IO.Path.ChangeExtension(aLayerFilename, "proj4")
-            IO.File.WriteAllText(lPrjFileName, aNativeProjection.ToProj4String)
+            Logger.Dbg("Did not project " & aLayerFilename)
         End If
 
         Return lReturn
@@ -624,12 +634,12 @@ ProjectIt:
     ''' <summary>
     ''' Project a grid using a new progress level
     ''' </summary>
-    Private Shared Function ProjectGrid(ByVal aNativeProjection As String, _
-                                       ByVal aDesiredProjection As String, _
-                                       ByVal aLayerFilename As String, _
-                                       ByVal aProjectedFilename As String, _
-                              Optional ByVal aTrimResult As Boolean = False, _
-                              Optional ByVal aIncrementProgressAfter As Boolean = False, _
+    Private Shared Function ProjectGrid(ByVal aNativeProjection As String,
+                                       ByVal aDesiredProjection As String,
+                                       ByVal aLayerFilename As String,
+                                       ByVal aProjectedFilename As String,
+                              Optional ByVal aTrimResult As Boolean = False,
+                              Optional ByVal aIncrementProgressAfter As Boolean = False,
                               Optional ByVal aProgressSameLevel As Boolean = False) As Boolean
         Using lLevel As New ProgressLevel(aIncrementProgressAfter, aProgressSameLevel)
             Try
@@ -668,9 +678,9 @@ ProjectIt:
         End Using
     End Function
 
-    Public Shared Sub ProjectImage(ByVal aCurrentProjection As String, ByVal aDesiredProjection As String, _
-                                   ByVal aSourceFilename As String, ByVal aDestinationFilename As String, _
-                          Optional ByVal aIncrementProgressAfter As Boolean = False, _
+    Public Shared Sub ProjectImage(ByVal aCurrentProjection As String, ByVal aDesiredProjection As String,
+                                   ByVal aSourceFilename As String, ByVal aDestinationFilename As String,
+                          Optional ByVal aIncrementProgressAfter As Boolean = False,
                           Optional ByVal aProgressSameLevel As Boolean = False)
         Throw New NotImplementedException("SpatialOperations.ProjectImage not yet implemented")
         'TODO: translate the following code to DotSpatial (but no hurry since we are not using this method currently)

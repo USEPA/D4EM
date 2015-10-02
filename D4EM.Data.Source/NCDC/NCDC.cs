@@ -217,6 +217,87 @@ namespace D4EM.Data.Source
             return "<error>" + result + "</error>";
         }
 
+        /// <summary>
+        /// Get data from the given station
+        /// </summary>
+        /// <param name="aProject">project to add data to</param>
+        /// <param name="aStationId">NCDC station to retrieve from</param>
+        /// <param name="variableIds">NCDC data types to retrieve such as AA1, TMP, WND, DEW, GF1</param>
+        /// <param name="start">Starting data of data to retrieve</param>
+        /// <param name="end">Ending data of data to retrieve</param>
+        /// <param name="numSites">Number of stations to get data for</param>
+        /// <returns>XML describing success or error</returns>
+        /// <remarks>Data is saved in "met" folder within aProject.ProjectFolder (code to read data and add to aProject.TimeseriesSources commented out)</remarks>
+        static public string GetDataFromStation(Project aProject, String aStationId, List<string> variableIds, DateTime start, DateTime end)
+        {
+            string lMetDataDir = System.IO.Path.Combine(aProject.ProjectFolder, "met");
+            System.IO.Directory.CreateDirectory(lMetDataDir);
+            string lCacheDir = System.IO.Path.Combine(aProject.CacheFolder, "NCDC");
+            System.IO.Directory.CreateDirectory(lCacheDir);
+
+            string result = "";
+            var lCacheFileNames = new List<string>();
+            foreach (string lVariableId in variableIds)
+            {
+                try
+                {
+                    string lCacheFileName = System.IO.Path.Combine(lCacheDir,
+                            NCDC.LayerSpecifications.ISH.Tag + '.'
+                            + aStationId + '.'
+                            + lVariableId + '.'
+                            + start.ToString("yyyy-MM-dd") + "to"
+                            + end.ToString("yyyy-MM-dd") + ".csv");
+
+                    FileInfo f = new FileInfo(lCacheFileName);
+                    if (f.Exists && f.Length > 100)
+                    {
+                        lCacheFileNames.Add(lCacheFileName);
+                    }
+                    else
+                    {
+                        string gotValues = GetValues(OutputTypes.csv, NCDC.LayerSpecifications.ISH, aStationId, lVariableId, start, end);
+                        if ((gotValues.Length > 100) && !gotValues.StartsWith("<"))
+                        {
+                            File.WriteAllText(lCacheFileName, gotValues);
+                            lCacheFileNames.Add(lCacheFileName);
+                        }
+                        else
+                        {
+                            string lShortMsg = "Did not retrieve data for " + lVariableId + " at " + aStationId + " from NCDC: '" + gotValues + "'";
+                            MapWinUtility.Logger.Dbg(lShortMsg);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MapWinUtility.Logger.Dbg("Exception in NCDC.GetDataFromStation: " + ex.ToString());
+                    continue;
+                }
+                //                result += " " + aStationId;
+                foreach (string lCacheFileName in lCacheFileNames)
+                {   // open and add met data to project
+                    string lDataFileName = lCacheFileName.Replace(lCacheDir, lMetDataDir);
+                    MapWinUtility.modFile.TryCopy(lCacheFileName, lDataFileName);
+                }
+                return "<success>" + result + "</success>";
+            }           
+            return "<error>" + result + "</error>";
+        }
+
+        static public bool GetAllSitesCSV(string aFileName, LayerSpecification datasetID)
+        {
+            if (File.Exists(aFileName))
+            {
+                return true;
+            }
+            else
+            { 
+                Directory.CreateDirectory(Path.GetDirectoryName(aFileName));
+                MapWinUtility.Logger.Status("Downloading list of NCDC sites");
+                return Download.DownloadURL(URL(OutputTypes.csv, "sites", datasetID.Tag), aFileName);
+            }
+        }
+
         static private atcUtility.atcCollection AllSitesSortedByDistanceFromCenterOfProject(Project aProject, LayerSpecification datasetID) 
         {
             double north = 0; double south = 0; double east = 0; double west = 0;
@@ -224,34 +305,32 @@ namespace D4EM.Data.Source
 
             string lCachefolder = Path.Combine(aProject.CacheFolder, "NCDC");
             string lAllSitesCSVcache = Path.Combine(lCachefolder, "All_" + datasetID.Tag + ".csv");
-            if (!File.Exists(lAllSitesCSVcache))
+            if (GetAllSitesCSV(lAllSitesCSVcache, datasetID))
             {
-                Directory.CreateDirectory(lCachefolder);
-                MapWinUtility.Logger.Status("Downloading list of NCDC sites");
-                Download.DownloadURL(URL(OutputTypes.csv, "sites", datasetID.Tag), lAllSitesCSVcache);
-            }
-            string[] lSiteRecord;
-            double lCenterLatitude = (north + south) / 2;
-            double lCenterLonitude = (east + west) / 2;
-            double lSiteLatitude;
-            double lSiteLonitude;
-            var lAllSites = new atcUtility.atcCollection();// SortedList<double, string>();
-            MapWinUtility.Logger.Status("Reading list of NCDC sites");
-            foreach (string lSiteCSV in atcUtility.modFile.LinesInFile(lAllSitesCSVcache))
-            {
-                lSiteRecord = lSiteCSV.Split(',');
-                if (double.TryParse(lSiteRecord[4], out lSiteLatitude) 
-                    && double.TryParse(lSiteRecord[5], out lSiteLonitude))
-                    //&& lSiteLatitude >= west && lSiteLatitude <= east&& lSiteLonitude >= south && lSiteLonitude <= north //Limiting sites to those within the region means many projects get no sites
+                string[] lSiteRecord;
+                double lCenterLatitude = (north + south) / 2;
+                double lCenterLonitude = (east + west) / 2;
+                double lSiteLatitude;
+                double lSiteLonitude;
+                var lAllSites = new atcUtility.atcCollection();// SortedList<double, string>();
+                MapWinUtility.Logger.Status("Reading list of NCDC sites");
+                foreach (string lSiteCSV in atcUtility.modFile.LinesInFile(lAllSitesCSVcache))
                 {
-                    //TODO: compute distance using aProject.DesiredProjection instead of lat/long
-                    lAllSites.Add(lSiteCSV, Math.Pow(lSiteLatitude - lCenterLatitude, 2) + Math.Pow(lSiteLonitude - lCenterLonitude, 2));
+                    lSiteRecord = lSiteCSV.Split(',');
+                    if (double.TryParse(lSiteRecord[4], out lSiteLatitude)
+                        && double.TryParse(lSiteRecord[5], out lSiteLonitude))
+                    //&& lSiteLatitude >= west && lSiteLatitude <= east&& lSiteLonitude >= south && lSiteLonitude <= north //Limiting sites to those within the region means many projects get no sites
+                    {
+                        //TODO: compute distance using aProject.DesiredProjection instead of lat/long
+                        lAllSites.Add(lSiteCSV, Math.Pow(lSiteLatitude - lCenterLatitude, 2) + Math.Pow(lSiteLonitude - lCenterLonitude, 2));
+                    }
                 }
+                MapWinUtility.Logger.Status("Sorting list of NCDC sites by distance");
+                lAllSites.SortByValue();
+                MapWinUtility.Logger.Status("Total of " + lAllSites.Count + " NCDC sites");
+                return lAllSites;
             }
-            MapWinUtility.Logger.Status("Sorting list of NCDC sites by distance");
-            lAllSites.SortByValue();
-            MapWinUtility.Logger.Status("Total of " + lAllSites.Count + " NCDC sites");
-            return lAllSites;
+            throw new ApplicationException("Could not find sites");
         }
 
         /// <summary>

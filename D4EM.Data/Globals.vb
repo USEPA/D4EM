@@ -32,23 +32,33 @@ Public Class Globals
 
     Public Shared Sub RepairAlbers(ByRef aProjection As DotSpatial.Projections.ProjectionInfo)
         If aProjection IsNot DotSpatial.Projections.KnownCoordinateSystems.Projected.NorthAmerica.USAContiguousAlbersEqualAreaConicUSGS Then
-            Dim lProj4 As String = aProjection.ToProj4String.Trim.ToLower
-            Select Case lProj4
-                Case "+proj=aea +ellps=grs80 +lon_0=-96 +lat_0=23.0 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=nad83 +units=m",
-                     "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=grs80 +datum=nad83 +units=m +no_defs",
-                     "+x_0=0 +y_0=0 +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +proj=aea +datum=nad83 +no_defs",
-                     "+x_0=0 +y_0=0 +lat_0=23 +lat_1=29.5 +lat_2=45.5 +lonc=-96 +proj=aea +a=6378137 +b=6356752.31414036 +no_defs",
-                     "+x_0=0 +y_0=0 +lat_0=0 +lat_1=29.5 +lat_2=45.5 +lonc=0 +proj=aea +datum=nad83 +no_defs",
-                     "+proj=aea +datum=nad83"
-                    Logger.Dbg("Repairing Albers Projection from " & aProjection.ToProj4String)
-                    aProjection = DotSpatial.Projections.KnownCoordinateSystems.Projected.NorthAmerica.USAContiguousAlbersEqualAreaConicUSGS
-                Case Else
-                    'Logger.Dbg("Non-Albers Projection " & lProj4)
-            End Select
+            Dim lProj4 As String = aProjection.ToProj4String
+            If MatchesAlbersUSGS(lProj4) Then
+                Logger.Dbg("Repairing Albers Projection from " & lProj4)
+                aProjection = DotSpatial.Projections.KnownCoordinateSystems.Projected.NorthAmerica.USAContiguousAlbersEqualAreaConicUSGS
+            End If
         End If
     End Sub
 
+    Private Shared Function MatchesAlbersUSGS(aProj4 As String) As Boolean
+        Select Case aProj4.Trim().ToLowerInvariant()
+            Case "+proj=aea +ellps=grs80 +lon_0=-96 +lat_0=23.0 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=nad83 +units=m",
+                 "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=grs80 +datum=nad83 +units=m +no_defs",
+                 "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=grs80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+                 "+x_0=0 +y_0=0 +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +proj=aea +datum=nad83 +no_defs",
+                 "+x_0=0 +y_0=0 +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +proj=aea +towgs84=0,0,0 +ellps=grs80 +no_defs",
+                 "+x_0=0 +y_0=0 +lat_0=23 +lat_1=29.5 +lat_2=45.5 +lonc=-96 +proj=aea +a=6378137 +b=6356752.31414036 +no_defs",
+                 "+x_0=0 +y_0=0 +lat_0=0 +lat_1=29.5 +lat_2=45.5 +lonc=0 +proj=aea +datum=nad83 +no_defs",
+                 "+proj=aea +datum=nad83"
+                Return True
+        End Select
+        Return False
+    End Function
+
     Public Shared Function FromProj4(ByVal aProj4String As String) As DotSpatial.Projections.ProjectionInfo
+        If MatchesAlbersUSGS(aProj4String) Then
+            Return AlbersProjection()
+        End If
         Dim lProjection = DotSpatial.Projections.ProjectionInfo.FromProj4String(aProj4String)
         RepairAlbers(lProjection)
         Return lProjection

@@ -61,11 +61,11 @@ Partial Class NHDPlus
                                         lGetEvenIfCached) Then
 
                             For Each lHUC8 As String In lHUC8s
-                                Dim lTempD4EMProject = New D4EM.Data.Project(DotSpatial.Projections.ProjectionInfo.FromProj4String(lDesiredProjection),
-                                                                            lCacheFolder, lSaveIn, _
-                                                                            lRegion, _
-                                                                            lClip, _
-                                                                            lMerge, _
+                                Dim lTempD4EMProject = New D4EM.Data.Project(Globals.FromProj4(lDesiredProjection),
+                                                                            lCacheFolder, lSaveIn,
+                                                                            lRegion,
+                                                                            lClip,
+                                                                            lMerge,
                                                                             lGetEvenIfCached)
                                 lResult &= GetNHDPlus(lTempD4EMProject, _
                                                       "NHDPlus", _

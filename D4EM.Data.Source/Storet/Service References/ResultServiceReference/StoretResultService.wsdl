@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://storetresultservice.storet.epa.gov/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="StoretResultService" targetNamespace="http://storetresultservice.storet.epa.gov/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types />
+  <message name="getResults">
+    <part name="OrganizationId" type="xsd:string" />
+    <part name="MonitoringLocationId" type="xsd:string" />
+    <part name="MonitoringLocationType" type="xsd:string" />
+    <part name="MinimumActivityStartDate" type="xsd:string" />
+    <part name="MaximumActivityStartDate" type="xsd:string" />
+    <part name="MinimumLatitude" type="xsd:string" />
+    <part name="MaximumLatitude" type="xsd:string" />
+    <part name="MinimumLongitude" type="xsd:string" />
+    <part name="MaximumLongitude" type="xsd:string" />
+    <part name="CharacteristicType" type="xsd:string" />
+    <part name="CharacteristicName" type="xsd:string" />
+    <part name="ResultType" type="xsd:string" />
+  </message>
+  <message name="getResultsResponse">
+    <part name="return" type="xsd:string" />
+  </message>
+  <message name="getResultCount">
+    <part name="OrganizationId" type="xsd:string" />
+    <part name="MonitoringLocationId" type="xsd:string" />
+    <part name="MonitoringLocationType" type="xsd:string" />
+    <part name="MinimumActivityStartDate" type="xsd:string" />
+    <part name="MaximumActivityStartDate" type="xsd:string" />
+    <part name="MinimumLatitude" type="xsd:string" />
+    <part name="MaximumLatitude" type="xsd:string" />
+    <part name="MinimumLongitude" type="xsd:string" />
+    <part name="MaximumLongitude" type="xsd:string" />
+    <part name="CharacteristicType" type="xsd:string" />
+    <part name="CharacteristicName" type="xsd:string" />
+    <part name="ResultType" type="xsd:string" />
+  </message>
+  <message name="getResultCountResponse">
+    <part name="return" type="xsd:int" />
+  </message>
+  <message name="getActivityCount">
+    <part name="OrganizationId" type="xsd:string" />
+    <part name="ActivityId" type="xsd:string" />
+    <part name="ActivityType" type="xsd:string" />
+    <part name="MonitoringLocationId" type="xsd:string" />
+    <part name="MonitoringLocationType" type="xsd:string" />
+    <part name="ProjectId" type="xsd:string" />
+    <part name="MinimumActivityStartDate" type="xsd:string" />
+    <part name="MaximumActivityStartDate" type="xsd:string" />
+    <part name="CharacteristicType" type="xsd:string" />
+    <part name="CharacteristicName" type="xsd:string" />
+  </message>
+  <message name="getActivityCountResponse">
+    <part name="return" type="xsd:int" />
+  </message>
+  <portType name="StoretResultService">
+    <operation name="getResults" parameterOrder="OrganizationId MonitoringLocationId MonitoringLocationType MinimumActivityStartDate MaximumActivityStartDate MinimumLatitude MaximumLatitude MinimumLongitude MaximumLongitude CharacteristicType CharacteristicName ResultType">
+      <input wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getResultsRequest" message="tns:getResults" />
+      <output wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getResultsResponse" message="tns:getResultsResponse" />
+    </operation>
+    <operation name="getResultCount" parameterOrder="OrganizationId MonitoringLocationId MonitoringLocationType MinimumActivityStartDate MaximumActivityStartDate MinimumLatitude MaximumLatitude MinimumLongitude MaximumLongitude CharacteristicType CharacteristicName ResultType">
+      <input wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getResultCountRequest" message="tns:getResultCount" />
+      <output wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getResultCountResponse" message="tns:getResultCountResponse" />
+    </operation>
+    <operation name="getActivityCount" parameterOrder="OrganizationId ActivityId ActivityType MonitoringLocationId MonitoringLocationType ProjectId MinimumActivityStartDate MaximumActivityStartDate CharacteristicType CharacteristicName">
+      <input wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getActivityCountRequest" message="tns:getActivityCount" />
+      <output wsam:Action="http://storetresultservice.storet.epa.gov/StoretResultService/getActivityCountResponse" message="tns:getActivityCountResponse" />
+    </operation>
+  </portType>
+  <binding name="StoretResultServicePortBinding" type="tns:StoretResultService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <operation name="getResults">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </output>
+    </operation>
+    <operation name="getResultCount">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </output>
+    </operation>
+    <operation name="getActivityCount">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://storetresultservice.storet.epa.gov/" />
+      </output>
+    </operation>
+  </binding>
+  <service name="StoretResultService">
+    <port name="StoretResultServicePort" binding="tns:StoretResultServicePortBinding">
+      <soap:address location="http://ofmpub.epa.gov:80/STORETwebservices/StoretResultService/StoretResultService" />
+    </port>
+  </service>
+</definitions>

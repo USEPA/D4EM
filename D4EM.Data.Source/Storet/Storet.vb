@@ -69,7 +69,7 @@ Public Class Storet
             lStationsText = IO.File.ReadAllText(lCacheStations)
         Else
             Logger.Status("Retrieving " & pName & " stations", True)
-            Dim lStationService As New StationService.StationServiceClient
+            Dim lStationService As New StationServiceReference.StationServiceClient
             lStationsText = lStationService.getStationsForMap(lSouth, lNorth, lWest, lEast)
             SaveFileString(lCacheStations, lStationsText)
             Dim lMetadata As New Metadata(lCacheStations & ".xml")
@@ -190,7 +190,7 @@ Public Class Storet
         Else
             Dim lStationsDBF As New atcTableDBF
             If lStationsDBF.OpenFile(IO.Path.Combine(aSaveIn, pName & ".dbf")) Then
-                Dim lResultService As New StoretResultService.StoretResultServiceClient
+                Dim lResultService As New ResultServiceReference.StoretResultServiceClient
                 Dim lOrgIdfield As Integer = lStationsDBF.FieldNumber("OrgId")
                 Dim lLocIdfield As Integer = lStationsDBF.FieldNumber("LocId")
                 Dim lStationIDfield As Integer = lStationsDBF.FieldNumber("LocId")

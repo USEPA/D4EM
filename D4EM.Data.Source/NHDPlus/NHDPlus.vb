@@ -20,10 +20,12 @@ Public Class NHDPlus
                 Name:="NHDPlus Waterbody", FilePattern:="nhdwaterbody.shp", Tag:="nhdwaterbody", Role:=Roles.Hydrography, IdFieldName:="COMID", Source:=GetType(NHDPlus))
         End Class
         Public Class HydrologicUnits
+            Public Shared SubregionPolygons As New LayerSpecification(
+                Name:="NHDPlus Subregion", FilePattern:="subregion.shp", Tag:="subregion", Role:=Roles.SubBasin, Source:=Reflection.MethodInfo.GetCurrentMethod.DeclaringType)
             Public Shared RegionPolygons As New LayerSpecification(
                 Name:="NHDPlus Region", FilePattern:="region.shp", Tag:="region", Role:=Roles.SubBasin, Source:=Reflection.MethodInfo.GetCurrentMethod.DeclaringType)
             Public Shared SubBasinPolygons As New LayerSpecification(
-                Name:="NHDPlus Subbasin", FilePattern:="subbasin.shp", Tag:="subbasin", Role:=Roles.SubBasin, Source:=GetType(NHDPlus))
+                Name:="NHDPlus HUC-8", FilePattern:="subbasin.shp", Tag:="subbasin", Role:=Roles.SubBasin, Source:=GetType(NHDPlus))
             Public Shared SubWatershedPolygons As New LayerSpecification(
                 Name:="NHDPlus Subwatershed", FilePattern:="subwatershed.shp", Tag:="subwatershed", Role:=Roles.SubBasin, Source:=GetType(NHDPlus))
             Public Shared WatershedPolygons As New LayerSpecification(
@@ -127,7 +129,7 @@ Retry:
                     Else
                         Logger.Msg(lZipFilename & vbCrLf _
                             & IO.File.GetLastWriteTime(lZipFilename) & vbCrLf _
-                            & Format(FileLen(lZipFilename), "#,##0") & " bytes" & vbCrLf, _
+                            & Format(FileLen(lZipFilename), "#,##0") & " bytes" & vbCrLf,
                             "Unable to Delete Corrupted NHDPlus download")
                     End If
                 Else
@@ -159,10 +161,10 @@ Retry:
                         lESRIgridFolders.Add(IO.Path.GetDirectoryName(lSourceGrid) & IO.Path.DirectorySeparatorChar)
                         If TagInTypes(IO.Path.GetFileName(IO.Path.GetDirectoryName(lSourceGrid)).ToLower, aDataTypes) Then
                             'Dim lSavedFilename As String = 
-                            ClipProjectGrid(aProject.DesiredProjection, _
-                                            IO.Path.GetDirectoryName(lSourceGrid), _
-                                            IO.Path.GetFileName(lSourceGrid), _
-                                            lTempHUC8folder, _
+                            ClipProjectGrid(aProject.DesiredProjection,
+                                            IO.Path.GetDirectoryName(lSourceGrid),
+                                            IO.Path.GetFileName(lSourceGrid),
+                                            lTempHUC8folder,
                                             lClipRegion)
                             'If IO.File.Exists(lSavedFilename) Then
                             '    'Logger.Status("Clipped and projected " & IO.Path.GetFileName(lSourceGrid))
@@ -190,14 +192,12 @@ Retry:
                     End If
                 Next
 
-                'For Each lShapeFilename As String In IO.Directory.GetFiles(lTempFolder, "*.shp")
-                '    Dim lLayerSpecfication As LayerSpecification = LayerSpecification.FromFilename(lShapeFilename, GetType(NHDPlus.LayerSpecifications))
-                '    If lLayerSpecfication IsNot Nothing Then
-                '        Dim lLayer As New Layer(lShapeFilename, lLayerSpecfication, False)
-                '        aProject.Layers.Add(lLayer)
-                '        Layer.CopyProcStepsFromCachedFile(lZipFilename, lShapeFilename)
-                '    End If
-                'Next
+                'Discard empty shape files (e.g. region, subregion, subwatershed, watershed)
+                For Each lShapeFilename As String In IO.Directory.GetFiles(lTempFolder, "*.shp", IO.SearchOption.AllDirectories)
+                    If FileLen(lShapeFilename) < 101 Then
+                        TryDeleteShapefile(lShapeFilename)
+                    End If
+                Next
 
                 Logger.Status("Clipping and projecting NHDPlus shape layers")
                 Dim lLayers As Generic.List(Of Layer) =
@@ -391,7 +391,7 @@ Retry:
                     Else
                         Logger.Msg(lZipFilename & vbCrLf _
                             & IO.File.GetLastWriteTime(lZipFilename) & vbCrLf _
-                            & Format(FileLen(lZipFilename), "#,##0") & " bytes" & vbCrLf, _
+                            & Format(FileLen(lZipFilename), "#,##0") & " bytes" & vbCrLf,
                             "Unable to Delete Corrupted NHDPlus download")
                     End If
                 Else
@@ -422,10 +422,10 @@ Retry:
                         lESRIgridFolders.Add(IO.Path.GetDirectoryName(lSourceGrid) & IO.Path.DirectorySeparatorChar)
                         If TagInTypes(IO.Path.GetFileName(IO.Path.GetDirectoryName(lSourceGrid)).ToLower, aDataTypes) Then
                             'Dim lSavedFilename As String = 
-                            ClipProjectGrid(desiredProjection, _
-                                            IO.Path.GetDirectoryName(lSourceGrid), _
-                                            IO.Path.GetFileName(lSourceGrid), _
-                                            lTempHUC8folder, _
+                            ClipProjectGrid(desiredProjection,
+                                            IO.Path.GetDirectoryName(lSourceGrid),
+                                            IO.Path.GetFileName(lSourceGrid),
+                                            lTempHUC8folder,
                                             lClipRegion)
                             'If IO.File.Exists(lSavedFilename) Then
                             '    'Logger.Status("Clipped and projected " & IO.Path.GetFileName(lSourceGrid))
@@ -575,8 +575,8 @@ Retry:
     ''' <param name="aCacheFilename">File name to test</param>
     ''' <param name="aDataTypes">List of data types to include, Nothing = all data types</param>
     ''' <param name="aESRIgridFolders">List of grid folders to skip contents of</param>
-    Private Shared Function ShouldMoveNonGrid(ByVal aCacheFilename As String, _
-                                              ByVal aESRIgridFolders As ArrayList, _
+    Private Shared Function ShouldMoveNonGrid(ByVal aCacheFilename As String,
+                                              ByVal aESRIgridFolders As ArrayList,
                                               ByVal aDataTypes As IEnumerable(Of LayerSpecification)) As Boolean
 
         If aCacheFilename.ToLower.EndsWith(".dbf") Then
@@ -617,9 +617,9 @@ Retry:
     ''' <param name="aBaseFieldName">Name of field to match in Base</param>
     ''' <param name="aAddFieldName">Name of field to match in Add, defaults to aBaseFieldName</param>
     ''' <remarks></remarks>
-    Private Shared Sub JoinAndSaveDbf(ByVal aBaseFileName As String, _
-                                      ByVal aAddFileName As String, _
-                                      ByVal aBaseFieldName As String, _
+    Private Shared Sub JoinAndSaveDbf(ByVal aBaseFileName As String,
+                                      ByVal aAddFileName As String,
+                                      ByVal aBaseFieldName As String,
                              Optional ByVal aAddFieldName As String = "")
         Logger.Status("Merging Value-Added Attributes to " & IO.Path.GetFileName(aBaseFileName) & " from " & IO.Path.GetFileName(aAddFileName))
         If Not IO.File.Exists(aBaseFileName) Then
@@ -724,10 +724,10 @@ Retry:
         End If
     End Sub
 
-    Private Shared Function ClipProjectGrid(ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo, _
-                                            ByVal aSourceDir As String, _
-                                            ByVal aBaseName As String, _
-                                            ByVal aDestDir As String, _
+    Private Shared Function ClipProjectGrid(ByVal aDesiredProjection As DotSpatial.Projections.ProjectionInfo,
+                                            ByVal aSourceDir As String,
+                                            ByVal aBaseName As String,
+                                            ByVal aDestDir As String,
                                             ByVal aClipRegion As Region) As String
 
         Dim lSourceFilename As String = IO.Path.Combine(aSourceDir, aBaseName)
@@ -776,13 +776,27 @@ Retry:
         End If
 
         If lNeedProjection Then
-            If SpatialOperations.ProjectGrid(NativeGridProjection, _
-                                             aDesiredProjection, _
-                                             lSourceFilename, _
+            If SpatialOperations.ProjectGrid(NativeGridProjection,
+                                             aDesiredProjection,
+                                             lSourceFilename,
                                              lDestFilename) Then
                 Logger.Status("Projected " & IO.Path.GetFileName(lDestFilename), True)
             Else
-
+                If IO.Path.GetExtension(lSourceFilename).Equals(".tif") Then
+                    'Move un-projected version into place
+                    If IO.File.Exists(lSourceFilename) Then
+                        Dim lMoved As Boolean = TryMoveGroup(lSourceFilename, aDestDir, TifExtensions)
+                        Logger.Status("Move " & IO.Path.GetFileName(lDestFilename) & ", Success=" & lMoved, True)
+                    End If
+                Else 'Save as desired type
+                    SpatialOperations.ChangeGridFormat(lSourceFilename, lDestFilename)
+                End If
+                'If projection file is not present, try saving a .prj file here.            
+                Dim lProjectionFilename As String = IO.Path.ChangeExtension(lDestFilename, "prj")
+                If Not IO.File.Exists(lProjectionFilename) Then
+                    IO.File.WriteAllText(lProjectionFilename, NativeGridProjection.ToEsriString)
+                End If
+                IO.File.WriteAllText(IO.Path.ChangeExtension(lDestFilename, "proj4"), NativeGridProjection.ToProj4String)
             End If
         Else 'Already in right projection
             If IO.Path.GetExtension(lSourceFilename).Equals(".tif") Then
@@ -799,6 +813,7 @@ Retry:
             If Not IO.File.Exists(lProjectionFilename) Then
                 IO.File.WriteAllText(lProjectionFilename, aDesiredProjection.ToEsriString)
             End If
+            IO.File.WriteAllText(IO.Path.ChangeExtension(lDestFilename, "proj4"), aDesiredProjection.ToProj4String)
         End If
         If lClipToFolder IsNot Nothing AndAlso IO.Directory.Exists(lClipToFolder) Then
             TryDelete(lClipToFolder, False)

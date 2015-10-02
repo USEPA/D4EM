@@ -4,6 +4,8 @@ Imports atcUtility
 Partial Class NLDAS
     Inherits SourceBase
 
+
+
     Public Overrides ReadOnly Property Name() As String
         Get
             Return "D4EM Data Download::NLDAS"
@@ -103,14 +105,14 @@ Partial Class NLDAS
 
     Public Function GetParameter(ByVal aArgs As Xml.XmlNode) As String
         Dim lResults As String = ""
-        Dim lStartDate As Date = #1/1/1979#
-        Dim lEndDate As Date = #1/1/9999#
+        Dim lStartDate As Date = pFirstAvailableDate
+        Dim lEndDate As Date = pDefaultEndDate
         Dim lCells As New Generic.List(Of NLDASGridCoords)
         Dim lCellIndex As Integer = -1
         Dim lCacheFolder As String = IO.Path.GetTempPath
         Dim lGetEvenIfCached As Boolean = False
         Dim lSaveIn As String = ""
-        Dim lDataType As String = "apcpsfc"
+        Dim lDataType As String = Nothing
         Dim lCacheOnly As Boolean = False
         Dim lWDMFilename As String = ""
 
@@ -125,7 +127,7 @@ Partial Class NLDAS
                     Case "enddate" : lEndDate = Date.Parse(lArg.InnerText)
                     Case "datatype" : lDataType = lArg.InnerText
                     Case "cachefolder" : lCacheFolder = lArg.InnerText
-                    Case "cacheonly" : lCacheOnly = True
+                    Case "cacheonly" : If Not lArg.InnerText.ToLower.Contains("false") Then lCacheOnly = True
                     Case "getevenifcached" : If Not lArg.InnerText.ToLower.Contains("false") Then lGetEvenIfCached = True
                     Case "savein" : lSaveIn = lArg.InnerText
                     Case "savewdm" : lWDMFilename = lArg.InnerText
@@ -135,11 +137,17 @@ Partial Class NLDAS
             End Try
             lArg = lArg.NextSibling
         End While
-
-        Return GetParameter(New Project(D4EM.Data.Globals.GeographicProjection,
-                                        lCacheFolder, lSaveIn, Nothing, False, False,
-                                        lGetEvenIfCached, lCacheOnly),
-                            "NLDAS", lCells, lDataType, lStartDate, lEndDate, lWDMFilename)
+        Dim lProject As New Project(D4EM.Data.Globals.GeographicProjection,
+                                    lCacheFolder, lSaveIn, Nothing, False, False,
+                                    lGetEvenIfCached, lCacheOnly)
+        Dim lDataTypes() As String = {lDataType}
+        If lDataType Is Nothing Then
+            lDataTypes = DefaultParameters
+        End If
+        For Each lDataType In lDataTypes
+            lResults &= GetParameter(lProject, "NLDAS", lCells, lDataType, lStartDate, lEndDate, lWDMFilename) & vbCrLf
+        Next
+        Return lResults
     End Function
 
 End Class

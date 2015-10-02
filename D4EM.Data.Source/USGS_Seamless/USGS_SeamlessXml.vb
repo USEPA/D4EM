@@ -73,19 +73,20 @@ Partial Class USGS_Seamless
                         Logger.Dbg("Exception reading Region from query: " & e.Message)
                     End Try
                 Case "datatype"
-                    Select Case lArg.InnerText.ToLower
-                        Case "1992", "1992landcover", "1992 land cover"
-                            lDataTypes.Add(LayerSpecifications.NLCD1992.LandCover)
-                        Case "land cover", "landcover"
-                            lDataTypes.Add(LayerSpecifications.NLCD2001.LandCover)
-                        Case "canopy"
-                            lDataTypes.Add(LayerSpecifications.NLCD2001.Canopy)
-                        Case "impervious", "impervioussurface", "impervious surface"
-                            lDataTypes.Add(LayerSpecifications.NLCD2001.Impervious)
-                        Case Else
-                            Throw New ApplicationException("Unknown Data Type " & lArg.InnerText)
-                    End Select
-                    'lDataTypes.Add(lArg.InnerText)
+                    For Each lLayerSpec As LayerSpecification In {
+                        LayerSpecifications.NLCD1992.LandCover,
+                        LayerSpecifications.NLCD2001.LandCover,
+                        LayerSpecifications.NLCD2001.Impervious,
+                        LayerSpecifications.NLCD2001.Canopy,
+                        LayerSpecifications.NLCD2006.LandCover,
+                        LayerSpecifications.NLCD2006.Impervious,
+                        LayerSpecifications.NLCD2011.LandCover,
+                        LayerSpecifications.NLCD2011.Impervious}
+
+                        If lLayerSpec.Tag.ToLowerInvariant().Replace("_", ".") = lArg.InnerText.ToLowerInvariant().Replace("_", ".") Then
+                            lDataTypes.Add(lLayerSpec)
+                        End If
+                    Next
                 Case "desiredprojection" : lDesiredProjection = Globals.FromProj4(lArg.InnerText)
                 Case "cachefolder" : lCacheFolder = lArg.InnerText
                 Case "cacheonly" : lCacheOnly = True
@@ -97,6 +98,9 @@ Partial Class USGS_Seamless
         End While
         Dim lResult As String = ""
         Dim lProject As New D4EM.Data.Project(lDesiredProjection, lCacheFolder, lSaveFolder, lRegion, lClip, False, lGetEvenIfCached, lCacheOnly)
+        If lDataTypes.Count = 0 Then
+            lDataTypes.Add(LayerSpecifications.NLCD2011.LandCover)
+        End If
         For Each lDataType As LayerSpecification In lDataTypes
             'TODO: determine how to best combine XML result from multiple data types
             lResult &= Execute(aProject:=lProject, aSaveFolder:=Nothing, aDataType:=lDataType)
