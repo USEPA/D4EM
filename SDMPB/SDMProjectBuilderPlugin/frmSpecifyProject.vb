@@ -210,7 +210,7 @@ NoMatch:
         SpecifyAndCreateNewProjectsWithLayerCollectionChanged(params)
         Me.Close()
         'Exit SDM Project Builder, leaving it open causes trouble
-        System.Windows.Forms.Application.Exit()
+        'System.Windows.Forms.Application.Exit()
     End Sub
 
     Private Function IsRegionSelected() As Boolean
