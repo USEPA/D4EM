@@ -54,19 +54,44 @@ namespace SDMProjectBuilder
             SetButtonsState(true);
             
             string fileName = lstboxDataFiles.SelectedItem.ToString();
+
+            //Remove the layer if it had previously been added
+            IMapLayer ptLayer = null;
+            foreach (Layer layer in _appMgr.Map.Layers)
+            {
+                if (layer != null)
+                {
+                    if (layer.DataSet != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(layer.DataSet.Name))
+                        {
+                            if (string.Compare(layer.DataSet.Name, fileName, true) == 0)
+                            {
+                                ptLayer = layer as IMapLayer;
+                                break;
+                            }
+                        }                            
+                    }
+                }
+            }
+
+            if (ptLayer != null)
+            {
+                _appMgr.Map.MapFrame.SuspendEvents();
+                _appMgr.Map.Layers.Remove(ptLayer);
+                _appMgr.Map.MapFrame.ResumeEvents();
+                Application.DoEvents();
+            }
             string fileNameWithExt = Path.ChangeExtension(fileName, "csv");
             string fileLoc = Path.Combine(_appMgr.SerializationManager.CurrentProjectDirectory, "LocalData");
             ImportLocalData ild = new ImportLocalData(_appMgr);
             FeatureSet fs = ild.LoadShapefileFromCSV(fileNameWithExt, fileLoc);
-            if (fs != null)
-            {
-                fileNameWithExt = Path.ChangeExtension(fileName, "shp");
-                fs.SaveAs(Path.Combine(fileLoc, fileNameWithExt), true);
-                IMapFeatureLayer iMFL = _appMgr.Map.Layers.Add(fs);
-                _appMgr.Map.Layers.SelectedLayer = iMFL;
-                iMFL.IsSelected = true;
-                _appMgr.Map.ViewExtents = iMFL.Extent;
-            }
+            fileNameWithExt = Path.ChangeExtension(fileName, "shp");
+            fs.SaveAs(Path.Combine(fileLoc, fileNameWithExt), true);
+            IMapFeatureLayer iMFL = _appMgr.Map.Layers.Add(fs);
+            _appMgr.Map.Layers.SelectedLayer = iMFL;
+            iMFL.IsSelected = true;
+            _appMgr.Map.ViewExtents = iMFL.Extent;            
         }
 
         private void btnEditFile_Click(object sender, EventArgs e)
