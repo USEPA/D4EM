@@ -763,7 +763,7 @@ Public Module modModelSetup
                 aWIND.Attributes.SetValue("ID", 4)
                 aWIND.Attributes.SetValue("Constituent", "WIND")
                 aWIND.Attributes.SetValue("TSTYP", "WIND")
-                lNewWDM.AddDataSet(aSOLR, atcDataSource.EnumExistAction.ExistReplace)
+                lNewWDM.AddDataSet(aWIND, atcDataSource.EnumExistAction.ExistReplace)
             End If
 
             If aSOLR IsNot Nothing Then
@@ -784,7 +784,7 @@ Public Module modModelSetup
                 aWIND.Attributes.SetValue("ID", 7)
                 aWIND.Attributes.SetValue("Constituent", "DEWP")
                 aWIND.Attributes.SetValue("TSTYP", "DEWP")
-                lNewWDM.AddDataSet(aWIND, atcDataSource.EnumExistAction.ExistReplace)
+                lNewWDM.AddDataSet(aDEWP, atcDataSource.EnumExistAction.ExistReplace)
             End If
 
             If aCLOU IsNot Nothing Then
