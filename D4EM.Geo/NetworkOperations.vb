@@ -1038,7 +1038,8 @@ Public Class NetworkOperations
                                                      ByVal aMinCatchmentKM2 As Double, _
                                                      ByVal aMinLengthKM As Double, _
                                                      ByVal aFields As FieldIndexes, _
-                                                     ByVal aOutletComIDs As Generic.List(Of Long))
+                                                     ByVal aOutletComIDs As Generic.List(Of Long), _
+                                                     ByVal aDontCombineComIDs As Generic.List(Of Long))
         Logger.Dbg("CombineMissingOutletCatchments Count " & aOutletComIDs.Count)
         Dim lCheckArea As Boolean = (aMinCatchmentKM2 > 0)
         Dim lCheckLength As Boolean = (aMinLengthKM > 0)
@@ -1048,7 +1049,7 @@ Public Class NetworkOperations
             Logger.Dbg("Process " & lOutletComID)
             Dim lFlowlineIndex As Integer = FindRecord(aFlowlines, aFields.FlowlinesComId, lOutletComID)
             'Dim lOutletComIdRecordIndex As Integer = FindRecord(aFlowlines, pFlowlinesComIdFieldIndex, lOutletComID)
-            If lFlowlineIndex > -1 Then
+            If lFlowlineIndex > -1 And aFlowlines.FeatureLookup.Count > 1 Then
                 If IsTooSmall(aFlowlines, lFlowlineIndex, aMinCatchmentKM2, aMinLengthKM, lCheckArea, lCheckLength, False, aFields) Then
                     'Dim lOutletCumArea As Double = aFlowlines.CellValue(pFlowlinesCumDrainAreaIndex, lOutletComIdRecordIndex)
                     'If lOutletCumArea < aMinCatchmentKM2 Then 'TODO: is this an appropriate check?
@@ -1062,15 +1063,18 @@ Public Class NetworkOperations
                         Dim lMergeWithComid As Long = aCatchments.Features(lNearestIndex).DataRow(aFields.CatchmentComId)
                         Logger.Dbg("MergeWith " & DumpComid(aFlowlines, lMergeWithComid, aFields))
                         Dim lMainFlowLineIndex As Integer = FindRecord(aFlowlines, aFields.FlowlinesComId, lMergeWithComid)
-                        If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
-                            If lMainFlowLineIndex < 0 Then
-                                Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
+                        'dont do this if lmergewithcomid is a dontcombine
+                        If Not aDontCombineComIDs.Contains(lMergeWithComid) Then
+                            If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
+                                If lMainFlowLineIndex < 0 Then
+                                    Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
+                                Else
+                                    CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
+                                End If
+                                lMergedThese.Add(lOutletComID)
                             Else
-                                CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
+                                Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
                             End If
-                            lMergedThese.Add(lOutletComID)
-                        Else
-                            Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
                         End If
                     End If
                 Else
@@ -1352,10 +1356,14 @@ Public Class NetworkOperations
             lLength = -1
             If lCheckLength Then UpdateValueIfNotNull(lLength, aFlowlines.Features(lFlowlineIndex).DataRow(aFields.FlowlinesLength))
             If (lCheckArea AndAlso lContribArea < aMinCatchmentKM2) OrElse (lCheckLength AndAlso lLength < aMinLengthKM) Then
-                If MergeUpstream(aFlowlines, aCatchments, FindUpstreamKeys(aOutletComId, aFlowlines, aFields.FlowlinesComId, aFields.FlowlinesDownstreamComId), aOutletComId, aOutletComIDs, aFields) Then
-                    Logger.Dbg("Merged small outlet upstream " & aOutletComId)
-                Else
-                    Logger.Dbg("Failed to merge small outlet upstream " & aOutletComId)
+                Dim lFindUpstreamKeys As Generic.List(Of Long) = FindUpstreamKeys(aOutletComId, aFlowlines, aFields.FlowlinesComId, aFields.FlowlinesDownstreamComId)
+                'dont merge upstream with a dontcombine   
+                If lFindUpstreamKeys.Count > 0 AndAlso Not aDontCombineComIDs.Contains(lFindUpstreamKeys(0)) Then
+                    If MergeUpstream(aFlowlines, aCatchments, lFindUpstreamKeys, aOutletComId, aOutletComIDs, aFields) Then
+                        Logger.Dbg("Merged small outlet upstream " & aOutletComId)
+                    Else
+                        Logger.Dbg("Failed to merge small outlet upstream " & aOutletComId)
+                    End If
                 End If
             End If
         End If
