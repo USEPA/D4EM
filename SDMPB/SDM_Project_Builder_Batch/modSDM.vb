@@ -280,7 +280,7 @@ Public Module modSDM
         Next
         Logger.Dbg("======== EnforceMinimumSizeDone OutletCount " & lOutletComIDs.Count & " ShapeCount " & lSimplifiedFlowlines.NumRows)
 
-        CombineMissingOutletCatchments(lSimplifiedFlowlines, lSimplifiedCatchments, aMinCatchmentKM2, aMinLengthKM, aFields, lOutletComIDs)
+        CombineMissingOutletCatchments(lSimplifiedFlowlines, lSimplifiedCatchments, aMinCatchmentKM2, aMinLengthKM, aFields, lOutletComIDs, lDontCombineComIDs)
         Logger.Dbg("Combined Missing Outlet Catchments OutletCount " & lOutletComIDs.Count & " ShapeCount " & lSimplifiedFlowlines.NumRows & " " & lSimplifiedCatchments.NumRows)
 
         lSimplifiedCatchments.Save()
