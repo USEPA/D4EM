@@ -54,6 +54,7 @@ Public Class SDMParameters
     Public KeepConnectingRemovedFlowLines As Boolean = True
 
     Public SWATDatabaseName As String = atcUtility.FindFile("", "SWAT2005.mdb")
+    Public ReportFlowUnits As Int16
     Public BoundariesLatLongCsvFileName As String = ""
     Public OutputsLatLongCsvFileName As String = ""
     'Private PresetCatchments As String = "" '"G:\Project\APES-Kraemer\ms_30m_01\Watershed\Shapes"
@@ -139,6 +140,7 @@ Public Class SDMParameters
                 sb.AppendLine("<SWAT>")
                 sb.AppendLine("    <CreateArcSWATFiles>" & CreateArcSWATFiles & "</CreateArcSWATFiles>")
                 sb.AppendLine("    <SWAT2005Database>" & SWATDatabaseName & "</SWAT2005Database>")
+                sb.AppendLine("    <ReportFlowUnits>" & ReportFlowUnits & "</ReportFlowUnits>")
                 'sb.AppendLine("SWATSoilsDatabase," & _swatSoilsDB)
                 sb.AppendLine("</SWAT>")
             End If

@@ -93,6 +93,9 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
+        Me.rbtnFlowLinear = New System.Windows.Forms.RadioButton()
+        Me.rbtnFlowLog = New System.Windows.Forms.RadioButton()
+        Me.lFlowUnits = New System.Windows.Forms.Label()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -341,6 +344,9 @@ Partial Class frmSpecifyProject
         '
         'groupParameters
         '
+        Me.groupParameters.Controls.Add(Me.lFlowUnits)
+        Me.groupParameters.Controls.Add(Me.rbtnFlowLog)
+        Me.groupParameters.Controls.Add(Me.rbtnFlowLinear)
         Me.groupParameters.Controls.Add(Me.lblSnow)
         Me.groupParameters.Controls.Add(Me.btnChemical)
         Me.groupParameters.Controls.Add(Me.chkLandAppliedChemical)
@@ -368,7 +374,7 @@ Partial Class frmSpecifyProject
         Me.groupParameters.Margin = New System.Windows.Forms.Padding(0)
         Me.groupParameters.Name = "groupParameters"
         Me.groupParameters.Padding = New System.Windows.Forms.Padding(0)
-        Me.groupParameters.Size = New System.Drawing.Size(598, 255)
+        Me.groupParameters.Size = New System.Drawing.Size(598, 262)
         Me.groupParameters.TabIndex = 18
         Me.groupParameters.TabStop = False
         Me.groupParameters.Text = "Parameters For Model Generation"
@@ -960,6 +966,41 @@ Partial Class frmSpecifyProject
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
         '
+        'rbtnFlowLinear
+        '
+        Me.rbtnFlowLinear.AutoSize = True
+        Me.rbtnFlowLinear.Enabled = False
+        Me.rbtnFlowLinear.Location = New System.Drawing.Point(165, 243)
+        Me.rbtnFlowLinear.Name = "rbtnFlowLinear"
+        Me.rbtnFlowLinear.Size = New System.Drawing.Size(54, 17)
+        Me.rbtnFlowLinear.TabIndex = 55
+        Me.rbtnFlowLinear.TabStop = True
+        Me.rbtnFlowLinear.Text = "Linear"
+        Me.rbtnFlowLinear.UseVisualStyleBackColor = True
+        '
+        'rbtnFlowLog
+        '
+        Me.rbtnFlowLog.AutoSize = True
+        Me.rbtnFlowLog.Checked = True
+        Me.rbtnFlowLog.Enabled = False
+        Me.rbtnFlowLog.Location = New System.Drawing.Point(220, 242)
+        Me.rbtnFlowLog.Name = "rbtnFlowLog"
+        Me.rbtnFlowLog.Size = New System.Drawing.Size(43, 17)
+        Me.rbtnFlowLog.TabIndex = 56
+        Me.rbtnFlowLog.TabStop = True
+        Me.rbtnFlowLog.Text = "Log"
+        Me.rbtnFlowLog.UseVisualStyleBackColor = True
+        '
+        'lFlowUnits
+        '
+        Me.lFlowUnits.AutoSize = True
+        Me.lFlowUnits.Enabled = False
+        Me.lFlowUnits.Location = New System.Drawing.Point(70, 245)
+        Me.lFlowUnits.Name = "lFlowUnits"
+        Me.lFlowUnits.Size = New System.Drawing.Size(91, 13)
+        Me.lFlowUnits.TabIndex = 48
+        Me.lFlowUnits.Text = "Report Flow Units"
+        '
         'frmSpecifyProject
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1072,4 +1113,7 @@ Partial Class frmSpecifyProject
     Friend WithEvents chkLandAppliedChemical As System.Windows.Forms.CheckBox
     Friend WithEvents btnChemical As System.Windows.Forms.Button
     Friend WithEvents lblSnow As System.Windows.Forms.Label
+    Friend WithEvents lFlowUnits As System.Windows.Forms.Label
+    Friend WithEvents rbtnFlowLog As System.Windows.Forms.RadioButton
+    Friend WithEvents rbtnFlowLinear As System.Windows.Forms.RadioButton
 End Class

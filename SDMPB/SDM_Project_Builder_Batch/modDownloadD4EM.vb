@@ -385,6 +385,7 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                 End Using
             End If
 
+            'Dim aReportFlowUnits As Short = 0
             If aParameters.SetupSWAT Then
                 Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating SWAT input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
                 Using lLevel As New ProgressLevel(False)
@@ -411,7 +412,8 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                         aSimulationEndYear:=aParameters.SimulationEndYear,
                         aUseMgtCropFile:=aParameters.UseMgtCropFile,
                         aOutputSummarize:=aParameters.OutputSummarize,
-                        aFields:=lFields)
+                        aFields:=lFields,
+                        aReportFlowUnits:=aParameters.ReportFlowUnits)
                     Dim lReturnCode As Integer = -1
                     Dim lInputFilePath As String = IO.Path.Combine(aProject.ProjectFolder, "Scenarios\" & lScenarioName & "\TxtInOut")
                     If aParameters.RunModel Then

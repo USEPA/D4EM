@@ -43,6 +43,21 @@ Public Class frmSpecifyProject
         End Set
     End Property
 
+    Public ReadOnly Property FlowUnits As Int16
+        Get
+            If rbtnFlowLinear.Checked Then
+                Return 0
+            ElseIf rbtnFlowLog.Checked Then
+                Return 1
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
+
+
+
     Private Function ExistingOrSelectedRegion(ByVal aSelectionLayerSpecification As D4EM.Data.LayerSpecification,
                                               ByVal aNewKeys As Generic.List(Of String)) As D4EM.Data.Region
         'Try
@@ -117,6 +132,7 @@ NoMatch:
         params.HspfBacterialOption = chkMicrobes.Checked
         params.HspfChemicalOption = chkLandAppliedChemical.Checked
         params.SetupSWAT = chkSWAT.Checked
+        params.ReportFlowUnits = FlowUnits
         params.MinCatchmentKM2 = atxSize.ValueDouble
         params.MinFlowlineKM = atxLength.ValueDouble
         params.LandUseIgnoreBelowFraction = atxLU.ValueDouble
@@ -359,6 +375,9 @@ NoMatch:
         lblSWAT1.Enabled = chkSWAT.Checked
         lblSWAT2.Enabled = chkSWAT.Checked
         btnSwatDatabase.Enabled = chkSWAT.Checked
+        rbtnFlowLinear.Enabled = chkSWAT.Checked
+        rbtnFlowLog.Enabled = chkSWAT.Checked
+        lFlowUnits.Enabled = chkSWAT.Checked
     End Sub
 
     Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
