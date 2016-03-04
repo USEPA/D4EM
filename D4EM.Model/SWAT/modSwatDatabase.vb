@@ -27,7 +27,8 @@ Public Module modSwatDatabase
                                  ByVal aSimulationEndYear As Integer, _
                                  ByVal aUseMgtCropFile As Boolean, _
                                  ByVal aCreateArcSWATFiles As Boolean, _
-                                 ByVal aFields As D4EM.Geo.NetworkOperations.FieldIndexes)
+                                 ByVal aFields As D4EM.Geo.NetworkOperations.FieldIndexes,
+                                 ByVal aReportFlowUnits As Short)
 
         If aHruTable Is Nothing Then
             Logger.Dbg("BuildSwatDatabase: HRU table not present, aborting")
@@ -60,7 +61,8 @@ Public Module modSwatDatabase
                     lCatchmentTable.Delimiter = vbTab
                     lCatchmentTable.OpenFile(IO.Path.Combine(aProjectFolder, "Catchments.txt"))
 
-                    lSwatInput.CIO.Add(CioDefault(aSimulationStartYear, aSimulationEndYear))
+                    lSwatInput.CIO.Add(CioDefault(aSimulationStartYear, aSimulationEndYear, aReportFlowUnits))
+                    'lSwatInput.CIO.Item.ILOG = aReportFlowUnits
                     lSwatInput.Wwq.Add(WwqDefault)
                     lSwatInput.Bsn.Add(BsnDefault)
 

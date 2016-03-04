@@ -5,7 +5,7 @@ Imports SwatObject
 ''' </summary>
 ''' <remarks>TODO: make more of these come from FRAMES</remarks>
 Module modDefaults
-    Friend Function CioDefault(ByVal aSimulationStartYear As Integer, ByVal aSimulationEndYear As Integer) As SwatInput.clsCIOItem
+    Friend Function CioDefault(ByVal aSimulationStartYear As Integer, ByVal aSimulationEndYear As Integer, ByVal aReportFlowUnits As Short) As SwatInput.clsCIOItem
         Dim lCioItem As New SwatInput.clsCIOItem
         With lCioItem
             .NBYR = aSimulationEndYear - aSimulationStartYear + 1
@@ -41,9 +41,11 @@ Module modDefaults
             .IPRINT = 1
             .NYSKIP = 0
             .ILOG = 1
+            .ILOG = aReportFlowUnits
             .IPRP = 1
             .IPRS = 1
         End With
+
         Return lCioItem
     End Function
 

@@ -28,7 +28,8 @@ Public Class SWATmodel
                                      ByVal aSimulationEndYear As Integer,
                                      ByVal aUseMgtCropFile As Boolean,
                                      ByVal aOutputSummarize As Boolean,
-                                     ByVal aFields As D4EM.Geo.NetworkOperations.FieldIndexes)
+                                     ByVal aFields As D4EM.Geo.NetworkOperations.FieldIndexes,
+                                     ByVal aReportFlowUnits As Short)
         Try
             'KLW 12/21/2009 Generate files for running ArcSWAT
             If (aCreateArcSWATFiles) Then
@@ -233,7 +234,9 @@ Public Class SWATmodel
                                       aSimulationEndYear:=aSimulationEndYear,
                                       aUseMgtCropFile:=aUseMgtCropFile,
                                       aCreateArcSWATFiles:=aCreateArcSWATFiles,
-                                      aFields:=aFields)
+                                      aFields:=aFields,
+                                      aReportFlowUnits:=aReportFlowUnits
+                                      )
                     Logger.Status("After BuildSwatDatabase " & MemUsage())
                     If (aCreateArcSWATFiles) Then
 
