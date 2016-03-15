@@ -44,6 +44,9 @@ Partial Class frmSpecifyProject
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.groupParameters = New System.Windows.Forms.GroupBox()
+        Me.lFlowUnits = New System.Windows.Forms.Label()
+        Me.rbtnFlowLog = New System.Windows.Forms.RadioButton()
+        Me.rbtnFlowLinear = New System.Windows.Forms.RadioButton()
         Me.lblSnow = New System.Windows.Forms.Label()
         Me.btnChemical = New System.Windows.Forms.Button()
         Me.chkLandAppliedChemical = New System.Windows.Forms.CheckBox()
@@ -93,9 +96,6 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
-        Me.rbtnFlowLinear = New System.Windows.Forms.RadioButton()
-        Me.rbtnFlowLog = New System.Windows.Forms.RadioButton()
-        Me.lFlowUnits = New System.Windows.Forms.Label()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -379,6 +379,40 @@ Partial Class frmSpecifyProject
         Me.groupParameters.TabStop = False
         Me.groupParameters.Text = "Parameters For Model Generation"
         Me.groupParameters.Visible = False
+        '
+        'lFlowUnits
+        '
+        Me.lFlowUnits.AutoSize = True
+        Me.lFlowUnits.Enabled = False
+        Me.lFlowUnits.Location = New System.Drawing.Point(70, 245)
+        Me.lFlowUnits.Name = "lFlowUnits"
+        Me.lFlowUnits.Size = New System.Drawing.Size(91, 13)
+        Me.lFlowUnits.TabIndex = 48
+        Me.lFlowUnits.Text = "Report Flow Units"
+        '
+        'rbtnFlowLog
+        '
+        Me.rbtnFlowLog.AutoSize = True
+        Me.rbtnFlowLog.Enabled = False
+        Me.rbtnFlowLog.Location = New System.Drawing.Point(220, 242)
+        Me.rbtnFlowLog.Name = "rbtnFlowLog"
+        Me.rbtnFlowLog.Size = New System.Drawing.Size(43, 17)
+        Me.rbtnFlowLog.TabIndex = 56
+        Me.rbtnFlowLog.Text = "Log"
+        Me.rbtnFlowLog.UseVisualStyleBackColor = True
+        '
+        'rbtnFlowLinear
+        '
+        Me.rbtnFlowLinear.AutoSize = True
+        Me.rbtnFlowLinear.Checked = True
+        Me.rbtnFlowLinear.Enabled = False
+        Me.rbtnFlowLinear.Location = New System.Drawing.Point(165, 243)
+        Me.rbtnFlowLinear.Name = "rbtnFlowLinear"
+        Me.rbtnFlowLinear.Size = New System.Drawing.Size(54, 17)
+        Me.rbtnFlowLinear.TabIndex = 55
+        Me.rbtnFlowLinear.TabStop = True
+        Me.rbtnFlowLinear.Text = "Linear"
+        Me.rbtnFlowLinear.UseVisualStyleBackColor = True
         '
         'lblSnow
         '
@@ -965,41 +999,6 @@ Partial Class frmSpecifyProject
         Me.groupData.TabStop = False
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
-        '
-        'rbtnFlowLinear
-        '
-        Me.rbtnFlowLinear.AutoSize = True
-        Me.rbtnFlowLinear.Enabled = False
-        Me.rbtnFlowLinear.Location = New System.Drawing.Point(165, 243)
-        Me.rbtnFlowLinear.Name = "rbtnFlowLinear"
-        Me.rbtnFlowLinear.Size = New System.Drawing.Size(54, 17)
-        Me.rbtnFlowLinear.TabIndex = 55
-        Me.rbtnFlowLinear.TabStop = True
-        Me.rbtnFlowLinear.Text = "Linear"
-        Me.rbtnFlowLinear.UseVisualStyleBackColor = True
-        '
-        'rbtnFlowLog
-        '
-        Me.rbtnFlowLog.AutoSize = True
-        Me.rbtnFlowLog.Checked = True
-        Me.rbtnFlowLog.Enabled = False
-        Me.rbtnFlowLog.Location = New System.Drawing.Point(220, 242)
-        Me.rbtnFlowLog.Name = "rbtnFlowLog"
-        Me.rbtnFlowLog.Size = New System.Drawing.Size(43, 17)
-        Me.rbtnFlowLog.TabIndex = 56
-        Me.rbtnFlowLog.TabStop = True
-        Me.rbtnFlowLog.Text = "Log"
-        Me.rbtnFlowLog.UseVisualStyleBackColor = True
-        '
-        'lFlowUnits
-        '
-        Me.lFlowUnits.AutoSize = True
-        Me.lFlowUnits.Enabled = False
-        Me.lFlowUnits.Location = New System.Drawing.Point(70, 245)
-        Me.lFlowUnits.Name = "lFlowUnits"
-        Me.lFlowUnits.Size = New System.Drawing.Size(91, 13)
-        Me.lFlowUnits.TabIndex = 48
-        Me.lFlowUnits.Text = "Report Flow Units"
         '
         'frmSpecifyProject
         '
