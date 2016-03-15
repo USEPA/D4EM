@@ -334,9 +334,10 @@ Public Module modSwatDatabase
 
                             lFlowlineTable.FindFirst(2, lComId)
                             'TODO: this seems to be how OpenSWAT does this!!!!!
-                            .CH_L1 = lFlowlineTable.Value(6) 'TODO: need trib values here!!!
-                            .CH_S1 = lFlowlineTable.Value(5) 'TODO: need trib values here!!!
-                            .CH_W1 = lFlowlineTable.Value(3) 'TODO: need trib values here!!!
+                            .CH_L1 = lFlowlineTable.Value(6) 'TODO: need trib values here!!! - longest flowline length [km]
+                            .CH_S1 = lFlowlineTable.Value(5) 'TODO: need trib values here!!! - average slope of trib [m/m]
+                            '.CH_W1 = lFlowlineTable.Value(3) 'TODO: need trib values here!!! 
+                            .CH_W1 = .SUB_KM ^ 0.6 * 1.29 '- average width of trib 1.29*(SA**0.6) [meters]
                             .HRUTOT = lHruSubCount
                             .FCST_REG = 1
                             .CH_K1 = 0.5
