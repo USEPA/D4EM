@@ -37,9 +37,13 @@ Partial Class NWIS
         Else
             Dim lStationsRDB As atcTableRDB = Nothing
             Dim lField_site_no As Integer = -1
-            If Not IO.File.Exists(lStationFilename) Then
-                GetStationsInRegion(aProject.Region, lStationFilename, NWIS.LayerSpecifications.Discharge)
-            End If
+            'Skip making this file if it does not exist, instead just get individual station information below.
+            'If Not IO.File.Exists(lStationFilename) And aProject.Region IsNot Nothing Then
+            '    Try
+            '        GetStationsInRegion(aProject.Region, lStationFilename, NWIS.LayerSpecifications.Discharge)
+            '    Catch
+            '    End Try
+            'End If
             If IO.File.Exists(lStationFilename) Then
                 lStationsRDB = New atcTableRDB
                 If lStationsRDB.OpenFile(lStationFilename) Then
@@ -108,28 +112,26 @@ DownloadIt:
                                 End Select
                             Else
                                 Dim lSiteHeader As String = ""
-                                If lStationsRDB Is Nothing Then
+                                If lStationsRDB IsNot Nothing AndAlso lField_site_no > 0 AndAlso lStationsRDB.FindFirst(lField_site_no, lStationID) Then
+                                    lSiteHeader = RecordAsRDBheader(lStationsRDB)
+                                End If
+                                If String.IsNullOrEmpty(lSiteHeader) Then
                                     'Try to get individual site header
                                     Dim lOneStationFilename As String = IO.Path.Combine(lSaveIn, pDefaultStationsBaseFilename) & "_" & lStationID & ".rdb"
                                     If Not IO.File.Exists(lOneStationFilename) Then
                                         GetStation(lStationID, lOneStationFilename)
                                     End If
                                     If IO.File.Exists(lOneStationFilename) Then
-                                        lStationsRDB = New atcTableRDB
-                                        If lStationsRDB.OpenFile(lOneStationFilename) Then
-                                            lField_site_no = lStationsRDB.FieldNumber("site_no")
-                                            If lField_site_no > 0 Then
-                                                If lStationsRDB.FindFirst(lField_site_no, lStationID) Then
-                                                    lSiteHeader = RecordAsRDBheader(lStationsRDB)
+                                        Dim lStationRDB As New atcTableRDB
+                                        If lStationRDB.OpenFile(lOneStationFilename) Then
+                                            Dim lField_site_station As Integer = lStationRDB.FieldNumber("site_no")
+                                            If lField_site_station > 0 Then
+                                                If lStationRDB.FindFirst(lField_site_station, lStationID) Then
+                                                    lSiteHeader = RecordAsRDBheader(lStationRDB)
                                                 End If
                                             End If
                                         End If
-                                        lStationsRDB = Nothing
-                                        lField_site_no = -1
-                                    End If
-                                ElseIf lField_site_no > 0 Then
-                                    If lStationsRDB.FindFirst(lField_site_no, lStationID) Then
-                                        lSiteHeader = RecordAsRDBheader(lStationsRDB)
+                                        lStationRDB = Nothing
                                     End If
                                 End If
 
