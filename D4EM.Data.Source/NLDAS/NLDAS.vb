@@ -31,7 +31,7 @@ Public Class NLDAS
     '33      UGRD10m    10-m above ground Zonal wind speed [m/s]
     '34      VGRD10m    10-m above ground Meridional wind speed [m/s]
 
-    Public DefaultParameters() As String = {"APCPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "DLWRFsfc", "PEVAPsfc"}
+    Public DefaultParameters() As String = {"APCPsfc", "PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"}
 
     Private Const pDefaultStationsBaseFilename As String = "NLDAS_Grid"
     Private Const pDegreesPerGridCell As Double = 1 / 8
@@ -316,7 +316,7 @@ Public Class NLDAS
     ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NLDAS") or full path of folder to save in (e.g. "C:\NLDAS").
     '''  If nothing or empty string, will save in aProject.ProjectFolder.</param>
     ''' <param name="aCells">NLDAS cells to get data for</param>
-    ''' <param name="aDataType">Only parameter "APCPsfc" is supported at this time</param>
+    ''' <param name="aDataType">Parameter name, eg "APCPsfc"</param>
     ''' <param name="aStartDate">Earliest time to get a value from, defaults to start of NLDAS data</param>
     ''' <param name="aEndDate">Latest time to get a value from, defaults to yesterday</param>
     ''' <param name="aWDMFilename">If specified, data will be saved in a WDM file</param>
@@ -498,7 +498,90 @@ Public Class NLDAS
                                         Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
                                     End If
                                 Else
-                                    lWDM.AddDataSet(lTimeseries, atcData.atcDataSource.EnumExistAction.ExistRenumber)
+
+                                    'find base dsn to place the other met data appropriately
+                                    Dim lBaseDsn As Integer = 1
+                                    If lWDM IsNot Nothing Then
+                                        If lWDM.DataSets.Count > 0 Then
+                                            For Each lDataSet As atcData.atcDataSet In lWDM.DataSets
+                                                If lDataSet.Attributes.GetValue("Location") = lCell.ToString() And lDataSet.Attributes.GetValue("Constituent") = "PREC" And lDataSet.Attributes.GetValue("Scenario") = "NLDAS" Then
+                                                    lBaseDsn = lDataSet.Attributes.GetValue("ID")
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+
+                                    'set the attributes of the new timeseries
+                                    Dim lNewDsn As Integer = lBaseDsn
+                                    Dim lCons As String = ""
+                                    Dim lDesc As String = ""
+                                    Dim lConvertedTimeseries As atcTimeseries = lTimeseries
+                                    If aDataType = "PEVAPsfc" Then
+                                        lNewDsn = lBaseDsn + 5
+                                        lCons = "PEVT"
+                                        lDesc = "Hourly Potential Evapotranspiration in Inches"
+                                        lConvertedTimeseries = lTimeseries / 25.4
+                                    ElseIf aDataType = "TMP2m" Then
+                                        lNewDsn = lBaseDsn + 2
+                                        lCons = "ATEM"
+                                        lDesc = "Hourly Air Temperature in Degrees F"
+                                        lConvertedTimeseries = (lTimeseries * 9 / 5) - 459.67
+                                    ElseIf aDataType = "UGRD10m" Then
+                                        lNewDsn = lBaseDsn + 3
+                                        lCons = "WINDU"
+                                        lDesc = "Hourly Zonal Wind in mph"
+                                        lConvertedTimeseries = lTimeseries * 2.237
+                                    ElseIf aDataType = "VGRD10m" Then
+                                        lNewDsn = lBaseDsn + 8
+                                        lCons = "WINDV"
+                                        lDesc = "Hourly Meridional Wind in mph"
+                                        lConvertedTimeseries = lTimeseries * 2.237
+                                    ElseIf aDataType = "DSWRFsfc" Then
+                                        lNewDsn = lBaseDsn + 4
+                                        lCons = "SOLR"
+                                        lDesc = "Hourly Solar Radiation"
+                                        lConvertedTimeseries = lTimeseries 'need conversion here
+                                        'now write the new timeseries to wdm
+                                        With lConvertedTimeseries.Attributes
+                                            .SetValue("ID", lNewDsn)
+                                            .SetValue("Constituent", lCons)
+                                            .SetValue("Description", lDesc)
+                                            .SetValue("Location", lCell.ToString())
+                                            .SetValue("Scenario", "NLDAS")
+                                            .SetValue("STANAM", "NLDAS Lat=" & .GetValue("Latitude") & " Long=" & .GetValue("Longitude"))
+                                            .SetValue("COMPFG", 1)
+                                        End With
+                                        If Not lWDM.AddDataSet(lConvertedTimeseries, atcData.atcDataSource.EnumExistAction.ExistRenumber) Then
+                                            Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
+                                        End If
+                                        'also use for cloud cover
+                                        lNewDsn = lBaseDsn + 7
+                                        lCons = "CLOU"
+                                        lDesc = "Hourly Cloud Cover"
+                                        lConvertedTimeseries = lTimeseries 'need conversion here
+                                        lConvertedTimeseries.Attributes.SetValue("TSTYPE", lCons)
+                                    ElseIf aDataType = "SPFH2m" Then
+                                        lNewDsn = lBaseDsn + 6
+                                        lCons = "DEWP"
+                                        lDesc = "Hourly Dew Point Temperature"
+                                        lConvertedTimeseries = lTimeseries 'need conversion here
+                                    End If
+
+                                    'now write the new timeseries to wdm
+                                    With lConvertedTimeseries.Attributes
+                                        .SetValue("ID", lNewDsn)
+                                        .SetValue("Constituent", lCons)
+                                        .SetValue("Description", lDesc)
+                                        .SetValue("Location", lCell.ToString())
+                                        .SetValue("Scenario", "NLDAS")
+                                        .SetValue("STANAM", "NLDAS Lat=" & .GetValue("Latitude") & " Long=" & .GetValue("Longitude"))
+                                        .SetValue("COMPFG", 1)
+                                    End With
+                                    If Not lWDM.AddDataSet(lConvertedTimeseries, atcData.atcDataSource.EnumExistAction.ExistRenumber) Then
+                                        Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
+                                    End If
+                                    
                                 End If
                             Next
                         End If

@@ -210,8 +210,7 @@ NoMatch:
         End If
 
         params.NLDASconstituents.Clear()
-        'TODO: turn chkMetDataNLDAS into radio button when more constituents are available
-        If chkMetDataNLDAS.Checked Then
+        If radioMetDataNLDAS.Checked Then
             params.NLDASconstituents.Add("apcpsfc")
         End If
 
@@ -363,7 +362,7 @@ NoMatch:
                 End If
             End If
 
-            End If
+        End If
 
     End Sub
 

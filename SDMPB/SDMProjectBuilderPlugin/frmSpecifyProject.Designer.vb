@@ -80,7 +80,6 @@ Partial Class frmSpecifyProject
         Me.comboElevation = New System.Windows.Forms.ComboBox()
         Me.groupMetData = New System.Windows.Forms.GroupBox()
         Me.txtNCDCtoken = New System.Windows.Forms.TextBox()
-        Me.chkMetDataNLDAS = New System.Windows.Forms.CheckBox()
         Me.radioMetDataNCDC = New System.Windows.Forms.RadioButton()
         Me.radioMetDataBASINS = New System.Windows.Forms.RadioButton()
         Me.lblSaveProjectAs = New System.Windows.Forms.Label()
@@ -96,6 +95,7 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
+        Me.radioMetDataNLDAS = New System.Windows.Forms.RadioButton()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -795,8 +795,8 @@ Partial Class frmSpecifyProject
         '
         Me.groupMetData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.groupMetData.Controls.Add(Me.radioMetDataNLDAS)
         Me.groupMetData.Controls.Add(Me.txtNCDCtoken)
-        Me.groupMetData.Controls.Add(Me.chkMetDataNLDAS)
         Me.groupMetData.Controls.Add(Me.radioMetDataNCDC)
         Me.groupMetData.Controls.Add(Me.radioMetDataBASINS)
         Me.groupMetData.Location = New System.Drawing.Point(98, 19)
@@ -817,16 +817,6 @@ Partial Class frmSpecifyProject
         Me.txtNCDCtoken.Size = New System.Drawing.Size(238, 20)
         Me.txtNCDCtoken.TabIndex = 3
         '
-        'chkMetDataNLDAS
-        '
-        Me.chkMetDataNLDAS.AutoSize = True
-        Me.chkMetDataNLDAS.Location = New System.Drawing.Point(7, 66)
-        Me.chkMetDataNLDAS.Name = "chkMetDataNLDAS"
-        Me.chkMetDataNLDAS.Size = New System.Drawing.Size(123, 17)
-        Me.chkMetDataNLDAS.TabIndex = 2
-        Me.chkMetDataNLDAS.Text = "NLDAS Precipitation"
-        Me.chkMetDataNLDAS.UseVisualStyleBackColor = True
-        '
         'radioMetDataNCDC
         '
         Me.radioMetDataNCDC.AutoSize = True
@@ -845,7 +835,6 @@ Partial Class frmSpecifyProject
         Me.radioMetDataBASINS.Name = "radioMetDataBASINS"
         Me.radioMetDataBASINS.Size = New System.Drawing.Size(64, 17)
         Me.radioMetDataBASINS.TabIndex = 0
-        Me.radioMetDataBASINS.TabStop = True
         Me.radioMetDataBASINS.Text = "BASINS"
         Me.radioMetDataBASINS.UseVisualStyleBackColor = True
         '
@@ -1000,6 +989,16 @@ Partial Class frmSpecifyProject
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
         '
+        'radioMetDataNLDAS
+        '
+        Me.radioMetDataNLDAS.AutoSize = True
+        Me.radioMetDataNLDAS.Location = New System.Drawing.Point(7, 66)
+        Me.radioMetDataNLDAS.Name = "radioMetDataNLDAS"
+        Me.radioMetDataNLDAS.Size = New System.Drawing.Size(61, 17)
+        Me.radioMetDataNLDAS.TabIndex = 4
+        Me.radioMetDataNLDAS.Text = "NLDAS"
+        Me.radioMetDataNLDAS.UseVisualStyleBackColor = True
+        '
         'frmSpecifyProject
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1089,7 +1088,6 @@ Partial Class frmSpecifyProject
     Friend WithEvents lblPourPointKm As System.Windows.Forms.Label
     Friend WithEvents txtPourPointKm As System.Windows.Forms.TextBox
     Friend WithEvents groupMetData As System.Windows.Forms.GroupBox
-    Friend WithEvents chkMetDataNLDAS As System.Windows.Forms.CheckBox
     Friend WithEvents radioMetDataNCDC As System.Windows.Forms.RadioButton
     Friend WithEvents radioMetDataBASINS As System.Windows.Forms.RadioButton
     Friend WithEvents txtNCDCtoken As System.Windows.Forms.TextBox
@@ -1115,4 +1113,5 @@ Partial Class frmSpecifyProject
     Friend WithEvents lFlowUnits As System.Windows.Forms.Label
     Friend WithEvents rbtnFlowLog As System.Windows.Forms.RadioButton
     Friend WithEvents rbtnFlowLinear As System.Windows.Forms.RadioButton
+    Friend WithEvents radioMetDataNLDAS As System.Windows.Forms.RadioButton
 End Class

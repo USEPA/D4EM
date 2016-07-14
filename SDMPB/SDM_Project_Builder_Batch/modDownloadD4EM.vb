@@ -692,7 +692,14 @@ TryGetvalues:
                                           New Date(aParameters.SimulationEndYear + 1, 1, 1, 0, 0, 0), lDestinationWDMfilename))
                     'precip has now been added to met WDM
 
-
+                    'pbd added new code to get other NLDAS data types
+                    Dim AdditionalParameters() As String = {"PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"} 'these are required to produce the HSPF constituents
+                    Dim lDataTypes() As String = AdditionalParameters
+                    For Each lDataType In lDataTypes
+                        lResults &= D4EM.Data.Source.NLDAS.GetParameter(aProject, lMetDataFolder,
+                                          lAllNLDAScells, lDataType, New Date(aParameters.SimulationStartYear, 1, 1, 0, 0, 0),
+                                          New Date(aParameters.SimulationEndYear + 1, 1, 1, 0, 0, 0), lDestinationWDMfilename) & vbCrLf
+                    Next
 
                     'modify WDM so NLDAS precip will be used instead of BASINS / NCDC precip
                     'Dim lWDM = atcDataManager.DataSourceBySpecification(lDestinationWDMfilename)
