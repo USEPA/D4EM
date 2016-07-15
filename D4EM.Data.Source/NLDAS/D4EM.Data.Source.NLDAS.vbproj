@@ -205,6 +205,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\D4EM.Data.MetCmp\D4EM.Data.MetCmp.vbproj">
+      <Project>{7e0e3306-36a9-4e26-bcf5-727d3c1336bb}</Project>
+      <Name>D4EM.Data.MetCmp</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
       <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
       <Name>D4EM.Data</Name>
