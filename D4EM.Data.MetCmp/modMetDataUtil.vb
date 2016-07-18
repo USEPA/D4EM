@@ -2362,7 +2362,11 @@ OuttaHere:
             Else
                 Call J2Date(aSolTSer.Dates.Value(lValueIndex - 1), lDate)
             End If
-            lCloudTs.Value(lValueIndex) = ((990.0 - aSolTSer.Value(lValueIndex)) / 742.5) ^ (1 / 3)
+            If aSolTSer.Value(lValueIndex) > 990 Then
+                lCloudTs.Value(lValueIndex) = 0.0
+            Else
+                lCloudTs.Value(lValueIndex) = ((990.0 - aSolTSer.Value(lValueIndex)) / 742.5) ^ (1 / 3)
+            End If
         Next lValueIndex
 
         Return lCloudTs
@@ -2373,7 +2377,7 @@ OuttaHere:
     ''' Compute dewpoint temp based on specific humidity using method requested by Athens ORD lab
     ''' </summary>
     ''' <param name="aSpecHumidTSer">Specific Humidity timeseries (kg/kg)</param>
-    ''' <param name="aAirTempTSer">Air Temperature timeseries (Deg C)</param>
+    ''' <param name="aAirTempTSer">Air Temperature timeseries (Deg F)</param>
     ''' <param name="aSource"></param>
     ''' <returns>Dewpint Temperature timeseries at same times as aSpecHumidTSer</returns>
     ''' <remarks></remarks>
@@ -2390,12 +2394,15 @@ OuttaHere:
         lDewpointTS.Attributes.SetValue("Scenario", "COMPUTED")
         lDewpointTS.Attributes.SetValue("Description", "Dewpoint temperature (Deg F) computed from Specific Humidity (kg/kg)")
         lDewpointTS.Attributes.Add("SPCHUM", aSpecHumidTSer.ToString)
-        lDewpointTS.Dates = atcData.MergeDates(lTSGroup)
-        lDewpointTS.numValues = lDewpointTS.Dates.numValues
+        'lDewpointTS.Dates = atcData.MergeDates(lTSGroup)
+        lDewpointTS.Dates = aSpecHumidTSer.Dates
+        lDewpointTS.numValues = aSpecHumidTSer.numValues
 
         Dim e As Double
         Dim es As Double
         Dim RelHumid As Double
+        Dim lAirTempC As Double
+        Dim lDewTempC As Double
         Dim lDate(5) As Integer
         Dim lSpecHumidIndex As Integer
         Dim lAirTempIndex As Integer
@@ -2408,7 +2415,8 @@ OuttaHere:
             Else
                 Call J2Date(lDewpointTS.Dates.Value(lValueIndex - 1), lDate)
             End If
-            e = 6.112 ^ ((17.67 * aAirTempTSer.Value(lAirTempIndex)) / (aAirTempTSer.Value(lAirTempIndex) + 243.5))
+            lAirTempC = (aAirTempTSer.Value(lAirTempIndex) - 32.0) * 5.0 / 9.0
+            e = 6.112 ^ ((17.67 * lAirTempC) / (lAirTempC + 243.5))
             es = aSpecHumidTSer.Value(lSpecHumidIndex) * aPressure / (0.378 * aSpecHumidTSer.Value(lSpecHumidIndex) + 0.622)
             RelHumid = e / es
             If RelHumid > 1.0 Then
@@ -2416,7 +2424,8 @@ OuttaHere:
             ElseIf RelHumid < 0 Then
                 RelHumid = 0.0
             End If
-            lDewpointTS.Value(lValueIndex) = aAirTempTSer.Value(lAirTempIndex) - ((100 - 100 * RelHumid) / 5)
+            lDewTempC = lAirTempC - ((100 - 100 * RelHumid) / 5)
+            lDewpointTS.Value(lValueIndex) = (lDewTempC * 9.0 / 5.0) + 32.0
         Next lValueIndex
 
         Return lDewpointTS

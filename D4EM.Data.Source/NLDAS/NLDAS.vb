@@ -532,12 +532,12 @@ Public Class NLDAS
                                         lNewDsn = lBaseDsn + 9 'use 3 for actual wind timeseries computed from windu and windv
                                         lCons = "WINDU"
                                         lDesc = "Hourly Zonal Wind in m/s"
-                                        lConvertedTimeseries = lTimeseries '* 2.237 for mph
+                                        lConvertedTimeseries = lTimeseries.Clone '* 2.237 for mph
                                     ElseIf aDataType = "VGRD10m" Then
                                         lNewDsn = lBaseDsn + 8
                                         lCons = "WINDV"
                                         lDesc = "Hourly Meridional Wind in m/s"
-                                        lConvertedTimeseries = lTimeseries '* 2.237 for mph
+                                        lConvertedTimeseries = lTimeseries.Clone '* 2.237 for mph
                                     ElseIf aDataType = "DSWRFsfc" Then
                                         lNewDsn = lBaseDsn + 4
                                         lCons = "SOLR"
@@ -610,9 +610,9 @@ Public Class NLDAS
                                                 Next
                                             End If
                                         End If
-                                        Dim lArgs As New atcDataAttributes
-                                        lArgs.Add("Timeseries", (lVWINDTimeseries * lVWINDTimeseries) + (lUWINDTimeseries * lUWINDTimeseries))
-                                        lConvertedTimeseries = atcData.DoMath("sqrt", lArgs) * 2.237
+                                        For lValueIndex As Integer = 1 To lVWINDTimeseries.numValues
+                                            lConvertedTimeseries.Value(lValueIndex) = (((lVWINDTimeseries.Value(lValueIndex) * lVWINDTimeseries.Value(lValueIndex)) + (lUWINDTimeseries.Value(lValueIndex) * lUWINDTimeseries.Value(lValueIndex))) ^ (0.5)) * 2.237
+                                        Next lValueIndex
                                         'now write the new timeseries to wdm
                                         With lConvertedTimeseries.Attributes
                                             .SetValue("ID", lBaseDsn + 3)
@@ -660,8 +660,6 @@ Public Class NLDAS
                             lResults = "<error>Failed to retrieve " & IO.Path.GetFileName(lCacheFilename) & "</error>"
                         End If
                     End If
-
-                    If lGDS IsNot Nothing Then lGDS.Clear()
 
                 Catch e As Exception
                     Return "<error>Error getting data for NLDAS cell " & lCell.ToString & vbCrLf & e.ToString & "</error>"
