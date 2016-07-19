@@ -43,6 +43,7 @@ Public Class SDMParameters
     Public BasinsMetConstituents As New Generic.List(Of String)
     Public NCDCconstituents As New Generic.List(Of String)
     Public NLDASconstituents As New Generic.List(Of String)
+    Public TimeZoneShift As Integer = 0             'Shift from UTC for NLDAS data
 
     Public ElevationGrid As D4EM.Data.LayerSpecification = D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid
     Public Shared ElevationGridOptions() As D4EM.Data.LayerSpecification =
@@ -176,6 +177,7 @@ Public Class SDMParameters
             AppendList("NCDCconstituents", NCDCconstituents, sb)
             If D4EM.Data.Source.NCDC.HasToken Then sb.AppendLine("NCDCtoken," & D4EM.Data.Source.NCDC.token)
             AppendList("NLDASconstituents", NLDASconstituents, sb)
+            sb.AppendLine("<TimeZoneShift>" & TimeZoneShift & "</TimeZoneShift>")
 
             sb.AppendLine("<SoilSource>" & SoilSource & "</SoilSource>")
             sb.AppendLine("<CatchmentsMethod>" & CatchmentsMethod & "</CatchmentsMethod>")
@@ -267,6 +269,7 @@ Public Class SDMParameters
                 Case "NCDCconstituents" : NCDCconstituents = New Generic.List(Of String)(lArg.InnerText.Split(" "))
                 Case "NCDCtoken" : D4EM.Data.Source.NCDC.token = lArg.InnerText
                 Case "NLDASconstituents" : NLDASconstituents = New Generic.List(Of String)(lArg.InnerText.Split(" "))
+                Case "TimeZoneShift" : TimeZoneShift = Convert.ToInt32(lArg.InnerText)
                 Case "WQConstituents"
                     WQConstituents = New Generic.List(Of String)
                     Dim lRawItems() As String = lArg.InnerText.Split(",")

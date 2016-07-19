@@ -79,6 +79,9 @@ Partial Class frmSpecifyProject
         Me.lblElevation = New System.Windows.Forms.Label()
         Me.comboElevation = New System.Windows.Forms.ComboBox()
         Me.groupMetData = New System.Windows.Forms.GroupBox()
+        Me.txtTimeZone = New atcControls.atcText()
+        Me.lblTimeZone = New System.Windows.Forms.Label()
+        Me.radioMetDataNLDAS = New System.Windows.Forms.RadioButton()
         Me.txtNCDCtoken = New System.Windows.Forms.TextBox()
         Me.radioMetDataNCDC = New System.Windows.Forms.RadioButton()
         Me.radioMetDataBASINS = New System.Windows.Forms.RadioButton()
@@ -95,7 +98,6 @@ Partial Class frmSpecifyProject
         Me.txtCatchments = New System.Windows.Forms.TextBox()
         Me.chkAddLayers = New System.Windows.Forms.CheckBox()
         Me.groupData = New System.Windows.Forms.GroupBox()
-        Me.radioMetDataNLDAS = New System.Windows.Forms.RadioButton()
         Me.groupSelectAreaOfInterest.SuspendLayout()
         Me.PanelPourPoint.SuspendLayout()
         Me.panelSelctionLayer.SuspendLayout()
@@ -795,6 +797,8 @@ Partial Class frmSpecifyProject
         '
         Me.groupMetData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.groupMetData.Controls.Add(Me.txtTimeZone)
+        Me.groupMetData.Controls.Add(Me.lblTimeZone)
         Me.groupMetData.Controls.Add(Me.radioMetDataNLDAS)
         Me.groupMetData.Controls.Add(Me.txtNCDCtoken)
         Me.groupMetData.Controls.Add(Me.radioMetDataNCDC)
@@ -807,6 +811,49 @@ Partial Class frmSpecifyProject
         Me.groupMetData.TabIndex = 38
         Me.groupMetData.TabStop = False
         Me.groupMetData.Text = "Meteorologic"
+        '
+        'txtTimeZone
+        '
+        Me.txtTimeZone.Alignment = System.Windows.Forms.HorizontalAlignment.Left
+        Me.txtTimeZone.DataType = atcControls.atcText.ATCoDataType.ATCoInt
+        Me.txtTimeZone.DefaultValue = ""
+        Me.txtTimeZone.HardMax = -999.0R
+        Me.txtTimeZone.HardMin = -999.0R
+        Me.txtTimeZone.InsideLimitsBackground = System.Drawing.Color.White
+        Me.txtTimeZone.Location = New System.Drawing.Point(256, 66)
+        Me.txtTimeZone.MaxWidth = 20
+        Me.txtTimeZone.Name = "txtTimeZone"
+        Me.txtTimeZone.NumericFormat = "0.#####"
+        Me.txtTimeZone.OutsideHardLimitBackground = System.Drawing.Color.Coral
+        Me.txtTimeZone.OutsideSoftLimitBackground = System.Drawing.Color.Yellow
+        Me.txtTimeZone.SelLength = 0
+        Me.txtTimeZone.SelStart = 0
+        Me.txtTimeZone.Size = New System.Drawing.Size(49, 18)
+        Me.txtTimeZone.SoftMax = -999.0R
+        Me.txtTimeZone.SoftMin = -999.0R
+        Me.txtTimeZone.TabIndex = 42
+        Me.txtTimeZone.ValueDouble = 0.0R
+        Me.txtTimeZone.ValueInteger = 0
+        '
+        'lblTimeZone
+        '
+        Me.lblTimeZone.AutoSize = True
+        Me.lblTimeZone.Location = New System.Drawing.Point(95, 68)
+        Me.lblTimeZone.Name = "lblTimeZone"
+        Me.lblTimeZone.Size = New System.Drawing.Size(155, 13)
+        Me.lblTimeZone.TabIndex = 41
+        Me.lblTimeZone.Text = "Project Time Zone - UTC minus"
+        Me.lblTimeZone.TextAlign = System.Drawing.ContentAlignment.BottomRight
+        '
+        'radioMetDataNLDAS
+        '
+        Me.radioMetDataNLDAS.AutoSize = True
+        Me.radioMetDataNLDAS.Location = New System.Drawing.Point(7, 66)
+        Me.radioMetDataNLDAS.Name = "radioMetDataNLDAS"
+        Me.radioMetDataNLDAS.Size = New System.Drawing.Size(61, 17)
+        Me.radioMetDataNLDAS.TabIndex = 4
+        Me.radioMetDataNLDAS.Text = "NLDAS"
+        Me.radioMetDataNLDAS.UseVisualStyleBackColor = True
         '
         'txtNCDCtoken
         '
@@ -835,6 +882,7 @@ Partial Class frmSpecifyProject
         Me.radioMetDataBASINS.Name = "radioMetDataBASINS"
         Me.radioMetDataBASINS.Size = New System.Drawing.Size(64, 17)
         Me.radioMetDataBASINS.TabIndex = 0
+        Me.radioMetDataBASINS.TabStop = True
         Me.radioMetDataBASINS.Text = "BASINS"
         Me.radioMetDataBASINS.UseVisualStyleBackColor = True
         '
@@ -989,16 +1037,6 @@ Partial Class frmSpecifyProject
         Me.groupData.Text = "Data Options"
         Me.groupData.Visible = False
         '
-        'radioMetDataNLDAS
-        '
-        Me.radioMetDataNLDAS.AutoSize = True
-        Me.radioMetDataNLDAS.Location = New System.Drawing.Point(7, 66)
-        Me.radioMetDataNLDAS.Name = "radioMetDataNLDAS"
-        Me.radioMetDataNLDAS.Size = New System.Drawing.Size(61, 17)
-        Me.radioMetDataNLDAS.TabIndex = 4
-        Me.radioMetDataNLDAS.Text = "NLDAS"
-        Me.radioMetDataNLDAS.UseVisualStyleBackColor = True
-        '
         'frmSpecifyProject
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1114,4 +1152,6 @@ Partial Class frmSpecifyProject
     Friend WithEvents rbtnFlowLog As System.Windows.Forms.RadioButton
     Friend WithEvents rbtnFlowLinear As System.Windows.Forms.RadioButton
     Friend WithEvents radioMetDataNLDAS As System.Windows.Forms.RadioButton
+    Friend WithEvents txtTimeZone As atcControls.atcText
+    Friend WithEvents lblTimeZone As System.Windows.Forms.Label
 End Class

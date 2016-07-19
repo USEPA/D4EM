@@ -115,6 +115,7 @@ Partial Class NLDAS
         Dim lDataType As String = Nothing
         Dim lCacheOnly As Boolean = False
         Dim lWDMFilename As String = ""
+        Dim lTimeZoneShift As Integer = 0
 
         Dim lArg As Xml.XmlNode = aArgs.FirstChild
 
@@ -131,6 +132,7 @@ Partial Class NLDAS
                     Case "getevenifcached" : If Not lArg.InnerText.ToLower.Contains("false") Then lGetEvenIfCached = True
                     Case "savein" : lSaveIn = lArg.InnerText
                     Case "savewdm" : lWDMFilename = lArg.InnerText
+                    Case "timezoneshift" : lTimeZoneShift = lArg.InnerText
                 End Select
             Catch e As Exception
                 Logger.Dbg("Exception reading argument from query: " & lArg.OuterXml & vbCrLf & vbCrLf & e.Message)
@@ -145,7 +147,7 @@ Partial Class NLDAS
             lDataTypes = DefaultParameters
         End If
         For Each lDataType In lDataTypes
-            lResults &= GetParameter(lProject, "NLDAS", lCells, lDataType, lStartDate, lEndDate, lWDMFilename) & vbCrLf
+            lResults &= GetParameter(lProject, "NLDAS", lCells, lDataType, lStartDate, lEndDate, lWDMFilename, lTimeZoneShift) & vbCrLf
         Next
         Return lResults
     End Function

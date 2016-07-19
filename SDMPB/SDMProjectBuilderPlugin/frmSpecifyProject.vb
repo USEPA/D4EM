@@ -212,6 +212,7 @@ NoMatch:
         params.NLDASconstituents.Clear()
         If radioMetDataNLDAS.Checked Then
             params.NLDASconstituents.Add("apcpsfc")
+            params.TimeZoneShift = txtTimeZone.Text
         End If
 
         Me.Visible = False

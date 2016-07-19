@@ -2364,6 +2364,8 @@ OuttaHere:
             End If
             If aSolTSer.Value(lValueIndex) > 990 Then
                 lCloudTs.Value(lValueIndex) = 0.0
+            ElseIf aSolTSer.Value(lValueIndex) < 247.5 Then
+                lCloudTs.Value(lValueIndex) = 1.0
             Else
                 lCloudTs.Value(lValueIndex) = ((990.0 - aSolTSer.Value(lValueIndex)) / 742.5) ^ (1 / 3)
             End If

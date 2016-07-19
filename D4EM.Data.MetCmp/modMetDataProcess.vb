@@ -583,7 +583,7 @@ Public Module modMetDataProcess
         Throw New ApplicationException("Could not determine time offset for " & ats.Attributes.GetValue("STAID", "station") & " in " & lState)
     End Function
 
-    Private Function ShiftDates(ByVal aTSer As atcTimeseries, ByVal aTU As modDate.atcTimeUnit, ByVal aShift As Integer) As atcDataSet
+    Public Function ShiftDates(ByVal aTSer As atcTimeseries, ByVal aTU As modDate.atcTimeUnit, ByVal aShift As Integer) As atcDataSet
         Dim lTSer As atcTimeseries = aTSer.Clone
         Dim lShiftInc As Double = 0
         Select Case aTU

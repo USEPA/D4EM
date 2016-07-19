@@ -321,6 +321,7 @@ Public Class NLDAS
     ''' <param name="aStartDate">Earliest time to get a value from, defaults to start of NLDAS data</param>
     ''' <param name="aEndDate">Latest time to get a value from, defaults to yesterday</param>
     ''' <param name="aWDMFilename">If specified, data will be saved in a WDM file</param>
+    ''' <param name="aTimeZoneShift">If specified, data will be shifted this number of hours to account for difference from UTC</param>
     ''' <returns>XML string describing what happened</returns>
     ''' <remarks></remarks>
     Public Shared Function GetParameter(ByVal aProject As Project,
@@ -329,7 +330,8 @@ Public Class NLDAS
                                Optional ByVal aDataType As String = "APCPsfc",
                                Optional ByVal aStartDate As Date = pFirstAvailableDate,
                                Optional ByVal aEndDate As Date = pDefaultEndDate,
-                               Optional ByVal aWDMFilename As String = "") As String
+                               Optional ByVal aWDMFilename As String = "",
+                               Optional ByVal aTimeZoneShift As Integer = 0) As String
         Dim lResults As String = ""
 
         If aCells Is Nothing OrElse aCells.Count = 0 Then
@@ -480,7 +482,8 @@ Public Class NLDAS
                             End If
                         End If
                         If lGDS IsNot Nothing Then
-                            For Each lTimeseries As atcData.atcTimeseries In lGDS.DataSets
+                            For Each lTimeseriesUnshifted As atcData.atcTimeseries In lGDS.DataSets
+                                Dim lTimeseries As atcTimeseries = D4EM.Data.MetCmp.ShiftDates(lTimeseriesUnshifted, atcTimeUnit.TUHour, -1 * aTimeZoneShift)
                                 If aDataType = "APCPsfc" Then
                                     Dim lInchesTimeseries As atcTimeseries = lTimeseries / 25.4
                                     With lInchesTimeseries.Attributes

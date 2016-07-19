@@ -689,7 +689,7 @@ TryGetvalues:
                     CheckResult(lResults, D4EM.Data.Source.NLDAS.GetParameter(aProject, lMetDataFolder,
                                           lAllNLDAScells, ,
                                           New Date(aParameters.SimulationStartYear, 1, 1, 0, 0, 0),
-                                          New Date(aParameters.SimulationEndYear + 1, 1, 1, 0, 0, 0), lDestinationWDMfilename))
+                                          New Date(aParameters.SimulationEndYear + 1, 1, 2, 0, 0, 0), lDestinationWDMfilename, aParameters.TimeZoneShift))
                     'precip has now been added to met WDM
 
                     'pbd added new code to get other NLDAS data types
@@ -698,7 +698,7 @@ TryGetvalues:
                     For Each lDataType In lDataTypes
                         lResults &= D4EM.Data.Source.NLDAS.GetParameter(aProject, lMetDataFolder,
                                           lAllNLDAScells, lDataType, New Date(aParameters.SimulationStartYear, 1, 1, 0, 0, 0),
-                                          New Date(aParameters.SimulationEndYear + 1, 1, 1, 0, 0, 0), lDestinationWDMfilename) & vbCrLf
+                                          New Date(aParameters.SimulationEndYear + 1, 1, 2, 0, 0, 0), lDestinationWDMfilename, aParameters.TimeZoneShift) & vbCrLf
                     Next
 
                     'modify WDM so NLDAS precip will be used instead of BASINS / NCDC precip
