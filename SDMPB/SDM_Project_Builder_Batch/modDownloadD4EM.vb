@@ -694,6 +694,7 @@ TryGetvalues:
 
                     'pbd added new code to get other NLDAS data types
                     Dim AdditionalParameters() As String = {"PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"} 'these are required to produce the HSPF constituents
+                    'Dim AdditionalParameters() As String = {"EVPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"} 'these are required to produce the HSPF constituents
                     Dim lDataTypes() As String = AdditionalParameters
                     For Each lDataType In lDataTypes
                         lResults &= D4EM.Data.Source.NLDAS.GetParameter(aProject, lMetDataFolder,

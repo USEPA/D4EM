@@ -457,6 +457,9 @@ Public Class NLDAS
                     If Not IO.File.Exists(lCacheFilename) Then
                         Using lLevel As New ProgressLevel(True)
                             Dim lURL As String = "http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:" & aDataType
+                            If aDataType = "EVPsfc" Then
+                                lURL = "http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_NOAH0125_H.002:" & aDataType
+                            End If
                             If aStartDate > pFirstAvailableDate Then
                                 lURL &= "&startDate=" & lStartDateString
                             End If
@@ -521,7 +524,7 @@ Public Class NLDAS
                                     Dim lCons As String = ""
                                     Dim lDesc As String = ""
                                     Dim lConvertedTimeseries As atcTimeseries = lTimeseries
-                                    If aDataType = "PEVAPsfc" Then
+                                    If aDataType = "PEVAPsfc" Or aDataType = "EVPsfc" Then
                                         lNewDsn = lBaseDsn + 5
                                         lCons = "PEVT"
                                         lDesc = "Hourly Potential Evapotranspiration in Inches"
