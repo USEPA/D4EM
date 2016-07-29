@@ -1064,18 +1064,18 @@ Public Class NetworkOperations
                         Logger.Dbg("MergeWith " & DumpComid(aFlowlines, lMergeWithComid, aFields))
                         Dim lMainFlowLineIndex As Integer = FindRecord(aFlowlines, aFields.FlowlinesComId, lMergeWithComid)
                         'dont do this if lmergewithcomid is a dontcombine
-                        If Not aDontCombineComIDs.Contains(lMergeWithComid) Then
-                            If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
-                                If lMainFlowLineIndex < 0 Then
-                                    Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
-                                Else
-                                    CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
-                                End If
-                                lMergedThese.Add(lOutletComID)
+                        'If Not aDontCombineComIDs.Contains(lMergeWithComid) Then
+                        If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
+                            If lMainFlowLineIndex < 0 Then
+                                Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
                             Else
-                                Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
+                                CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
                             End If
+                            lMergedThese.Add(lOutletComID)
+                        Else
+                            Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
                         End If
+                        'End If
                     End If
                 Else
                     'LogMessage(aLog, "Big Enough " & lOutletComID & " Area " & lOutletCumArea)
