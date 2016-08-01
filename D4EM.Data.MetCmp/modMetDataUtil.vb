@@ -2418,8 +2418,8 @@ OuttaHere:
                 Call J2Date(lDewpointTS.Dates.Value(lValueIndex - 1), lDate)
             End If
             lAirTempC = (aAirTempTSer.Value(lAirTempIndex) - 32.0) * 5.0 / 9.0
-            e = 6.112 ^ ((17.67 * lAirTempC) / (lAirTempC + 243.5))
-            es = aSpecHumidTSer.Value(lSpecHumidIndex) * aPressure / (0.378 * aSpecHumidTSer.Value(lSpecHumidIndex) + 0.622)
+            es = 6.112 * Math.Exp((17.67 * lAirTempC) / (lAirTempC + 243.5))
+            e = aSpecHumidTSer.Value(lSpecHumidIndex) * aPressure / (0.378 * aSpecHumidTSer.Value(lSpecHumidIndex) + 0.622)
             RelHumid = e / es
             If RelHumid > 1.0 Then
                 RelHumid = 1.0
