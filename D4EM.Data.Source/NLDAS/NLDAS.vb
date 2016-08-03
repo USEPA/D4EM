@@ -566,7 +566,23 @@ Public Class NLDAS
                                         lNewDsn = lBaseDsn + 7
                                         lCons = "CLOU"
                                         lDesc = "Hourly Cloud Cover"
-                                        lConvertedTimeseries = D4EM.Data.MetCmp.NLDASCloudCoverTimeseriesFromSolar(lTimeseries, lWDM)
+                                        'lConvertedTimeseries = D4EM.Data.MetCmp.NLDASCloudCoverTimeseriesFromSolar(lTimeseries, lWDM)
+                                        'another alternative for cloud cover:
+                                        Dim lDailyTimeseries As atcTimeseries = Aggregate(lConvertedTimeseries, atcTimeUnit.TUDay, 1, atcTran.TranSumDiv, lWDM)
+                                        Dim lDailyCCTimeseries As atcTimeseries = D4EM.Data.MetCmp.CloudCoverTimeseriesFromSolar(lDailyTimeseries, lWDM, lConvertedTimeseries.Attributes.GetValue("Latitude"))
+                                        For lValueIndex As Integer = 1 To lConvertedTimeseries.numValues
+                                            Dim lDayIndex = lDailyCCTimeseries.Dates.IndexOfValue(Int(lConvertedTimeseries.Dates.Value(lValueIndex)), True)
+                                            If lDayIndex > 0 Then
+                                                Dim lVal As Double = lDailyCCTimeseries.Value(lDayIndex)
+                                                If lVal > 0 Then
+                                                    lConvertedTimeseries.Value(lValueIndex) = lDailyCCTimeseries.Value(lDayIndex)
+                                                Else
+                                                    lConvertedTimeseries.Value(lValueIndex) = 10.0
+                                                End If
+                                            Else
+                                                lConvertedTimeseries.Value(lValueIndex) = 0.0
+                                            End If
+                                        Next lValueIndex
                                         lConvertedTimeseries.Attributes.SetValue("TSTYPE", lCons)
                                     ElseIf aDataType = "SPFH2m" Then
                                         lNewDsn = lBaseDsn + 6
