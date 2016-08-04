@@ -289,7 +289,10 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                     If aParameters.Catchments IsNot Nothing Then aParameters.Catchments.Clear()
                 Case "NHDPlus"
                     lOriginalFlowlinesLayer = aProject.LayerFromTag(D4EM.Data.Source.NHDPlus.LayerSpecifications.Hydrography.Flowline.Tag)
-                    lOriginalCatchmentsLayer = aProject.LayerFromTag(D4EM.Data.Source.NHDPlus.LayerSpecifications.CatchmentPolygons.Tag)
+                    'pbd -- fixing situation where multiple catchment layers may exist in the project, need to get the one that corresponds to these flowlines
+                    Dim lCatchmentFileName As String = PathNameOnly(lOriginalFlowlinesLayer.FileName) & "\..\drainage\" & D4EM.Data.Source.NHDPlus.LayerSpecifications.CatchmentPolygons.FilePattern
+                    'lOriginalCatchmentsLayer = aProject.LayerFromTag(D4EM.Data.Source.NHDPlus.LayerSpecifications.CatchmentPolygons.Tag)
+                    lOriginalCatchmentsLayer = aProject.LayerFromFileName(IO.Path.GetFullPath(lCatchmentFileName))
                 Case Else
                     Throw New ApplicationException("Unknown Catchements Method " & aParameters.CatchmentsMethod)
             End Select
