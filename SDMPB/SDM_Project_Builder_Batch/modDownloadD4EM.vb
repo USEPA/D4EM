@@ -363,13 +363,15 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                 'Dim lMetWDM As atcData.atcDataSource = aProject.TimeseriesSources.Item
                 Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating HSPF input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
                 Using lLevel As New ProgressLevel(False)
+                    'pbd -- fixing situation where multiple elevation layers may exist in the project, need to get the one that corresponds to these flowlines
+                    Dim lElevationFileName As String = IO.Path.GetFullPath(PathNameOnly(lOriginalFlowlinesLayer.FileName) & "\..\" & D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid.FilePattern)
                     Dim lHSPFModel As New D4EM.Model.HSPF.HSPFmodel
                     lHSPFModel.BuildHSPFInput(
                         aProject:=aProject,
                         aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
                         aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
                         aLandUseLayer:=aProject.LayerFromRole(D4EM.Data.LayerSpecification.Roles.LandUse),
-                        aDemGridLayer:=aProject.LayerFromTag(aParameters.ElevationGrid.Tag), _
+                        aDemGridLayer:=aProject.LayerFromFileName(lElevationFileName), _
                         aSoilsLayer:=lSoilsLayer,
                         aMetWDM:=aProject.TimeseriesSources(0),
                         aSimulationStartYear:=aParameters.SimulationStartYear,
