@@ -140,13 +140,27 @@ Partial Class NWIS
 
         Dim lProject As New Project(lDesiredProjection, Nothing, lSaveAsBase, lRegion, False, True)
 
-        If want_measurements Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Measurement, lSaveAsBase, lMakeShape)
-        If want_discharge Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Discharge, lSaveAsBase, lMakeShape)
-        If want_qw Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.WaterQuality, lSaveAsBase, lMakeShape)
-        If want_gw_daily Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterDaily, lSaveAsBase, lMakeShape)
-        If want_gw_periodic Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterPeriodic, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
-        If want_peak Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Peak, lSaveAsBase, lMakeShape)
-        If want_precipitation Then lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Precipitation, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
+        If want_measurements Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Measurement, lSaveAsBase, lMakeShape)
+        End If
+        If want_discharge Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Discharge, lSaveAsBase, lMakeShape)
+        End If
+        If want_qw Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.WaterQuality, lSaveAsBase, lMakeShape)
+        End If
+        If want_gw_daily Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterDaily, lSaveAsBase, lMakeShape)
+        End If
+        If want_gw_periodic Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.GroundwaterPeriodic, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
+        End If
+        If want_peak Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Peak, lSaveAsBase, lMakeShape)
+        End If
+        If want_precipitation Then
+            lResults &= GetAndMakeShape(lProject, NWIS.LayerSpecifications.Precipitation, lSaveAsBase, lMakeShape) 'TODO: lMinCount)
+        End If
         Return lResults
     End Function
 
@@ -186,7 +200,11 @@ Partial Class NWIS
         Return GetDailyDischarge(New Project(D4EM.Data.Globals.GeographicProjection,
                                              lCacheFolder, lSaveIn, lRegion, False, False,
                                              lGetEvenIfCached, lCacheOnly),
-                                 "NWIS", lStationIDs, lStartDate, lEndDate, lWDMFilename)
+                                 aSaveFolder:="NWIS",
+                                 aStationIDs:=lStationIDs,
+                                 aStartDate:=lStartDate,
+                                 aEndDate:=lEndDate,
+                                 aWDMFilename:=lWDMFilename)
     End Function
 
     Public Shared Function GetMeasurements(ByVal aArgs As Xml.XmlNode) As String
@@ -225,7 +243,10 @@ Partial Class NWIS
         Return GetMeasurements(New Project(D4EM.Data.Globals.GeographicProjection,
                                            lCacheFolder, lSaveIn, lRegion, False, False,
                                            lGetEvenIfCached, lCacheOnly),
-                               "NWIS", lStationIDs, lStartDate, lEndDate)
+                               aSaveFolder:="NWIS",
+                               aStationIDs:=lStationIDs,
+                               aStartDate:=lStartDate,
+                               aEndDate:=lEndDate)
     End Function
 
     Public Shared Function GetIDADischarge(ByVal aArgs As Xml.XmlNode) As String
@@ -367,8 +388,14 @@ Partial Class NWIS
             lArg = lArg.NextSibling
         End While
         Return GetDailyGroundwater(New Project(D4EM.Data.Globals.GeographicProjection,
-                                 lCacheFolder, lSaveIn, lRegion, False, False,
-                                 lGetEvenIfCached, lCacheOnly), lSaveIn, lStationIDs, lStartDate, lEndDate, lWDMFilename, aDataType)
+                                               lCacheFolder, lSaveIn, lRegion, False, False,
+                                               lGetEvenIfCached, lCacheOnly),
+                                   aSaveFolder:="NWIS",
+                                   aStationIDs:=lStationIDs,
+                                   aStartDate:=lStartDate,
+                                   aEndDate:=lEndDate,
+                                   aWDMFilename:=lWDMFilename,
+                                   aDataType:=aDataType)
     End Function
 
 End Class
