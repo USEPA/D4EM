@@ -162,11 +162,11 @@ Public Class NLDAS
             lSouthLatitude = Math.Max(lSouthLatitude, pSouthmostGridCenter)
             'TODO: lNorthLatitude = Math.Min(lNorthLatitude, pNorthmostGridCenter)
 
-            lMinX = Math.Floor((lWestLongitude - pWestmostGridCenter) / pDegreesPerGridCell)
-            lMaxX = Math.Ceiling((lEastLongitude - pWestmostGridCenter) / pDegreesPerGridCell)
+            lMinX = Math.Floor(((lWestLongitude - pWestmostGridCenter) / pDegreesPerGridCell) + 1)
+            lMaxX = Math.Ceiling(((lEastLongitude - pWestmostGridCenter) / pDegreesPerGridCell) + 1)
 
-            lMinY = Math.Floor((lSouthLatitude - pSouthmostGridCenter) / pDegreesPerGridCell)
-            lMaxY = Math.Ceiling((lNorthLatitude - pSouthmostGridCenter) / pDegreesPerGridCell)
+            lMinY = Math.Floor(((lSouthLatitude - pSouthmostGridCenter) / pDegreesPerGridCell) + 1)
+            lMaxY = Math.Ceiling(((lNorthLatitude - pSouthmostGridCenter) / pDegreesPerGridCell) + 1)
 
             lMinX = Math.Max(lMinX, 0)
             lMinY = Math.Max(lMinY, 0)
@@ -205,8 +205,8 @@ Public Class NLDAS
                                     Optional ByVal aTargetProjection As DotSpatial.Projections.ProjectionInfo = Nothing) As DotSpatial.Data.Shape
 
         Dim lCoordinates As New Generic.List(Of DotSpatial.Topology.Coordinate)
-        Dim lSouthwestLatLon As New DotSpatial.Topology.Coordinate(pWestmostGridEdge + aGrid.X * pDegreesPerGridCell,
-                                                                   pSouthmostGridEdge + aGrid.Y * pDegreesPerGridCell)
+        Dim lSouthwestLatLon As New DotSpatial.Topology.Coordinate(pWestmostGridEdge + ((aGrid.X - 1) * pDegreesPerGridCell),
+                                                                   pSouthmostGridEdge + ((aGrid.Y - 1) * pDegreesPerGridCell))
 
         Dim lNextPoint As New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X,
                                                              lSouthwestLatLon.Y)
@@ -277,8 +277,8 @@ Public Class NLDAS
         For Each lGrid As NLDASGridCoords In aAllCells
             Dim lFeature As DotSpatial.Data.IFeature
             If aLayerType = LayerSpecifications.GridPoints Then
-                Dim lX As Double = pWestmostGridCenter + lGrid.X * pDegreesPerGridCell
-                Dim lY As Double = pSouthmostGridCenter + lGrid.Y * pDegreesPerGridCell
+                Dim lX As Double = pWestmostGridCenter + ((lGrid.X - 1) * pDegreesPerGridCell)
+                Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y - 1) * pDegreesPerGridCell)
                 Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
                 Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
                 lFeature = lFeatureSet.AddFeature(lPoint)
