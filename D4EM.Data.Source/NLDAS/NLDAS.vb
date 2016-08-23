@@ -126,8 +126,8 @@ Public Class NLDAS
             Dim lX As Integer
             Dim lY As Integer
 
-            lX = (lLongitude - pWestmostGridCenter) / pDegreesPerGridCell
-            lY = (lLatitude - pSouthmostGridCenter) / pDegreesPerGridCell
+            lX = ((lLongitude - pWestmostGridCenter) / pDegreesPerGridCell) + 1
+            lY = ((lLatitude - pSouthmostGridCenter) / pDegreesPerGridCell) + 1
 
             cell = New NLDASGridCoords(lX, lY)
 
