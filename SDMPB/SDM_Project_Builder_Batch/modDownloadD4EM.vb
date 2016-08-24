@@ -805,7 +805,15 @@ TrySeamlessElevation:
             If Not lLayer.IsFeatureSet Then
                 If lLayer.Projection.ToProj4String.Equals(aProject.DesiredProjection.ToProj4String) OrElse lLayer.Projection.Matches(aProject.DesiredProjection) Then
                     If lReferenceGrid Is Nothing OrElse lLayer.Specification.Role = D4EM.Data.LayerSpecification.Roles.LandUse Then
-                        lReferenceGrid = lLayer
+                        'pbd -- fixing situation where multiple elevation layers may exist in the project in different HUC8s, need to get the one that corresponds to these flowlines
+                        If lLayer.Specification.Role = D4EM.Data.LayerSpecification.Roles.Elevation Then
+                            'may not want this one, see if it has flowlines which will indicate if this is the HUC8 of interest
+                            If IO.File.Exists(IO.Path.GetFullPath(PathNameOnly(lLayer.FileName) & "\hydrography\nhdflowline.shp")) Then
+                                lReferenceGrid = lLayer
+                            End If
+                        Else
+                            lReferenceGrid = lLayer
+                        End If
                     End If
                 Else
                     lNeedProjecting.Add(lLayer)
