@@ -67,7 +67,8 @@ Public Class HSPFmodel
                               ByVal aChemicalMaximumSolubility As Double,
                               ByVal aChemicalPartitionCoeff() As Double,
                               ByVal aChemicalFreundlichExp() As Double,
-                              ByVal aChemicalDegradationRate() As Double)
+                              ByVal aChemicalDegradationRate() As Double,
+                              ByVal aSegmentationOption As Integer)
 
         Logger.Dbg("BuildHSPFInput: Start")
         GisUtil.MappingObject = aProject
@@ -144,7 +145,7 @@ Public Class HSPFmodel
         Dim lSubbasinsLayerIndex As Integer = GisUtil.LayerIndex(pSubbasinLayerName)
         If GisUtil.IsField(lSubbasinsLayerIndex, pSubbasinSegmentName) Then
             FindUniqueMetSegments(lUniqueModelSegmentNames, lUniqueModelSegmentIds, _
-                                  pSubbasinLayerName, pSubbasinFieldName, pSubbasinSegmentName)
+                                  pSubbasinLayerName, pSubbasinFieldName, pSubbasinSegmentName, aSegmentationOption)
         Else
             'if the ModelSeg field doesn't exist (using NCDC), set it to blank
             pSubbasinSegmentName = ""
@@ -158,7 +159,7 @@ Public Class HSPFmodel
         Dim lMetStations As New atcCollection
         Dim lMetBaseDsns As New atcCollection
         Dim lMetWdmNames As New atcCollection
-        BuildListofMetStationNames(lMetWdmNames, lMetStations, lMetBaseDsns, aProject.TimeseriesSources, lUniqueModelSegmentNames)
+        BuildListofMetStationNames(lMetWdmNames, lMetStations, lMetBaseDsns, aProject.TimeseriesSources, lUniqueModelSegmentNames, aSegmentationOption)
 
         Dim lMetWdmIds As New atcCollection
         'Using same wdm file for all model segments
@@ -259,7 +260,8 @@ Public Class HSPFmodel
                      pOutletsLayerName, pPointFieldName, pPointYear, _
                      pLandUseFieldName, pLandUseClassFile, _
                      pSubbasinSegmentName, _
-                     pPSRCustom, pPSRCustomFile, pPSRCalculate, aSnowOption, aDemGridLayer, lElevationUnitsName) Then
+                     pPSRCustom, pPSRCustomFile, pPSRCalculate, aSnowOption, aDemGridLayer, lElevationUnitsName, _
+                     aSegmentationOption) Then
             lMetWdmNames.Clear()
             lMetWdmNames.Add(pMetWDM)
             If CreateUCI(IO.Path.Combine(lOutputPath, pBaseOutputName & ".uci"),
