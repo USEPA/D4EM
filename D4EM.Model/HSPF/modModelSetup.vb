@@ -67,7 +67,8 @@ Public Module modModelSetup
                               ByVal aPSRCalculate As Boolean, _
                               ByVal aSnowOption As Integer, _
                               ByVal aElevationLayer As D4EM.Data.Layer, _
-                              ByVal aElevationUnits As String) As Boolean
+                              ByVal aElevationUnits As String, _
+                              ByVal aSegmentationOption As Integer) As Boolean
 
         Logger.Status("Preparing to process")
         Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
@@ -104,11 +105,17 @@ Public Module modModelSetup
         If aSubbasinSegmentName <> "<none>" And aSubbasinSegmentName <> "" Then 'see if we have some model segments in the subbasin dbf
             lSubbasinSegmentFieldIndex = GisUtil.FieldIndex(lSubbasinLayerIndex, aSubbasinSegmentName)
         End If
+        Dim lCount As Integer = 0
         For Each lSubbasinIndex As Integer In lSubbasinsSelected.Keys
+            lCount += 1
             lSubbasinId = lSubbasinsSelected.ItemByKey(lSubbasinIndex)
             If lSubbasinSegmentFieldIndex > -1 And aUniqueModelSegmentIds.Count > 0 Then
                 Dim lModelSegment As String = GisUtil.FieldValue(lSubbasinLayerIndex, lSubbasinIndex, lSubbasinSegmentFieldIndex)
-                lSubbasinsModelSegmentIds.Add(lSubbasinId, aUniqueModelSegmentIds(aUniqueModelSegmentNames.IndexFromKey(lModelSegment)))
+                If aSegmentationOption = 0 Then  'Individual
+                    lSubbasinsModelSegmentIds.Add(lSubbasinId, lCount)  'do individual model segments by adding a unique model segment id for each subbasin
+                Else  'Grouped
+                    lSubbasinsModelSegmentIds.Add(lSubbasinId, aUniqueModelSegmentIds(aUniqueModelSegmentNames.IndexFromKey(lModelSegment)))
+                End If
             Else
                 lSubbasinsModelSegmentIds.Add(lSubbasinId, 1)
             End If
@@ -803,112 +810,225 @@ Public Module modModelSetup
                                           ByVal aMetStations As atcCollection, _
                                           ByVal aMetBaseDsns As atcCollection, _
                                           ByVal aTimeseriesSources As Generic.List(Of atcData.atcTimeseriesSource), _
-                                          ByVal aUniqueModelSegmentNames As atcCollection)
+                                          ByVal aUniqueModelSegmentNames As atcCollection, _
+                                          ByVal aSegmentationOption As Integer)
         aMetStations.Clear()
         aMetBaseDsns.Clear()
         aMetWdmNames.Clear()
 
-        For Each lUnique As String In aUniqueModelSegmentNames
-            aMetStations.Add(lUnique)
-            aMetBaseDsns.Add(lUnique)
-            aMetWdmNames.Add(lUnique)
-        Next
+        If aSegmentationOption = 0 Then  'Individual
+            Dim lCount As Integer = 0    'do individual model segments by adding a unique model segment id for each subbasin 
+            For Each lUnique As String In aUniqueModelSegmentNames
+                lCount += 1
+                aMetStations.Add(lCount, lUnique)
+                aMetBaseDsns.Add(lCount, lUnique)
+                aMetWdmNames.Add(lCount, lUnique)
+            Next
 
-        'collection of unique wdm file names, used to establish WDM2, WDM3, etc
-        Dim lUniqueWDMNames As New atcCollection
+            'collection of unique wdm file names, used to establish WDM2, WDM3, etc
+            Dim lUniqueWDMNames As New atcCollection
 
-        For Each lDataSourceGeneric As atcDataSource In aTimeseriesSources
-            If lDataSourceGeneric IsNot Nothing AndAlso lDataSourceGeneric.Name = "Timeseries::WDM" Then
-                Dim lDataSourceWDM As atcWDM.atcDataSourceWDM = lDataSourceGeneric
-                Dim lCounter As Integer = 0
-                For lCounter = 1 To lDataSourceWDM.DataSets.Count
-                    Dim lDataSet As atcTimeseries = lDataSourceWDM.DataSets(lCounter - 1)
-                    Logger.Progress("Building List of Met Station Names", lCounter, lDataSourceWDM.DataSets.Count)
-                    If lDataSet.Attributes.GetValue("Constituent") = "PREC" Then
-                        If (lDataSet.Attributes.GetValue("Scenario") = "OBSERVED" OrElse lDataSet.Attributes.GetValue("Scenario") = "COMPUTED") Then
-                            Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
-                            Dim lUniqueIndex As Integer = aUniqueModelSegmentNames.IndexOf(lLoc)
-                            If lUniqueIndex >= 0 Then
-                                Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
-                                Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
-                                Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
-                                lUniqueWDMNames.Add(lFileName)
-                                'get the common dates from prec and pevt at this location
-                                Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
-                                Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
-                                'find pevt dataset at the same location
-                                Dim lAddIt As Boolean = False
-                                For Each lDataSet2 As atcData.atcTimeseries In lDataSourceWDM.DataSets
-                                    If lDataSet2.Attributes.GetValue("Constituent") = "PEVT" And _
-                                       lDataSet2.Attributes.GetValue("Location") = lLoc Then
-                                        Dim lSJDay2 As Double = lDataSet2.Attributes.GetValue("SJDay") '.Dates.Value(0)
-                                        Dim lEJDay2 As Double = lDataSet2.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet2.Dates.numValues)
-                                        If lSJDay2 > lSJDay Then lSJDay = lSJDay2
-                                        If lEJDay2 < lEJDay Then lEJDay = lEJDay2
-                                        lAddIt = True
-                                        Exit For
+            For Each lDataSourceGeneric As atcDataSource In aTimeseriesSources
+                If lDataSourceGeneric IsNot Nothing AndAlso lDataSourceGeneric.Name = "Timeseries::WDM" Then
+                    Dim lDataSourceWDM As atcWDM.atcDataSourceWDM = lDataSourceGeneric
+                    Dim lCounter As Integer = 0
+                    For lCounter = 1 To lDataSourceWDM.DataSets.Count
+                        Dim lDataSet As atcTimeseries = lDataSourceWDM.DataSets(lCounter - 1)
+                        Logger.Progress("Building List of Met Station Names", lCounter, lDataSourceWDM.DataSets.Count)
+                        If lDataSet.Attributes.GetValue("Constituent") = "PREC" Then
+                            If (lDataSet.Attributes.GetValue("Scenario") = "OBSERVED" OrElse lDataSet.Attributes.GetValue("Scenario") = "COMPUTED") Then
+                                Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
+                                Dim lUniqueIndex As Integer = -1
+                                For Each lSegmentName As String In aUniqueModelSegmentNames   'do individual model segments by adding a unique model segment id for each subbasin
+                                    lUniqueIndex += 1
+                                    If lSegmentName = lLoc Then
+                                        Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
+                                        Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
+                                        Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
+                                        lUniqueWDMNames.Add(lFileName)
+                                        'get the common dates from prec and pevt at this location
+                                        Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                        Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
+                                        'find pevt dataset at the same location
+                                        Dim lAddIt As Boolean = False
+                                        For Each lDataSet2 As atcData.atcTimeseries In lDataSourceWDM.DataSets
+                                            If lDataSet2.Attributes.GetValue("Constituent") = "PEVT" And _
+                                               lDataSet2.Attributes.GetValue("Location") = lLoc Then
+                                                Dim lSJDay2 As Double = lDataSet2.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                                Dim lEJDay2 As Double = lDataSet2.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet2.Dates.numValues)
+                                                If lSJDay2 > lSJDay Then lSJDay = lSJDay2
+                                                If lEJDay2 < lEJDay Then lEJDay = lEJDay2
+                                                lAddIt = True
+                                                Exit For
+                                            End If
+                                        Next
+                                        'if this one is computed and observed also exists at same location, just use observed
+                                        If lDataSet.Attributes.GetValue("Scenario") = "COMPUTED" Then
+                                            For Each lDataSet2 As atcData.atcTimeseries In lDataSourceWDM.DataSets
+                                                If lDataSet2.Attributes.GetValue("Constituent") = "PREC" And _
+                                                   lDataSet2.Attributes.GetValue("Scenario") = "OBSERVED" And _
+                                                   lDataSet2.Attributes.GetValue("Location") = lLoc Then
+                                                    lAddIt = False
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                        If lAddIt Then
+                                            Dim lLeadingChar As String = ""
+                                            If IsBASINSMetWDM(lDataSourceWDM.DataSets, lDsn, lLoc) Then
+                                                'full set available here
+                                                lLeadingChar = "*"
+                                            End If
+                                            Dim lSdate(6) As Integer
+                                            Dim lEdate(6) As Integer
+                                            J2Date(lSJDay, lSdate)
+                                            J2Date(lEJDay, lEdate)
+                                            Dim lDateString As String = "(" & lSdate(0) & "/" & lSdate(1) & "/" & lSdate(2) & "-" & lEdate(0) & "/" & lEdate(1) & "/" & lEdate(2) & ")"
+                                            aMetStations(lUniqueIndex) = lLeadingChar & lLoc & ":" & lStanam & " " & lDateString
+                                            aMetBaseDsns.RemoveAt(lUniqueIndex) : aMetBaseDsns.Insert(lUniqueIndex, aMetBaseDsns.Count, lDsn)
+                                            aMetWdmNames.RemoveAt(lUniqueIndex) : aMetWdmNames.Insert(lUniqueIndex, aMetWdmNames.Count, lFileName)
+                                            If Not atcData.atcDataManager.DataSources.Contains(lDataSourceWDM) Then
+                                                atcData.atcDataManager.DataSources.Add(lDataSourceWDM)
+                                            End If
+                                        End If
                                     End If
                                 Next
-                                'if this one is computed and observed also exists at same location, just use observed
-                                If lDataSet.Attributes.GetValue("Scenario") = "COMPUTED" Then
+                            Else
+                                'allow all nldas stations, they wont have pevt at the same location ever
+                                Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
+                                Dim lUniqueIndex As Integer = -1
+                                For Each lSegmentName As String In aUniqueModelSegmentNames  'do individual model segments by adding a unique model segment id for each subbasin
+                                    lUniqueIndex += 1
+                                    If lSegmentName = lLoc Then
+                                        Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
+                                        Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
+                                        Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
+                                        lUniqueWDMNames.Add(lFileName)
+
+                                        Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                        Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
+                                        Dim lSdate(6) As Integer
+                                        Dim lEdate(6) As Integer
+                                        J2Date(lSJDay, lSdate)
+                                        J2Date(lEJDay, lEdate)
+
+                                        Dim lDateString As String = "(" & lSdate(0) & "/" & lSdate(1) & "/" & lSdate(2) & "-" & lEdate(0) & "/" & lEdate(1) & "/" & lEdate(2) & ")"
+                                        aMetStations(lUniqueIndex) = lLoc & ":" & lStanam & " " & lDateString
+                                        aMetBaseDsns.RemoveAt(lUniqueIndex) : aMetBaseDsns.Insert(lUniqueIndex, aMetBaseDsns.Count, lDsn)
+                                        aMetWdmNames.RemoveAt(lUniqueIndex) : aMetWdmNames.Insert(lUniqueIndex, aMetWdmNames.Count, lFileName)
+                                    End If
+                                Next
+                            End If
+                        End If
+                        'set valuesneedtoberead so that the dates and values will be forgotten, to free up memory
+                        'lDataSet.ValuesNeedToBeRead = True
+                    Next
+                End If
+            Next lDataSourceGeneric
+        Else
+            'normal grouped segmentation
+            For Each lUnique As String In aUniqueModelSegmentNames
+                aMetStations.Add(lUnique)
+                aMetBaseDsns.Add(lUnique)
+                aMetWdmNames.Add(lUnique)
+            Next
+
+            'collection of unique wdm file names, used to establish WDM2, WDM3, etc
+            Dim lUniqueWDMNames As New atcCollection
+
+            For Each lDataSourceGeneric As atcDataSource In aTimeseriesSources
+                If lDataSourceGeneric IsNot Nothing AndAlso lDataSourceGeneric.Name = "Timeseries::WDM" Then
+                    Dim lDataSourceWDM As atcWDM.atcDataSourceWDM = lDataSourceGeneric
+                    Dim lCounter As Integer = 0
+                    For lCounter = 1 To lDataSourceWDM.DataSets.Count
+                        Dim lDataSet As atcTimeseries = lDataSourceWDM.DataSets(lCounter - 1)
+                        Logger.Progress("Building List of Met Station Names", lCounter, lDataSourceWDM.DataSets.Count)
+                        If lDataSet.Attributes.GetValue("Constituent") = "PREC" Then
+                            If (lDataSet.Attributes.GetValue("Scenario") = "OBSERVED" OrElse lDataSet.Attributes.GetValue("Scenario") = "COMPUTED") Then
+                                Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
+                                Dim lUniqueIndex As Integer = aUniqueModelSegmentNames.IndexOf(lLoc)
+                                If lUniqueIndex >= 0 Then
+                                    Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
+                                    Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
+                                    Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
+                                    lUniqueWDMNames.Add(lFileName)
+                                    'get the common dates from prec and pevt at this location
+                                    Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                    Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
+                                    'find pevt dataset at the same location
+                                    Dim lAddIt As Boolean = False
                                     For Each lDataSet2 As atcData.atcTimeseries In lDataSourceWDM.DataSets
-                                        If lDataSet2.Attributes.GetValue("Constituent") = "PREC" And _
-                                           lDataSet2.Attributes.GetValue("Scenario") = "OBSERVED" And _
+                                        If lDataSet2.Attributes.GetValue("Constituent") = "PEVT" And _
                                            lDataSet2.Attributes.GetValue("Location") = lLoc Then
-                                            lAddIt = False
+                                            Dim lSJDay2 As Double = lDataSet2.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                            Dim lEJDay2 As Double = lDataSet2.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet2.Dates.numValues)
+                                            If lSJDay2 > lSJDay Then lSJDay = lSJDay2
+                                            If lEJDay2 < lEJDay Then lEJDay = lEJDay2
+                                            lAddIt = True
                                             Exit For
                                         End If
                                     Next
-                                End If
-                                If lAddIt Then
-                                    Dim lLeadingChar As String = ""
-                                    If IsBASINSMetWDM(lDataSourceWDM.DataSets, lDsn, lLoc) Then
-                                        'full set available here
-                                        lLeadingChar = "*"
+                                    'if this one is computed and observed also exists at same location, just use observed
+                                    If lDataSet.Attributes.GetValue("Scenario") = "COMPUTED" Then
+                                        For Each lDataSet2 As atcData.atcTimeseries In lDataSourceWDM.DataSets
+                                            If lDataSet2.Attributes.GetValue("Constituent") = "PREC" And _
+                                               lDataSet2.Attributes.GetValue("Scenario") = "OBSERVED" And _
+                                               lDataSet2.Attributes.GetValue("Location") = lLoc Then
+                                                lAddIt = False
+                                                Exit For
+                                            End If
+                                        Next
                                     End If
+                                    If lAddIt Then
+                                        Dim lLeadingChar As String = ""
+                                        If IsBASINSMetWDM(lDataSourceWDM.DataSets, lDsn, lLoc) Then
+                                            'full set available here
+                                            lLeadingChar = "*"
+                                        End If
+                                        Dim lSdate(6) As Integer
+                                        Dim lEdate(6) As Integer
+                                        J2Date(lSJDay, lSdate)
+                                        J2Date(lEJDay, lEdate)
+                                        Dim lDateString As String = "(" & lSdate(0) & "/" & lSdate(1) & "/" & lSdate(2) & "-" & lEdate(0) & "/" & lEdate(1) & "/" & lEdate(2) & ")"
+                                        aMetStations(lUniqueIndex) = lLeadingChar & lLoc & ":" & lStanam & " " & lDateString
+                                        aMetBaseDsns.RemoveAt(lUniqueIndex) : aMetBaseDsns.Insert(lUniqueIndex, aMetBaseDsns.Count, lDsn)
+                                        aMetWdmNames.RemoveAt(lUniqueIndex) : aMetWdmNames.Insert(lUniqueIndex, aMetWdmNames.Count, lFileName)
+                                        If Not atcData.atcDataManager.DataSources.Contains(lDataSourceWDM) Then
+                                            atcData.atcDataManager.DataSources.Add(lDataSourceWDM)
+                                        End If
+                                    End If
+                                End If
+                            Else
+                                'allow all nldas stations, they wont have pevt at the same location ever
+                                Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
+                                Dim lUniqueIndex As Integer = aUniqueModelSegmentNames.IndexOf(lLoc)
+                                If lUniqueIndex >= 0 Then
+
+                                    Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
+                                    Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
+                                    Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
+                                    lUniqueWDMNames.Add(lFileName)
+
+                                    Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
+                                    Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
                                     Dim lSdate(6) As Integer
                                     Dim lEdate(6) As Integer
                                     J2Date(lSJDay, lSdate)
                                     J2Date(lEJDay, lEdate)
+
                                     Dim lDateString As String = "(" & lSdate(0) & "/" & lSdate(1) & "/" & lSdate(2) & "-" & lEdate(0) & "/" & lEdate(1) & "/" & lEdate(2) & ")"
-                                    aMetStations(lUniqueIndex) = lLeadingChar & lLoc & ":" & lStanam & " " & lDateString
+                                    aMetStations(lUniqueIndex) = lLoc & ":" & lStanam & " " & lDateString
                                     aMetBaseDsns.RemoveAt(lUniqueIndex) : aMetBaseDsns.Insert(lUniqueIndex, aMetBaseDsns.Count, lDsn)
                                     aMetWdmNames.RemoveAt(lUniqueIndex) : aMetWdmNames.Insert(lUniqueIndex, aMetWdmNames.Count, lFileName)
-                                    If Not atcData.atcDataManager.DataSources.Contains(lDataSourceWDM) Then
-                                        atcData.atcDataManager.DataSources.Add(lDataSourceWDM)
-                                    End If
                                 End If
                             End If
-                        Else
-                            'allow all nldas stations, they wont have pevt at the same location ever
-                            Dim lLoc As String = lDataSet.Attributes.GetValue("Location")
-                            Dim lUniqueIndex As Integer = aUniqueModelSegmentNames.IndexOf(lLoc)
-                            If lUniqueIndex >= 0 Then
-
-                                Dim lStanam As String = lDataSet.Attributes.GetValue("Stanam")
-                                Dim lDsn As Integer = lDataSet.Attributes.GetValue("Id")
-                                Dim lFileName As String = lDataSet.Attributes.GetValue("Data Source")
-                                lUniqueWDMNames.Add(lFileName)
-
-                                Dim lSJDay As Double = lDataSet.Attributes.GetValue("SJDay") '.Dates.Value(0)
-                                Dim lEJDay As Double = lDataSet.Attributes.GetValue("EJDay") '.Dates.Value(lDataSet.Dates.numValues)
-                                Dim lSdate(6) As Integer
-                                Dim lEdate(6) As Integer
-                                J2Date(lSJDay, lSdate)
-                                J2Date(lEJDay, lEdate)
-
-                                Dim lDateString As String = "(" & lSdate(0) & "/" & lSdate(1) & "/" & lSdate(2) & "-" & lEdate(0) & "/" & lEdate(1) & "/" & lEdate(2) & ")"
-                                aMetStations(lUniqueIndex) = lLoc & ":" & lStanam & " " & lDateString
-                                aMetBaseDsns.RemoveAt(lUniqueIndex) : aMetBaseDsns.Insert(lUniqueIndex, aMetBaseDsns.Count, lDsn)
-                                aMetWdmNames.RemoveAt(lUniqueIndex) : aMetWdmNames.Insert(lUniqueIndex, aMetWdmNames.Count, lFileName)
-                            End If
                         End If
-                    End If
-                    'set valuesneedtoberead so that the dates and values will be forgotten, to free up memory
-                    'lDataSet.ValuesNeedToBeRead = True
-                Next
-            End If
-        Next lDataSourceGeneric
+                        'set valuesneedtoberead so that the dates and values will be forgotten, to free up memory
+                        'lDataSet.ValuesNeedToBeRead = True
+                    Next
+                End If
+            Next lDataSourceGeneric
+        End If
     End Sub
 
     Public Function CreateUCI(ByVal aUciName As String,
@@ -1113,7 +1233,8 @@ Public Module modModelSetup
                                      ByRef aUniqueModelSegmentIds As atcCollection, _
                                      ByVal aSubbasinLayerName As String, _
                                      ByVal aSubbasinFieldName As String, _
-                                     ByVal aModelSegmentFieldName As String)
+                                     ByVal aModelSegmentFieldName As String, _
+                                     ByVal aSegmentationOption As Integer)
 
         If Not String.IsNullOrEmpty(aModelSegmentFieldName) Then
             Dim lSubbasinsLayerIndex As Integer = GisUtil.LayerIndex(aSubbasinLayerName)
@@ -1128,8 +1249,14 @@ Public Module modModelSetup
             Dim lIsInteger As Boolean = True
             For lIndex As Integer = 1 To GisUtil.NumFeatures(lSubbasinsLayerIndex)
                 Dim lModelSegment As String = GisUtil.FieldValue(lSubbasinsLayerIndex, lIndex - 1, lModelSegmentFieldIndex)
-                If aUniqueModelSegmentNames.IndexFromKey(lModelSegment) = -1 Then
-                    aUniqueModelSegmentNames.Add(lModelSegment)
+                If aSegmentationOption = 0 Or aUniqueModelSegmentNames.IndexFromKey(lModelSegment) = -1 Then
+                    'do this for every subbasin if segmentation option is individual, only once per model segment if using normal grouped segmentation
+                    If aSegmentationOption = 0 Then  'Individual
+                        'do individual model segments by adding a unique model segment id for each subbasin
+                        aUniqueModelSegmentNames.Add(lIndex, lModelSegment)
+                    Else
+                        aUniqueModelSegmentNames.Add(lModelSegment)
+                    End If
                     lUniqueModelSegmentIntegerIds.Add(lUniqueModelSegmentIntegerIds.Count + 1)
                     If IsInteger(lModelSegment) Then
                         If Int(lModelSegment) > 0 Then

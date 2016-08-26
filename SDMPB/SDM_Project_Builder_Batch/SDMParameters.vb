@@ -86,6 +86,7 @@ Public Class SDMParameters
     Public HspfChemicalPartitionCoeff() As Double = {4, 4, 2, 2}
     Public HspfChemicalFreundlichExp() As Double = {1.4, 1.4, 1.4, 1.4}
     Public HspfChemicalDegradationRate() As Double = {0.12, 0.045, 0.04, 0.04}
+    Public HspfSegmentationOption As Integer = 0 '0 = individual segmentation (one per subwatershed), 1 = grouped segmentation
 
     Public GeoProcess As Boolean = True
     Public BuildDatabase As Boolean = True
@@ -166,6 +167,7 @@ Public Class SDMParameters
                 sb.AppendLine("    <ChemicalDegradationRateLower>" & HspfChemicalDegradationRate(2) & "</ChemicalDegradationRateLower>")
                 sb.AppendLine("    <ChemicalDegradationRateGround>" & HspfChemicalDegradationRate(3) & "</ChemicalDegradationRateGround>")
                 sb.AppendLine("    <OutputInterval>" & [Enum].GetName(HspfOutputInterval.GetType, HspfOutputInterval) & "</OutputInterval>")
+                sb.AppendLine("    <SegmentationOption>" & HspfSegmentationOption & "</SegmentationOption>")
                 sb.AppendLine("</HSPF>")
             End If
 
@@ -249,6 +251,7 @@ Public Class SDMParameters
                 Case "SnowOption" : HspfSnowOption = Convert.ToInt32(lArg.InnerText)
                 Case "BacterialOption" : HspfBacterialOption = Convert.ToBoolean(lArg.InnerText)
                 Case "ChemicalOption" : HspfChemicalOption = Convert.ToBoolean(lArg.InnerText)
+                Case "SegmentationOption" : HspfSegmentationOption = Convert.ToInt32(lArg.InnerText)
                 Case "ChemicalName" : HspfChemicalName = lArg.InnerText
                 Case "ChemicalMaximumSolubility" : HspfChemicalMaximumSolubility = Convert.ToDouble(lArg.InnerText)
                 Case "ChemicalPartitionCoeffSurface" : HspfChemicalPartitionCoeff(0) = Convert.ToDouble(lArg.InnerText)

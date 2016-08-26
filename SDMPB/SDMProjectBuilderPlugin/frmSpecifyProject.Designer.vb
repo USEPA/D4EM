@@ -44,6 +44,8 @@ Partial Class frmSpecifyProject
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.groupParameters = New System.Windows.Forms.GroupBox()
+        Me.cboSegmentation = New System.Windows.Forms.ComboBox()
+        Me.lblSegmentation = New System.Windows.Forms.Label()
         Me.lFlowUnits = New System.Windows.Forms.Label()
         Me.rbtnFlowLog = New System.Windows.Forms.RadioButton()
         Me.rbtnFlowLinear = New System.Windows.Forms.RadioButton()
@@ -326,7 +328,7 @@ Partial Class frmSpecifyProject
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCancel.Location = New System.Drawing.Point(3, 515)
+        Me.btnCancel.Location = New System.Drawing.Point(3, 533)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(0)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(80, 28)
@@ -337,7 +339,7 @@ Partial Class frmSpecifyProject
         '
         Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnNext.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnNext.Location = New System.Drawing.Point(970, 515)
+        Me.btnNext.Location = New System.Drawing.Point(970, 533)
         Me.btnNext.Margin = New System.Windows.Forms.Padding(0)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(80, 28)
@@ -346,6 +348,8 @@ Partial Class frmSpecifyProject
         '
         'groupParameters
         '
+        Me.groupParameters.Controls.Add(Me.cboSegmentation)
+        Me.groupParameters.Controls.Add(Me.lblSegmentation)
         Me.groupParameters.Controls.Add(Me.lFlowUnits)
         Me.groupParameters.Controls.Add(Me.rbtnFlowLog)
         Me.groupParameters.Controls.Add(Me.rbtnFlowLinear)
@@ -376,17 +380,36 @@ Partial Class frmSpecifyProject
         Me.groupParameters.Margin = New System.Windows.Forms.Padding(0)
         Me.groupParameters.Name = "groupParameters"
         Me.groupParameters.Padding = New System.Windows.Forms.Padding(0)
-        Me.groupParameters.Size = New System.Drawing.Size(598, 262)
+        Me.groupParameters.Size = New System.Drawing.Size(598, 282)
         Me.groupParameters.TabIndex = 18
         Me.groupParameters.TabStop = False
         Me.groupParameters.Text = "Parameters For Model Generation"
         Me.groupParameters.Visible = False
         '
+        'cboSegmentation
+        '
+        Me.cboSegmentation.FormattingEnabled = True
+        Me.cboSegmentation.Items.AddRange(New Object() {"Individual", "Grouped"})
+        Me.cboSegmentation.Location = New System.Drawing.Point(137, 207)
+        Me.cboSegmentation.Name = "cboSegmentation"
+        Me.cboSegmentation.Size = New System.Drawing.Size(73, 21)
+        Me.cboSegmentation.TabIndex = 58
+        Me.cboSegmentation.Text = "Individual"
+        '
+        'lblSegmentation
+        '
+        Me.lblSegmentation.AutoSize = True
+        Me.lblSegmentation.Location = New System.Drawing.Point(60, 210)
+        Me.lblSegmentation.Name = "lblSegmentation"
+        Me.lblSegmentation.Size = New System.Drawing.Size(75, 13)
+        Me.lblSegmentation.TabIndex = 57
+        Me.lblSegmentation.Text = "Segmentation:"
+        '
         'lFlowUnits
         '
         Me.lFlowUnits.AutoSize = True
         Me.lFlowUnits.Enabled = False
-        Me.lFlowUnits.Location = New System.Drawing.Point(70, 245)
+        Me.lFlowUnits.Location = New System.Drawing.Point(71, 262)
         Me.lFlowUnits.Name = "lFlowUnits"
         Me.lFlowUnits.Size = New System.Drawing.Size(91, 13)
         Me.lFlowUnits.TabIndex = 48
@@ -396,7 +419,7 @@ Partial Class frmSpecifyProject
         '
         Me.rbtnFlowLog.AutoSize = True
         Me.rbtnFlowLog.Enabled = False
-        Me.rbtnFlowLog.Location = New System.Drawing.Point(220, 242)
+        Me.rbtnFlowLog.Location = New System.Drawing.Point(221, 259)
         Me.rbtnFlowLog.Name = "rbtnFlowLog"
         Me.rbtnFlowLog.Size = New System.Drawing.Size(43, 17)
         Me.rbtnFlowLog.TabIndex = 56
@@ -408,7 +431,7 @@ Partial Class frmSpecifyProject
         Me.rbtnFlowLinear.AutoSize = True
         Me.rbtnFlowLinear.Checked = True
         Me.rbtnFlowLinear.Enabled = False
-        Me.rbtnFlowLinear.Location = New System.Drawing.Point(165, 243)
+        Me.rbtnFlowLinear.Location = New System.Drawing.Point(166, 260)
         Me.rbtnFlowLinear.Name = "rbtnFlowLinear"
         Me.rbtnFlowLinear.Size = New System.Drawing.Size(54, 17)
         Me.rbtnFlowLinear.TabIndex = 55
@@ -564,7 +587,7 @@ Partial Class frmSpecifyProject
         Me.lblSWAT2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblSWAT2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblSWAT2.Location = New System.Drawing.Point(188, 223)
+        Me.lblSWAT2.Location = New System.Drawing.Point(189, 240)
         Me.lblSWAT2.Name = "lblSWAT2"
         Me.lblSWAT2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblSWAT2.Size = New System.Drawing.Size(369, 15)
@@ -575,7 +598,7 @@ Partial Class frmSpecifyProject
         'lblSWAT1
         '
         Me.lblSWAT1.AutoSize = True
-        Me.lblSWAT1.Location = New System.Drawing.Point(67, 223)
+        Me.lblSWAT1.Location = New System.Drawing.Point(68, 240)
         Me.lblSWAT1.Name = "lblSWAT1"
         Me.lblSWAT1.Size = New System.Drawing.Size(115, 13)
         Me.lblSWAT1.TabIndex = 32
@@ -584,7 +607,7 @@ Partial Class frmSpecifyProject
         'btnSwatDatabase
         '
         Me.btnSwatDatabase.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSwatDatabase.Location = New System.Drawing.Point(563, 220)
+        Me.btnSwatDatabase.Location = New System.Drawing.Point(564, 237)
         Me.btnSwatDatabase.Name = "btnSwatDatabase"
         Me.btnSwatDatabase.Size = New System.Drawing.Size(29, 20)
         Me.btnSwatDatabase.TabIndex = 37
@@ -692,7 +715,7 @@ Partial Class frmSpecifyProject
         Me.chkSWAT.AutoSize = True
         Me.chkSWAT.Checked = True
         Me.chkSWAT.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkSWAT.Location = New System.Drawing.Point(6, 222)
+        Me.chkSWAT.Location = New System.Drawing.Point(7, 239)
         Me.chkSWAT.Name = "chkSWAT"
         Me.chkSWAT.Size = New System.Drawing.Size(58, 17)
         Me.chkSWAT.TabIndex = 36
@@ -911,7 +934,7 @@ Partial Class frmSpecifyProject
         '
         Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnPrevious.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPrevious.Location = New System.Drawing.Point(881, 515)
+        Me.btnPrevious.Location = New System.Drawing.Point(881, 533)
         Me.btnPrevious.Margin = New System.Windows.Forms.Padding(0)
         Me.btnPrevious.Name = "btnPrevious"
         Me.btnPrevious.Size = New System.Drawing.Size(80, 28)
@@ -923,7 +946,7 @@ Partial Class frmSpecifyProject
         '
         Me.btnBuild.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnBuild.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnBuild.Location = New System.Drawing.Point(970, 515)
+        Me.btnBuild.Location = New System.Drawing.Point(970, 533)
         Me.btnBuild.Margin = New System.Windows.Forms.Padding(0)
         Me.btnBuild.Name = "btnBuild"
         Me.btnBuild.Size = New System.Drawing.Size(80, 28)
@@ -1009,7 +1032,7 @@ Partial Class frmSpecifyProject
         Me.chkAddLayers.AutoSize = True
         Me.chkAddLayers.Checked = True
         Me.chkAddLayers.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkAddLayers.Location = New System.Drawing.Point(97, 522)
+        Me.chkAddLayers.Location = New System.Drawing.Point(97, 540)
         Me.chkAddLayers.Name = "chkAddLayers"
         Me.chkAddLayers.Size = New System.Drawing.Size(231, 17)
         Me.chkAddLayers.TabIndex = 46
@@ -1041,7 +1064,7 @@ Partial Class frmSpecifyProject
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1053, 546)
+        Me.ClientSize = New System.Drawing.Size(1053, 564)
         Me.Controls.Add(Me.chkAddLayers)
         Me.Controls.Add(Me.btnPrevious)
         Me.Controls.Add(Me.btnCancel)
@@ -1154,4 +1177,6 @@ Partial Class frmSpecifyProject
     Friend WithEvents radioMetDataNLDAS As System.Windows.Forms.RadioButton
     Friend WithEvents txtTimeZone As atcControls.atcText
     Friend WithEvents lblTimeZone As System.Windows.Forms.Label
+    Friend WithEvents cboSegmentation As System.Windows.Forms.ComboBox
+    Friend WithEvents lblSegmentation As System.Windows.Forms.Label
 End Class

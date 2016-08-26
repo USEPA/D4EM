@@ -131,6 +131,7 @@ NoMatch:
         [Enum].TryParse(comboHspfOutputInterval.Text, params.HspfOutputInterval)
         params.HspfBacterialOption = chkMicrobes.Checked
         params.HspfChemicalOption = chkLandAppliedChemical.Checked
+        params.HspfSegmentationOption = Math.Max(0, cboSegmentation.SelectedIndex)
         params.SetupSWAT = chkSWAT.Checked
         params.ReportFlowUnits = FlowUnits
         params.MinCatchmentKM2 = atxSize.ValueDouble
@@ -797,6 +798,7 @@ LoadedOtherLayer:
         comboHspfSnow.SelectedIndex = params.HspfSnowOption
         chkMicrobes.Checked = params.HspfBacterialOption
         chkLandAppliedChemical.Checked = params.HspfChemicalOption
+        cboSegmentation.SelectedIndex = params.HspfSegmentationOption
         comboHspfOutputInterval.Text = [Enum].GetName(params.HspfOutputInterval.GetType, params.HspfOutputInterval)
         chkSWAT.Checked = params.SetupSWAT
         atxSize.ValueDouble = params.MinCatchmentKM2
@@ -979,10 +981,10 @@ LoadedOtherLayer:
                                                      lPourPointLongitude.ToString("#.###") & " " & DoubleToString(lPourPointMaxKm) & "km")
                             lPourPointLatitude = 44.094
                             lPourPointLongitude = -87.662
-                            lPourPointMaxKm = 20
+                            lPourPointMaxKm = 1000
                             MapWinUtility.Logger.Dbg("Defaulting to mouth of Manitowoc pour point at: " &
                                                      lPourPointLatitude.ToString("#.###") & "," &
-                                                     lPourPointLongitude.ToString("#.###") & " 20km")
+                                                     lPourPointLongitude.ToString("#.###") & " 1000km")
                             pourPoint = D4EM.Data.Source.EPAWaters.GetPourPoint(g_NationalProject.CacheFolder, lPourPointLatitude, lPourPointLongitude)
                         End Try
                     End If

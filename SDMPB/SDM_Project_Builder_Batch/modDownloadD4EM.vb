@@ -386,7 +386,8 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
                         aChemicalMaximumSolubility:=aParameters.HspfChemicalMaximumSolubility,
                         aChemicalPartitionCoeff:=aParameters.HspfChemicalPartitionCoeff,
                         aChemicalFreundlichExp:=aParameters.HspfChemicalFreundlichExp,
-                        aChemicalDegradationRate:=aParameters.HspfChemicalDegradationRate)
+                        aChemicalDegradationRate:=aParameters.HspfChemicalDegradationRate,
+                        aSegmentationOption:=aParameters.HspfSegmentationOption)
                 End Using
             End If
 
