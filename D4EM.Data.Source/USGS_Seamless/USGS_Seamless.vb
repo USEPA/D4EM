@@ -202,12 +202,12 @@ Public Class USGS_Seamless
                     lUSarea = ""
                     lBaseFilename = "NLCD_" & lDataType & "_2011"
 
-                'Case LayerSpecifications.NED.OneArcSecond
-                '   lBaseFilename = "NED_1ArcSecond"
-                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
-                'Case LayerSpecifications.NED.OneThirdArcSecond
-                '   lBaseFilename = "NED_ThirdArcSecond"
-                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                    'Case LayerSpecifications.NED.OneArcSecond
+                    '   lBaseFilename = "NED_1ArcSecond"
+                    '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                    'Case LayerSpecifications.NED.OneThirdArcSecond
+                    '   lBaseFilename = "NED_ThirdArcSecond"
+                    '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
                 Case Else
                     lBaseFilename = lDataType
             End Select
@@ -631,12 +631,12 @@ Public Class USGS_Seamless
                 lyear = "2011"
                 lUSarea = ""
                 lBaseFilename = "NLCD_" & lDataType & "_2011"
-            'Case LayerSpecifications.NED.OneArcSecond
-            '   lBaseFilename = "NED_1ArcSecond"
-            '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
-            'Case LayerSpecifications.NED.OneThirdArcSecond
-            '   lBaseFilename = "NED_ThirdArcSecond"
-            '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneArcSecond
+                '   lBaseFilename = "NED_1ArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneThirdArcSecond
+                '   lBaseFilename = "NED_ThirdArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
             Case Else
                 '   lBaseFilename = lDataType
         End Select

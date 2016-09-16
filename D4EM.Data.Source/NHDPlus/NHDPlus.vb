@@ -49,7 +49,9 @@ Public Class NHDPlus
     Private Shared NativeGridProjection As DotSpatial.Projections.ProjectionInfo = Globals.AlbersProjection
     'Private Shared pBaseURL As String = "ftp://horizon-systems.com/NHDPlus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'KW 10/2/2014 - above link no longing working.  Data has been moved to an Amazon EC2 site
-    Private Shared pBaseURL As String = "ftp://ec2-54-227-241-43.compute-1.amazonaws.com/NHDplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
+    'Private Shared pBaseURL As String = "ftp://ec2-54-227-241-43.compute-1.amazonaws.com/NHDplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
+    'PBD 9/16/2016 - above link no longing working.
+    Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
 
     ''' <summary>
     ''' Download and unpack NHDPlus data
