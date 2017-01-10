@@ -117,4 +117,15 @@ Public Module Download
         Logger.Status("")
     End Sub
 
+    Private NullCertificateValidator As New System.Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateRemoteCertificate)
+
+    Public Sub DisableHttpsCertificateCheck()
+        ' validate cert by calling a function
+        System.Net.ServicePointManager.ServerCertificateValidationCallback = NullCertificateValidator
+    End Sub
+
+    ' callback used to validate the certificate in an SSL conversation
+    Private Function ValidateRemoteCertificate(ByVal sender As Object, ByVal cert As Object, ByVal chain As Object, ByVal policyErrors As Object) As Boolean
+        Return True
+    End Function
 End Module
