@@ -471,7 +471,8 @@ Module modMicrobial
 
         If lErrorMsg.Length = 0 Then
             'SDMPB populates the UCI accordingly.
-            PopulateMicrobeParms(aUci, ldtCropland, ldtForest, ldtPasture, ldtBuiltup, ldtDirect)
+            Dim dieoff As Array = GetDieOff(lMonthlyFirstOrderDieOffRateConstantsFileName)
+            PopulateMicrobeParms(aUci, ldtCropland, ldtForest, ldtPasture, ldtBuiltup, ldtDirect, dieoff)
         Else
             Logger.Msg("Warning: " & lErrorMsg)
         End If
@@ -749,7 +750,7 @@ Module modMicrobial
         End If
     End Sub
 
-    Public Sub PopulateMicrobeParms(ByVal aUci As HspfUci, ByVal aCropData As System.Data.DataTable, ByVal aForestData As System.Data.DataTable, ByVal aPastureData As System.Data.DataTable, ByVal aBuiltupData As System.Data.DataTable, ByVal aDirectData As System.Data.DataTable)
+    Public Sub PopulateMicrobeParms(ByVal aUci As HspfUci, ByVal aCropData As System.Data.DataTable, ByVal aForestData As System.Data.DataTable, ByVal aPastureData As System.Data.DataTable, ByVal aBuiltupData As System.Data.DataTable, ByVal aDirectData As System.Data.DataTable, ByRef dieoff As Array)
         'get these values from microbial source module
 
         With aUci
@@ -757,14 +758,14 @@ Module modMicrobial
             Dim lPerlndOperations As HspfOperations = .OpnBlks("PERLND").Ids
             For lPerlndIndex As Integer = 1 To lPerlndOperations.Count
                 Dim lHspfOperation As HspfOperation = lPerlndOperations(lPerlndIndex - 1)
-                PopulateAccumSqolim(lHspfOperation, aCropData, aForestData, aPastureData, aBuiltupData, aDirectData)
+                PopulateAccumSqolim(lHspfOperation, aCropData, aForestData, aPastureData, aBuiltupData, aDirectData, dieoff)
             Next
 
             'set accumulation rates and storage limits for implnds 
             Dim lImplndOperations As HspfOperations = aUci.OpnBlks("IMPLND").Ids
             For lImplndIndex As Integer = 1 To lImplndOperations.Count
                 Dim lHspfOperation As HspfOperation = lImplndOperations(lImplndIndex - 1)
-                PopulateAccumSqolim(lHspfOperation, aCropData, aForestData, aPastureData, aBuiltupData, aDirectData)
+                PopulateAccumSqolim(lHspfOperation, aCropData, aForestData, aPastureData, aBuiltupData, aDirectData, dieoff)
             Next
 
             'set direct deposition to rchres operations
@@ -812,7 +813,7 @@ Module modMicrobial
         End With
     End Sub
 
-    Public Sub PopulateAccumSqolim(ByVal aOper As HspfOperation, ByVal aCropData As System.Data.DataTable, ByVal aForestData As System.Data.DataTable, ByVal aPastureData As System.Data.DataTable, ByVal aBuiltupData As System.Data.DataTable, ByVal aDirectData As System.Data.DataTable)
+    Public Sub PopulateAccumSqolim(ByVal aOper As HspfOperation, ByVal aCropData As System.Data.DataTable, ByVal aForestData As System.Data.DataTable, ByVal aPastureData As System.Data.DataTable, ByVal aBuiltupData As System.Data.DataTable, ByVal aDirectData As System.Data.DataTable, ByRef dieoff As Array)
         Dim lLU As String = ""
         Dim lAccumulationRate(12) As Double
         Dim lStorageLimit(12) As Double
@@ -945,6 +946,21 @@ Module modMicrobial
                     Else
                         lHspfTable.Parms.Item(lMonthIndex - 1).Value = lAccumulationRate(lMonthIndex)
                     End If
+                    If lAccumulationRate(lMonthIndex) = 0 Then
+                        lHspfTable.Parms.Item(lMonthIndex - 1).Value = 1.0
+                        If dieoff(lMonthIndex - 1) > 10 ^ -1 Then
+                            lStorageLimit(lMonthIndex) = 1.0 / (2.303 * dieoff(lMonthIndex - 1))
+                        ElseIf dieoff(lMonthIndex - 1) < 10 ^ -6 Then
+                            lStorageLimit(lMonthIndex) = 1.0 * Date.DaysInMonth(Today.Year, lMonthIndex)
+                        Else
+                            lStorageLimit(lMonthIndex) = (1.0 / (2.303 * dieoff(lMonthIndex - 1))) * (1 - 10 ^ -(Date.DaysInMonth(Today.Year, lMonthIndex) * dieoff(lMonthIndex - 1)))
+                        End If
+
+                        'lStorageLimit(lMonthIndex) = 1.0 * Date.DaysInMonth(Today.Year, lMonthIndex)
+                        'If DieOFF < 0.0001 Then
+                        '    lStorageLimit(lMonthIndex) = 1.0 / (2.303 * DieOFF)
+                        'End If
+                    End If
                 Next
                 lHspfTable = aOper.Tables("MON-SQOLIM")
                 For lMonthIndex As Integer = 1 To 12
@@ -963,4 +979,37 @@ Module modMicrobial
             End If
         End If
     End Sub
+
+    Private Function GetDieOff(ByRef file As String) As Array
+        Using fr As New FileIO.TextFieldParser(file)
+            fr.TextFieldType = FileIO.FieldType.Delimited
+            fr.SetDelimiters(",")
+            Dim currentRow As String()
+            Dim rndx As Int16 = 0
+            Dim dieoff As Double() = New Double(11) {}
+            While Not fr.EndOfData
+                Try
+                    currentRow = fr.ReadFields()
+                    Dim currentField As String
+                    Dim fndx As Int16 = 0
+                    For Each currentField In currentRow
+                        'MsgBox(currentField)
+                        If fndx > 0 Then
+                            If rndx > 0 Then
+                                dieoff(rndx - 1) = CDbl(currentField)
+                            End If
+                        End If
+                        fndx = fndx + 1
+                    Next
+                    rndx = rndx + 1
+                Catch ex As FileIO.MalformedLineException
+                    MsgBox("MSM DieOff file line " & ex.Message & "is not valid and will be skipped.")
+                End Try
+            End While
+            Return dieoff
+        End Using
+
+    End Function
+
 End Module
+
