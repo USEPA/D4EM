@@ -179,6 +179,23 @@ Retry:
                         End If
                     Next
                 End Using
+                'also do for tif grids used in NHDPlus v2.1
+                Dim lAllTifGrids As New Collections.Specialized.NameValueCollection
+                AddFilesInDir(lAllTifGrids, lHUCUnZipFolder, True, "*.tif")
+                Logger.Progress(0, lAllTifGrids.Count)
+                Using lLevel As New ProgressLevel(True)
+                    For Each lSourceGrid As String In lAllTifGrids
+                        'lTifGridFolders.Add(IO.Path.GetDirectoryName(lSourceGrid) & IO.Path.DirectorySeparatorChar)
+                        If TagInTypes(IO.Path.GetFileName(IO.Path.GetDirectoryName(lSourceGrid)).ToLower, aDataTypes) Then
+                            ClipProjectGrid(aProject.DesiredProjection,
+                                            IO.Path.GetDirectoryName(lSourceGrid),
+                                            IO.Path.GetFileName(lSourceGrid),
+                                            lTempHUC8folder,
+                                            lClipRegion)
+                            lLevel.Reset()
+                        End If
+                    Next
+                End Using
 
                 'Move non-grid files from unzipped to temp
                 Dim lAllFilesToMove As New Collections.Specialized.NameValueCollection
