@@ -5,7 +5,8 @@
 bin/Debug/models/SWAT/Databases/SWAT_US_Soils.mdb
 *SWAT_US_Soils.mdb
 *.msi
-
+D4EM.Model/HSPF/Visual Studio 2010/*
+D4EM.Model/visual studio 2010/
 
 # User-specific files
 *.suo
