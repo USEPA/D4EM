@@ -193,6 +193,9 @@ Retry:
                                             lTempHUC8folder,
                                             lClipRegion)
                             lLevel.Reset()
+                            If IO.File.Exists(IO.Path.ChangeExtension(lSourceGrid, ".prj")) Then
+                                TryDelete(IO.Path.ChangeExtension(lSourceGrid, ".prj"))
+                            End If
                         End If
                     Next
                 End Using
