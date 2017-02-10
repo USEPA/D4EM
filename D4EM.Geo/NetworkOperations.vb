@@ -1064,21 +1064,21 @@ Public Class NetworkOperations
                         Logger.Dbg("MergeWith " & DumpComid(aFlowlines, lMergeWithComid, aFields))
                         Dim lMainFlowLineIndex As Integer = FindRecord(aFlowlines, aFields.FlowlinesComId, lMergeWithComid)
                         'dont do this if lmergewithcomid is a dontcombine
-                        'If Not aDontCombineComIDs.Contains(lMergeWithComid) Then
-                        If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
-                            If lMainFlowLineIndex < 0 Then
-                                Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
+                        If Not aDontCombineComIDs.Contains(lMergeWithComid) And Not aDontCombineComIDs.Contains(lOutletComID) Then
+                            If CombineCatchments(aCatchments, lMergeWithComid, lOutletComID, aFields) Then
+                                If lMainFlowLineIndex < 0 Then
+                                    Logger.Dbg("Combined catchments, but did not find flowline index for " & aFields.FlowlinesComId)
+                                Else
+                                    CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
+                                End If
+                                lMergedThese.Add(lOutletComID)
                             Else
-                                CombineFlowlines(aFlowlines, lMainFlowLineIndex, lFlowlineIndex, False, False, aFields, aOutletComIDs)
+                                Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
                             End If
-                            lMergedThese.Add(lOutletComID)
-                        Else
-                            Logger.Dbg("Failed to merge missing outlet catchment " & lOutletComID & " into " & lMergeWithComid, True)
                         End If
-                        'End If
                     End If
                 Else
-                    'LogMessage(aLog, "Big Enough " & lOutletComID & " Area " & lOutletCumArea)
+                        'LogMessage(aLog, "Big Enough " & lOutletComID & " Area " & lOutletCumArea)
                 End If
             Else
                 Logger.Dbg("Missing OutletComID " & lOutletComID)
@@ -1298,12 +1298,16 @@ Public Class NetworkOperations
                             Dim lCountBigUpstream As Integer = 0
                             Dim lCountBigDontCombine As Integer = 0
                             For Each lComIdUpUp As Long In lUpUpstream
+                                If aDontCombineComIDs.Contains(lComIdUpUp) Then
+                                    lCountBigDontCombine += 1
+                                End If
                                 Dim lRecordUpUp As Integer = FindRecord(aFlowlines, aFields.FlowlinesComId, lComIdUpUp)
                                 If Not IsTooSmall(aFlowlines, lRecordUpUp, aMinCatchmentKM2, aMinLengthKM, lCheckArea, lCheckLength, False, aFields) Then
                                     lCountBigUpstream += 1
-                                    If aDontCombineComIDs.Contains(lComIdUpUp) Then
-                                        lCountBigDontCombine += 1
-                                    End If
+                                    'moved up a few lines -- if there's a don't combine, don't merge
+                                    'If aDontCombineComIDs.Contains(lComIdUpUp) Then
+                                    '    lCountBigDontCombine += 1
+                                    'End If
                                 End If
                             Next
                             If lCountBigUpstream = 1 AndAlso lCountBigDontCombine = 0 Then 'can merge upstream if there is only one large contributor
