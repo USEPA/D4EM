@@ -940,12 +940,7 @@ Module modMicrobial
                 Dim lHspfTable As HspfTable
                 lHspfTable = aOper.Tables("MON-ACCUM")
                 For lMonthIndex As Integer = 1 To 12
-                    If lAccumulationRate(lMonthIndex) > lStorageLimit(lMonthIndex) Then
-                        'catch case where accum rate is greater than storage limit, use storage limit as accum rate
-                        lHspfTable.Parms.Item(lMonthIndex - 1).Value = lStorageLimit(lMonthIndex)
-                    Else
-                        lHspfTable.Parms.Item(lMonthIndex - 1).Value = lAccumulationRate(lMonthIndex)
-                    End If
+                    lHspfTable.Parms.Item(lMonthIndex - 1).Value = lAccumulationRate(lMonthIndex)
                     If lAccumulationRate(lMonthIndex) = 0 Then
                         lHspfTable.Parms.Item(lMonthIndex - 1).Value = 1.0
                         If dieoff(lMonthIndex - 1) > 10 ^ -1 Then
@@ -965,17 +960,20 @@ Module modMicrobial
                 lHspfTable = aOper.Tables("MON-SQOLIM")
                 For lMonthIndex As Integer = 1 To 12
                     lHspfTable.Parms.Item(lMonthIndex - 1).Value = lStorageLimit(lMonthIndex)
+                    If lAccumulationRate(lMonthIndex) > lStorageLimit(lMonthIndex) Then
+                        'catch case where accum rate is greater than storage limit, use accum rate as storage limit
+                        lHspfTable.Parms.Item(lMonthIndex - 1).Value = lAccumulationRate(lMonthIndex)
+                    End If
                 Next
             ElseIf aOper.Name = "IMPLND" Then
                 Dim lHspfTable As HspfTable
                 lHspfTable = aOper.Tables("QUAL-INPUT")
-                If lAccumulationRate(1) > lStorageLimit(1) Then
-                    'catch case where accum rate is greater than storage limit, use storage limit as accum rate
-                    lHspfTable.Parms.Item(2).Value = lStorageLimit(1)
-                Else
-                    lHspfTable.Parms.Item(2).Value = lAccumulationRate(1)
-                End If
+                lHspfTable.Parms.Item(2).Value = lAccumulationRate(1)
                 lHspfTable.Parms.Item(3).Value = lStorageLimit(1)
+                If lAccumulationRate(1) > lStorageLimit(1) Then
+                    'catch case where accum rate is greater than storage limit, use accum rate as storage limit
+                    lHspfTable.Parms.Item(3).Value = lAccumulationRate(1)
+                End If
             End If
         End If
     End Sub
