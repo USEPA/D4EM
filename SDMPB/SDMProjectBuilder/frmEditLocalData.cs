@@ -91,7 +91,7 @@ namespace SDMProjectBuilder
             IMapFeatureLayer iMFL = _appMgr.Map.Layers.Add(fs);
             _appMgr.Map.Layers.SelectedLayer = iMFL;
             iMFL.IsSelected = true;
-            _appMgr.Map.ViewExtents = iMFL.Extent;            
+            //_appMgr.Map.ViewExtents = iMFL.Extent;            
         }
 
         private void btnEditFile_Click(object sender, EventArgs e)
