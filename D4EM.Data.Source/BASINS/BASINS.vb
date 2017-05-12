@@ -883,7 +883,9 @@ Retry:
         If Not FileExists(lCacheFilename) Then
             Dim lURL As String = pBaseURL & aHUC8 & "/" & lFileNameOnly
             If lBaseDataType = LayerSpecifications.huc12 Then
-                lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL
+                'hspf.com is down for good, huc12 boundaries now found on epa ftp server
+                'lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL
+                lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
             End If
             If Not D4EM.Data.Download.DownloadURL(lURL, lCacheFilename) Then
                 Throw New ApplicationException("Could not download BASINS " & lBaseDataType.Tag & " data for " & aHUC8 & " from " & vbCrLf & lURL & vbCrLf & " to " & lCacheFilename)
