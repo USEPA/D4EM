@@ -34,11 +34,16 @@ Partial Class NHDPlus
         Dim lNode As Xml.XmlNode
         Dim lError As String = ""
         Dim lResult As String = ""
+        Dim lVersion As Integer = 1
         Try
             lQuery.LoadXml(aQuery)
             lNode = lQuery.FirstChild
             If lNode.Name.ToLower = "function" Then
                 lFunctionName = lNode.Attributes.GetNamedItem("name").Value.ToLower
+                If lFunctionName = "getnhdplus2" Then
+                    lFunctionName = "getnhdplus"
+                    lVersion = 2
+                End If
                 Select Case lFunctionName
                     Case "getnhdplus"
                         Dim lHUC8s As Generic.List(Of String) = Nothing
@@ -67,11 +72,19 @@ Partial Class NHDPlus
                                                                             lClip,
                                                                             lMerge,
                                                                             lGetEvenIfCached)
-                                lResult &= GetNHDPlus(lTempD4EMProject, _
-                                                      "NHDPlus", _
-                                                      lHUC8, _
-                                                      lMergeAddedAttributes, _
+                                If lVersion = 1 Then
+                                    lResult &= GetNHDPlus(lTempD4EMProject,
+                                                      "NHDPlus",
+                                                      lHUC8,
+                                                      lMergeAddedAttributes,
                                                       lDataTypes)
+                                ElseIf lVersion = 2 Then
+                                    lResult &= GetNHDPlus2(lTempD4EMProject,
+                                                      "NHDPlus2",
+                                                      lHUC8,
+                                                      lMergeAddedAttributes,
+                                                      lDataTypes)
+                                End If
                             Next
                         End If
                     Case Else

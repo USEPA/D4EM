@@ -52,9 +52,30 @@ Public Class NHDPlus
     'Private Shared pBaseURL As String = "ftp://ec2-54-227-241-43.compute-1.amazonaws.com/NHDplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'PBD 9/16/2016 - above link no longing working.
     Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
+    Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
 
     ''' <summary>
-    ''' Download and unpack NHDPlus data
+    ''' Download and unpack NHDPlus data (for v2.1
+    ''' </summary>
+    ''' <param name="aProject">project to add data to</param>
+    ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NHDPlus") or full path of folder to save in (e.g. "C:\NHDPlus").
+    '''  If nothing or empty string, will save in aProject.ProjectFolder.</param>
+    ''' <param name="aHUC8">8-digit hydrologic unit code to download</param>
+    ''' <param name="aJoinAttributes">True to merge value-added attributes to .dbf of shape file, False to leave in separate .dbf</param>
+    ''' <param name="aDataTypes">types of data to unpack: valid values are in NHDPlus.LayerSpecifications. If none specified, all data will be processed</param>
+    ''' <returns>XML describing success or error</returns>
+    Public Shared Function GetNHDPlus2(ByVal aProject As D4EM.Data.Project,
+                                      ByVal aSaveFolder As String,
+                                      ByVal aHUC8 As String,
+                                      ByVal aJoinAttributes As Boolean,
+                                      ByVal ParamArray aDataTypes() As LayerSpecification) As String
+        Dim lResult As String = Nothing
+        Logger.Msg("in GetNHDPlus2!")
+        Return lResult
+    End Function
+
+    ''' <summary>
+    ''' Download and unpack NHDPlus data (for v1.0)
     ''' </summary>
     ''' <param name="aProject">project to add data to</param>
     ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NHDPlus") or full path of folder to save in (e.g. "C:\NHDPlus").

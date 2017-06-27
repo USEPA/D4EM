@@ -55,6 +55,9 @@ Module modMain
                 If lFunction.Name.ToLower = "function" Then
                     lFunctionName = lFunction.Attributes.GetNamedItem("name").Value
                     Logger.Dbg("Function " & lFunctionName)
+                    If lFunctionName = "GetNHDplus2" Then
+                        lFunctionName = "GetNHDplus"
+                    End If
                     Dim lSource As D4EM.Data.SourceBase = GetSourceSupportingFunction(lFunctionName)
                     'Select Case lFunctionName
                     '    Case "GetBASINS" : lSource = New D4EM.Data.Source.BASINS()
