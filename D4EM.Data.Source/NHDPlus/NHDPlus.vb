@@ -55,7 +55,7 @@ Public Class NHDPlus
     Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
 
     ''' <summary>
-    ''' Download and unpack NHDPlus data (for v2.1
+    ''' Download and unpack NHDPlus data (for v2.1)
     ''' </summary>
     ''' <param name="aProject">project to add data to</param>
     ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NHDPlus") or full path of folder to save in (e.g. "C:\NHDPlus").
@@ -70,7 +70,13 @@ Public Class NHDPlus
                                       ByVal aJoinAttributes As Boolean,
                                       ByVal ParamArray aDataTypes() As LayerSpecification) As String
         Dim lResult As String = Nothing
-        Logger.Msg("in GetNHDPlus2!")
+        Dim lVersion As Integer = 2
+        lResult &= GetNHDPlusForSpecifiedVersion(aProject,
+                                                 aSaveFolder,
+                                                 aHUC8,
+                                                 aJoinAttributes,
+                                                 lVersion,
+                                                 aDataTypes)
         Return lResult
     End Function
 
@@ -90,6 +96,34 @@ Public Class NHDPlus
                                       ByVal aJoinAttributes As Boolean,
                                       ByVal ParamArray aDataTypes() As LayerSpecification) As String
         Dim lResult As String = Nothing
+        Dim lVersion As Integer = 1
+        lResult &= GetNHDPlusForSpecifiedVersion(aProject,
+                                                 aSaveFolder,
+                                                 aHUC8,
+                                                 aJoinAttributes,
+                                                 lVersion,
+                                                 aDataTypes)
+        Return lResult
+    End Function
+
+    ''' <summary>
+    ''' Download and unpack NHDPlus data, with argument to specify which version
+    ''' </summary>
+    ''' <param name="aProject">project to add data to</param>
+    ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NHDPlus") or full path of folder to save in (e.g. "C:\NHDPlus").
+    '''  If nothing or empty string, will save in aProject.ProjectFolder.</param>
+    ''' <param name="aHUC8">8-digit hydrologic unit code to download</param>
+    ''' <param name="aJoinAttributes">True to merge value-added attributes to .dbf of shape file, False to leave in separate .dbf</param>
+    ''' <param name="aVersion">version number to download, supports 1 and 2</param>
+    ''' <param name="aDataTypes">types of data to unpack: valid values are in NHDPlus.LayerSpecifications. If none specified, all data will be processed</param>
+    ''' <returns>XML describing success or error</returns>
+    Private Shared Function GetNHDPlusForSpecifiedVersion(ByVal aProject As D4EM.Data.Project,
+                                                          ByVal aSaveFolder As String,
+                                                          ByVal aHUC8 As String,
+                                                          ByVal aJoinAttributes As Boolean,
+                                                          ByVal aVersion As Integer,
+                                                          ByVal ParamArray aDataTypes() As LayerSpecification) As String
+        Dim lResult As String = Nothing
         Dim lSaveIn As String = aProject.ProjectFolder
         If aSaveFolder IsNot Nothing AndAlso aSaveFolder.Length > 0 Then lSaveIn = IO.Path.Combine(lSaveIn, aSaveFolder)
         IO.Directory.CreateDirectory(lSaveIn)
@@ -99,6 +133,9 @@ Public Class NHDPlus
         Dim lHUC2 As String = aHUC8.Substring(0, 2)
         Dim lBaseFilename As String = "NHDPlus" & aHUC8 & ".zip"
         Dim lZipFilename As String = IO.Path.Combine(IO.Path.Combine(aProject.CacheFolder, "NHDPlus"), lBaseFilename)
+        If aVersion = 2 Then
+            lZipFilename = IO.Path.Combine(IO.Path.Combine(aProject.CacheFolder, "NHDPlus2"), lBaseFilename)
+        End If
 
 Retry:
         'If the cached file already exists and either we need to get a new one anyway or it is too short to be real, then delete cached file
@@ -114,18 +151,29 @@ Retry:
             Dim lURL As String
             Logger.Status("Downloading NHD Plus")
             Dim lBaseURL As String = pBaseURL & lHUC2
+            If aVersion = 2 Then
+                lBaseURL = pBaseURL2 & lHUC2
+            End If
             If lHUC2 = "10" Then
                 lURL = lBaseURL & "L/" & lBaseFilename
                 If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                     lURL = lBaseURL & "U/" & lBaseFilename
                     If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
-                        Throw New ApplicationException("Unable to download NHDPlus for " & aHUC8)
+                        If aVersion = 2 Then
+                            Throw New ApplicationException("Unable to download NHDPlus v2.1 for " & aHUC8)
+                        Else
+                            Throw New ApplicationException("Unable to download NHDPlus v1.0 for " & aHUC8)
+                        End If
                     End If
                 End If
             Else
                 lURL = lBaseURL & "/" & lBaseFilename
                 If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
-                    Throw New ApplicationException("Unable to download NHDPlus for " & aHUC8)
+                    If aVersion = 2 Then
+                        Throw New ApplicationException("Unable to download NHDPlus v2.1 for " & aHUC8)
+                    Else
+                        Throw New ApplicationException("Unable to download NHDPlus v1.0 for " & aHUC8)
+                    End If
                 End If
             End If
         End If
@@ -347,7 +395,7 @@ Retry:
     End Function
 
     ''' <summary>
-    ''' Download and unpack NHDPlus data
+    ''' Download and unpack NHDPlus data (only for v1.0)
     ''' </summary>
     ''' <param name="aProjFolder">project folder to save data in</param>
     ''' <param name="aSaveFolder">Sub-folder within project folder (e.g. "NHDPlus") or full path of folder to save in (e.g. "C:\NHDPlus").
