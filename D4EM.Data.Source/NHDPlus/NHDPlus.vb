@@ -160,9 +160,9 @@ Retry:
                     lURL = lBaseURL & "U/" & lBaseFilename
                     If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                         If aVersion = 2 Then
-                            Throw New ApplicationException("Unable to download NHDPlus v2.1 for " & aHUC8)
+                            Throw New ApplicationException("Unable to locate NHDPlus v2.1 for " & aHUC8)
                         Else
-                            Throw New ApplicationException("Unable to download NHDPlus v1.0 for " & aHUC8)
+                            Throw New ApplicationException("Unable to locate NHDPlus v1.0 for " & aHUC8)
                         End If
                     End If
                 End If
@@ -170,9 +170,9 @@ Retry:
                 lURL = lBaseURL & "/" & lBaseFilename
                 If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                     If aVersion = 2 Then
-                        Throw New ApplicationException("Unable to download NHDPlus v2.1 for " & aHUC8)
+                        Throw New ApplicationException("Unable to locate NHDPlus v2.1 for " & aHUC8)
                     Else
-                        Throw New ApplicationException("Unable to download NHDPlus v1.0 for " & aHUC8)
+                        Throw New ApplicationException("Unable to locate NHDPlus v1.0 for " & aHUC8)
                     End If
                 End If
             End If
