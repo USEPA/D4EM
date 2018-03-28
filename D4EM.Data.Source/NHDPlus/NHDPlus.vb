@@ -52,7 +52,8 @@ Public Class NHDPlus
     'Private Shared pBaseURL As String = "ftp://ec2-54-227-241-43.compute-1.amazonaws.com/NHDplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'PBD 9/16/2016 - above link no longing working.
     Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
-    Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
+    'Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
+    Private Shared pBaseURL2 As String = "ftp://newftp.epa.gov/exposure/BasinsData/NHDPlus21/"
 
     ''' <summary>
     ''' Download and unpack NHDPlus data (for v2.1)
@@ -152,18 +153,14 @@ Retry:
             Logger.Status("Downloading NHD Plus")
             Dim lBaseURL As String = pBaseURL & lHUC2
             If aVersion = 2 Then
-                lBaseURL = pBaseURL2 & lHUC2
+                lBaseURL = pBaseURL2 '& lHUC2
             End If
-            If lHUC2 = "10" Then
+            If lHUC2 = "10" And aVersion <> 2 Then
                 lURL = lBaseURL & "L/" & lBaseFilename
                 If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                     lURL = lBaseURL & "U/" & lBaseFilename
                     If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
-                        If aVersion = 2 Then
-                            Throw New ApplicationException("Unable to locate NHDPlus v2.1 for " & aHUC8)
-                        Else
-                            Throw New ApplicationException("Unable to locate NHDPlus v1.0 for " & aHUC8)
-                        End If
+                        Throw New ApplicationException("Unable to locate NHDPlus v1.0 for " & aHUC8)
                     End If
                 End If
             Else
