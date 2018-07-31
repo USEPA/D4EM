@@ -128,4 +128,8 @@ Public Module Download
     Private Function ValidateRemoteCertificate(ByVal sender As Object, ByVal cert As Object, ByVal chain As Object, ByVal policyErrors As Object) As Boolean
         Return True
     End Function
+
+    Public Sub SetSecurityProtocol()
+        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12
+    End Sub
 End Module

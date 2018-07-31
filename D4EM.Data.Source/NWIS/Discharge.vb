@@ -85,6 +85,7 @@ Partial Class NWIS
                     Else
                         Try
                             Logger.Progress("Getting NWIS Discharge data for " & lStationID, lStationIndex, aStationIDs.Count)
+                            D4EM.Data.Download.SetSecurityProtocol()
 
                             Dim sURL As String = "http://waterdata.usgs.gov/nwis/dv?cb_00060=on&format=rdb" _
                                                & "&begin_date=" & Format(CDate(aStartDate), "yyyy-MM-dd") _

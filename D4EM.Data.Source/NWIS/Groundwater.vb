@@ -81,6 +81,7 @@ Partial Class NWIS
                         Logger.Dbg("Using cached '" & lCacheFilename & "'")
                     Else
                         Try
+                            D4EM.Data.Download.SetSecurityProtocol()
                             Logger.Progress("Getting " & lDataTypeLabel & " data for " & lStationID, lStationIndex, aStationIDs.Count)
 
                             Dim sURL As String = "http://waterservices.usgs.gov/nwis/dv?format=rdb" _

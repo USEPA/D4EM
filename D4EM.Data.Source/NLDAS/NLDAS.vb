@@ -456,6 +456,7 @@ Public Class NLDAS
 
                     If Not IO.File.Exists(lCacheFilename) Then
                         D4EM.Data.Download.DisableHttpsCertificateCheck()  'the website has an invalid certificate, but go ahead and get it anyway.
+                        D4EM.Data.Download.SetSecurityProtocol()
                         Using lLevel As New ProgressLevel(True)
                             Dim lURL As String = "https://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:" & aDataType
                             If aDataType = "EVPsfc" Then

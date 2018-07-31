@@ -62,6 +62,7 @@ Partial Public Class NWIS
                                 Logger.Dbg("Using cached '" & lCacheFilename & "'")
                             Else
                                 Try
+                                    D4EM.Data.Download.SetSecurityProtocol()
                                     If .FindFirst(lField_site_no, lStationID) Then
                                         Dim sURL As String = GetWQURL(lStationID, .Value(lField_state_cd), aStartDate, aEndDate)
                                         lSiteData = DownloadURL(sURL)

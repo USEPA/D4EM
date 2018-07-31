@@ -92,6 +92,7 @@ Partial Public Class NWIS
                     Else
                         Try
                             Logger.Progress("Requesting NWIS IDA data for " & lStationID, lStationIndex, aStationIDs.Count)
+                            D4EM.Data.Download.SetSecurityProtocol()
 
                             Dim lRequestCookies As System.Net.CookieContainer = Nothing
                             Dim lAvailableRecordsResponse As System.Net.HttpWebResponse = Nothing

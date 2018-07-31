@@ -117,7 +117,7 @@ Public Class USGS_Seamless
             '        Else
 
             'Base Server Text
-            Dim NLCD_USGS_Server_Text As String = "http://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+            Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
             'Bounding box of area to retrieve
             Dim lNorth As Double = 0
@@ -226,6 +226,7 @@ Public Class USGS_Seamless
             'Read the json file to get the .tif URL from the "href"
             Try
                 Logger.Status("Requesting " & lBaseFilename)
+                D4EM.Data.Download.SetSecurityProtocol()
                 Dim request As System.Net.WebRequest = System.Net.WebRequest.Create(NLCD_GET_URL)
                 Dim response As System.Net.WebResponse = request.GetResponse()
                 Dim responseStream As System.IO.Stream = response.GetResponseStream()
@@ -344,7 +345,7 @@ Public Class USGS_Seamless
         'Build NLCD request URL (json with reference to .tiff file returned)
 
         'Server location
-        Dim NLCD_USGS_Server_Text As String = "http://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+        Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
         'format can be an image or json with reference to an image
         Dim responseformat As String = "f=json"    '"f=image", "f=json"
@@ -442,6 +443,7 @@ Public Class USGS_Seamless
 
         'Set up webrequest with NLCD_GETURL and create stream with JSON result (which should include a URL to the .tiff image we want)
         Try
+            D4EM.Data.Download.SetSecurityProtocol()
             Dim request As System.Net.WebRequest = System.Net.WebRequest.Create(NLCD_GET_URL)
             Dim response As System.Net.WebResponse = request.GetResponse()
             Dim responseStream As System.IO.Stream = response.GetResponseStream()
@@ -552,7 +554,7 @@ Public Class USGS_Seamless
         'Build NLCD request URL (json with reference to .tiff file returned)
 
         'Server location
-        Dim NLCD_USGS_Server_Text As String = "http://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+        Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
         'format can be an image or json with reference to an image
         Dim responseformat As String = "f=json"    '"f=image", "f=json"
@@ -654,6 +656,7 @@ Public Class USGS_Seamless
 
         'Set up webrequest with NLCD_GETURL and create stream with JSON result (which should include a URL to the .tiff image we want)
         Try
+            D4EM.Data.Download.SetSecurityProtocol()
             Dim request As System.Net.WebRequest = System.Net.WebRequest.Create(NLCD_GET_URL)
             Dim response As System.Net.WebResponse = request.GetResponse()
             Dim responseStream As System.IO.Stream = response.GetResponseStream()
@@ -1103,11 +1106,11 @@ Public Class USGS_Seamless
         End Select
         Select Case aPhase
             Case 1
-                Return "http://landfire.cr.usgs.gov/Website/distreq/RequestSummary.jsp?AL=" _
+                Return "https://landfire.cr.usgs.gov/Website/distreq/RequestSummary.jsp?AL=" _
                      & aNorth.ToString() + "," + aSouth.ToString() + "," + aEast.ToString() + "," + aWest.ToString() _
                      & "&PL=" & lKey & lLayerFormat1 & lMetadataFormat1 & lArchiveFormat1 & "&ORIG=MRLC"
-            Case 2 'http://igskmncngs086.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?zid=20120926.083203758.152061136002
-                Return "http://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?siz=1" _
+            Case 2 'https://igskmncngs086.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?zid=20120926.083203758.152061136002
+                Return "https://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus?siz=1" _
                      & "&key=" & lKey2 _
                      & "&ras=1&rsp=0" _
                      & "&pfm=" & lLayerFormat2 _
@@ -1117,7 +1120,7 @@ Public Class USGS_Seamless
                      & "&rgt=" & aEast _
                      & "&top=" & aNorth _
                      & "&bot=" & aSouth _
-                     & "&wmd=1&mur=http://landfire.cr.usgs.gov/distmeta/servlet/gov.usgs.edc.MetaBuilder" _
+                     & "&wmd=1&mur=https://landfire.cr.usgs.gov/distmeta/servlet/gov.usgs.edc.MetaBuilder" _
                      & "&mcd=" & lMCD _
                      & "&mdf=" & lMetadataFormat2 _
                      & "&arc=" & lArchiveFormat2 _
@@ -1129,7 +1132,7 @@ Public Class USGS_Seamless
                      & "&bnd=&bndnm=&RC=&ORIG=MRLC"
 
             Case 3
-                Return "http://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus"
+                Return "https://landfire.cr.usgs.gov/diststatus/servlet/gov.usgs.edc.RequestStatus"
         End Select
         Return ""
     End Function

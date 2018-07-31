@@ -112,6 +112,7 @@ TryDownload:
         Dim lScript As String
         Dim list_of_search_criteria As String = "&list_of_search_criteria=lat_long_bounding_box"
         Dim lSelection As String = ""
+        D4EM.Data.Download.SetSecurityProtocol()
         Select Case aStationDataType
             Case NWIS.LayerSpecifications.Measurement
                 lScript = "measurements"

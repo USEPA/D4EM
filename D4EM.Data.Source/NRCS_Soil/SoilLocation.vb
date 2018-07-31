@@ -310,6 +310,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
             Else
                 Using lLevel As New ProgressLevel(True)
                     Logger.Status("Attempting soil download of " & DoubleToString(lAreaMeters, 14) & " square meters")
+                    D4EM.Data.Download.SetSecurityProtocol()
                     Dim lURL As String = "http://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&Typename=MapunitPoly&BBOX=" & lFilter
                     If Not DownloadURL(lURL, lCacheFile) Then
                         If lAreaMeters > 10000000 Then 'Maybe an even smaller area will help?
@@ -368,6 +369,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
         If IO.File.Exists(lCacheFile) Then
             Logger.Dbg("Using cached results in " & lCacheFile)
         Else
+            D4EM.Data.Download.SetSecurityProtocol()
             Dim lURL As String = "http://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&Typename=MapunitPoly&BBOX=" & lFilter
             If Not DownloadURL(lURL, lCacheFile) Then
                 Throw New ApplicationException("Unable to download soil data from " & lURL & " to " & lCacheFile)
@@ -461,6 +463,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
         End If
         Dim lFoundValidHSG As Boolean = False
         Do Until lFoundValidHSG
+            D4EM.Data.Download.SetSecurityProtocol()
             Dim lFilter As String = "<Filter>" _
                                   & "  <DWithin>" _
                                   & "    <PropertyName>Geometry</PropertyName>" _
@@ -831,6 +834,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
             "LEFT OUTER JOIN chtexture cht ON cht.chtgkey = chtgrp.chtgkey  " & vbCr & _
             "ORDER BY l.areasymbol, mukey, cokey, comppct_r DESC, hzdepb_r"
         Try
+            D4EM.Data.Download.SetSecurityProtocol()
             Return aSOAPConn.RunQuery(lQuery)
         Catch eSoap As Exception
             Logger.Dbg("Error running SOAP query '" & lQuery & "'" & vbCrLf & eSoap.ToString)
