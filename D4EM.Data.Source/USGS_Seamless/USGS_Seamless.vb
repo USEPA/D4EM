@@ -118,7 +118,8 @@ Public Class USGS_Seamless
 
             'Base Server Text
             'Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
-            Dim NLCD_USGS_Server_Text As String = "https://edcintl.cr.usgs.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
+            'Dim NLCD_USGS_Server_Text As String = "https://edcintl.cr.usgs.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
+            Dim NLCD_USGS_Server_Text As String = "https://www.mrlc.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
 
             'Bounding box of area to retrieve
             Dim lNorth As Double = 0
