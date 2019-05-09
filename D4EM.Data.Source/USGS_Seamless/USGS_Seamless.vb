@@ -37,6 +37,13 @@ Public Class USGS_Seamless
     '    'TODO: others from case statement in BuildURL
     'End Class
 
+    'Base Server Text
+    'Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+    'Dim NLCD_USGS_Server_Text As String = "https://edcintl.cr.usgs.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
+    Shared NLCD_USGS_Server_Text As String = "https://www.mrlc.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
+
+
+
     Public Class LayerSpecifications
         Public Class NLCD1992
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_1992_landcover.tif", Name:="NLCD 1992 Land Cover", Tag:="NLCD1992", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
@@ -92,9 +99,11 @@ Public Class USGS_Seamless
     ''' <remarks></remarks>
     Public Overloads Shared Function Execute(ByVal aProject As Project,
                                              ByVal aSaveFolder As String,
-                                             ByVal aDataType As LayerSpecification) As String
+                                             ByVal aDataType As LayerSpecification,
+                                             ByVal Optional addLayer As Boolean = False) As String
         Dim lError As String = ""
         Dim lResult As String = ""
+        Dim lFinalLayerName As String = ""
         Try
             'Dim req As USGS_Seamless_Soap.GetServerInfoRequest
             'Dim res As USGS_Seamless_Soap.GetServerInfoResponse
@@ -220,12 +229,12 @@ Public Class USGS_Seamless
                     lBaseFilename = "NLCD_" & lDataType & "_2011"
                     lLayerString = "&layers=mrlc_nlcd_2011_impervious_2011_edition_2014_10_10"
 
-                'Case LayerSpecifications.NED.OneArcSecond
-                '   lBaseFilename = "NED_1ArcSecond"
-                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
-                'Case LayerSpecifications.NED.OneThirdArcSecond
-                '   lBaseFilename = "NED_ThirdArcSecond"
-                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                    'Case LayerSpecifications.NED.OneArcSecond
+                    '   lBaseFilename = "NED_1ArcSecond"
+                    '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                    'Case LayerSpecifications.NED.OneThirdArcSecond
+                    '   lBaseFilename = "NED_ThirdArcSecond"
+                    '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
                 Case Else
                     lBaseFilename = lDataType
                     lLayerString = "&layers=" + lDataType
@@ -238,7 +247,7 @@ Public Class USGS_Seamless
             'Console.WriteLine("{0}:{1}", 1, NLCD_GET_URL)
 
             'Dim MyTiffURL As String = Nothing
-            Dim lFinalLayerName As String = IO.Path.Combine(lSaveIn, lBaseFilename & ".tif")
+            lFinalLayerName = IO.Path.Combine(lSaveIn, lBaseFilename & ".tif")
             If Not TryDelete(lFinalLayerName) Then
                 lFinalLayerName = GetTemporaryFileName(IO.Path.ChangeExtension(lFinalLayerName, "").TrimEnd("."), IO.Path.GetExtension(lFinalLayerName))
             End If
@@ -298,6 +307,12 @@ Public Class USGS_Seamless
         Catch ex2 As Exception
             lError = ex2.ToString()
         End Try
+
+        If (addLayer) Then
+            Dim layerSpec As LayerSpecification = aDataType
+            Dim nlayer = New Layer(lFinalLayerName, layerSpec, False)
+            aProject.Layers.Add(nlayer)
+        End If
 
         Logger.Progress("", 0, 0)
         If lError.Length = 0 Then
@@ -369,7 +384,7 @@ Public Class USGS_Seamless
         'Build NLCD request URL (json with reference to .tiff file returned)
 
         'Server location
-        Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+        'Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
         'format can be an image or json with reference to an image
         Dim responseformat As String = "f=json"    '"f=image", "f=json"
@@ -578,7 +593,7 @@ Public Class USGS_Seamless
         'Build NLCD request URL (json with reference to .tiff file returned)
 
         'Server location
-        Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
+        'Dim NLCD_USGS_Server_Text As String = "https://landfire.cr.usgs.gov/arcgis/rest/services/NLCD/USGS_EDC_LandCover_NLCD/ImageServer/exportImage?"
 
         'format can be an image or json with reference to an image
         Dim responseformat As String = "f=json"    '"f=image", "f=json"

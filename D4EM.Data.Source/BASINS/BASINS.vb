@@ -896,10 +896,11 @@ Retry:
         Dim lTempFolder As String = NewTempDir(IO.Path.Combine(lCacheFolder, "D4EM_unpack_BASINS"))
         Dim lUnpackFolder As String = IO.Path.Combine(lTempFolder, lBaseDataType.Tag & g_PathChar)
 
+        'Move this until after full path is build
         'Unpack into temporary folder
-        TryDelete(lUnpackFolder)
-        MkDirPath(lUnpackFolder)
-        Zipper.UnzipFile(lCacheFilename, lUnpackFolder)
+        'TryDelete(lUnpackFolder)
+        'MkDirPath(lUnpackFolder)
+        'Zipper.UnzipFile(lCacheFilename, lUnpackFolder)
 
         Dim lNativeProjection As DotSpatial.Projections.ProjectionInfo = pNativeProjection
 
@@ -907,7 +908,9 @@ Retry:
 
         Select Case lBaseDataType
             Case LayerSpecifications.core31.all
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lUnpackFolder &= aHUC8 & g_PathChar
+
                 'Remove some obsolete layers
                 TryDeleteShapefile(lUnpackFolder & "gage.shp")     'replaced by NWIS data download 
                 TryDeleteShapefile(lUnpackFolder & "wdm.shp")      'replaced by BASINS met data download
@@ -922,9 +925,13 @@ Retry:
                 TryDelete(lUnpackFolder & "wqobs")                 'obsolete water quality
             Case LayerSpecifications.huc12
                 lUnpackFolder &= aHUC8 & g_PathChar
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
+
                 lNativeProjection = Globals.WebMercatorProjection
             Case LayerSpecifications.giras
                 lUnpackFolder &= aHUC8 & g_PathChar & "landuse"
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
+
                 lSaveIn = IO.Path.Combine(lSaveIn, "landuse")
             Case LayerSpecifications.Census.all
                 lSaveIn = IO.Path.Combine(lSaveIn, "census")
@@ -1119,6 +1126,14 @@ Retry:
 
     Private Sub OnDownloadProgess(ByVal bytesRead As Integer, ByVal totalBytes As Integer)
         Logger.Progress("Downloading", bytesRead, totalBytes)
+    End Sub
+
+    Private Shared Sub UnpackToTempFolder(ByVal lUnpackFolder As String, ByVal lCacheFilename As String)
+
+        'Unpack into temporary folder
+        TryDelete(lUnpackFolder)
+        MkDirPath(lUnpackFolder)
+        Zipper.UnzipFile(lCacheFilename, lUnpackFolder)
     End Sub
 
 End Class

@@ -762,14 +762,14 @@ TryNASStats:            Try
         Logger.Status("Step " & lStep & " of " & lLastStep & ": Getting NLCD Land Cover", True) : lStep += 1
         Using lLevel As New ProgressLevel(False)
 TryNLCD:    Try
-                'CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "NLCD", D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover))
-                CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.GetNLCD(aProject, "NLCD",
-                                                                             aProject.DesiredProjection,
-                                                                             aProject.ProjectFolder,
-                                                                             aProject.CacheFolder,
-                                                                             aProject.Region,
-                                                                             True,
-                                                                             D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover))
+                CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.Execute(aProject, "NLCD", D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover, True))
+                'CheckResult(lResults, D4EM.Data.Source.USGS_Seamless.GetNLCD(aProject, "NLCD",
+                '                                                             aProject.DesiredProjection,
+                '                                                             aProject.ProjectFolder,
+                '                                                             aProject.CacheFolder,
+                '                                                             aProject.Region,
+                '                                                             True,
+                '                                                             D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover))
                 'D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2001.LandCover))
                 IO.File.WriteAllText(aProject.ProjectFilename, aProject.AsMWPRJ)
 
