@@ -103,6 +103,9 @@
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DotSpatial.Data">
+      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
+    </Reference>
     <Reference Include="DotSpatial.Projections, Version=0.11.9.6, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>

@@ -2,7 +2,7 @@
 	<function name='GetUSGS_Seamless' label='Description'>    
 		<arguments>     
 			<region format='Region' label='Region' />
-			<DataType          format='String' label='Type of data to get' valid='NLCD2011.LandCover|NLCD2006.LandCover|NLCD2006.Impervious|NLCD2001.LandCover|NLCD2001.Canopy|NLCD2001.Impervious|NLCD1992' optional='true' default='LandCover' />
+			<DataType          format='String' label='Type of data to get' valid='NLCD2013.LandCover|NLCD2008.LandCover|NLCD2004.LandCover|NLCD2016.LandCover|NLCD2011.LandCover|NLCD2006.LandCover|NLCD2006.Impervious|NLCD2001.LandCover|NLCD2001.Canopy|NLCD2001.Impervious|NLCD1992' optional='true' default='LandCover' />
 			<DesiredProjection format='String' label='PROJ 4 string describing desired projection' optional='true' />
 			<ImageWidth format='Integer' label='Width in pixels of image to retrieve' optional='false' />
 			<ImageHeight format='Integer' label='Height in pixels of image to retrieve' optional='false' />      

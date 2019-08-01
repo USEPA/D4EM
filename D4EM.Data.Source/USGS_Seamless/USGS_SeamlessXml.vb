@@ -73,6 +73,7 @@ Partial Class USGS_Seamless
                         Logger.Dbg("Exception reading Region from query: " & e.Message)
                     End Try
                 Case "datatype"
+                    'GPF 7/25/2019 added 2016
                     For Each lLayerSpec As LayerSpecification In {
                         LayerSpecifications.NLCD1992.LandCover,
                         LayerSpecifications.NLCD2001.LandCover,
@@ -81,7 +82,12 @@ Partial Class USGS_Seamless
                         LayerSpecifications.NLCD2006.LandCover,
                         LayerSpecifications.NLCD2006.Impervious,
                         LayerSpecifications.NLCD2011.LandCover,
-                        LayerSpecifications.NLCD2011.Impervious}
+                        LayerSpecifications.NLCD2011.Impervious,
+                        LayerSpecifications.NLCD2016.LandCover,
+                        LayerSpecifications.NLCD2016.Impervious,
+                        LayerSpecifications.NLCD2008.LandCover,
+                        LayerSpecifications.NLCD2013.LandCover,
+                        LayerSpecifications.NLCD2004.LandCover}
 
                         If lLayerSpec.Tag.ToLowerInvariant().Replace("_", ".") = lArg.InnerText.ToLowerInvariant().Replace("_", ".") Then
                             lDataTypes.Add(lLayerSpec)

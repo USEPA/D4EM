@@ -4,6 +4,7 @@ Imports D4EM.Geo
 Imports D4EM.Data.LayerSpecification
 Imports System
 Imports System.Net
+'Imports System.Diagnostics
 Imports System.IO
 'Imports System.MarshalByRefObject
 Imports System.Drawing.Imaging
@@ -11,6 +12,9 @@ Imports System.Drawing.Bitmap
 Imports System.Drawing
 Imports System.Drawing.Image
 Imports Newtonsoft.Json.Linq
+Imports DotSpatial.Data
+Imports System.Windows.Forms
+'modified GPF 7/25/2019 with changes in MRLC feature names
 
 Public Class USGS_Seamless
 
@@ -42,8 +46,6 @@ Public Class USGS_Seamless
     'Dim NLCD_USGS_Server_Text As String = "https://edcintl.cr.usgs.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
     Shared NLCD_USGS_Server_Text As String = "https://www.mrlc.gov/geoserver/mrlc_download/wms?SERVICE=WMS&request=GetMap"
 
-
-
     Public Class LayerSpecifications
         Public Class NLCD1992
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_1992_landcover.tif", Name:="NLCD 1992 Land Cover", Tag:="NLCD1992", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
@@ -60,6 +62,26 @@ Public Class USGS_Seamless
         Public Class NLCD2011
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2011_landcover.tif", Name:="NLCD 2011 Land Cover", Tag:="NLCD2011.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
             Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2011_impervious.tif", Name:="NLCD 2011 Impervious", Tag:="NLCD2011.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        'GPF 7/25/2019
+        Public Class NLCD2016
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2016_landcover.tif", Name:="NLCD 2016 Land Cover", Tag:="NLCD2016.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2016_impervious.tif", Name:="NLCD 2016 Impervious", Tag:="NLCD2016.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        'GPF 7/25/2019
+        Public Class NLCD2013
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2013_landcover.tif", Name:="NLCD 2013 Land Cover", Tag:="NLCD2013.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2013_impervious.tif", Name:="NLCD 2013 Impervious", Tag:="NLCD2013.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        'GPF 7/25/2019
+        Public Class NLCD2008
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2008_landcover.tif", Name:="NLCD 2008 Land Cover", Tag:="NLCD2008.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2008_impervious.tif", Name:="NLCD 2008 Impervious", Tag:="NLCD2008.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        'GPF 7/25/2019
+        Public Class NLCD2004
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2004_landcover.tif", Name:="NLCD 2004 Land Cover", Tag:="NLCD2004.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2004_impervious.tif", Name:="NLCD 2004 Impervious", Tag:="NLCD2004.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
         Public Class NED
             Public Shared OneArcSecond As New LayerSpecification(FilePattern:="NED_2001_OneArcSecond.tif", Name:="NED One Arc Second", Tag:="NED.OneArcSecond", Role:=Roles.Elevation, Source:=GetType(USGS_Seamless))
@@ -195,7 +217,9 @@ Public Class USGS_Seamless
                     lDataType = "landcover"
                     lYear = "2001"
                     lBaseFilename = "NLCD_" & lDataType & "_2001"
-                    lLayerString = "&layers=mrlc_nlcd_2001_landcover_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2001_landcover_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2001_Land_Cover_L48"
                 Case LayerSpecifications.NLCD2001.Canopy
                     lDataType = "canopy"
                     lYear = "2001"
@@ -205,30 +229,95 @@ Public Class USGS_Seamless
                     lDataType = "impervious"
                     lYear = "2001"
                     lBaseFilename = "NLCD_" & lDataType & "_2001"
-                    lLayerString = "&layers=mrlc_nlcd_2001_impervious_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2001_impervious_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2001_Impervious_L48"
                 Case LayerSpecifications.NLCD2006.LandCover
                     lDataType = "landcover"
                     lYear = "2006"
                     lBaseFilename = "NLCD_" & lDataType & "_2006"
-                    lLayerString = "&layers=mrlc_nlcd_2006_landcover_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2006_landcover_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2006_Land_Cover_L48"
                 Case LayerSpecifications.NLCD2006.Impervious
                     lDataType = "impervious"
                     lYear = "2006"
                     lBaseFilename = "NLCD_" & lDataType & "_2006"
-                    lLayerString = "&layers=mrlc_nlcd_2006_impervious_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2006_impervious_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2006_Impervious_L48"
                 Case LayerSpecifications.NLCD2011.LandCover
                     lDataType = "landcover"
                     lYear = "2011"
                     lUSarea = ""
                     lBaseFilename = "NLCD_" & lDataType & "_2011"
-                    lLayerString = "&layers=mrlc_nlcd_2011_landcover_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2011_landcover_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2011_Land_Cover_L48"
                 Case LayerSpecifications.NLCD2011.Impervious
                     lDataType = "impervious"
                     lYear = "2011"
                     lUSarea = ""
                     lBaseFilename = "NLCD_" & lDataType & "_2011"
-                    lLayerString = "&layers=mrlc_nlcd_2011_impervious_2011_edition_2014_10_10"
+                    'lLayerString = "&layers=mrlc_nlcd_2011_impervious_2011_edition_2014_10_10"
+                    'GPF 07-25-19
+                    lLayerString = "&layers=NLCD_2011_Impervious_L48"
 
+               'GPF 07-25-19 for 2016 NLCD
+                Case LayerSpecifications.NLCD2016.LandCover
+                    lDataType = "landcover"
+                    lYear = "2016"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2016"
+                    lLayerString = "&layers=NLCD_2016_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2016.Impervious
+                    lDataType = "impervious"
+                    lYear = "2016"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2016"
+                    lLayerString = "&layers=NLCD_2016_Impervious_L48"
+
+                'GPF 07-25-19 for 2013 NLCD
+                Case LayerSpecifications.NLCD2013.LandCover
+                    lDataType = "landcover"
+                    lYear = "2013"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2013"
+                    lLayerString = "&layers=NLCD_2013_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2013.Impervious
+                    lDataType = "impervious"
+                    lYear = "2013"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2013"
+                    lLayerString = "&layers=NLCD_2013_Impervious_L48"
+
+                'GPF 07-25-19 for 2008 NLCD
+                Case LayerSpecifications.NLCD2008.LandCover
+                    lDataType = "landcover"
+                    lYear = "2008"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2008"
+                    lLayerString = "&layers=NLCD_2008_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2008.Impervious
+                    lDataType = "impervious"
+                    lYear = "2008"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2008"
+                    lLayerString = "&layers=NLCD_2008_Impervious_L48"
+
+                'GPF 07-25-19 for 2004 NLCD
+                Case LayerSpecifications.NLCD2004.LandCover
+                    lDataType = "landcover"
+                    lYear = "2004"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2004"
+                    lLayerString = "&layers=NLCD_2004_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2004.Impervious
+                    lDataType = "impervious"
+                    lYear = "2004"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2004"
+                    lLayerString = "&layers=NLCD_2004_Impervious_L48"
                     'Case LayerSpecifications.NED.OneArcSecond
                     '   lBaseFilename = "NED_1ArcSecond"
                     '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
@@ -245,6 +334,7 @@ Public Class USGS_Seamless
             'Dim NLCD_GET_URL As String = NLCD_USGS_Server_Text + responseformat + BoundingBox + imagesize + BB_SR + ImageSR + imageformat + pixelType + image_compression + mosaicRule
             Dim NLCD_GET_URL As String = NLCD_USGS_Server_Text + lLayerString + responseformat + BoundingBox + imagesize + BB_SR + ImageSR + imageformat + "&version=1.1.1"
             'Console.WriteLine("{0}:{1}", 1, NLCD_GET_URL)
+            Debug.WriteLine("NLCD_GET_URL=" + NLCD_GET_URL)
 
             'Dim MyTiffURL As String = Nothing
             lFinalLayerName = IO.Path.Combine(lSaveIn, lBaseFilename & ".tif")
@@ -299,6 +389,12 @@ Public Class USGS_Seamless
                 If Not IO.File.Exists(lFinalLayerName) Then
                     Throw New ApplicationException("Error downloading from " & NLCD_GET_URL & ", file not created: " & lFinalLayerName)
                 End If
+
+                'GPF 7/25/2019 re-class landuse
+                If lDataType.ToLower() = "landcover" Then
+                    ReClassNLCD(lFinalLayerName)
+                End If
+
             Catch wex As System.Net.WebException
                 lError = "Error downloading from " & NLCD_GET_URL & " to " & lFinalLayerName & " : " & wex.ToString
             End Try
@@ -327,6 +423,56 @@ Public Class USGS_Seamless
         End If
 
     End Function
+
+    Public Shared Sub ReClassNLCD(ByVal aLandCover As String)
+
+        Dim lError As String = String.Empty
+
+        'check NLCD for values
+        Dim lulc As IRaster = Raster.OpenFile(aLandCover)
+        Dim minval As Integer = CInt(lulc.Minimum)
+        Dim maxval As Integer = CInt(lulc.Maximum)
+        lulc.Close()
+        lulc = Nothing
+        If maxval > 16 Then Return 'no need to reclass
+
+        Try
+            Dim tifcode As New List(Of Integer)({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})
+            Dim lucode As New List(Of Integer)({11, 12, 21, 22, 23, 24, 31, 41, 42, 43, 52, 71, 81, 82, 90, 95})
+
+            Dim tmpfile As String = GetTemporaryFileName("lulc", "tif")
+            File.Copy(aLandCover, tmpfile)
+
+            lulc = Raster.OpenFile(tmpfile)
+
+            Dim rmin As Integer = lulc.StartRow
+            Dim rmax As Integer = lulc.EndRow
+            Dim cmin As Integer = lulc.StartColumn
+            Dim cmax As Integer = lulc.EndColumn
+            Dim val As Integer = 0, ndx As Integer = 0
+
+            'reclass
+            For row As Integer = rmin To rmax
+                For col As Integer = cmin To cmax
+                    val = CInt(lulc.Value(row, col))
+                    ndx = tifcode.IndexOf(val)
+                    lulc.Value(row, col) = lucode(ndx)
+                Next
+            Next
+            lulc.Save()
+            lulc.Close()
+            lulc = Nothing
+            tifcode = Nothing
+            lucode = Nothing
+
+            File.Delete(aLandCover)
+            File.Copy(tmpfile, aLandCover)
+            File.Delete(tmpfile)
+        Catch ex As Exception
+            lError = ex.Message + "\r\n\r\n" + ex.StackTrace
+            Logger.Dbg("Error downloading from USGS Seamless", lError)
+        End Try
+    End Sub
 
     'sdmdp version
     '''' <summary>
@@ -672,12 +818,12 @@ Public Class USGS_Seamless
                 lyear = "2011"
                 lUSarea = ""
                 lBaseFilename = "NLCD_" & lDataType & "_2011"
-            'Case LayerSpecifications.NED.OneArcSecond
-            '   lBaseFilename = "NED_1ArcSecond"
-            '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
-            'Case LayerSpecifications.NED.OneThirdArcSecond
-            '   lBaseFilename = "NED_ThirdArcSecond"
-            '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneArcSecond
+                '   lBaseFilename = "NED_1ArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
+                'Case LayerSpecifications.NED.OneThirdArcSecond
+                '   lBaseFilename = "NED_ThirdArcSecond"
+                '  lNativeProjection = D4EM.Data.Globals.GeographicProjection
             Case Else
                 '   lBaseFilename = lDataType
         End Select
@@ -1175,7 +1321,6 @@ Public Class USGS_Seamless
         End Select
         Return ""
     End Function
-
     ''' <summary>
     ''' Changes aFilename to an existing file name if one is found whose edges are close enough to those in aFilename
     ''' "Close enough" is defined by CacheWithinDegreesInside and CacheWithinDegreesOutside
