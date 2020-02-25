@@ -434,11 +434,12 @@ Public Class USGS_Seamless
         Dim maxval As Integer = CInt(lulc.Maximum)
         lulc.Close()
         lulc = Nothing
-        If maxval > 16 Then Return 'no need to reclass
+        If maxval > 22 Then Return 'no need to reclass
 
         Try
-            Dim tifcode As New List(Of Integer)({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})
-            Dim lucode As New List(Of Integer)({11, 12, 21, 22, 23, 24, 31, 41, 42, 43, 52, 71, 81, 82, 90, 95})
+            Dim tifcode As New List(Of Integer)({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21})
+            'Dim lucode As New List(Of Integer)({11, 12, 21, 22, 23, 24, 31, 41, 42, 43, 52, 71, 81, 82, 90, 95})
+            Dim lucode As New List(Of Integer)({11, 12, 21, 22, 23, 24, 31, 41, 42, 43, 51, 52, 71, 72, 73, 74, 81, 82, 90, 95, 0})
 
             Dim tmpfile As String = GetTemporaryFileName("lulc", "tif")
             File.Copy(aLandCover, tmpfile)
