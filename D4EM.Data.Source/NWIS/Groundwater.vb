@@ -318,6 +318,7 @@ DownloadIt:
                         Logger.Dbg("Using cached '" & lCacheFilename & "'")
                     Else
                         Try
+                            D4EM.Data.Download.SetSecurityProtocol()
                             Logger.Progress("Getting " & lDataTypeLabel & " data for " & lStationID, lStationIndex, aStationIDs.Count)
                             'http://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=410947071344803&agency_cd=USGS&format=rdb
 
