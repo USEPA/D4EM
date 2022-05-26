@@ -193,7 +193,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="Service References\NRCS_Service\SDMTabularService.wsdl" />
+    <None Include="Service References\NRCS_Service\SDMTabularService1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -214,9 +214,6 @@
     <WCFMetadataStorage Include="Service References\NRCS_Service\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\NRCS_Service\SDMTabularService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\NRCS_Service\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +224,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\NRCS_Service\SDMTabularService1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

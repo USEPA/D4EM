@@ -11,7 +11,6 @@
 Option Strict On
 Option Explicit On
 
-Imports System.Data
 
 Namespace NRCS_Service
     
@@ -19,10 +18,86 @@ Namespace NRCS_Service
      System.ServiceModel.ServiceContractAttribute([Namespace]:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx", ConfigurationName:="NRCS_Service.SDMTabularServiceSoap")>  _
     Public Interface SDMTabularServiceSoap
         
-        <System.ServiceModel.OperationContractAttribute(Action:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx/RunQuery", ReplyAction:="*"),  _
-         System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults:=true)>  _
-        Function RunQuery(ByVal Query As String) As System.Data.DataSet
+        'CODEGEN: Generating message contract since element name Query from namespace http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx is not marked nillable
+        <System.ServiceModel.OperationContractAttribute(Action:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx/RunQuery", ReplyAction:="*")>  _
+        Function RunQuery(ByVal request As NRCS_Service.RunQueryRequest) As NRCS_Service.RunQueryResponse
     End Interface
+    
+    <System.Diagnostics.DebuggerStepThroughAttribute(),  _
+     System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0"),  _
+     System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced),  _
+     System.ServiceModel.MessageContractAttribute(IsWrapped:=false)>  _
+    Partial Public Class RunQueryRequest
+        
+        <System.ServiceModel.MessageBodyMemberAttribute(Name:="RunQuery", [Namespace]:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx", Order:=0)>  _
+        Public Body As NRCS_Service.RunQueryRequestBody
+        
+        Public Sub New()
+            MyBase.New
+        End Sub
+        
+        Public Sub New(ByVal Body As NRCS_Service.RunQueryRequestBody)
+            MyBase.New
+            Me.Body = Body
+        End Sub
+    End Class
+    
+    <System.Diagnostics.DebuggerStepThroughAttribute(),  _
+     System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0"),  _
+     System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced),  _
+     System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx")>  _
+    Partial Public Class RunQueryRequestBody
+        
+        <System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue:=false, Order:=0)>  _
+        Public Query As String
+        
+        Public Sub New()
+            MyBase.New
+        End Sub
+        
+        Public Sub New(ByVal Query As String)
+            MyBase.New
+            Me.Query = Query
+        End Sub
+    End Class
+    
+    <System.Diagnostics.DebuggerStepThroughAttribute(),  _
+     System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0"),  _
+     System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced),  _
+     System.ServiceModel.MessageContractAttribute(IsWrapped:=false)>  _
+    Partial Public Class RunQueryResponse
+        
+        <System.ServiceModel.MessageBodyMemberAttribute(Name:="RunQueryResponse", [Namespace]:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx", Order:=0)>  _
+        Public Body As NRCS_Service.RunQueryResponseBody
+        
+        Public Sub New()
+            MyBase.New
+        End Sub
+        
+        Public Sub New(ByVal Body As NRCS_Service.RunQueryResponseBody)
+            MyBase.New
+            Me.Body = Body
+        End Sub
+    End Class
+    
+    <System.Diagnostics.DebuggerStepThroughAttribute(),  _
+     System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0"),  _
+     System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced),  _
+     System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx")>  _
+    Partial Public Class RunQueryResponseBody
+        
+        <System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue:=false, Order:=0)>  _
+        Public RunQueryResult As System.Data.DataSet
+        
+        Public Sub New()
+            MyBase.New
+        End Sub
+        
+        Public Sub New(ByVal RunQueryResult As System.Data.DataSet)
+            MyBase.New
+            Me.RunQueryResult = RunQueryResult
+        End Sub
+    End Class
     
     <System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")>  _
     Public Interface SDMTabularServiceSoapChannel
@@ -55,8 +130,17 @@ Namespace NRCS_Service
             MyBase.New(binding, remoteAddress)
         End Sub
         
-        Public Function RunQuery(ByVal Query As String) As System.Data.DataSet Implements NRCS_Service.SDMTabularServiceSoap.RunQuery
-            Return MyBase.Channel.RunQuery(Query)
+        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>  _
+        Function NRCS_Service_SDMTabularServiceSoap_RunQuery(ByVal request As NRCS_Service.RunQueryRequest) As NRCS_Service.RunQueryResponse Implements NRCS_Service.SDMTabularServiceSoap.RunQuery
+            Return MyBase.Channel.RunQuery(request)
+        End Function
+        
+        Public Function RunQuery(ByVal Query As String) As System.Data.DataSet
+            Dim inValue As NRCS_Service.RunQueryRequest = New NRCS_Service.RunQueryRequest()
+            inValue.Body = New NRCS_Service.RunQueryRequestBody()
+            inValue.Body.Query = Query
+            Dim retVal As NRCS_Service.RunQueryResponse = CType(Me,NRCS_Service.SDMTabularServiceSoap).RunQuery(inValue)
+            Return retVal.Body.RunQueryResult
         End Function
     End Class
 End Namespace

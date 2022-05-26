@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://SDMDataAccess.sc.egov.usda.gov/Tabular/SDMTabularService.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="SDMTabularService.wsdl" MetadataType="Wsdl" ID="c2850876-e871-41d8-bdb6-ab07e1424208" SourceId="1" SourceUrl="http://sdmdataaccess.nrcs.usda.gov/tabular/SDMTabularService.asmx?wsdl" />
-    <MetadataFile FileName="SDMTabularService.disco" MetadataType="Disco" ID="42ed3892-e616-4fd9-a1f0-d1084ed0ca82" SourceId="1" SourceUrl="http://sdmdataaccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx?disco" />
+    <MetadataFile FileName="SDMTabularService.wsdl" MetadataType="Wsdl" ID="77630453-fac2-4f74-aff7-26d80c66b5be" SourceId="1" SourceUrl="https://sdmdataaccess.sc.egov.usda.gov/tabular/SDMTabularService.asmx?wsdl" />
+    <MetadataFile FileName="SDMTabularService.disco" MetadataType="Disco" ID="67df27dc-1cab-4ed8-a73d-0f784b9bc5ab" SourceId="1" SourceUrl="https://sdmdataaccess.sc.egov.usda.gov/Tabular/SDMTabularService.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -530,7 +530,9 @@ SplitIt:        If lEastWest > lNorthSouth Then
                             lSoil.AreaSymbol = lXMLdocFeature.GetElementsByTagName("ms:AREASYMBOL").Item(lIndex).InnerText
                             lSoil.MuSym = lXMLdocFeature.GetElementsByTagName("ms:MUSYM").Item(lIndex).InnerText
                             lSoil.NationalMuSym = lXMLdocFeature.GetElementsByTagName("ms:NationalMuSym").Item(lIndex).InnerText
-                            lSoil.ObjectID = lXMLdocFeature.GetElementsByTagName("ms:OBJECTID").Item(lIndex).InnerText
+                            If lXMLdocFeature.GetElementsByTagName("ms:OBJECTID").Count > 0 Then
+                                lSoil.ObjectID = lXMLdocFeature.GetElementsByTagName("ms:OBJECTID").Item(lIndex).InnerText
+                            End If
                         Catch eXML As Exception
                             Logger.Dbg(eXML.Message & " setting properties of soil " & lMuKey)
                         End Try
@@ -626,7 +628,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
                 If lSoilTable Is Nothing Then
                     If lSoap Is Nothing Then
                         Try
-                            lSoap = New NRCS_Service.SDMTabularServiceSoapClient
+                            lSoap = New NRCS_Service.SDMTabularServiceSoapClient()
                         Catch ex As Exception
                             Logger.Dbg("Error: Unable to create NRCS.SDMTabularServiceSoapClient: " & ex.ToString)
                         End Try
