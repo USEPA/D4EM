@@ -63,6 +63,10 @@ Public Class USGS_Seamless
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2011_landcover.tif", Name:="NLCD 2011 Land Cover", Tag:="NLCD2011.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
             Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2011_impervious.tif", Name:="NLCD 2011 Impervious", Tag:="NLCD2011.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
+        Public Class NLCD2019
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2019_landcover.tif", Name:="NLCD 2019 Land Cover", Tag:="NLCD2019.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2019_impervious.tif", Name:="NLCD 2019 Impervious", Tag:="NLCD2019.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
         'GPF 7/25/2019
         Public Class NLCD2016
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2016_landcover.tif", Name:="NLCD 2016 Land Cover", Tag:="NLCD2016.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
@@ -263,6 +267,18 @@ Public Class USGS_Seamless
                     'GPF 07-25-19
                     lLayerString = "&layers=NLCD_2011_Impervious_L48"
 
+                Case LayerSpecifications.NLCD2019.LandCover
+                    lDataType = "landcover"
+                    lYear = "2019"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2019"
+                    lLayerString = "&layers=NLCD_2019_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2019.Impervious
+                    lDataType = "impervious"
+                    lYear = "2019"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2019"
+                    lLayerString = "&layers=NLCD_2019_Impervious_L48"
                'GPF 07-25-19 for 2016 NLCD
                 Case LayerSpecifications.NLCD2016.LandCover
                     lDataType = "landcover"
@@ -551,9 +567,9 @@ Public Class USGS_Seamless
         Dim YSize As Integer = (lNorth - lSouth) / 30
 
         'limiting size of output .tiff
-        If XSize > 50000 Then XSize = 50000 'limiting size of output .tiff
+        If XSize > 200000 Then XSize = 200000 'limiting size of output .tiff
         If XSize < 1 Then XSize = 10 'min size
-        If YSize > 50000 Then YSize = 50000
+        If YSize > 200000 Then YSize = 200000
         If YSize < 1 Then YSize = 10
         'size of result in pixels (e.g., 300x400 = size=300,400; default is 400x400)
         Dim imagesize As String = "&size=" + XSize.ToString + "," + YSize.ToString  'size of result in pixels (e.g., 300x400 = size=300,400; default is 400x400)

@@ -85,6 +85,8 @@ Partial Class USGS_Seamless
                         LayerSpecifications.NLCD2011.Impervious,
                         LayerSpecifications.NLCD2016.LandCover,
                         LayerSpecifications.NLCD2016.Impervious,
+                        LayerSpecifications.NLCD2019.LandCover,
+                        LayerSpecifications.NLCD2019.Impervious,
                         LayerSpecifications.NLCD2008.LandCover,
                         LayerSpecifications.NLCD2013.LandCover,
                         LayerSpecifications.NLCD2004.LandCover}
