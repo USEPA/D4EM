@@ -83,6 +83,10 @@ Module modMain
                         Using lLevel As New ProgressLevel(Not lSingleQuery, lSingleQuery)
                             lResult &= ExecuteNCDC(lQuery)
                         End Using
+                    ElseIf lFunctionName.StartsWith("GetSoils") Then
+                        Using lLevel As New ProgressLevel(Not lSingleQuery, lSingleQuery)
+                            lResult &= ExecuteNRCS_Soils(lQuery)
+                        End Using
                     Else
                         Logger.Msg("Cannot find extension for function '" & lFunctionName & "'" & vbCrLf & vbCrLf & lQuery, g_AppNameLong)
                     End If

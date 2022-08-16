@@ -215,6 +215,7 @@
   <ItemGroup>
     <Compile Include="modMain.vb" />
     <Compile Include="modNCDC.vb" />
+    <Compile Include="modNRCS_Soils.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
