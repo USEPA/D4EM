@@ -5,7 +5,7 @@ Imports WorldWind.Net
 ''' <remarks></remarks>
 Public Module Download
 
-    Private pBackupURL As String = "http://hspf.com/cgi-bin/finddata.pl?url="
+    'Private pBackupURL As String = "http://hspf.com/cgi-bin/finddata.pl?url="
     Private pLastStatusSent As Double = 0
 
     ''' <summary>Download a URL, return results as a string</summary>
@@ -40,24 +40,25 @@ Public Module Download
             Logger.Dbg("Downloaded from primary server")
         Catch we As System.Net.WebException
             'TODO: catch proxy exception and prompt for proxy authentication
-            Logger.Dbg("Caught WebException '" & we.Message & "' trying backup server")
-            If aURL.StartsWith(pBackupURL) Then 'Already tried backup server
-                Logger.Dbg("Unable to download from backup server")
-                Return False
-            End If
-            Try
-                DownloadURLProgress(pBackupURL & aURL, aSaveAs, Nothing, Nothing)
-                If FileLen(aSaveAs) < 1000 AndAlso IO.File.ReadAllText(aSaveAs).Contains("404 Not Found") Then
-                    Logger.Dbg("Not found using backup server")
-                    TryDelete(aSaveAs)
-                    Return False
-                End If
-                Layer.AddProcessStepToFile("Downloaded from " & pBackupURL & aURL, aSaveAs)
-                Logger.Dbg("Downloaded using backup server")
-            Catch be As Exception
-                Logger.Dbg("Caught Backup Exception '" & be.ToString() & "'")
-                Return False
-            End Try
+            Logger.Dbg("Caught WebException '" & we.Message & "'")
+            Return False
+            'If aURL.StartsWith(pBackupURL) Then 'Already tried backup server
+            '    Logger.Dbg("Unable to download from backup server")
+            '    Return False
+            'End If
+            'Try
+            '    DownloadURLProgress(pBackupURL & aURL, aSaveAs, Nothing, Nothing)
+            '    If FileLen(aSaveAs) < 1000 AndAlso IO.File.ReadAllText(aSaveAs).Contains("404 Not Found") Then
+            '        Logger.Dbg("Not found using backup server")
+            '        TryDelete(aSaveAs)
+            '        Return False
+            '    End If
+            '    Layer.AddProcessStepToFile("Downloaded from " & pBackupURL & aURL, aSaveAs)
+            '    Logger.Dbg("Downloaded using backup server")
+            'Catch be As Exception
+            '    Logger.Dbg("Caught Backup Exception '" & be.ToString() & "'")
+            '    Return False
+            'End Try
         Catch e As Exception
             Logger.Dbg("Caught Exception '" & e.ToString() & "'")
             Return False
