@@ -183,7 +183,7 @@ Public Class SoilLocation
         Public Property Polygons As SoilPolygons ' New List(Of SoilPolygon) 'Polygons describing spatial extent of soil
         Public Property Components As New List(Of SoilComponent)
 
-        'Public Property KSAT_Surface As Double 'Saturated Hydraulic Conductivity (micrometers/second) in top horizon
+        Public Property KSAT_Surface As Double 'Saturated Hydraulic Conductivity (micrometers/second) in top horizon
         'Public Property KSAT As Double 'Saturated Hydraulic Conductivity (micrometers/second) depth weighted
         'Public Property Slope_R As Double 'Representative slope in %
         Public Property Layers As List(Of SoilLayer) 'Layers associated with soil
@@ -225,6 +225,8 @@ Public Class SoilLocation
         Public Property dbovendry_r As Double = 0.0 'bd
         Public Property awc_r As Double = 0.0 'awc
         Public Property ksat_r As Double = 0.0 'ksat
+        Public Property ksat_l As Double = 0.0 'ksat
+        Public Property ksat_h As Double = 0.0 'ksat
         Public Property om_r As Double = 0.0 'cbd
         Public Property claytotal_r As Double = 0.0 'clay%
         Public Property silttotal_r As Double = 0.0 'silt%
@@ -666,8 +668,11 @@ SplitIt:        If lEastWest > lNorthSouth Then
                     Next
                     If lDomComponent IsNot Nothing Then
                         lDomComponent.IsDominant = True
+                        If lDomComponent.chorizons.Count > 0 Then
+                            lSoil.KSAT_Surface = lDomComponent.chorizons(0).ksat_r  'use surface layer of dominant component
+                        End If
                     Else
-                        Logger.Dbg("No components of MuKey " & lSoil.MuKey)
+                            Logger.Dbg("No components of MuKey " & lSoil.MuKey)
                     End If
                 Else
                     Logger.Dbg("No soil data found for MuKey " & lSoil.MuKey)
@@ -698,6 +703,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
 
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("MuKey", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("HSG", "C", 4, 0))
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Ksat", "N", 4, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("AreaSymbol", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("MuSym", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("NationalMuSym", "C", 8, 0))
@@ -713,9 +719,10 @@ SplitIt:        If lEastWest > lNorthSouth Then
                         With (lFeatureSet.AddFeature(lShape.ToGeometry))
                             .DataRow(0) = lSoil.MuKey
                             .DataRow(1) = lSoil.HSG
-                            .DataRow(2) = lSoil.AreaSymbol
-                            .DataRow(3) = lSoil.MuSym
-                            .DataRow(4) = lSoil.NationalMuSym
+                            .DataRow(2) = lSoil.KSAT_Surface
+                            .DataRow(3) = lSoil.AreaSymbol
+                            .DataRow(4) = lSoil.MuSym
+                            .DataRow(5) = lSoil.NationalMuSym
                             '.DataRow() = lSoil.ObjectID
                         End With
                     Else
@@ -818,22 +825,22 @@ SplitIt:        If lEastWest > lNorthSouth Then
     End Enum
 
     Private Shared Function RunSoilQuery(ByVal aMuKey As String, ByVal aSOAPConn As NRCS_Service.SDMTabularServiceSoapClient) As System.Data.DataSet
-        Dim lQuery As String = _
-            "SELECT " & vbCr & _
-            "saversion, saverest," & vbCr & _
-            "l.areasymbol, l.areaname, l.lkey," & vbCr & _
-            "mu.musym, mu.muname, museq, mu.mukey," & vbCr & _
-            "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr & _
-            "hzdepb_r, dbovendry_r, awc_r, ksat_r, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, fraggt10_r, frag3to10_r, sieveno10_r, ch.chkey, " & vbCr & _
-            "texdesc, texture, " & vbCr & _
-            "cht.chtgkey, texcl " & vbCr & _
-            "FROM sacatalog sac" & vbCr & _
-            "INNER JOIN legend l ON l.areasymbol = sac.areasymbol AND l.areatypename='Non-MLRA Soil Survey Area' " & vbCr & _
-            "INNER JOIN mapunit mu ON mu.lkey = l.lkey AND mu.mukey = " & "'" & aMuKey & "'" & vbCr & _
-            "LEFT OUTER JOIN component c ON c.mukey = mu.mukey" & vbCr & _
-            "LEFT OUTER JOIN chorizon ch ON ch.cokey = c.cokey" & vbCr & _
-            "LEFT OUTER JOIN chtexturegrp chtgrp ON chtgrp.chkey = ch.chkey " & vbCr & _
-            "LEFT OUTER JOIN chtexture cht ON cht.chtgkey = chtgrp.chtgkey  " & vbCr & _
+        Dim lQuery As String =
+            "SELECT " & vbCr &
+            "saversion, saverest," & vbCr &
+            "l.areasymbol, l.areaname, l.lkey," & vbCr &
+            "mu.musym, mu.muname, museq, mu.mukey," & vbCr &
+            "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr &
+            "hzdepb_r, dbovendry_r, awc_r, ksat_r, ksat_l, ksat_h, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, fraggt10_r, frag3to10_r, sieveno10_r, ch.chkey, " & vbCr &
+            "texdesc, texture, " & vbCr &
+            "cht.chtgkey, texcl " & vbCr &
+            "FROM sacatalog sac" & vbCr &
+            "INNER JOIN legend l ON l.areasymbol = sac.areasymbol AND l.areatypename='Non-MLRA Soil Survey Area' " & vbCr &
+            "INNER JOIN mapunit mu ON mu.lkey = l.lkey AND mu.mukey = " & "'" & aMuKey & "'" & vbCr &
+            "LEFT OUTER JOIN component c ON c.mukey = mu.mukey" & vbCr &
+            "LEFT OUTER JOIN chorizon ch ON ch.cokey = c.cokey" & vbCr &
+            "LEFT OUTER JOIN chtexturegrp chtgrp ON chtgrp.chkey = ch.chkey " & vbCr &
+            "LEFT OUTER JOIN chtexture cht ON cht.chtgkey = chtgrp.chtgkey  " & vbCr &
             "ORDER BY l.areasymbol, mukey, cokey, comppct_r DESC, hzdepb_r"
         Try
             D4EM.Data.Download.SetSecurityProtocol()
@@ -893,6 +900,8 @@ SplitIt:        If lEastWest > lNorthSouth Then
                         Double.TryParse(.Rows(lRow).Item("dbovendry_r"), lHorizonToFill.dbovendry_r)
                         Double.TryParse(.Rows(lRow).Item("awc_r"), lHorizonToFill.awc_r)
                         Double.TryParse(.Rows(lRow).Item("ksat_r"), lHorizonToFill.ksat_r)
+                        Double.TryParse(.Rows(lRow).Item("ksat_l"), lHorizonToFill.ksat_l)
+                        Double.TryParse(.Rows(lRow).Item("ksat_h"), lHorizonToFill.ksat_h)
                         Double.TryParse(.Rows(lRow).Item("om_r"), lHorizonToFill.om_r)
                         Double.TryParse(.Rows(lRow).Item("claytotal_r"), lHorizonToFill.claytotal_r)
                         Double.TryParse(.Rows(lRow).Item("silttotal_r"), lHorizonToFill.silttotal_r)
@@ -994,23 +1003,23 @@ SplitIt:        If lEastWest > lNorthSouth Then
             Return Nothing
         Else 'this gets the dominant hsg for the map unit based on percentage of components
             Dim lSoilLayers As New SortedList(Of String, SoilLayer)
-            Dim lQuery As String = _
-                "SELECT" & vbCr & _
-                "saversion, saverest," & vbCr & _
-                "l.areasymbol, l.areaname, l.lkey," & vbCr & _
-                "mu.musym, mu.muname, museq, mu.mukey," & vbCr & _
-                "hydgrpcd, " & vbCr & _
-                "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr & _
-                "hzdepb_r, dbovendry_r, awc_r, ksat_r, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, ch.chkey " & vbCr & _
-                "texdesc, texture, " & vbCr & _
-                "cht.chtgkey, texcl " & vbCr & _
-                "FROM sacatalog sac" & vbCr & _
-                "INNER JOIN legend l ON l.areasymbol = sac.areasymbol AND l.areatypename='Non-MLRA Soil Survey Area' " & vbCr & _
-                "INNER JOIN mapunit mu ON mu.lkey = l.lkey AND mu.mukey = " & "'" & aKey & "'" & vbCr & _
-                "LEFT OUTER JOIN component c ON c.mukey = mu.mukey" & vbCr & _
-                "LEFT OUTER JOIN chorizon ch ON ch.cokey = c.cokey" & vbCr & _
-                "LEFT OUTER JOIN chtexturegrp chtgrp ON chtgrp.chkey = ch.chkey " & vbCr & _
-                "LEFT OUTER JOIN chtexture cht ON cht.chtgkey = chtgrp.chtgkey " & vbCr & _
+            Dim lQuery As String =
+                "SELECT" & vbCr &
+                "saversion, saverest," & vbCr &
+                "l.areasymbol, l.areaname, l.lkey," & vbCr &
+                "mu.musym, mu.muname, museq, mu.mukey," & vbCr &
+                "hydgrpcd, " & vbCr &
+                "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr &
+                "hzdepb_r, dbovendry_r, awc_r, ksat_r, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, ch.chkey " & vbCr &
+                "texdesc, texture, " & vbCr &
+                "cht.chtgkey, texcl " & vbCr &
+                "FROM sacatalog sac" & vbCr &
+                "INNER JOIN legend l ON l.areasymbol = sac.areasymbol AND l.areatypename='Non-MLRA Soil Survey Area' " & vbCr &
+                "INNER JOIN mapunit mu ON mu.lkey = l.lkey AND mu.mukey = " & "'" & aKey & "'" & vbCr &
+                "LEFT OUTER JOIN component c ON c.mukey = mu.mukey" & vbCr &
+                "LEFT OUTER JOIN chorizon ch ON ch.cokey = c.cokey" & vbCr &
+                "LEFT OUTER JOIN chtexturegrp chtgrp ON chtgrp.chkey = ch.chkey " & vbCr &
+                "LEFT OUTER JOIN chtexture cht ON cht.chtgkey = chtgrp.chtgkey " & vbCr &
                 "ORDER BY l.areaname, museq, comppct_r DESC, compname, hzdepb_r"
 
             'Dim lURL As String = "http://sdmdataaccess.nrcs.usda.gov/QueryResults.aspx?TxtQuery=" & System.Web.HttpUtility.UrlEncode(lQuery) & "&RbgFormat=RbiIXML&BtnSubmit=Submit+Query"
