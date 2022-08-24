@@ -183,7 +183,7 @@ Public Class SoilLocation
         Public Property Polygons As SoilPolygons ' New List(Of SoilPolygon) 'Polygons describing spatial extent of soil
         Public Property Components As New List(Of SoilComponent)
 
-        Public Property KSAT_Surface As Double 'Saturated Hydraulic Conductivity (micrometers/second) in top horizon
+        'Public Property KSAT_Surface As Double 'Saturated Hydraulic Conductivity (micrometers/second) in top horizon
         'Public Property KSAT As Double 'Saturated Hydraulic Conductivity (micrometers/second) depth weighted
         'Public Property Slope_R As Double 'Representative slope in %
         Public Property Layers As List(Of SoilLayer) 'Layers associated with soil
@@ -668,11 +668,6 @@ SplitIt:        If lEastWest > lNorthSouth Then
                     Next
                     If lDomComponent IsNot Nothing Then
                         lDomComponent.IsDominant = True
-                        If lDomComponent.chorizons.Count > 0 Then
-                            lSoil.KSAT_Surface = lDomComponent.chorizons(0).ksat_r  'use surface layer of dominant component
-                        End If
-                    Else
-                            Logger.Dbg("No components of MuKey " & lSoil.MuKey)
                     End If
                 Else
                     Logger.Dbg("No soil data found for MuKey " & lSoil.MuKey)
@@ -703,10 +698,23 @@ SplitIt:        If lEastWest > lNorthSouth Then
 
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("MuKey", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("HSG", "C", 4, 0))
-                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Ksat", "N", 4, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("AreaSymbol", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("MuSym", "C", 8, 0))
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("NationalMuSym", "C", 8, 0))
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Ksat", "N", 8, 0))
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("HzDepb", "N", 8, 0))       'bottom depth of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("DbOvenDry", "N", 8, 2))    'oven dry weight of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Awc", "N", 8, 2))          'available water capacity of surface horizon 
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Om", "N", 8, 0))           'organic matter of surface horizon 
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("ClayTotal", "N", 8, 2))    'percent total clay of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("SiltTotal", "N", 8, 2))    'percent total silt of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("SandTotal", "N", 8, 2))    'percent total sand of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Kffact", "N", 8, 2))       'erodibility factor of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Ec", "N", 8, 0))           'electrical conductivity of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Texture", "C", 24, 0))     'texture modifier and texture class of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("AlbedoDry", "N", 8, 2))    'albedo dry
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("CompName", "C", 12, 0))    'component name 
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("CompPct", "N", 8, 0))      'component percentage
             End If
 
             For Each lPolygonFilename As String In lSoil.Polygons.Files
@@ -719,11 +727,37 @@ SplitIt:        If lEastWest > lNorthSouth Then
                         With (lFeatureSet.AddFeature(lShape.ToGeometry))
                             .DataRow(0) = lSoil.MuKey
                             .DataRow(1) = lSoil.HSG
-                            .DataRow(2) = lSoil.KSAT_Surface
-                            .DataRow(3) = lSoil.AreaSymbol
-                            .DataRow(4) = lSoil.MuSym
-                            .DataRow(5) = lSoil.NationalMuSym
+                            .DataRow(2) = lSoil.AreaSymbol
+                            .DataRow(3) = lSoil.MuSym
+                            .DataRow(4) = lSoil.NationalMuSym
                             '.DataRow() = lSoil.ObjectID
+                            For Each lComponent As SoilComponent In lSoil.Components
+                                If lComponent.IsDominant Then
+                                    If lComponent.chorizons.Count > 0 Then
+                                        .DataRow(5) = lComponent.chorizons(0).ksat_r        'use surface layer of dominant component        um/s
+                                        .DataRow(6) = lComponent.chorizons(0).hzdepb_r      'bottom depth of surface horizon                mm
+                                        .DataRow(7) = lComponent.chorizons(0).dbovendry_r   'oven dry weight of surface horizon             g/cm3
+                                        .DataRow(8) = lComponent.chorizons(0).awc_r         'available water capacity of surface horizon    cm/cm
+                                        .DataRow(9) = lComponent.chorizons(0).om_r          'organic matter of surface horizon              percent
+                                        .DataRow(10) = lComponent.chorizons(0).claytotal_r  'percent total clay of surface horizon          percent
+                                        .DataRow(11) = lComponent.chorizons(0).silttotal_r  'percent total silt of surface horizon          percent
+                                        .DataRow(12) = lComponent.chorizons(0).sandtotal_r  'percent total sand of surface horizon          percent
+                                        .DataRow(13) = lComponent.chorizons(0).kffact       'erodibility factor of surface horizon
+                                        .DataRow(14) = lComponent.chorizons(0).ec_r         'electrical conductivity of surface horizon     dS/m
+                                        .DataRow(15) = Left(lComponent.chorizons(0).texture, 24)  'texture description
+                                        'partdensity                                        'particle density, aka specific gravity         g/cm3
+                                    End If
+                                    .DataRow(16) = lComponent.albedodry_r          'albedo dry
+                                    .DataRow(17) = Left(lComponent.compname, 12)   'component name 
+                                    .DataRow(18) = lComponent.comppct_r            'component percentage                                    percent
+                                    'slope_r                                       'slope in percent                                        percent
+                                    'slopelenusle_r                                'slope length                                            meters
+                                    'runoff                                        'runoff class
+                                    'elev_r                                        'mean elevation                                          meters
+                                    'map_r                                         'mean annual precip                                      mm
+                                    Exit For
+                                End If
+                            Next
                         End With
                     Else
                         'TODO: make inner polygons work as holes
@@ -826,16 +860,16 @@ SplitIt:        If lEastWest > lNorthSouth Then
 
     Private Shared Function RunSoilQuery(ByVal aMuKey As String, ByVal aSOAPConn As NRCS_Service.SDMTabularServiceSoapClient) As System.Data.DataSet
         Dim lQuery As String =
-            "SELECT " & vbCr &
-            "saversion, saverest," & vbCr &
-            "l.areasymbol, l.areaname, l.lkey," & vbCr &
+            "Select " & vbCr &
+            "saversion, saverest, " & vbCr &
+            "l.areasymbol, l.areaname, l.lkey, " & vbCr &
             "mu.musym, mu.muname, museq, mu.mukey," & vbCr &
             "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr &
             "hzdepb_r, dbovendry_r, awc_r, ksat_r, ksat_l, ksat_h, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, fraggt10_r, frag3to10_r, sieveno10_r, ch.chkey, " & vbCr &
             "texdesc, texture, " & vbCr &
             "cht.chtgkey, texcl " & vbCr &
             "FROM sacatalog sac" & vbCr &
-            "INNER JOIN legend l ON l.areasymbol = sac.areasymbol AND l.areatypename='Non-MLRA Soil Survey Area' " & vbCr &
+            "INNER JOIN legend l ON l.areasymbol = sac.areasymbol And l.areatypename='Non-MLRA Soil Survey Area' " & vbCr &
             "INNER JOIN mapunit mu ON mu.lkey = l.lkey AND mu.mukey = " & "'" & aMuKey & "'" & vbCr &
             "LEFT OUTER JOIN component c ON c.mukey = mu.mukey" & vbCr &
             "LEFT OUTER JOIN chorizon ch ON ch.cokey = c.cokey" & vbCr &
