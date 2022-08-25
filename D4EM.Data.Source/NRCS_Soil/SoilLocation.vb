@@ -217,6 +217,11 @@ Public Class SoilLocation
         Public Property IsDominant As Boolean = False
         Public Property chorizons As New List(Of SoilHorizon)
         Public Property sname As String
+        Public Property slope_r As Double = 0.0           'slope in percent
+        Public Property slopelenusle_r As Double = 0.0    'slope length in meters
+        Public Property runoff As String = ""             'runoff class
+        Public Property elev_r As Double = 0.0            'mean elevation in meters
+        Public Property map_r As Double = 0.0             'mean annual precip in mm
     End Class
 
     Public Class SoilHorizon 'chorizon
@@ -237,6 +242,7 @@ Public Class SoilLocation
         Public Property anion_excl As Double = 0.5 'anion content
         Public Property soilcrk As Double = 0.5 'soil fissures
         Public Property texture As String = "" 'texture description
+        Public Property partdensity As Double = 0.0
     End Class
 
     ''' <summary>
@@ -712,9 +718,15 @@ SplitIt:        If lEastWest > lNorthSouth Then
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Kffact", "N", 8, 2))       'erodibility factor of surface horizon
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Ec", "N", 8, 0))           'electrical conductivity of surface horizon
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Texture", "C", 24, 0))     'texture modifier and texture class of surface horizon
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("PartDensity", "N", 8, 2))  'particle density, aka specific gravity of surface horizon
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("AlbedoDry", "N", 8, 2))    'albedo dry
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("CompName", "C", 12, 0))    'component name 
                 lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("CompPct", "N", 8, 0))      'component percentage
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Slope", "N", 8, 0))        'slope in percent                                        percent
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("SlopeLenUsle", "N", 8, 0)) 'slope length                                            meters
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Runoff", "C", 12, 0))      'runoff class
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Elev", "N", 8, 0))         'mean elevation                                          meters
+                lFeatureSet.DataTable.Columns.Add(New DotSpatial.Data.Field("Map", "N", 8, 0))          'mean annual precip                                      mm
             End If
 
             For Each lPolygonFilename As String In lSoil.Polygons.Files
@@ -745,16 +757,16 @@ SplitIt:        If lEastWest > lNorthSouth Then
                                         .DataRow(13) = lComponent.chorizons(0).kffact       'erodibility factor of surface horizon
                                         .DataRow(14) = lComponent.chorizons(0).ec_r         'electrical conductivity of surface horizon     dS/m
                                         .DataRow(15) = Left(lComponent.chorizons(0).texture, 24)  'texture description
-                                        'partdensity                                        'particle density, aka specific gravity         g/cm3
+                                        .DataRow(16) = lComponent.chorizons(0).partdensity  'particle density, aka specific gravity         g/cm3
                                     End If
-                                    .DataRow(16) = lComponent.albedodry_r          'albedo dry
-                                    .DataRow(17) = Left(lComponent.compname, 12)   'component name 
-                                    .DataRow(18) = lComponent.comppct_r            'component percentage                                    percent
-                                    'slope_r                                       'slope in percent                                        percent
-                                    'slopelenusle_r                                'slope length                                            meters
-                                    'runoff                                        'runoff class
-                                    'elev_r                                        'mean elevation                                          meters
-                                    'map_r                                         'mean annual precip                                      mm
+                                    .DataRow(17) = lComponent.albedodry_r          'albedo dry
+                                    .DataRow(18) = Left(lComponent.compname, 12)   'component name 
+                                    .DataRow(19) = lComponent.comppct_r            'component percentage                                    percent
+                                    .DataRow(20) = lComponent.slope_r              'slope in percent                                        percent
+                                    .DataRow(21) = lComponent.slopelenusle_r       'slope length                                            meters
+                                    .DataRow(22) = Left(lComponent.runoff, 12)     'runoff class
+                                    .DataRow(23) = lComponent.elev_r               'mean elevation                                          meters
+                                    .DataRow(24) = lComponent.map_r                'mean annual precip                                      mm
                                     Exit For
                                 End If
                             Next
@@ -864,8 +876,8 @@ SplitIt:        If lEastWest > lNorthSouth Then
             "saversion, saverest, " & vbCr &
             "l.areasymbol, l.areaname, l.lkey, " & vbCr &
             "mu.musym, mu.muname, museq, mu.mukey," & vbCr &
-            "compname, comppct_r, albedodry_r, hydgrp, c.cokey, " & vbCr &
-            "hzdepb_r, dbovendry_r, awc_r, ksat_r, ksat_l, ksat_h, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, ec_r, fraggt10_r, frag3to10_r, sieveno10_r, ch.chkey, " & vbCr &
+            "compname, comppct_r, albedodry_r, slope_r, slopelenusle_r, runoff, elev_r, map_r, hydgrp, c.cokey, " & vbCr &
+            "hzdepb_r, dbovendry_r, awc_r, ksat_r, ksat_l, ksat_h, om_r, claytotal_r, silttotal_r, sandtotal_r, kffact, partdensity, ec_r, fraggt10_r, frag3to10_r, sieveno10_r, ch.chkey, " & vbCr &
             "texdesc, texture, " & vbCr &
             "cht.chtgkey, texcl " & vbCr &
             "FROM sacatalog sac" & vbCr &
@@ -910,6 +922,11 @@ SplitIt:        If lEastWest > lNorthSouth Then
                     lCompToFill.HSG = .Rows(lRow).Item("hydgrp")
                     Double.TryParse(.Rows(lRow).Item("albedodry_r"), lCompToFill.albedodry_r)
                     lCompToFill.sname = aSoil.AreaSymbol & aSoil.MuSym & "_" & lCoKey.Substring(lCoKey.IndexOf(":") + 1) 'GA089CuC_177287
+                    Double.TryParse(.Rows(lRow).Item("slope_r"), lCompToFill.slope_r)
+                    Double.TryParse(.Rows(lRow).Item("slopelenusle_r"), lCompToFill.slopelenusle_r)
+                    lCompToFill.runoff = .Rows(lRow).Item("runoff")
+                    Double.TryParse(.Rows(lRow).Item("elev_r"), lCompToFill.elev_r)
+                    Double.TryParse(.Rows(lRow).Item("map_r"), lCompToFill.map_r)
                 End If
 
                 Dim chkey As String = .Rows(lRow).Item("chkey")
@@ -942,6 +959,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
                         Double.TryParse(.Rows(lRow).Item("sandtotal_r"), lHorizonToFill.sandtotal_r)
                         Double.TryParse(.Rows(lRow).Item("kffact"), lHorizonToFill.kffact)
                         Double.TryParse(.Rows(lRow).Item("ec_r"), lHorizonToFill.ec_r)
+                        Double.TryParse(.Rows(lRow).Item("partdensity"), lHorizonToFill.partdensity)
                         lHorizonToFill.texture = .Rows(lRow).Item("texcl")
                         Dim lfraggt10 As Double
                         Dim lfrag3to10 As Double
