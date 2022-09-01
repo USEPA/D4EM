@@ -32,7 +32,7 @@ Public Class NLDAS
     '33      UGRD10m    10-m above ground Zonal wind speed [m/s]
     '34      VGRD10m    10-m above ground Meridional wind speed [m/s]
 
-    Public DefaultParameters() As String = {"APCPsfc", "PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"}
+    Public DefaultParameters As New List(Of String) From {"APCPsfc", "PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"}
 
     Private Const pDefaultStationsBaseFilename As String = "NLDAS_Grid"
     Private Const pDegreesPerGridCell As Double = 1 / 8

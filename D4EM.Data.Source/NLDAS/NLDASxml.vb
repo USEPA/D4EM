@@ -116,6 +116,7 @@ Partial Class NLDAS
         Dim lCacheOnly As Boolean = False
         Dim lWDMFilename As String = ""
         Dim lTimeZoneShift As Integer = 0
+        Dim lDataTypes As New List(Of String)
 
         Dim lArg As Xml.XmlNode = aArgs.FirstChild
 
@@ -126,7 +127,7 @@ Partial Class NLDAS
                     Case "stationid" : lCells.Add(New NLDASGridCoords(lArg.InnerText))
                     Case "startdate" : lStartDate = Date.Parse(lArg.InnerText)
                     Case "enddate" : lEndDate = Date.Parse(lArg.InnerText)
-                    Case "datatype" : lDataType = lArg.InnerText
+                    Case "datatype" : lDataTypes.Add(lArg.InnerText)
                     Case "cachefolder" : lCacheFolder = lArg.InnerText
                     Case "cacheonly" : If Not lArg.InnerText.ToLower.Contains("false") Then lCacheOnly = True
                     Case "getevenifcached" : If Not lArg.InnerText.ToLower.Contains("false") Then lGetEvenIfCached = True
@@ -142,8 +143,8 @@ Partial Class NLDAS
         Dim lProject As New Project(D4EM.Data.Globals.GeographicProjection,
                                     lCacheFolder, lSaveIn, Nothing, False, False,
                                     lGetEvenIfCached, lCacheOnly)
-        Dim lDataTypes() As String = {lDataType}
-        If lDataType Is Nothing Then
+
+        If lDataTypes.Count = 0 Then
             lDataTypes = DefaultParameters
         End If
         For Each lDataType In lDataTypes
