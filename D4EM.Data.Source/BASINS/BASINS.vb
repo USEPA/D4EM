@@ -92,8 +92,10 @@ Public Class BASINS
     'Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
     'Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
     'Private Shared pBaseURL As String = "http://www3.epa.gov/ceampubl/basins/gis_data/huc/"
-    Private Shared pBaseURL As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
-    Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
+    'Private Shared pBaseURL As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
+    'Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
+    Private Shared pBaseURL As String = "https://gaftp.epa.gov/Exposure/BasinsData/BasinsCoreData/"
+    Private Shared pBaseMetURL As String = "https://gaftp.epa.gov/Exposure/BasinsData/met_data/"
 
     Public Shared MinRequiredConstituents() As String = {"PREC", "PEVT"}
     Public Shared MaxRequiredConstituents() As String = {"ATEM", "WIND", "SOLR", "DEWP", "CLOU", "PREC", "PEVT"} 'TODO: set based on HSPF model requirements

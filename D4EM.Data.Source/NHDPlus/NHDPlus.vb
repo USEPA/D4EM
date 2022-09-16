@@ -53,7 +53,8 @@ Public Class NHDPlus
     'PBD 9/16/2016 - above link no longing working.
     Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
-    Private Shared pBaseURL2 As String = "ftp://newftp.epa.gov/exposure/BasinsData/NHDPlus21/"
+    'Private Shared pBaseURL2 As String = "ftp://newftp.epa.gov/exposure/BasinsData/NHDPlus21/"
+    Private Shared pBaseURL2 As String = "https://gaftp.epa.gov/Exposure/BasinsData/NHDPlus21"
 
     ''' <summary>
     ''' Download and unpack NHDPlus data (for v2.1)
