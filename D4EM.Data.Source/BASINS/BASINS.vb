@@ -931,21 +931,27 @@ Retry:
 
                 lNativeProjection = Globals.WebMercatorProjection
             Case LayerSpecifications.giras
-                lUnpackFolder &= aHUC8 & g_PathChar & "landuse"
                 UnpackToTempFolder(lUnpackFolder, lCacheFilename)
+                lUnpackFolder &= aHUC8 & g_PathChar & "landuse"
 
                 lSaveIn = IO.Path.Combine(lSaveIn, "landuse")
             Case LayerSpecifications.Census.all
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "census")
             Case LayerSpecifications.dem, LayerSpecifications.DEMG
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "dem")
             Case LayerSpecifications.nhd
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "nhd")
             Case LayerSpecifications.lstoret
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "STORET-Legacy")
             Case LayerSpecifications.NED
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "ned")
             Case LayerSpecifications.pcs3
+                UnpackToTempFolder(lUnpackFolder, lCacheFilename)
                 lSaveIn = IO.Path.Combine(lSaveIn, "pcs3")
                 'Case LayerSpecifications.d303
                 '    lSaveIn = IO.Path.Combine(lSaveIn, "303d")
