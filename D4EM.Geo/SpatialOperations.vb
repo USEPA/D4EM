@@ -3,6 +3,7 @@ Imports MapWinUtility
 Imports D4EM.Data
 Imports DotSpatial.Data
 Imports DotSpatial.Projections
+Imports NetTopologySuite.Geometries
 
 Public Class SpatialOperations
 
@@ -1217,12 +1218,15 @@ NextPoint:
         Dim lStartRow As Integer, lStartCol As Integer
         Dim lEndRow As Integer, lEndCol As Integer
 
-        With aShape.Envelope
-            aGridLayer.CellBounds(.Minimum.X, .Minimum.Y,
-                                  .Maximum.X, .Maximum.Y,
-                                  lStartRow, lStartCol,
-                                  lEndRow, lEndCol)
-        End With
+        Dim env = aShape.Geometry.EnvelopeInternal
+
+        aGridLayer.CellBounds(env.MaxX, env.MinY, env.MinX, env.MaxY, lStartRow, lStartCol, lEndRow, lEndCol)
+        'With aShape..Envelope
+        ' aGridLayer.CellBounds(.MinX, .MinY,
+        '.MaximumX, .MaxY,
+        'lStartRow, lStartCol,
+        'lEndRow, lEndCol)
+        'End With
 
         'If GridShapeIDLayer Is Nothing Then
         '    GridShapeIDLayer = DotSpatial.Data.Raster.Create(IO.Path.ChangeExtension(lInputGrid.Filename, ".ShapeRangePolygon" & IO.Path.GetExtension(lInputGrid.Filename)),
@@ -1235,8 +1239,8 @@ NextPoint:
         Dim lCellcount As Integer = 0
         Dim lTooBigCellCount As Integer = 0
         Dim lTooSmallCellCount As Integer = 0
-        Dim lPolygonGeometry As DotSpatial.Topology.Geometry = aShape.BasicGeometry
-        Dim lXYPos As DotSpatial.Topology.Coordinate
+        Dim lPolygonGeometry As NetTopologySuite.Geometries.Geometry = aShape.Geometry
+        Dim lXYPos As NetTopologySuite.Geometries.Coordinate
         Dim lIsMulti As Boolean = (aShapeRange.NumParts > 1)
         Dim lIntersects As Boolean = True
         Dim lSum As Double = 0
@@ -1311,7 +1315,7 @@ NextPoint:
 
         Dim cellWidth As Double = aRaster.CellWidth
         Dim cellHeight As Double = aRaster.CellHeight
-        Dim lPolyExtent = aPolygon.Envelope.ToExtent
+        Dim lPolyExtent = New DotSpatial.Data.Extent(aPolygon.Geometry.Envelope.EnvelopeInternal)
         Dim SharedExtent As DotSpatial.Data.Extent = aRaster.Bounds.Extent.Intersection(lPolyExtent)
 
         Dim lNewMinCell = DotSpatial.Data.RasterExt.ProjToCell(aRaster, SharedExtent.MinX, SharedExtent.MaxY)
@@ -1331,8 +1335,8 @@ NextPoint:
         '    lNewMaxCell.Column = aRaster.NumColumns - 1
         'End If
 
-        Dim lNewMinCoord = DotSpatial.Data.RasterBoundsExt.CellBottomLeft_ToProj(aRaster.Bounds, lNewMinCell.Row, lNewMinCell.Column)
-        Dim lNewMaxCoord = DotSpatial.Data.RasterBoundsExt.CellTopRight_ToProj(aRaster.Bounds, lNewMaxCell.Row, lNewMaxCell.Column)
+        Dim lNewMinCoord = DotSpatial.Data.RasterBoundsExt.CellBottomLeftToProj(aRaster.Bounds, lNewMinCell.Row, lNewMinCell.Column)
+        Dim lNewMaxCoord = DotSpatial.Data.RasterBoundsExt.CellTopRightToProj(aRaster.Bounds, lNewMaxCell.Row, lNewMaxCell.Column)
 
         Dim lNewNumCols As Integer = lNewMaxCell.Column - lNewMinCell.Column + 1
         Dim lNewNumRows As Integer = lNewMaxCell.Row - lNewMinCell.Row + 1
@@ -1351,8 +1355,9 @@ NextPoint:
         Dim lLastNewColumn As Integer = (output.Bounds.NumColumns - 1)
         For lNewRow As Integer = 0 To lLastNewRow
             For lNewColumn As Integer = 0 To lLastNewColumn
-                Dim cellCenter As DotSpatial.Topology.Coordinate = output.CellToProj(lNewRow, lNewColumn)
-                If aPolygon.Intersects(cellCenter) Then
+                Dim cellCenter As NetTopologySuite.Geometries.Coordinate = output.CellToProj(lNewRow, lNewColumn)
+                Dim env As NetTopologySuite.Geometries.Envelope = New Envelope(cellCenter)
+                If aPolygon.Intersects(env) Then
                     output.Value(lNewRow, lNewColumn) = aRaster.Value(lNewRow + lNewMinCell.Row, lNewColumn + lNewMinCell.Column)
                 Else
                     output.Value(lNewRow, lNewColumn) = output.NoDataValue

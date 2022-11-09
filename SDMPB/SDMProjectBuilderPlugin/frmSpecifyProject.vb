@@ -399,12 +399,12 @@ NoMatch:
     End Sub
 
     Private Sub radioSelctionLayer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
-        radioSelectHUC12.CheckedChanged, _
-        radioSelectHUC8.CheckedChanged, _
-        radioSelectCatchment.CheckedChanged, _
-        radioSelectCounty.CheckedChanged, _
-        radioSelectCurrent.CheckedChanged, _
-        radioSelectPourPoint.CheckedChanged, _
+        radioSelectHUC12.CheckedChanged,
+        radioSelectHUC8.CheckedChanged,
+        radioSelectCatchment.CheckedChanged,
+        radioSelectCounty.CheckedChanged,
+        radioSelectCurrent.CheckedChanged,
+        radioSelectPourPoint.CheckedChanged,
         radioSelectBox.CheckedChanged
 
         If radioSelectBox.Checked Then
@@ -509,9 +509,9 @@ NoMatch:
 
                                 For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                     If lSelectionExtent Is Nothing Then
-                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                     Else
-                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                     End If
                                     If lSelectionSpec = D4EM.Data.Region.RegionTypes.polygon Then
                                         'Selection on arbitrary layer, implemented as bounding box of all selected features
@@ -679,9 +679,9 @@ LoadedOtherLayer:
                                     For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                         params.Catchments.Add(lFeature.DataRow(lCatchmentLayer.IdFieldIndex))
                                         If lSelectionExtent Is Nothing Then
-                                            lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                            lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                         Else
-                                            lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                            lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                         End If
                                     Next
                                 End If
@@ -690,9 +690,9 @@ LoadedOtherLayer:
                                 For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                     lAllSelectedFeatures.Add(lFeature)
                                     If lSelectionExtent Is Nothing Then
-                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                     Else
-                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                     End If
                                 Next
 
@@ -744,7 +744,7 @@ LoadedOtherLayer:
 
                             'Case D4EM.Data.Region.RegionTypes.polygon
                         Case Else
-                            Dim lCentroid As DotSpatial.Topology.IPoint = lSelectedFeature.ToShape.ToGeometry.Centroid
+                            Dim lCentroid As NetTopologySuite.Geometries.Point = lSelectedFeature.ToShape.ToGeometry.Centroid
                             Dim lHuc8Index As Integer = lNationalHuc8.CoordinatesInShapefile(lCentroid.X, lCentroid.Y)
                             If lHuc8Index >= 0 Then
                                 lHUC8string = lNationalHuc8.AsFeatureSet.Features(lHuc8Index).DataRow(lNationalHuc8.IdFieldIndex)
@@ -932,13 +932,13 @@ LoadedOtherLayer:
                     SelectingPourPoint = False
                     btnSelectPourPoint.Visible = True
                     g_Map.Cursor = System.Windows.Forms.Cursors.WaitCursor
-                    Dim lPourPointMaxKm = 0
+                    Dim lPourPointMaxKm As Double = 0.0
                     If Not Double.TryParse(txtPourPointKm.Text, lPourPointMaxKm) Then
                         MapWinUtility.Logger.Dbg("Non-numeric pour point maximum km, defaulting to 20.")
                         lPourPointMaxKm = 20
                     End If
 
-                    Dim lPointMapProjection As DotSpatial.Topology.Coordinate = g_Map.PixelToProj(New System.Drawing.Point(e.X, e.Y))
+                    Dim lPointMapProjection As NetTopologySuite.Geometries.Coordinate = g_Map.PixelToProj(New System.Drawing.Point(e.X, e.Y))
                     Dim lPourPointLatitude = lPointMapProjection.Y
                     Dim lPourPointLongitude = lPointMapProjection.X
                     D4EM.Geo.SpatialOperations.ProjectPoint(lPourPointLongitude, lPourPointLatitude, g_Map.Projection, DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984)

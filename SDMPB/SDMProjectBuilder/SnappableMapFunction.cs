@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DotSpatial.Symbology;
 using DotSpatial.Controls;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 using System.Drawing;
 using DotSpatial.Data;
 
@@ -98,13 +98,13 @@ namespace SDMProjectBuilder
             if (pix == null)
                 return false;
 
-            IEnvelope env = pix.ToEnvelope();
+            Envelope env = pix.ToEnvelope();
 
             foreach (IFeatureLayer layer in this.snapLayers)
             {
                 foreach (IFeature feat in layer.DataSet.Features)
                 {
-                    foreach (Coordinate c in feat.Coordinates)
+                    foreach (Coordinate c in feat.Geometry.Coordinates)
                     {
                         // If the mouse envelope contains the current coordinate, we found a
                         // snap location.

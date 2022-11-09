@@ -11,7 +11,7 @@ using DotSpatial.Controls;
 using DotSpatial.Data;
 using DotSpatial.Projections;
 using DotSpatial.Symbology;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 using MapWinUtility;
 using atcUtility;
 
@@ -224,9 +224,10 @@ namespace SDMProjectBuilder
                 Reproject.ReprojectPoints(pts, null, KnownCoordinateSystems.Geographic.World.WGS1984, map.Projection, 0, 1);
 
                 IFeatureSet fs = layer.DataSet;
-                Coordinate coord = new Coordinate(pts);
+                //Coordinate coord = new Coordinate(pts);
+                Coordinate coord = new Coordinate(lLongitude, lLatitude);
                 Feature feature = new Feature(coord);
-                fs.AddFeature(feature);
+                fs.AddFeature(feature.Geometry);
 
             }
             catch (Exception ex)

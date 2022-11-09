@@ -173,7 +173,7 @@ Public Class NLDAS
             lMaxX = Math.Min(lMaxX, pMaxGridX)
             lMaxY = Math.Min(lMaxY, pMaxGridY)
 
-            Dim lRegionGeometries As New Generic.List(Of DotSpatial.Topology.Geometry)
+            Dim lRegionGeometries As New Generic.List(Of NetTopologySuite.Geometries.Geometry)
 
             lRegionGeometries.Add(aRegion.ToShape(Globals.GeographicProjection).ToGeometry)
 
@@ -183,8 +183,8 @@ Public Class NLDAS
                 For lY As Integer = lMinY To lMaxY
                     If lMustSearchShapes Then
                         lOverlaps = False
-                        Dim lGridGeometry As DotSpatial.Topology.Geometry = CreateGridSquare(New NLDASGridCoords(lX, lY)).ToGeometry
-                        For Each lHucGeometry As DotSpatial.Topology.Geometry In lRegionGeometries
+                        Dim lGridGeometry As NetTopologySuite.Geometries.Geometry = CreateGridSquare(New NLDASGridCoords(lX, lY)).ToGeometry
+                        For Each lHucGeometry As NetTopologySuite.Geometries.Geometry In lRegionGeometries
                             If lHucGeometry.Intersects(lGridGeometry) Then
                                 lOverlaps = True
                                 Exit For
@@ -279,8 +279,8 @@ Public Class NLDAS
             If aLayerType = LayerSpecifications.GridPoints Then
                 Dim lX As Double = pWestmostGridCenter + ((lGrid.X - 1) * pDegreesPerGridCell)
                 Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y - 1) * pDegreesPerGridCell)
-                Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
+                Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
+                Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
                 lFeature = lFeatureSet.AddFeature(lPoint)
             Else
                 lFeature = lFeatureSet.AddFeature(CreateGridSquare(lGrid).ToGeometry)

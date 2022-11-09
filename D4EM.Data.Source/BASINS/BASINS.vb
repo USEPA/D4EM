@@ -3,6 +3,7 @@ Imports atcUtility
 Imports D4EM.Data
 Imports D4EM.Data.LayerSpecification
 Imports D4EM.Geo
+Imports NetTopologySuite.Geometries
 
 Public Class BASINS
 
@@ -267,7 +268,7 @@ Public Class BASINS
                             'Add new location to shape file
                             If .FindFirst(lLocationField, lLocation, lFirstNewShape) Then
                                 Do
-                                    Dim lPoint As New DotSpatial.Topology.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
+                                    Dim lPoint As New NetTopologySuite.Geometries.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
                                     Dim lShape As New DotSpatial.Data.Shape(lPoint)
                                     DotSpatial.Projections.Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, Globals.GeographicProjection, aProject.DesiredProjection, 0, 1)
                                     lStationsLayer.AddShape(lShape)
@@ -672,7 +673,7 @@ Public Class BASINS
                 Dim lCenterLat As Double = (lNorth + lSouth) / 2
                 Dim lCenterLon As Double = (lEast + lWest) / 2
                 Try
-                    Dim lCentroid As DotSpatial.Topology.Point = aRegion.ToShape(D4EM.Data.Globals.GeographicProjection).ToGeometry.Centroid
+                    Dim lCentroid As NetTopologySuite.Geometries.Point = aRegion.ToShape(D4EM.Data.Globals.GeographicProjection).ToGeometry.Centroid
                     If lCentroid.X > lWest AndAlso lCentroid.X < lEast AndAlso lCentroid.Y > lSouth AndAlso lCentroid.Y < lNorth Then
                         lCenterLat = lCentroid.Y
                         lCenterLon = lCentroid.X
@@ -1101,8 +1102,8 @@ Retry:
                         Dim lX As Double
                         Dim lY As Double
                         If Double.TryParse(lNativeStations.Value(lLongField), lX) AndAlso Double.TryParse(lNativeStations.Value(lLatField), lY) Then
-                            Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                            Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
+                            Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
+                            Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
                             Dim lFeature As DotSpatial.Data.IFeature = lNewShapefile.AddFeature(lPoint)
                             'Dim lFeature As DotSpatial.Data.IFeature = lNewFeatureSet.AddFeature(lPoint)
                             For lCurField As Integer = 1 To lNativeStations.NumFields

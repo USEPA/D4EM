@@ -1,5 +1,6 @@
 Imports atcUtility
 Imports MapWinUtility
+Imports NetTopologySuite.Geometries
 
 ''' <remarks>Copyright 2005 AQUA TERRA Consultants - Royalty-free use permitted under open source license</remarks>
 ''' <summary>GIS Utilities implemented thru MapWindow</summary>
@@ -211,9 +212,9 @@ Public Class GisUtil
                         lSf1.AsFeatureSet.Extent.MinY > lSf2.AsFeatureSet.Extent.MaxY OrElse _
                         lSf1.AsFeatureSet.Extent.MaxY < lSf2.AsFeatureSet.Extent.MinY) Then
                     'might be within, check in detail
-                    For lIndex = 1 To lSf1Shape.NumPoints
-                        lX = lSf1Shape.Coordinates(lIndex - 1).X
-                        lY = lSf1Shape.Coordinates(lIndex - 1).Y
+                    For lIndex = 1 To lSf1Shape.ShapeIndex.NumPoints
+                        lX = lSf1Shape.Geometry.Coordinates(lIndex - 1).X
+                        lY = lSf1Shape.Geometry.Coordinates(lIndex - 1).Y
                         lOverlappingPolygons = lSf2.PointInShape(aFeatureIndex2, lX, lY)
                         If lOverlappingPolygons Then 'quit loop, we've found they overlap
                             Exit For
@@ -221,9 +222,9 @@ Public Class GisUtil
                     Next lIndex
 
                     If Not lOverlappingPolygons Then 'now check the opposite
-                        For lIndex = 1 To lSf2Shape.NumPoints
-                            lX = lSf2Shape.Coordinates(lIndex - 1).X
-                            lY = lSf2Shape.Coordinates(lIndex - 1).Y
+                        For lIndex = 1 To lSf2Shape.ShapeIndex.NumPoints
+                            lX = lSf2Shape.Geometry.Coordinates(lIndex - 1).X
+                            lY = lSf2Shape.Geometry.Coordinates(lIndex - 1).Y
                             lOverlappingPolygons = lSf1.PointInShape(aFeatureIndex1, lX, lY)
                             If lOverlappingPolygons Then 'quit loop, we've found they overlap
                                 Exit For
@@ -297,17 +298,17 @@ Public Class GisUtil
             aIndex(lShapeIndex) = -1
             lSf1Shape = lSf1.Feature(lShapeIndex - 1)
             'first just check the midpoint of a feature
-            Dim lPointIndex As Integer = lSf1Shape.NumPoints / 2
-            lX = lSf1Shape.Coordinates(lPointIndex - 1).X
-            lY = lSf1Shape.Coordinates(lPointIndex - 1).Y
+            Dim lPointIndex As Integer = lSf1Shape.ShapeIndex.NumPoints / 2
+            lX = lSf1Shape.Geometry.Coordinates(lPointIndex - 1).X
+            lY = lSf1Shape.Geometry.Coordinates(lPointIndex - 1).Y
             lNth = lSf2.CoordinatesInShapefile(lX, lY)
             If lNth > -1 Then 'add to index array
                 aIndex(lShapeIndex) = lNth
             End If
             If aIndex(lShapeIndex) = -1 Then
-                For lPointIndex = 2 To lSf1Shape.NumPoints - 1  'ignore end points, could be ambiguous
-                    lX = lSf1Shape.Coordinates(lPointIndex - 1).X
-                    lY = lSf1Shape.Coordinates(lPointIndex - 1).Y
+                For lPointIndex = 2 To lSf1Shape.ShapeIndex.NumPoints - 1  'ignore end points, could be ambiguous
+                    lX = lSf1Shape.Geometry.Coordinates(lPointIndex - 1).X
+                    lY = lSf1Shape.Geometry.Coordinates(lPointIndex - 1).Y
                     lNth = lSf2.CoordinatesInShapefile(lX, lY)
                     If lNth > -1 Then 'add to index array
                         aIndex(lShapeIndex) = lNth
@@ -317,8 +318,8 @@ Public Class GisUtil
             End If
             If aIndex(lShapeIndex) = -1 Then
                 'did not find from intermediate points, check first point
-                lX = lSf1Shape.Coordinates(0).X
-                lY = lSf1Shape.Coordinates(0).Y
+                lX = lSf1Shape.Geometry.Coordinates(0).X
+                lY = lSf1Shape.Geometry.Coordinates(0).Y
                 lNth = lSf2.CoordinatesInShapefile(lX, lY)
                 If lNth > -1 Then 'add to index array
                     aIndex(lShapeIndex) = lNth
@@ -326,8 +327,8 @@ Public Class GisUtil
             End If
             If aIndex(lShapeIndex) = -1 Then
                 'did not find from intermediate points, check last point
-                lX = lSf1Shape.Coordinates(lSf1Shape.NumPoints - 1).X
-                lY = lSf1Shape.Coordinates(lSf1Shape.NumPoints - 1).Y
+                lX = lSf1Shape.Geometry.Coordinates(lSf1Shape.ShapeIndex.NumPoints - 1).X
+                lY = lSf1Shape.Geometry.Coordinates(lSf1Shape.ShapeIndex.NumPoints - 1).Y
                 lNth = lSf2.CoordinatesInShapefile(lX, lY)
                 If lNth > -1 Then 'add to index array
                     aIndex(lShapeIndex) = lNth
@@ -762,7 +763,7 @@ Public Class GisUtil
         Dim lSf As D4EM.Data.Layer = PolygonShapeFileFromIndex(aLayerIndex)
         If FeatureIndexValid(aFeatureIndex, lSf) Then
             Try 'MapWinGeoProc.Utils.Area()
-                Dim lGeometry As DotSpatial.Topology.Geometry = lSf.Feature(aFeatureIndex).BasicGeometry
+                Dim lGeometry As NetTopologySuite.Geometries.Geometry = lSf.Feature(aFeatureIndex).Geometry
                 lArea = lGeometry.Area
                 If lArea < 0.000001 Then 'TODO: try to calculate?
                     lArea = GetNaN()
@@ -781,7 +782,7 @@ Public Class GisUtil
         Try
             Dim lSf As D4EM.Data.Layer = ShapeFileFromIndex(aLayerIndex)
             If FeatureIndexValid(aFeatureIndex, lSf) Then
-                Dim lGeometry As DotSpatial.Topology.Geometry = lSf.Feature(aFeatureIndex).BasicGeometry
+                Dim lGeometry As NetTopologySuite.Geometries.Geometry = lSf.Feature(aFeatureIndex).Geometry
                 lLength = lGeometry.Length
                 If lLength < 0.000001 Then 'could it be undefined
                     Logger.Dbg("Warning: very short length of feature #" & aFeatureIndex)
@@ -816,10 +817,10 @@ Public Class GisUtil
         Dim lsf As D4EM.Data.Layer = ShapeFileFromIndex(aLayerIndex)
         If FeatureIndexValid(aFeatureIndex, lsf) Then
             Dim lShape As DotSpatial.Data.Feature = lsf.Feature(aFeatureIndex)
-            aX1 = lShape.Coordinates(0).X
-            aY1 = lShape.Coordinates(0).Y
-            aX2 = lShape.Coordinates(lShape.NumPoints - 1).X
-            aY2 = lShape.Coordinates(lShape.NumPoints - 1).Y
+            aX1 = lShape.Geometry.Coordinates(0).X
+            aY1 = lShape.Geometry.Coordinates(0).Y
+            aX2 = lShape.Geometry.Coordinates(lShape.ShapeIndex.NumPoints - 1).X
+            aY2 = lShape.Geometry.Coordinates(lShape.ShapeIndex.NumPoints - 1).Y
         End If
     End Sub
 
@@ -836,11 +837,11 @@ Public Class GisUtil
         Dim lsf As D4EM.Data.Layer = ShapeFileFromIndex(aLayerIndex)
         If FeatureIndexValid(aFeatureIndex, lsf) Then
             Dim lShape As DotSpatial.Data.Feature = lsf.Feature(aFeatureIndex)
-            ReDim aX(lShape.NumPoints - 1)
-            ReDim aY(lShape.NumPoints - 1)
-            For lIndex As Integer = 0 To lShape.NumPoints - 1
-                aX(lIndex) = lShape.Coordinates(lIndex).X
-                aY(lIndex) = lShape.Coordinates(lIndex).Y
+            ReDim aX(lShape.ShapeIndex.NumPoints - 1)
+            ReDim aY(lShape.ShapeIndex.NumPoints - 1)
+            For lIndex As Integer = 0 To lShape.ShapeIndex.NumPoints - 1
+                aX(lIndex) = lShape.Geometry.Coordinates(lIndex).X
+                aY(lIndex) = lShape.Geometry.Coordinates(lIndex).Y
             Next
         End If
     End Sub
@@ -848,12 +849,12 @@ Public Class GisUtil
     Public Shared Function AddLine(ByVal aLayerIndex As Integer, ByVal aX() As Double, ByVal aY() As Double) As Boolean
         Dim lSf As D4EM.Data.Layer = ShapeFileFromIndex(aLayerIndex)
 
-        Dim lCoordinates As New Generic.List(Of DotSpatial.Topology.Coordinate)
+        Dim lCoordinates As New Generic.List(Of NetTopologySuite.Geometries.Coordinate)
         For lPointIndex As Integer = 0 To aX.GetUpperBound(0)
-            lCoordinates.Add(New DotSpatial.Topology.Coordinate(aX(lPointIndex), aY(lPointIndex)))
+            lCoordinates.Add(New NetTopologySuite.Geometries.Coordinate(aX(lPointIndex), aY(lPointIndex)))
         Next
 
-        Dim lLine As New DotSpatial.Data.Feature(DotSpatial.Topology.FeatureType.Line, lCoordinates)
+        Dim lLine As New DotSpatial.Data.Feature(DotSpatial.Data.FeatureType.Line, lCoordinates)
         lSf.AsFeatureSet.Features.Add(lLine)
         Return True
     End Function
@@ -873,8 +874,8 @@ Public Class GisUtil
         Dim lSf As D4EM.Data.Layer = ShapeFileFromIndex(aLayerIndex)
         If FeatureIndexValid(aFeatureIndex, lSf) Then
             Dim lShape As DotSpatial.Data.Feature = lSf.Feature(aFeatureIndex)
-            aX = lShape.Coordinates(0).X
-            aY = lShape.Coordinates(0).Y
+            aX = lShape.Geometry.Coordinates(0).X
+            aY = lShape.Geometry.Coordinates(0).Y
         End If
     End Sub
 
@@ -901,7 +902,7 @@ Public Class GisUtil
     End Sub
 
     Public Shared Function AddPoint(ByVal aLayerIndex As Integer, ByVal aX As Double, ByVal aY As Double) As Boolean
-        ShapeFileFromIndex(aLayerIndex).AsFeatureSet.Features.Add(New DotSpatial.Topology.Coordinate(aX, aY))
+        ShapeFileFromIndex(aLayerIndex).AsFeatureSet.Features.Add(New NetTopologySuite.Geometries.Coordinate(aX, aY))
         Return True
     End Function
 
@@ -1091,8 +1092,8 @@ Public Class GisUtil
     ''' </summary>
     Public Shared Function PointInPolygon(ByVal aPointLayerIndex As Integer, ByVal aPointIndex As Integer, ByVal aPolygonLayerIndex As Integer) As Integer
         Dim lPointSf As D4EM.Data.Layer = ShapeFileFromIndex(aPointLayerIndex)
-        Return PointInPolygonXY(lPointSf.Feature(aPointIndex).Coordinates(0).X,
-                                lPointSf.Feature(aPointIndex).Coordinates(0).Y,
+        Return PointInPolygonXY(lPointSf.Feature(aPointIndex).Geometry.Coordinates(0).X,
+                                lPointSf.Feature(aPointIndex).Geometry.Coordinates(0).Y,
                                 aPolygonLayerIndex)
     End Function
 
@@ -1322,7 +1323,7 @@ Public Class GisUtil
             ReDim lCountMeanElevLS(aMeanElevGridPoly.GetUpperBound(0), aMeanElevGridPoly.GetUpperBound(1))
         End If
 
-        Dim lCoordinates As DotSpatial.Topology.Coordinate = Nothing
+        Dim lCoordinates As NetTopologySuite.Geometries.Coordinate = Nothing
 
         If pStatusShow Then Logger.Status("Tabulating Areas...", True)
         For lRow As Integer = lStartingRow To lEndingRow
@@ -1332,7 +1333,7 @@ Public Class GisUtil
                 lYLat = lCoordinates.Y
             End If
             For lCol As Integer = lStartingColumn To lEndingColumn
-                Dim lXY As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lInputGrid, lRow, lCol)
+                Dim lXY As NetTopologySuite.Geometries.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lInputGrid, lRow, lCol)
                 lInsideId = lPolygonSf.CoordinatesInShapefile(lXY.X, lXY.Y)
                 If lInsideId > -1 Then 'this is in a subbasin
                     'Console.WriteLine(lInputGrid.Value(lRow, lCol))
@@ -1666,10 +1667,10 @@ Public Class GisUtil
             lSfOut = DotSpatial.Data.FeatureSet.Open(aOutputLayerName)
         End If
 
-        Dim lShapeNew As DotSpatial.Topology.Geometry
+        Dim lShapeNew As NetTopologySuite.Geometries.Geometry
         Dim lShape1 As DotSpatial.Data.Feature
         Dim lShape2 As DotSpatial.Data.Feature
-        Dim lShape2Ext As DotSpatial.Topology.Envelope
+        Dim lShape2Ext As NetTopologySuite.Geometries.Envelope
 
         'set up collections of subbasin shapes and extents to save computation time later
         Dim lSf2ShapeExtXmax As New Generic.List(Of Double)
@@ -1679,11 +1680,11 @@ Public Class GisUtil
 
         'cache extents of selected subbasin (or all if none selected)
         For Each lShape2 In lSf2.Features
-            lShape2Ext = lShape2.Envelope
-            lSf2ShapeExtXmax.Add(lShape2Ext.Maximum.X)
-            lSf2ShapeExtXmin.Add(lShape2Ext.Minimum.X)
-            lSf2ShapeExtYmax.Add(lShape2Ext.Maximum.Y)
-            lSf2ShapeExtYmin.Add(lShape2Ext.Minimum.Y)
+            lShape2Ext = lShape2.Geometry.EnvelopeInternal
+            lSf2ShapeExtXmax.Add(lShape2Ext.MaxX)
+            lSf2ShapeExtXmin.Add(lShape2Ext.MinX)
+            lSf2ShapeExtYmax.Add(lShape2Ext.MaxY)
+            lSf2ShapeExtYmin.Add(lShape2Ext.MinY)
         Next
 
         '********** do overlay ***********
@@ -1694,23 +1695,23 @@ Public Class GisUtil
         If pStatusShow Then Logger.Status("Overlay of Layer '" & lLayer1.Specification.Name & "' with Layer '" & lLayer2.Specification.Name & "'")
         For lShapeIndex1 As Integer = 0 To lNumShapes - 1 'loop through each shape of the land use layer
             lShape1 = lSf1.Features(lShapeIndex1)
-            Dim lSf1Ext As DotSpatial.Topology.Envelope = lShape1.Envelope
-            If Not (lSf1Ext.Minimum.X > lSf2Ext.MaxX OrElse _
-                    lSf1Ext.Maximum.X < lSf2Ext.MinX OrElse _
-                    lSf1Ext.Minimum.Y > lSf2Ext.MaxY OrElse _
-                    lSf1Ext.Maximum.Y < lSf2Ext.MinY) Then
+            Dim lSf1Ext As NetTopologySuite.Geometries.Envelope = lShape1.Geometry.EnvelopeInternal
+            If Not (lSf1Ext.MinX > lSf2Ext.MaxX OrElse
+                    lSf1Ext.MaxX < lSf2Ext.MinX OrElse
+                    lSf1Ext.MinY > lSf2Ext.MaxY OrElse
+                    lSf1Ext.MaxY < lSf2Ext.MinY) Then
                 'current first polygon falls in the extents of the second shapefile
                 For lShapeIndex2 As Integer = 0 To lSf2.Features.Count - 1
                     'loop thru each selected shape in second shapefile (or all if none selected)
                     lShape2 = lSf2.Features(lShapeIndex2)
                     lPolygonCount = lPolygonCount + 1
-                    If Not (lSf1Ext.Minimum.X > lSf2ShapeExtXmax(lShapeIndex2) OrElse _
-                            lSf1Ext.Maximum.X < lSf2ShapeExtXmin(lShapeIndex2) OrElse _
-                            lSf1Ext.Minimum.Y > lSf2ShapeExtYmax(lShapeIndex2) OrElse _
-                            lSf1Ext.Maximum.Y < lSf2ShapeExtYmin(lShapeIndex2)) Then
+                    If Not (lSf1Ext.MinX > lSf2ShapeExtXmax(lShapeIndex2) OrElse
+                            lSf1Ext.MaxX < lSf2ShapeExtXmin(lShapeIndex2) OrElse
+                            lSf1Ext.MinY > lSf2ShapeExtYmax(lShapeIndex2) OrElse
+                            lSf1Ext.MaxY < lSf2ShapeExtYmin(lShapeIndex2)) Then
                         'look for intersection from overlay of these shapes
-                        Dim lGeom1 As DotSpatial.Topology.Geometry = lShape1.BasicGeometry
-                        Dim lGeom2 As DotSpatial.Topology.Geometry = lShape2.BasicGeometry
+                        Dim lGeom1 As NetTopologySuite.Geometries.Geometry = lShape1.Geometry
+                        Dim lGeom2 As NetTopologySuite.Geometries.Geometry = lShape2.Geometry
                         lShapeNew = lGeom1.Intersection(lGeom2) ' MapWinGeoProc.SpatialOperations.Intersection(lShape1, lSf2Shape(k))
                         If Not lShapeNew Is Nothing AndAlso lShapeNew.NumPoints > 0 Then 'Insert the shape into the shapefile 
                             Dim lArea As Double = Math.Abs(lShapeNew.Area)
@@ -2041,11 +2042,11 @@ Public Class GisUtil
         'to identify which original reach it was a part of)
         Dim lFoundPoint As Boolean
 
-        For j As Integer = 2 To lSf1Shape.NumPoints - 1
+        For j As Integer = 2 To lSf1Shape.ShapeIndex.NumPoints - 1
             lFoundPoint = False
-            For i As Integer = 1 To lSf2Shape.NumPoints
-                If lSf1Shape.Coordinates(j - 1).X = lSf2Shape.Coordinates(i - 1).X And _
-                   lSf1Shape.Coordinates(j - 1).Y = lSf2Shape.Coordinates(i - 1).Y Then
+            For i As Integer = 1 To lSf2Shape.ShapeIndex.NumPoints
+                If lSf1Shape.Geometry.Coordinates(j - 1).X = lSf2Shape.Geometry.Coordinates(i - 1).X And
+                   lSf1Shape.Geometry.Coordinates(j - 1).Y = lSf2Shape.Geometry.Coordinates(i - 1).Y Then
                     lFoundPoint = True
                     Exit For
                 End If

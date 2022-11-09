@@ -8,7 +8,8 @@ using System.Text;
 using System.Xml;
 using DotSpatial.Data;
 using DotSpatial.Projections;
-using DotSpatial.Topology;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 using D4EM.Data;
 using Newtonsoft.Json.Linq;
@@ -327,7 +328,7 @@ namespace D4EM.Data.Source
                     polyfs.Projection = _defaultProjection;
                     polyfs.Name = LayerSpecifications.PourpointWatershed.Name;
                     polyfs.DataTable.Columns.Add(new DataColumn("areasqkm"));
-                    watershedFeature = polyfs.AddFeature(watershedFeature);
+                    watershedFeature = polyfs.AddFeature(watershedFeature.Geometry);
                     try { watershedFeature.DataRow["areasqkm"] = mainObj["output"]["total_areasqkm"].ToString(); }
                     catch { }                        
                     //TODO: add other attributes we can find in the JSON
@@ -390,7 +391,7 @@ namespace D4EM.Data.Source
 
                         //"areasqkm": 1.40933574,
 
-                        currentFeature = fsCatchments.AddFeature(currentFeature);
+                        currentFeature = fsCatchments.AddFeature(currentFeature.Geometry);
                         try { currentFeature.DataRow["COMID"] = JSONshape["comid"].ToString(); } catch { };
                         try { currentFeature.DataRow["ReachCode"] = JSONshape["reachcode"].ToString(); } catch { };
                         try { currentFeature.DataRow["AREASQKM"] = JSONshape["areasqkm"].ToString(); } catch { };
@@ -466,15 +467,16 @@ namespace D4EM.Data.Source
                                 JArray linecoord = (JArray)coordArray[j];
                                 if (linecoord != null)
                                 {
-                                    lines[j] = new LineString(CoordsFromJArray(linecoord));
+                                    lines[j] = new LineString(CoordsFromJArray(linecoord).ToArray());
                                 }
                             }
-                            linef = linefs.AddFeature(new Feature(new MultiLineString(lines)));
+                            //linef = linefs.AddFeature(new Feature(new MultiLineString(lines)));
+                            linef = linefs.AddFeature(new MultiLineString(lines));
                         }
                     }
                     else if (stype.Trim().ToLower() == "linestring") //For the case GeoJSON returns a LineString 
                     {
-                        linef = linefs.AddFeature(new Feature(FeatureType.Line, CoordsFromJArray(coordArray)));
+                        linef = linefs.AddFeature(new Feature(FeatureType.Line, CoordsFromJArray(coordArray)).Geometry);
                     }
 
                     if (linef != null)
@@ -639,13 +641,34 @@ namespace D4EM.Data.Source
                     if (Polycoord != null)
                         foreach (JArray multiRingcoord in Polycoord)
                             if (multiRingcoord != null)
-                                polys.Add(new Polygon(CoordsFromJArray(multiRingcoord)));
+                            {
+                                //KW - 2022-11-08
+                                //Not sure this will work, but it compiles :)
+                                List<Coordinate> coords = new List<Coordinate>();
+                                foreach(var coord in multiRingcoord)
+                                {
+                                    Coordinate coord2 = new Coordinate(Convert.ToDouble(coord[0]), Convert.ToDouble(coord[1]));
+                                    coords.Add(coord2);
+                                }
+                                LinearRing linearRing = new LinearRing(coords.ToArray());
+                                //polys.Add(new Polygon(CoordsFromJArray(multiRingcoord)));
+                                polys.Add(new Polygon(linearRing));
+                            }
             }
             else if (stype.Trim().ToLower() == "polygon") //For the case GeoJSON returns a Polygon 
             {
                 foreach (JArray Ringcoord in coordArray)  //The second level
                     if (Ringcoord != null)
-                        polys.Add(new Polygon(CoordsFromJArray(Ringcoord)));
+                    {
+                        List<Coordinate> coords = new List<Coordinate>();
+                        foreach (var coord in Ringcoord)
+                        {
+                            Coordinate coord2 = new Coordinate(Convert.ToDouble(coord[0]), Convert.ToDouble(coord[1]));
+                            coords.Add(coord2);
+                        }
+                        LinearRing linearRing = new LinearRing(coords.ToArray());
+                        polys.Add(new Polygon(linearRing));
+                    }
             }
             return polys;
         }

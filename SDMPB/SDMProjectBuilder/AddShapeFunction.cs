@@ -28,7 +28,7 @@ using DotSpatial.Controls;
 using DotSpatial.Data;
 using DotSpatial.Projections;
 using DotSpatial.Symbology;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 using Point = System.Drawing.Point;
 
 namespace SDMProjectBuilder
@@ -40,12 +40,12 @@ namespace SDMProjectBuilder
     {
         #region private variables
 
-        private ContextMenu _context;
+        private ContextMenuStrip _context;
         private CoordinateDialog _coordinateDialog;
         private List<Coordinate> _coordinates;
         private bool _disposed;
         private IFeatureSet _featureSet;
-        private MenuItem _finishPart;
+        private ToolStripItem _finishPart;
         private Point _mousePosition;
         private List<List<Coordinate>> _parts;
         private bool _standBy;
@@ -77,11 +77,18 @@ namespace SDMProjectBuilder
         private void Configure()
         {
             YieldStyle = (YieldStyles.LeftButton | YieldStyles.RightButton);
-            _context = new ContextMenu();
-            _context.MenuItems.Add("Delete", DeleteShape);
-            _finishPart = new MenuItem("Finish Part", FinishPart);
-            _context.MenuItems.Add(_finishPart);
-            _context.MenuItems.Add("Finish Shape", FinishShape);
+            _context = new ContextMenuStrip();
+            ToolStripItem tsItemDelete = _context.Items.Add("Delete", null, DeleteShape);
+            //tsItemDelete.Click += DeleteShape;
+
+            ToolStripItem _finishPart = _context.Items.Add("Finish Part", null, FinishPart);
+            //_finishPart.Click += FinishPart;
+
+            //_finishPart = new MenuItem("Finish Part", FinishPart);
+  
+            ToolStripItem tsItemFinishShape = _context.Items.Add("Finish Shape", null, FinishShape);
+            //tsItemFinishShape.Click += FinishPart;
+
             _parts = new List<List<Coordinate>>();
             
         }
@@ -114,16 +121,16 @@ namespace SDMProjectBuilder
             }
             if (_featureSet.FeatureType == FeatureType.Point || _featureSet.FeatureType == FeatureType.MultiPoint)
             {
-                if (_context.MenuItems.Contains(_finishPart))
+                if (_context.Items.Contains(_finishPart))
                 {
-                    _context.MenuItems.Remove(_finishPart);
+                    _context.Items.Remove(_finishPart);
                 }
             }
             else
             {
-                if (!_context.MenuItems.Contains(_finishPart))
+                if (!_context.Items.Contains(_finishPart))
                 {
-                    _context.MenuItems.Add(1, _finishPart);
+                    _finishPart = _context.Items.Add("1");
                 }
             }
             _coordinateDialog.Show();
@@ -153,7 +160,7 @@ namespace SDMProjectBuilder
             if (_coordinateDialog != null) { _coordinateDialog.Hide(); }
             if (_coordinates != null && _coordinates.Count > 1)
             {
-                LineString ls = new LineString(_coordinates);
+                LineString ls = new LineString(_coordinates.ToArray());
                 FeatureSet fs = new FeatureSet(FeatureType.Line);
                 fs.Features.Add(new Feature(ls));
                 MapLineLayer gll = new MapLineLayer(fs)
@@ -301,7 +308,7 @@ namespace SDMProjectBuilder
                 ComputeSnappedLocation(e, ref snappedCoord);
                 // End snapping changes
 
-                DotSpatial.Topology.Point pt = new DotSpatial.Topology.Point(snappedCoord); // Snapping changes
+                NetTopologySuite.Geometries.Point pt = new NetTopologySuite.Geometries.Point(snappedCoord); // Snapping changes
                 Feature f = new Feature(pt);
                 _featureSet.Features.Add(f);
 
@@ -371,7 +378,12 @@ namespace SDMProjectBuilder
                 Feature f = null;
                 if (_featureSet.FeatureType == FeatureType.MultiPoint)
                 {
-                    f = new Feature(new MultiPoint(_coordinates));
+                    List<NetTopologySuite.Geometries.Point> points = new List<NetTopologySuite.Geometries.Point>();
+                    foreach(var coord in _coordinates)
+                    {
+                        points.Add(new NetTopologySuite.Geometries.Point(coord));
+                    }
+                    f = new Feature(new MultiPoint(points.ToArray()));
                 }
                 if (_featureSet.FeatureType == FeatureType.Line || _featureSet.FeatureType == FeatureType.Polygon)
                 {

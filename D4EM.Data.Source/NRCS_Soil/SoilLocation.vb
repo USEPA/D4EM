@@ -456,7 +456,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
         '    Throw New ApplicationException("Built Missing Configuration File.  Please Restart " & lAssemblyName)
         'End If
 
-        Logger.Dbg("about to query soil data for key at " & aLatitude & " " & aLongitude & _
+        Logger.Dbg("about to query soil data for key at " & aLatitude & " " & aLongitude &
                    " " & aRadiusInitial & " " & aRadiusIncrement & " " & aRadiusMax)
         Dim lDistance As Double = aRadiusInitial
         Dim lDistanceMax As Double = aRadiusMax
@@ -944,7 +944,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
                     lNewHorizon = True
                 End If
                 If lHorizonToFill.chkey = "" Then
-                    If .Rows(lRow).Item("hzdepb_r").ToString.Trim() <> "" AndAlso _
+                    If .Rows(lRow).Item("hzdepb_r").ToString.Trim() <> "" AndAlso
                        Double.TryParse(.Rows(lRow).Item("hzdepb_r").ToString, lHorizonToFill.hzdepb_r) Then
                         lHorizonToFill.chkey = chkey
                         lHorizonToFill.hzdepb_r *= 10 'turn into mm
