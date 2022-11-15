@@ -887,7 +887,8 @@ Retry:
             If lBaseDataType = LayerSpecifications.huc12 Then
                 'hspf.com is down for good, huc12 boundaries now found on epa ftp server
                 'lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL
-                lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
+                'lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
+                lURL = "https://gaftp.epa.gov/Exposure/BasinsData/NHDPlus21/NHDPlus" & aHUC8 & ".zip"
             End If
             If Not D4EM.Data.Download.DownloadURL(lURL, lCacheFilename) Then
                 Throw New ApplicationException("Could not download BASINS " & lBaseDataType.Tag & " data for " & aHUC8 & " from " & vbCrLf & lURL & vbCrLf & " to " & lCacheFilename)
@@ -978,7 +979,7 @@ Retry:
         End If
 
         Dim lPrjFileContents As String = lNativeProjection.ToEsriString
-        For Each lShapeFilename As String In IO.Directory.GetFiles(lUnpackFolder, "*.shp") 'TODO:  IO.SearchOption.AllDirectories)
+        For Each lShapeFilename As String In IO.Directory.GetFiles(lUnpackFolder, "*.shp", IO.SearchOption.AllDirectories)
             Layer.CopyProcStepsFromCachedFile(lCacheFilename, lShapeFilename)
             Dim lProjectionFilename As String = IO.Path.ChangeExtension(lShapeFilename, ".prj")
             If Not IO.File.Exists(lProjectionFilename) Then
