@@ -92,10 +92,11 @@ Public Class BASINS
     'Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
     'Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
     'Private Shared pBaseURL As String = "http://www3.epa.gov/ceampubl/basins/gis_data/huc/"
-    'Private Shared pBaseURL As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
+    Private Shared pBaseURLnew As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
     'Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
-    Private Shared pBaseURL As String = "https://gaftp.epa.gov/Exposure/BasinsData/BasinsCoreData/"
-    Private Shared pBaseMetURL As String = "https://gaftp.epa.gov/Exposure/BasinsData/met_data/"
+    Private Shared pBaseURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/BasinsCoreData/"
+    Private Shared pBaseMetURLnew As String = "ftp://newftp.epa.gov/Exposure/BasinsData/met_data/"
+    Private Shared pBaseMetURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/met_data/"
 
     Public Shared MinRequiredConstituents() As String = {"PREC", "PEVT"}
     Public Shared MaxRequiredConstituents() As String = {"ATEM", "WIND", "SOLR", "DEWP", "CLOU", "PREC", "PEVT"} 'TODO: set based on HSPF model requirements
@@ -358,14 +359,20 @@ Public Class BASINS
                             Logger.Dbg("Using cached '" & lCacheFilename & "'")
                         Else
                             If Not FileExists(lZipFilename) Then
-                                Dim lURL As String = pBaseMetURL & lLocation & ".zip"
+                                Dim lURL As String = pBaseMetURLnew & lLocation & ".zip"
                                 If Not aProject.GetEvenIfCached Then
                                     Select Case My.Computer.Name.ToUpper 'Developer machines get from local server
                                         Case "WIZ", "RUNNER", "ZORRO", "XOR", "HOUSE", "TONGWORKSTATION", "ZAP"
-                                            lURL = lURL.Replace(pBaseMetURL, "http://hspf.com/BasinsMet/")
+                                            lURL = lURL.Replace(pBaseMetURLnew, "http://hspf.com/BasinsMet/")
                                     End Select
                                 End If
-                                D4EM.Data.Download.DownloadURL(lURL, lZipFilename)
+                                If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
+                                    Logger.Dbg("failed epa ceam '" & lURL)
+                                    lURL = pBaseMetURLga & lLocation & ".zip"
+                                    If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
+                                        Logger.Dbg("failed gaftp '" & lURL)
+                                    End If
+                                End If
                             End If
                             'extract compressed download
                             If FileExists(lZipFilename) Then
@@ -884,14 +891,17 @@ MissingRequirement:
         End If
 Retry:
         If Not FileExists(lCacheFilename) Then
-            Dim lURL As String = pBaseURL & aHUC8 & "/" & lFileNameOnly
+            Dim lURL As String = pBaseURLnew & aHUC8 & "/" & lFileNameOnly
             If lBaseDataType = LayerSpecifications.huc12 Then
                 'hspf.com is down for good, huc12 boundaries now found on epa ftp server
                 'lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL
                 lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
             End If
             If Not D4EM.Data.Download.DownloadURL(lURL, lCacheFilename) Then
-                Throw New ApplicationException("Could not download BASINS " & lBaseDataType.Tag & " data for " & aHUC8 & " from " & vbCrLf & lURL & vbCrLf & " to " & lCacheFilename)
+                lURL = pBaseURLga & aHUC8 & "/" & lFileNameOnly
+                If Not D4EM.Data.Download.DownloadURL(lURL, lCacheFilename) Then
+                    Throw New ApplicationException("Could not download BASINS " & lBaseDataType.Tag & " data for " & aHUC8 & " from " & vbCrLf & lURL & vbCrLf & " to " & lCacheFilename)
+                End If
             End If
         End If
 
