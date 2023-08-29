@@ -34,6 +34,8 @@ Public Module Download
     ''' <returns>True if download was successful, False if it was not.</returns>
     ''' <remarks>Creates directory if SaveAs includes a directory and it does not exist</remarks>
     Public Function DownloadURL(ByVal aURL As String, ByVal aSaveAs As String) As Boolean
+        D4EM.Data.Download.DisableHttpsCertificateCheck()
+        D4EM.Data.Download.SetSecurityProtocol()
         Try
             DownloadURLProgress(aURL, aSaveAs, AddressOf DefaultProgressHandler, AddressOf DefaultCompleteHandler)
             Layer.AddProcessStepToFile("Downloaded from " & aURL, aSaveAs)

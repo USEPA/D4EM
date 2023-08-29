@@ -74,6 +74,7 @@ Partial Class USGS_Seamless
                     End Try
                 Case "datatype"
                     'GPF 7/25/2019 added 2016
+                    'GPF 8/22/2023 added 2021
                     For Each lLayerSpec As LayerSpecification In {
                         LayerSpecifications.NLCD1992.LandCover,
                         LayerSpecifications.NLCD2001.LandCover,
@@ -87,6 +88,8 @@ Partial Class USGS_Seamless
                         LayerSpecifications.NLCD2016.Impervious,
                         LayerSpecifications.NLCD2019.LandCover,
                         LayerSpecifications.NLCD2019.Impervious,
+                        LayerSpecifications.NLCD2021.LandCover,
+                        LayerSpecifications.NLCD2021.Impervious,
                         LayerSpecifications.NLCD2008.LandCover,
                         LayerSpecifications.NLCD2013.LandCover,
                         LayerSpecifications.NLCD2004.LandCover}

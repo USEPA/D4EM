@@ -13,8 +13,7 @@ Imports System.Drawing
 Imports System.Drawing.Image
 Imports Newtonsoft.Json.Linq
 Imports DotSpatial.Data
-Imports System.Windows.Forms
-'modified GPF 7/25/2019 with changes in MRLC feature names
+'Imports System.Windows.Forms
 
 Public Class USGS_Seamless
 
@@ -66,6 +65,10 @@ Public Class USGS_Seamless
         Public Class NLCD2019
             Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2019_landcover.tif", Name:="NLCD 2019 Land Cover", Tag:="NLCD2019.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
             Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2019_impervious.tif", Name:="NLCD 2019 Impervious", Tag:="NLCD2019.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+        End Class
+        Public Class NLCD2021
+            Public Shared LandCover As New LayerSpecification(FilePattern:="NLCD_2021_landcover.tif", Name:="NLCD 2021 Land Cover", Tag:="NLCD2021.LandCover", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
+            Public Shared Impervious As New LayerSpecification(FilePattern:="NLCD_2021_impervious.tif", Name:="NLCD 2021 Impervious", Tag:="NLCD2021.Impervious", Role:=Roles.LandUse, Source:=GetType(USGS_Seamless))
         End Class
         'GPF 7/25/2019
         Public Class NLCD2016
@@ -279,6 +282,21 @@ Public Class USGS_Seamless
                     lUSarea = ""
                     lBaseFilename = "NLCD_" & lDataType & "_2019"
                     lLayerString = "&layers=NLCD_2019_Impervious_L48"
+
+               'GPF 08-22-23 for 2021 NLCD
+                Case LayerSpecifications.NLCD2021.LandCover
+                    lDataType = "landcover"
+                    lYear = "2021"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2021"
+                    lLayerString = "&layers=NLCD_2021_Land_Cover_L48"
+                Case LayerSpecifications.NLCD2021.Impervious
+                    lDataType = "impervious"
+                    lYear = "2021"
+                    lUSarea = ""
+                    lBaseFilename = "NLCD_" & lDataType & "_2021"
+                    lLayerString = "&layers=NLCD_2021_Impervious_L48"
+
                'GPF 07-25-19 for 2016 NLCD
                 Case LayerSpecifications.NLCD2016.LandCover
                     lDataType = "landcover"
