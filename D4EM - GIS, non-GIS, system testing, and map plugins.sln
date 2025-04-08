@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Data.Source.BASINS", "D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj", "{1A68540D-13CA-46AF-93E6-2C864E6627C7}"
@@ -17,7 +17,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Data.Source.NRCS_Soil"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EMInterface", "Examples\D4EMInterface\D4EMInterface.csproj", "{7C204F58-353C-4F01-AE5C-C098897B265E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EM.Data.Source.NASS", "D4EM.Data.Source\NASS\D4EM.Data.Source.NASS.csproj", "{842D42C9-0868-4512-8F91-160900C4B391}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D4EM.Data.Source.NASS", "D4EM.Data.Source\NASS\D4EM.Data.Source.NASS.csproj", "{842D42C9-0868-4512-8F91-160900C4B391}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EM.Data.Source.NatureServe", "D4EM.Data.Source\NatureServe\D4EM.Data.Source.NatureServe.csproj", "{82A2BCAF-A6E3-4343-AA01-0917CFB0D07C}"
 EndProject
@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapPlugin_Storet", "Example
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapPlugin_WDNR", "Examples\PluginSourceCode\D4EM_WDNR SourceCode\D4EM_WDNR\MapPlugin_WDNR.csproj", "{A9EDC398-88B6-432D-A733-E924F7A01F00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EM.Data.Source.NCDC", "D4EM.Data.Source\NCDC\D4EM.Data.Source.NCDC.csproj", "{1A8BFF0E-75FC-4DD8-AFFA-61D94BA0F369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D4EM.Data.Source.NCDC", "D4EM.Data.Source\NCDC\D4EM.Data.Source.NCDC.csproj", "{1A8BFF0E-75FC-4DD8-AFFA-61D94BA0F369}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EMSystemTesting", "Examples\SystemTesting\D4EMSystemTesting.csproj", "{C700F122-D6C7-47D5-89B9-FD432A1601F4}"
 EndProject
@@ -57,13 +57,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapPlugin_NAWQA", "Examples
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Data.Source.NHDPlus", "D4EM.Data.Source\NHDPlus\D4EM.Data.Source.NHDPlus.vbproj", "{6B7283C6-6DDE-41E9-BA00-F3EDD604B38B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAUtility", "Utility\EPAUtility\EPAUtility.csproj", "{79EB8DAF-410E-4CB1-A0EA-01FAA5CC675C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAUtility", "Utility\EPAUtility\EPAUtility.csproj", "{79EB8DAF-410E-4CB1-A0EA-01FAA5CC675C}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Model.SWAT", "D4EM.Model\SWAT\D4EM.Model.SWAT.vbproj", "{22888497-60ED-4792-936A-91131B7629DD}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Model.HSPF", "D4EM.Model\HSPF\D4EM.Model.HSPF.vbproj", "{D84BAE9D-AE01-490A-856E-56DB6E846629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D4EM.Data.Source.EPAWaters", "D4EM.Data.Source\EPAWaters\D4EM.Data.Source.EPAWaters.csproj", "{E8D46B8E-E059-4C17-B448-37C1EF0BCAB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D4EM.Data.Source.EPAWaters", "D4EM.Data.Source\EPAWaters\D4EM.Data.Source.EPAWaters.csproj", "{E8D46B8E-E059-4C17-B448-37C1EF0BCAB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapPlugin_USGS_Seamless", "Examples\PluginSourceCode\D4EM_USGS_Seamless Source Code\D4EM_USGS_Seamless\MapPlugin_USGS_Seamless.csproj", "{A4609D43-EEC6-492D-A44A-8F229F9E3C8D}"
 EndProject

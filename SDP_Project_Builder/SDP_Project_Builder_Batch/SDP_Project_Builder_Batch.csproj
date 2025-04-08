@@ -1,19 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{99DEA895-ED03-4D5B-9783-0B9C313038FE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SDP_Project_Builder_Batch</RootNamespace>
-    <AssemblyName>SDP_Project_Builder_Batch</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,191 +18,34 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Configurations>Debug;Release 3.5;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\x86Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="atcControls">
-      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcControls.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="atcData">
-      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcData.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="atcTimeseriesNCDC, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcTimeseriesNCDC.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="atcUtility">
-      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\atcUtility.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Analysis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Controls">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Controls.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Data">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Data.Forms">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Data.Forms.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
-      <HintPath>..\..\Externals\x86Debug\GDAL\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Extensions">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Projections">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Projections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Serialization">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Serialization.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Symbology">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Symbology.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Tools">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\Tools\DotSpatial.Tools.dll</HintPath>
-    </Reference>
-    <Reference Include="DotSpatial.Topology">
-      <HintPath>..\..\Externals\x86Debug\DotSpatial\DotSpatial.Topology.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\Externals\x86Debug\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\..\Externals\x86Debug\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="MapWinUtility">
-      <HintPath>..\..\Externals\x86Debug\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="WebDownload">
-      <HintPath>..\..\Externals\x86Debug\WorldWind\WebDownload.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\D4EM.Data.DBManager\D4EM.Data.DBManager.csproj">
-      <Project>{80193DE7-73EC-4516-AC69-2C3CF27BA4FA}</Project>
-      <Name>D4EM.Data.DBManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj">
-      <Project>{1A68540D-13CA-46AF-93E6-2C864E6627C7}</Project>
-      <Name>D4EM.Data.Source.BASINS</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\EPAWaters\D4EM.Data.Source.EPAWaters.csproj">
-      <Project>{E8D46B8E-E059-4C17-B448-37C1EF0BCAB9}</Project>
-      <Name>D4EM.Data.Source.EPAWaters</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\NCDC\D4EM.Data.Source.NCDC.csproj">
-      <Project>{1A8BFF0E-75FC-4DD8-AFFA-61D94BA0F369}</Project>
-      <Name>D4EM.Data.Source.NCDC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\NHDPlus\D4EM.Data.Source.NHDPlus.vbproj">
-      <Project>{6B7283C6-6DDE-41E9-BA00-F3EDD604B38B}</Project>
-      <Name>D4EM.Data.Source.NHDPlus</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\NRCS_Soil\D4EM.Data.Source.NRCS_Soil.vbproj">
-      <Project>{7612F73D-72CD-4A3D-861A-401E0E5F72BA}</Project>
-      <Name>D4EM.Data.Source.NRCS_Soil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data.Source\USGS_Seamless\D4EM.Data.Source.USGS_Seamless.vbproj">
-      <Project>{2CF5E4F7-8649-40F7-8481-CEFE720262CF}</Project>
-      <Name>D4EM.Data.Source.USGS_Seamless</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
-      <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
-      <Name>D4EM.Data</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj">
-      <Project>{573A99FB-08DE-4B28-8628-AC7089348D96}</Project>
-      <Name>D4EM.Geo</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Model\HE2RMES\D4EM.Model.HE2RMES.csproj">
-      <Project>{DE0191D8-C6BC-4530-8028-6797604C70B8}</Project>
-      <Name>D4EM.Model.HE2RMES</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SDPBatchParameters.cs" />
-    <Compile Include="SDPParameters.cs" />
-    <Compile Include="SDP_Project_Builder_Batch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <ProjectReference Include="..\..\D4EM.Data.DBManager\D4EM.Data.DBManager.csproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\EPAWaters\D4EM.Data.Source.EPAWaters.csproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\NCDC\D4EM.Data.Source.NCDC.csproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\NHDPlus\D4EM.Data.Source.NHDPlus.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\NRCS_Soil\D4EM.Data.Source.NRCS_Soil.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Data.Source\USGS_Seamless\D4EM.Data.Source.USGS_Seamless.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Model\HE2RMES\D4EM.Model.HE2RMES.csproj" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -237,12 +69,8 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
 </Project>

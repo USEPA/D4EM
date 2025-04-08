@@ -1,7 +1,9 @@
+Imports System.IO
 Imports atcUtility
 Imports MapWinUtility
 Imports D4EM.Data.LayerSpecification
 Imports DotSpatial.Data
+Imports NetTopologySuite.Geometries
 
 Public Class Region
     Implements IEquatable(Of Region)
@@ -403,8 +405,8 @@ Public Class Region
         'Dim output As DotSpatial.Data.IRaster = DotSpatial.Analysis.ClipRaster.ClipRasterWithPolygon(Me.ToShape(aRaster.Projection), aRaster, aClippedFilename)
 
         Dim lClipPolygon As New DotSpatial.Data.Feature
-        Dim lClipGeometry As DotSpatial.Topology.IBasicGeometry = Me.ToShape(aRaster.Projection).ToGeometry
-        lClipPolygon.BasicGeometry = lClipGeometry
+        Dim lClipGeometry As Geometry = Me.ToShape(aRaster.Projection).ToGeometry
+        lClipPolygon.Geometry = lClipGeometry
 
         Dim cellWidth As Double = aRaster.CellWidth
         Dim cellHeight As Double = aRaster.CellHeight
@@ -674,13 +676,13 @@ Public Class Region
                 Dim lShapeFilename As String
                 Dim lSelectFromLayer As DotSpatial.Data.FeatureSet
                 If aKeyType = National.LayerSpecifications.huc12 Then
-                    Dim lNationalFolder As String = IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
-                    If IO.Directory.Exists(lNationalFolder) Then
+                    Dim lNationalFolder As String = System.IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
+                    If System.IO.Directory.Exists(lNationalFolder) Then
                         'Group HUC-12s by HUC8, then for each HUC8 expand the bounds to accomodate all the HUC-12 in that HUC-8
                         Dim lDictHUC8s As System.Collections.Generic.Dictionary(Of String, Generic.List(Of String)) = DictHuc8_12(lKeys)
 
                         For Each lkvPair In lDictHUC8s
-                            lShapeFilename = IO.Path.Combine(lNationalFolder, "huc12", lkvPair.Key, "huc12.shp")
+                            lShapeFilename = System.IO.Path.Combine(lNationalFolder, "huc12", lkvPair.Key, "huc12.shp")
                             lSelectFromLayer = DotSpatial.Data.FeatureSet.OpenFile(lShapeFilename)
                             SetBoundsFromKeys(lSelectFromLayer, aKeyType.IdFieldName, lkvPair.Value)
                             If aKeyType = pRegionSpecification AndAlso lDictHUC8s.Count = 1 Then

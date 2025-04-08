@@ -84,8 +84,8 @@ Public Module Download
         Logger.Dbg("Downloaded " & Format(aDownloadInfo.BytesProcessed, "#,##0") & " bytes from " & aDownloadInfo.Url)
     End Sub
 
-    Private Sub DownloadURLProgress(ByVal URL As String, ByVal SaveAs As String, _
-                                    ByVal progressHandler As DownloadProgressHandler, _
+    Private Sub DownloadURLProgress(ByVal URL As String, ByVal SaveAs As String,
+                                    ByVal progressHandler As DownloadProgressHandler,
                                     ByVal completeHandler As DownloadCompleteHandler)
         Dim lURLserver As String = URL.Substring(URL.IndexOf("/") + 2)
         lURLserver = lURLserver.Substring(0, lURLserver.IndexOf("/"))

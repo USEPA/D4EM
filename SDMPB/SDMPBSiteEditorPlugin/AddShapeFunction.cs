@@ -39,11 +39,13 @@ namespace SDMPBSiteEditorPlugin
     {
         #region private variables
 
-        private ContextMenu _context;
+        // TODO ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
+                private ContextMenu _context;
         private CoordinateDialog _coordinateDialog;
         private List<Coordinate> _coordinates;
         private bool _disposed;
         private IFeatureSet _featureSet;
+        // TODO MenuItem is no longer supported. Use ToolStripMenuItem instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
         private MenuItem _finishPart;
         private Point _mousePosition;
         private List<List<Coordinate>> _parts;
@@ -76,8 +78,10 @@ namespace SDMPBSiteEditorPlugin
         private void Configure()
         {
             YieldStyle = (YieldStyles.LeftButton | YieldStyles.RightButton);
+            // TODO ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
             _context = new ContextMenu();
             _context.MenuItems.Add("Delete", DeleteShape);
+            // TODO MenuItem is no longer supported. Use ToolStripMenuItem instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
             _finishPart = new MenuItem("Finish Part", FinishPart);
             _context.MenuItems.Add(_finishPart);
             _context.MenuItems.Add("Finish Shape", FinishShape);

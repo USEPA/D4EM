@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "D4EM.Data.Source.BASINS", "D4EM.Data.Source\BASINS\D4EM.Data.Source.BASINS.vbproj", "{1A68540D-13CA-46AF-93E6-2C864E6627C7}"
@@ -35,7 +35,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SDM_Project_Builder_Batch",
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SDMProjectBuilderPlugin", "SDMPB\SDMProjectBuilderPlugin\SDMProjectBuilderPlugin.vbproj", "{EE20175B-D30D-4997-B61F-63F498F658D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDMProjectBuilder", "SDMPB\SDMProjectBuilder\SDMProjectBuilder.csproj", "{E3FD2E29-A34A-4CB9-9882-ECF5B9E50E56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SDMProjectBuilder", "SDMPB\SDMProjectBuilder\SDMProjectBuilder.csproj", "{E3FD2E29-A34A-4CB9-9882-ECF5B9E50E56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
