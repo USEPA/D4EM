@@ -409,7 +409,7 @@ Module modSDM_GUI
         Return lLayerHandle
     End Function
 
-    Friend Function FormIsOpen(ByVal aForm As Windows.Forms.Form) As Boolean
+    Friend Function FormIsOpen(ByVal aForm As System.Windows.Forms.Form) As Boolean
         If aForm Is Nothing Then
             Return False
         ElseIf aForm.IsDisposed Then

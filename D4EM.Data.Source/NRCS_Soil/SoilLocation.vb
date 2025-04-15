@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Reflection
+Imports System.ServiceModel
 Imports atcUtility
 Imports MapWinUtility
 
@@ -125,13 +126,13 @@ Public Class SoilLocation
             Return IO.Directory.GetFiles(pDirectoryName)
         End Function
 
-        Public Shared Function ToCoordinates(ByVal aLine As String) As Generic.List(Of DotSpatial.Topology.Coordinate)
+        Public Shared Function ToCoordinates(ByVal aLine As String) As Generic.List(Of NetTopologySuite.Geometries.Coordinate)
             Dim lInner As Boolean = False
             Select Case aLine.Substring(0, 1)
                 Case "O" : lInner = False : aLine = aLine.Substring(1)
                 Case "I" : lInner = True : aLine = aLine.Substring(1)
             End Select
-            Dim lCoordinates As New Generic.List(Of DotSpatial.Topology.Coordinate)
+            Dim lCoordinates As New Generic.List(Of NetTopologySuite.Geometries.Coordinate)
             Dim lLatitude As Double
             Dim lLongitude As Double
             Dim lLonLat() As String
@@ -142,7 +143,7 @@ Public Class SoilLocation
                 If lLonLat.Length = 2 AndAlso
                     Double.TryParse(lLonLat(0), lLongitude) AndAlso
                     Double.TryParse(lLonLat(1), lLatitude) Then
-                    lCoordinates.Add(New DotSpatial.Topology.Coordinate(lLongitude, lLatitude))
+                    lCoordinates.Add(New NetTopologySuite.Geometries.Coordinate(lLongitude, lLatitude))
                 ElseIf Not String.IsNullOrWhiteSpace(lPoint) Then
                     Logger.Dbg("Polygon coordinates not found in " & lPoint)
                 End If
@@ -617,7 +618,10 @@ SplitIt:        If lEastWest > lNorthSouth Then
     End Function
 
     Private Shared Sub PopulateSoils(ByVal aSoils As List(Of Soil), ByVal aCacheFolder As String)
-        Dim lSoap As NRCS_Service.SDMTabularServiceSoapClient = Nothing
+        Dim binding As New BasicHttpBinding()
+        Dim endpoint As New EndpointAddress("http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx")
+        Dim lSoap As New NRCS_Service.SDMTabularServiceSoapClient(binding, endpoint)
+        'Dim lSoap As NRCS_Service.SDMTabularServiceSoapClient = Nothing
         For Each lSoil As Soil In aSoils
             If Not String.IsNullOrEmpty(lSoil.MuKey) Then
                 Dim lCacheFilename As String = IO.Path.Combine(aCacheFolder, "SSURGO_" & lSoil.MuKey & ".xml")
@@ -696,7 +700,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
         Dim lNextProgress As Date = Now.AddSeconds(10)
         For Each lSoil In aSoils
             If lFeatureSet Is Nothing Then
-                lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Polygon)
+                lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Polygon)
                 lFeatureSet.Filename = atcUtility.GetTemporaryFileName(IO.Path.ChangeExtension(aLayerFilename, "").TrimEnd("."), ".shp")
                 Logger.Dbg("Building " & lFeatureSet.Filename)
                 lShapeFileName = lFeatureSet.Filename
@@ -734,7 +738,7 @@ SplitIt:        If lEastWest > lNorthSouth Then
                 For Each lPolygonString As String In lLines
                     If lPolygonString.StartsWith("O") Then
                         Dim lCoordinates = SoilPolygons.ToCoordinates(lPolygonString)
-                        Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Topology.FeatureType.Polygon)
+                        Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Data.FeatureType.Polygon)
                         lShape.AddPart(lCoordinates, DotSpatial.Data.CoordinateType.Regular)
                         With (lFeatureSet.AddFeature(lShape.ToGeometry))
                             .DataRow(0) = lSoil.MuKey

@@ -30,7 +30,7 @@ Public Class frmNavHelper
         Dim defCursor As System.Windows.Forms.Cursor = Me.Cursor
         Try
 
-            Me.Cursor = Windows.Forms.Cursors.WaitCursor
+            Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 
             Dim layers As New List(Of ILayer)
             layers = map.GetLayers()

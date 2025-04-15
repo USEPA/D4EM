@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <MyType>Windows</MyType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -16,35 +16,21 @@
     <DocumentationFile>D4EM.Model.SWAT.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <DocumentationFile>D4EM.Model.SWAT.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86Release\</OutputPath>
-    <DocumentationFile>D4EM.Model.SWAT.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcData">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+      <HintPath>..\..\BASINS\atcData.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesBinary">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesBinary.dll</HintPath>
+      <HintPath>..\..\BASINS\atcTimeseriesBinary.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesD4EM">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesD4EM.dll</HintPath>
+      <HintPath>..\..\BASINS\atcTimeseriesD4EM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesMath">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesMath.dll</HintPath>
+      <HintPath>..\..\BASINS\atcTimeseriesMath.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesSWAT">
@@ -52,15 +38,15 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\atcUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcWDM">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
+      <HintPath>..\..\BASINS\atcWDM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MapWinUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SwatObject">
@@ -113,11 +99,11 @@
     <PackageReference Include="DotSpatial.Analysis" Version="4.0.656" />
     <PackageReference Include="DotSpatial.Data" Version="4.0.656" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
   </ItemGroup>
 </Project>

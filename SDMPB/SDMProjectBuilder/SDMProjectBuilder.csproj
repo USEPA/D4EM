@@ -1,15 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>..\..\bin\Debug\</OutputPath>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>..\..\bin\Debug\</OutputPath>
     <CodeAnalysisLogFile>bin\Debug\SDMProjectBuilder.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
@@ -28,17 +25,17 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="atcUtility, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="atcUtility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Tools">
       <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Tools.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MapWinUtility, Version=4.8.8.30745, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MapWinUtility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -55,8 +52,8 @@
     <PackageReference Include="DotSpatial.Symbology.Forms" Version="4.0.656" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.4" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>

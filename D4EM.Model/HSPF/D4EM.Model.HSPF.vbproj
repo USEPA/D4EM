@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <MyType>Windows</MyType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -18,77 +18,38 @@
     <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86Release\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64Debug\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisLogFile>bin\Debug\D4EM.Model.HSPF.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64Release\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <CodeAnalysisLogFile>bin\Release\D4EM.Model.HSPF.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcControls">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcControls.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcControls.dll</HintPath>
     </Reference>
     <Reference Include="atcData">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+      <HintPath>..\..\BASINS\atcData.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcSegmentation">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcSegmentation.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcSegmentation.dll</HintPath>
     </Reference>
     <Reference Include="atcTimeseriesBinary">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesBinary.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcTimeseriesBinary.dll</HintPath>
     </Reference>
     <Reference Include="atcTimeseriesD4EM">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesD4EM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesMath">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesMath.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcTimeseriesMath.dll</HintPath>
     </Reference>
     <Reference Include="atcUCI">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUCI.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcUCI.dll</HintPath>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="atcWDM">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcWDM.dll</HintPath>
     </Reference>
     <Reference Include="MapWinUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MSM">
@@ -127,11 +88,11 @@
     <PackageReference Include="DotSpatial.Analysis" Version="4.0.656" />
     <PackageReference Include="DotSpatial.Data" Version="4.0.656" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <MyType>Windows</MyType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -34,25 +34,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcData">
-      <HintPath>..\Externals\AnyCPU\ATC_DS_Net6\atcData.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcData.dll</HintPath>
     </Reference>
-    <Reference Include="atcTimeseriesNCDC, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesNCDC.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="atcTimeseriesNCDC">
+      <HintPath>..\BASINS\atcTimeseriesNCDC.dll</HintPath>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\Externals\AnyCPU\ATC_DS_Net6\atcUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="atcWDM">
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcWDM.dll</HintPath>
     </Reference>
     <Reference Include="MapWinUtility">
-      <HintPath>..\Externals\AnyCPU\ATC_DS_Net6\MapWinUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\MapWinUtility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +101,6 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346201">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.4" />
   </ItemGroup>
 </Project>

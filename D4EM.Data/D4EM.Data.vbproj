@@ -1,35 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <ProjectType>Local</ProjectType>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-    <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ProjectType>Local</ProjectType>    
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
     <MyType>Windows</MyType>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,54 +34,20 @@
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <NoWarn>41999,42016,42017,42018,42019,42032,42036</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64Debug\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>D4EMDataManager.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42032,42036</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64Release\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>D4EMDataManager.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42032,42036</NoWarn>
-    <DebugType>None</DebugType>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>D4EMDataManager.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42032,42036</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86Release\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>D4EMDataManager.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42032,42036</NoWarn>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcData">
-      <HintPath>..\Externals\AnyCPU\ATC_DS_Net6\atcData.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcData.dll</HintPath>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\Externals\AnyCPU\ATC_DS_Net6\atcUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
       <HintPath>..\Externals\AnyCPU\DotSpatial\Windows Extensions\DotSpatial.Data.Rasters.GdalExtension\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MapWinUtility, Version=4.8.2.17410, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="MapWinUtility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+      <HintPath>..\BASINS\MapWinUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Update="System">
@@ -115,7 +57,7 @@
       <Name>System.Xml</Name>
     </Reference>
     <Reference Include="WebDownload">
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\WebDownload.dll</HintPath>
+      <HintPath>..\BASINS\WebDownload.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -164,7 +106,7 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346201">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.4" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
   </ItemGroup>
 </Project>

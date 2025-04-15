@@ -360,80 +360,82 @@ TryNHD:             Try 'Get both hydrography and elevation or only one
             '            aChemicalDegradationRate:=aParameters.HspfChemicalDegradationRate)
             '    End Using
             'End If
-            If aParameters.SetupHSPF Then
-                'Dim lMetWDM As atcData.atcDataSource = aProject.TimeseriesSources.Item
-                Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating HSPF input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
-                Using lLevel As New ProgressLevel(False)
-                    'pbd -- fixing situation where multiple elevation layers may exist in the project, need to get the one that corresponds to these flowlines
-                    Dim lElevationFileName As String = IO.Path.GetFullPath(PathNameOnly(lOriginalFlowlinesLayer.FileName) & "\..\" & D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid.FilePattern)
-                    Dim lHSPFModel As New D4EM.Model.HSPF.HSPFmodel
-                    lHSPFModel.BuildHSPFInput(
-                        aProject:=aProject,
-                        aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
-                        aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
-                        aLandUseLayer:=aProject.LayerFromRole(D4EM.Data.LayerSpecification.Roles.LandUse),
-                        aDemGridLayer:=aProject.LayerFromFileName(lElevationFileName),
-                        aSoilsLayer:=lSoilsLayer,
-                        aMetWDM:=aProject.TimeseriesSources(0),
-                        aSimulationStartYear:=aParameters.SimulationStartYear,
-                        aSimulationEndYear:=aParameters.SimulationEndYear,
-                        aOutputInterval:=aParameters.HspfOutputInterval,
-                        aBaseOutputName:=lScenarioName,
-                        aWQConstituents:=aParameters.WQConstituents.ToArray(),
-                        aSnowOption:=aParameters.HspfSnowOption,
-                        aBacterialOption:=aParameters.HspfBacterialOption,
-                        aChemicalOption:=aParameters.HspfChemicalOption,
-                        aChemicalName:=aParameters.HspfChemicalName,
-                        aChemicalMaximumSolubility:=aParameters.HspfChemicalMaximumSolubility,
-                        aChemicalPartitionCoeff:=aParameters.HspfChemicalPartitionCoeff,
-                        aChemicalFreundlichExp:=aParameters.HspfChemicalFreundlichExp,
-                        aChemicalDegradationRate:=aParameters.HspfChemicalDegradationRate,
-                        aSegmentationOption:=aParameters.HspfSegmentationOption)
-                End Using
-            End If
+            'KW
+            'If aParameters.SetupHSPF Then
+            '    'Dim lMetWDM As atcData.atcDataSource = aProject.TimeseriesSources.Item
+            '    Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating HSPF input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
+            '    Using lLevel As New ProgressLevel(False)
+            '        'pbd -- fixing situation where multiple elevation layers may exist in the project, need to get the one that corresponds to these flowlines
+            '        Dim lElevationFileName As String = IO.Path.GetFullPath(PathNameOnly(lOriginalFlowlinesLayer.FileName) & "\..\" & D4EM.Data.Source.NHDPlus.LayerSpecifications.ElevationGrid.FilePattern)
+            '        Dim lHSPFModel As New D4EM.Model.HSPF.HSPFmodel
+            '        lHSPFModel.BuildHSPFInput(
+            '            aProject:=aProject,
+            '            aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
+            '            aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
+            '            aLandUseLayer:=aProject.LayerFromRole(D4EM.Data.LayerSpecification.Roles.LandUse),
+            '            aDemGridLayer:=aProject.LayerFromFileName(lElevationFileName),
+            '            aSoilsLayer:=lSoilsLayer,
+            '            aMetWDM:=aProject.TimeseriesSources(0),
+            '            aSimulationStartYear:=aParameters.SimulationStartYear,
+            '            aSimulationEndYear:=aParameters.SimulationEndYear,
+            '            aOutputInterval:=aParameters.HspfOutputInterval,
+            '            aBaseOutputName:=lScenarioName,
+            '            aWQConstituents:=aParameters.WQConstituents.ToArray(),
+            '            aSnowOption:=aParameters.HspfSnowOption,
+            '            aBacterialOption:=aParameters.HspfBacterialOption,
+            '            aChemicalOption:=aParameters.HspfChemicalOption,
+            '            aChemicalName:=aParameters.HspfChemicalName,
+            '            aChemicalMaximumSolubility:=aParameters.HspfChemicalMaximumSolubility,
+            '            aChemicalPartitionCoeff:=aParameters.HspfChemicalPartitionCoeff,
+            '            aChemicalFreundlichExp:=aParameters.HspfChemicalFreundlichExp,
+            '            aChemicalDegradationRate:=aParameters.HspfChemicalDegradationRate,
+            '            aSegmentationOption:=aParameters.HspfSegmentationOption)
+            '    End Using
+            'End If
 
             'Dim aReportFlowUnits As Short = 0
-            If aParameters.SetupSWAT Then
-                Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating SWAT input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
-                Using lLevel As New ProgressLevel(False)
-                    D4EM.Model.SWAT.SWATmodel.BuildSWATInput(
-                        aScenarioName:=lScenarioName,
-                        aProject:=aProject,
-                        aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
-                        aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
-                        aLandUseLayer:=aProject.LayerFromTag(D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover.Tag),
-                        aDemGridLayer:=aProject.LayerFromTag(aParameters.ElevationGrid.Tag),
-                        aSoilsLayer:=lSoilsLayer,
-                        aSoilProperties:=lSoils,
-                        aCreateArcSWATFiles:=aParameters.CreateArcSWATFiles,
-                        aBuildDatabase:=aParameters.BuildDatabase,
-                        aSWATDatabaseName:=aParameters.SWATDatabaseName,
-                        aGeoProcess:=aParameters.GeoProcess,
-                        aResume:=aParameters.ResumeOverlay,
-                        aAreaIgnoreBelowFraction:=aParameters.AreaIgnoreBelowFraction,
-                        aAreaIgnoreBelowAbsolute:=aParameters.AreaIgnoreBelowAbsolute,
-                        aLandUseIgnoreBelowFraction:=aParameters.LandUseIgnoreBelowFraction,
-                        aLandUseIgnoreBelowAbsolute:=aParameters.LandUseIgnoreBelowAbsolute,
-                        aParameterShapefileName:=aParameters.ParameterShapefileName,
-                        aSimulationStartYear:=aParameters.SimulationStartYear,
-                        aSimulationEndYear:=aParameters.SimulationEndYear,
-                        aUseMgtCropFile:=aParameters.UseMgtCropFile,
-                        aOutputSummarize:=aParameters.OutputSummarize,
-                        aFields:=lFields,
-                        aReportFlowUnits:=aParameters.ReportFlowUnits)
-                    Dim lReturnCode As Integer = -1
-                    Dim lInputFilePath As String = IO.Path.Combine(aProject.ProjectFolder, "Scenarios\" & lScenarioName & "\TxtInOut")
-                    If aParameters.RunModel Then
-                        lReturnCode = D4EM.Model.SWAT.SWATmodel.RunModel(lInputFilePath)
-                    End If
-                    If aParameters.OutputSummarize AndAlso lReturnCode = 0 Then
-                        Logger.Status("PostProcessModelResults")
-                        D4EM.Model.SWAT.SWATmodel.SummarizeOutput(aProject.ProjectFolder, lInputFilePath, lScenarioName)
-                        Logger.Status("DoneOutputSummarize " & MemUsage())
-                    End If
+            'KW
+            'If aParameters.SetupSWAT Then
+            '    Logger.Status("Step " & lStep & " of " & lLastStep & ": Creating SWAT input sequence", True) : lStep += 1 ', lStep, lLastStep) : lStep += 1
+            '    Using lLevel As New ProgressLevel(False)
+            '        D4EM.Model.SWAT.SWATmodel.BuildSWATInput(
+            '            aScenarioName:=lScenarioName,
+            '            aProject:=aProject,
+            '            aCatchmentsLayer:=lSimplifiedCatchmentsLayer,
+            '            aFlowlinesLayer:=lSimplifiedFlowlinesLayer,
+            '            aLandUseLayer:=aProject.LayerFromTag(D4EM.Data.Source.USGS_Seamless.LayerSpecifications.NLCD2011.LandCover.Tag),
+            '            aDemGridLayer:=aProject.LayerFromTag(aParameters.ElevationGrid.Tag),
+            '            aSoilsLayer:=lSoilsLayer,
+            '            aSoilProperties:=lSoils,
+            '            aCreateArcSWATFiles:=aParameters.CreateArcSWATFiles,
+            '            aBuildDatabase:=aParameters.BuildDatabase,
+            '            aSWATDatabaseName:=aParameters.SWATDatabaseName,
+            '            aGeoProcess:=aParameters.GeoProcess,
+            '            aResume:=aParameters.ResumeOverlay,
+            '            aAreaIgnoreBelowFraction:=aParameters.AreaIgnoreBelowFraction,
+            '            aAreaIgnoreBelowAbsolute:=aParameters.AreaIgnoreBelowAbsolute,
+            '            aLandUseIgnoreBelowFraction:=aParameters.LandUseIgnoreBelowFraction,
+            '            aLandUseIgnoreBelowAbsolute:=aParameters.LandUseIgnoreBelowAbsolute,
+            '            aParameterShapefileName:=aParameters.ParameterShapefileName,
+            '            aSimulationStartYear:=aParameters.SimulationStartYear,
+            '            aSimulationEndYear:=aParameters.SimulationEndYear,
+            '            aUseMgtCropFile:=aParameters.UseMgtCropFile,
+            '            aOutputSummarize:=aParameters.OutputSummarize,
+            '            aFields:=lFields,
+            '            aReportFlowUnits:=aParameters.ReportFlowUnits)
+            '        Dim lReturnCode As Integer = -1
+            '        Dim lInputFilePath As String = IO.Path.Combine(aProject.ProjectFolder, "Scenarios\" & lScenarioName & "\TxtInOut")
+            '        If aParameters.RunModel Then
+            '            lReturnCode = D4EM.Model.SWAT.SWATmodel.RunModel(lInputFilePath)
+            '        End If
+            '        If aParameters.OutputSummarize AndAlso lReturnCode = 0 Then
+            '            Logger.Status("PostProcessModelResults")
+            '            D4EM.Model.SWAT.SWATmodel.SummarizeOutput(aProject.ProjectFolder, lInputFilePath, lScenarioName)
+            '            Logger.Status("DoneOutputSummarize " & MemUsage())
+            '        End If
 
-                End Using
-            End If
+            '    End Using
+            'End If
 
             For Each lLocalShapeFileName As String In IO.Directory.GetFiles(IO.Path.Combine(aProject.ProjectFolder, "LocalData"), "*.shp")
                 If aProject.LayerFromFileName(lLocalShapeFileName) Is Nothing Then
@@ -586,7 +588,8 @@ TryNCDCvalues:
                     Logger.Status("Processing NCDC data")
                     D4EM.Data.MetCmp.MetDataProcess(lRawDataGroup, lMetDataFolder, lPREC, lATEM, lWIND, lSOLR, lPEVT, lDEWP, lCLOU)
 
-                    aProject.TimeseriesSources.Add(D4EM.Model.HSPF.CreateMetWDM(lDestinationWDMfilename, lPREC, lATEM, lWIND, lSOLR, lPEVT, lDEWP, lCLOU))
+                    'KW
+                    'aProject.TimeseriesSources.Add(D4EM.Model.HSPF.CreateMetWDM(lDestinationWDMfilename, lPREC, lATEM, lWIND, lSOLR, lPEVT, lDEWP, lCLOU))
 
                     'Dim lDestinationWDM As New atcWDM.atcDataSourceWDM
                     'If Not lDestinationWDM.Open(lDestinationWDMfilename) Then

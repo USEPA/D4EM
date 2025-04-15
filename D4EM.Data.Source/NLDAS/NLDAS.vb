@@ -1,4 +1,5 @@
-﻿Imports atcData
+﻿Imports NetTopologySuite.Geometries
+Imports atcData
 Imports atcUtility
 Imports MapWinUtility
 Imports MapWinUtility.Strings
@@ -204,29 +205,30 @@ Public Class NLDAS
     Private Shared Function CreateGridSquare(ByVal aGrid As NLDASGridCoords,
                                     Optional ByVal aTargetProjection As DotSpatial.Projections.ProjectionInfo = Nothing) As DotSpatial.Data.Shape
 
-        Dim lCoordinates As New Generic.List(Of DotSpatial.Topology.Coordinate)
-        Dim lSouthwestLatLon As New DotSpatial.Topology.Coordinate(pWestmostGridEdge + ((aGrid.X - 1) * pDegreesPerGridCell),
+        Dim lCoordinates As New Generic.List(Of Coordinate)
+        Dim lSouthwestLatLon As New Coordinate(pWestmostGridEdge + ((aGrid.X - 1) * pDegreesPerGridCell),
                                                                    pSouthmostGridEdge + ((aGrid.Y - 1) * pDegreesPerGridCell))
 
-        Dim lNextPoint As New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X,
+        Dim lNextPoint As New Coordinate(lSouthwestLatLon.X,
                                                              lSouthwestLatLon.Y)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X,
                                                         lSouthwestLatLon.Y + pDegreesPerGridCell)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
                                                         lSouthwestLatLon.Y + pDegreesPerGridCell)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
                                                         lSouthwestLatLon.Y)
         lCoordinates.Add(lNextPoint)
 
         lCoordinates.Add(lSouthwestLatLon) 'Close the polygon
 
-        Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Topology.FeatureType.Polygon)
+        'Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Topology.FeatureType.Polygon)        
+        Dim lShape As New DotSpatial.Data.Shape(New NetTopologySuite.Geometries.Polygon(Nothing), DotSpatial.Data.FeatureType.Polygon)
         lShape.AddPart(lCoordinates, DotSpatial.Data.CoordinateType.Regular)
 
         If aTargetProjection IsNot Nothing AndAlso Not (aTargetProjection.Equals(Globals.GeographicProjection)) Then
@@ -262,9 +264,10 @@ Public Class NLDAS
 
         Dim lFeatureSet As DotSpatial.Data.FeatureSet
         If aLayerType = LayerSpecifications.GridPoints Then
-            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Point)
+            'lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Point)
+            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Point)
         Else
-            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Polygon)
+            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Polygon)
         End If
         lFeatureSet.Projection = Globals.GeographicProjection
 

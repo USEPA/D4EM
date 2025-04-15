@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <MyType>Windows</MyType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -60,20 +60,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcUtility">
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Data.Rasters.GdalExtension">
       <HintPath>..\Externals\AnyCPU\DotSpatial\Windows Extensions\DotSpatial.Data.Rasters.GdalExtension\DotSpatial.Data.Rasters.GdalExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotSpatial.Tools">
-      <HintPath>..\Externals\AnyCPU\DotSpatial\DotSpatial.Tools.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\DotSpatial\DotSpatial.Tools.dll</HintPath>
     </Reference>
     <Reference Include="MapWinUtility">
-      <HintPath>..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\BASINS\MapWinUtility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +122,6 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
   </ItemGroup>
 </Project>

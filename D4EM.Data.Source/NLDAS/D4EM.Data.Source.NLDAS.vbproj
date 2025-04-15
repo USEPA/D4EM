@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>D4EM.Data.Source</RootNamespace>
     <MyType>Windows</MyType>
@@ -32,58 +32,27 @@
     <DocumentationFile>D4EM.Data.Source.NLDAS.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64Debug\</OutputPath>
-    <DocumentationFile>D4EM.Data.Source.NLDAS.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64Release\</OutputPath>
-    <DocumentationFile>D4EM.Data.Source.NLDAS.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-    <DebugType>None</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <DocumentationFile>D4EM.Data.Source.NLDAS.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86Release\</OutputPath>
-    <DocumentationFile>D4EM.Data.Source.NLDAS.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcData">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+      <HintPath>..\..\BASINS\atcData.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesGDS">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesGDS.dll</HintPath>
+      <HintPath>..\..\BASINS\atcTimeseriesGDS.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\atcUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcWDM">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
+      <HintPath>..\..\BASINS\atcWDM.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotSpatial.Topology, Version=1.0.2011.5, Culture=neutral, PublicKeyToken=a66b5e9434ca3671, processorArchitecture=x86">
+    <Reference Include="MapWinUtility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="MapWinUtility, Version=4.8.2.17410, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Update="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -126,23 +95,6 @@
     <EmbeddedResource Include="NLDASQuerySchema.xml" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\D4EM.Data.MetCmp\D4EM.Data.MetCmp.vbproj" />
     <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj" />
     <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj" />
@@ -153,6 +105,7 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
   </ItemGroup>
 </Project>

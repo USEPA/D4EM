@@ -2,6 +2,7 @@
 Imports MapWinUtility
 Imports MapWinUtility.Strings
 Imports D4EM.Geo.NetworkOperations
+Imports System.Windows.Forms
 
 
 Public Module modSDM
@@ -17,10 +18,10 @@ Public Module modSDM
     Public Sub main()
         Dim lParametersFilename As String = Command()
         If Not IO.File.Exists(lParametersFilename) Then
-            Dim lOpenDialog As New Windows.Forms.OpenFileDialog()
+            Dim lOpenDialog = New OpenFileDialog()
             lOpenDialog.Title = "Select SDM Project Builder Parameter File"
             lOpenDialog.FileName = PARAMETER_FILE
-            If lOpenDialog.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If lOpenDialog.ShowDialog = DialogResult.OK Then
                 lParametersFilename = lOpenDialog.FileName
             End If
         End If

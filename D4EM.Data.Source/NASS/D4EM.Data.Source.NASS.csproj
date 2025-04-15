@@ -1,47 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\bin\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
+  </PropertyGroup>  
   <ItemGroup>
-    <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Data, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
+    <Reference Include="MapWinUtility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Projections">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Symbology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Symbology.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Topology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MapWinUtility, Version=4.8.5.29563, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>      
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +18,12 @@
     <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DotSpatial.Analysis" Version="4.0.656" />
+    <PackageReference Include="DotSpatial.Data" Version="4.0.656" />
+    <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
+    <PackageReference Include="DotSpatial.Symbology" Version="4.0.656" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
       <PrivateAssets>all</PrivateAssets>

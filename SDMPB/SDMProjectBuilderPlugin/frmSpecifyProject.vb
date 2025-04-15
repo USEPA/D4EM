@@ -128,7 +128,8 @@ NoMatch:
         g_AddLayers = chkAddLayers.Checked
         params.SetupHSPF = chkHSPF.Checked
         params.HspfSnowOption = Math.Max(0, comboHspfSnow.SelectedIndex)
-        [Enum].TryParse(comboHspfOutputInterval.Text, params.HspfOutputInterval)
+        'KW
+        '[Enum].TryParse(comboHspfOutputInterval.Text, params.HspfOutputInterval)
         params.HspfBacterialOption = chkMicrobes.Checked
         params.HspfChemicalOption = chkLandAppliedChemical.Checked
         params.HspfSegmentationOption = Math.Max(0, cboSegmentation.SelectedIndex)
@@ -257,7 +258,7 @@ NoMatch:
 
     Private Sub btnNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNext.Click
         SelectingCatchments = False
-        Dim lNewGroup As Windows.Forms.GroupBox = Nothing
+        Dim lNewGroup As System.Windows.Forms.GroupBox = Nothing
         If groupSelectAreaOfInterest.Visible Then
             If Not IsRegionSelected() Then
                 MapWinUtility.Logger.Msg("Area of interest must be selected before proceeding", Me.Text)
@@ -275,7 +276,7 @@ NoMatch:
 
     Private Sub btnPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrevious.Click
         SelectingCatchments = False
-        Dim lNewGroup As Windows.Forms.GroupBox = Nothing
+        Dim lNewGroup As System.Windows.Forms.GroupBox = Nothing
         If groupParameters.Visible Then
             lNewGroup = groupSelectAreaOfInterest
         ElseIf groupData.Visible Then
@@ -287,7 +288,7 @@ NoMatch:
         SetCurrentStep(lNewGroup)
     End Sub
 
-    Private Sub SetCurrentStep(ByVal aGroup As Windows.Forms.GroupBox)
+    Private Sub SetCurrentStep(ByVal aGroup As System.Windows.Forms.GroupBox)
         If Me.Height < 400 Then Me.Height = 400
         If Me.Width < 700 Then Me.Width = 700
 
@@ -304,8 +305,8 @@ NoMatch:
         aGroup.Top = pMargin
         aGroup.Width = Math.Max(Me.ClientSize.Width - pMargin * 2, 200)
         aGroup.Height = Math.Max(btnCancel.Top - pMargin * 2, 200)
-        aGroup.Anchor = Windows.Forms.AnchorStyles.Bottom + Windows.Forms.AnchorStyles.Top _
-                      + Windows.Forms.AnchorStyles.Left + Windows.Forms.AnchorStyles.Right
+        aGroup.Anchor = System.Windows.Forms.AnchorStyles.Bottom + System.Windows.Forms.AnchorStyles.Top _
+                      + System.Windows.Forms.AnchorStyles.Left + System.Windows.Forms.AnchorStyles.Right
         aGroup.Visible = True
 
         If aGroup Is groupSelectAreaOfInterest Then
@@ -799,7 +800,8 @@ LoadedOtherLayer:
         chkMicrobes.Checked = params.HspfBacterialOption
         chkLandAppliedChemical.Checked = params.HspfChemicalOption
         cboSegmentation.SelectedIndex = params.HspfSegmentationOption
-        comboHspfOutputInterval.Text = [Enum].GetName(params.HspfOutputInterval.GetType, params.HspfOutputInterval)
+        'KW
+        'comboHspfOutputInterval.Text = [Enum].GetName(params.HspfOutputInterval.GetType, params.HspfOutputInterval)
         chkSWAT.Checked = params.SetupSWAT
         atxSize.ValueDouble = params.MinCatchmentKM2
         atxLength.ValueDouble = params.MinFlowlineKM
@@ -1021,7 +1023,7 @@ LoadedOtherLayer:
                 Catch ex As Exception
 
                 Finally
-                    g_Map.Cursor = Windows.Forms.Cursors.Default
+                    g_Map.Cursor = System.Windows.Forms.Cursors.Default
                     UpdateSelectedFeatures()
                 End Try
             ElseIf SelectingCatchments Then
@@ -1060,13 +1062,13 @@ LoadedOtherLayer:
     End Sub
 
     Private Sub btnSaveProjectAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveProjectAs.Click
-        Dim lSaveAs As New Windows.Forms.SaveFileDialog()
+        Dim lSaveAs As New System.Windows.Forms.SaveFileDialog()
         With lSaveAs
             .Title = "Save new SDM Project As..."
             .FileName = txtSaveProjectAs.Text
             If String.IsNullOrEmpty(.FileName) Then .FileName = params.NewProjectFileName
             .Filter = "MapWindow Project (*.mwprj)|*.mwprj"
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 params.Project.ProjectFilename = .FileName
                 params.Project.ProjectFolder = IO.Path.GetDirectoryName(.FileName)
             End If
