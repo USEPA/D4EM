@@ -121,7 +121,6 @@ Public Module Download
     Private NullCertificateValidator As New System.Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateRemoteCertificate)
 
     Public Sub DisableHttpsCertificateCheck()
->>>>>>> dotnet6
         ' validate cert by calling a function
         System.Net.ServicePointManager.ServerCertificateValidationCallback = NullCertificateValidator
     End Sub
