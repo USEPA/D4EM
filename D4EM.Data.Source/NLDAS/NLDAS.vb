@@ -280,17 +280,11 @@ Public Class NLDAS
         For Each lGrid As NLDASGridCoords In aAllCells
             Dim lFeature As DotSpatial.Data.IFeature
             If aLayerType = LayerSpecifications.GridPoints Then
-<<<<<<< HEAD
-                Dim lX As Double = pWestmostGridCenter + ((lGrid.X) * pDegreesPerGridCell)
-                Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y) * pDegreesPerGridCell)
-                Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
-=======
+
                 Dim lX As Double = pWestmostGridCenter + ((lGrid.X - 1) * pDegreesPerGridCell)
                 Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y - 1) * pDegreesPerGridCell)
                 Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
                 Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
->>>>>>> dotnet6
                 lFeature = lFeatureSet.AddFeature(lPoint)
             Else
                 lFeature = lFeatureSet.AddFeature(CreateGridSquare(lGrid).ToGeometry)
