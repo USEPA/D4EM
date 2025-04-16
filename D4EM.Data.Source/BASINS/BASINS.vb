@@ -3,6 +3,7 @@ Imports atcUtility
 Imports D4EM.Data
 Imports D4EM.Data.LayerSpecification
 Imports D4EM.Geo
+Imports NetTopologySuite.Geometries
 
 Public Class BASINS
 
@@ -270,7 +271,7 @@ Public Class BASINS
                             'Add new location to shape file
                             If .FindFirst(lLocationField, lLocation, lFirstNewShape) Then
                                 Do
-                                    Dim lPoint As New DotSpatial.Topology.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
+                                    Dim lPoint As New NetTopologySuite.Geometries.Coordinate(.Value(lLongitudeField), .Value(lLatitudeField))
                                     Dim lShape As New DotSpatial.Data.Shape(lPoint)
                                     DotSpatial.Projections.Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, Globals.GeographicProjection, aProject.DesiredProjection, 0, 1)
                                     lStationsLayer.AddShape(lShape)
@@ -681,7 +682,7 @@ Public Class BASINS
                 Dim lCenterLat As Double = (lNorth + lSouth) / 2
                 Dim lCenterLon As Double = (lEast + lWest) / 2
                 Try
-                    Dim lCentroid As DotSpatial.Topology.Point = aRegion.ToShape(D4EM.Data.Globals.GeographicProjection).ToGeometry.Centroid
+                    Dim lCentroid As NetTopologySuite.Geometries.Point = aRegion.ToShape(D4EM.Data.Globals.GeographicProjection).ToGeometry.Centroid
                     If lCentroid.X > lWest AndAlso lCentroid.X < lEast AndAlso lCentroid.Y > lSouth AndAlso lCentroid.Y < lNorth Then
                         lCenterLat = lCentroid.Y
                         lCenterLon = lCentroid.X
@@ -895,7 +896,8 @@ Retry:
             If lBaseDataType = LayerSpecifications.huc12 Then
                 'hspf.com is down for good, huc12 boundaries now found on epa ftp server
                 'lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL
-                lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
+                'lURL = "ftp://newftp.epa.gov/exposure/NHDV1/HUC12_Boundries/" & aHUC8 & ".zip"
+                lURL = "https://gaftp.epa.gov/Exposure/BasinsData/NHDPlus21/NHDPlus" & aHUC8 & ".zip"
             End If
             If Not D4EM.Data.Download.DownloadURL(lURL, lCacheFilename) Then
                 lURL = pBaseURLga & aHUC8 & "/" & lFileNameOnly
@@ -995,7 +997,7 @@ Retry:
         End If
 
         Dim lPrjFileContents As String = lNativeProjection.ToEsriString
-        For Each lShapeFilename As String In IO.Directory.GetFiles(lUnpackFolder, "*.shp") 'TODO:  IO.SearchOption.AllDirectories)
+        For Each lShapeFilename As String In IO.Directory.GetFiles(lUnpackFolder, "*.shp", IO.SearchOption.AllDirectories)
             Layer.CopyProcStepsFromCachedFile(lCacheFilename, lShapeFilename)
             Dim lProjectionFilename As String = IO.Path.ChangeExtension(lShapeFilename, ".prj")
             If Not IO.File.Exists(lProjectionFilename) Then
@@ -1119,8 +1121,8 @@ Retry:
                         Dim lX As Double
                         Dim lY As Double
                         If Double.TryParse(lNativeStations.Value(lLongField), lX) AndAlso Double.TryParse(lNativeStations.Value(lLatField), lY) Then
-                            Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                            Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
+                            Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
+                            Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
                             Dim lFeature As DotSpatial.Data.IFeature = lNewShapefile.AddFeature(lPoint)
                             'Dim lFeature As DotSpatial.Data.IFeature = lNewFeatureSet.AddFeature(lPoint)
                             For lCurField As Integer = 1 To lNativeStations.NumFields

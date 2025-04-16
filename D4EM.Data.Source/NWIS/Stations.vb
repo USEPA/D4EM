@@ -1,3 +1,4 @@
+Imports NetTopologySuite.Geometries
 Imports atcUtility
 Imports MapWinUtility
 Imports D4EM.Geo
@@ -6,7 +7,7 @@ Partial Public Class NWIS
 
     Public Const pDefaultStationsBaseFilename As String = "NWIS_Stations"
 
-    Private Shared SiteColumns As String = _
+    Private Shared SiteColumns As String =
               "&column_name=agency_cd" _
             + "&column_name=site_no" _
             + "&column_name=station_nm" _
@@ -59,9 +60,9 @@ Partial Public Class NWIS
             + "&column_name=sv_end_date" _
             + "&column_name=sv_count_nu"
 
-    Friend Shared Function GetAndMakeShape(ByVal aProject As Project, _
-                                           ByVal aStationDataType As LayerSpecification, _
-                                  Optional ByVal aSaveAsBaseFilename As String = Nothing, _
+    Friend Shared Function GetAndMakeShape(ByVal aProject As Project,
+                                           ByVal aStationDataType As LayerSpecification,
+                                  Optional ByVal aSaveAsBaseFilename As String = Nothing,
                                   Optional ByVal aMakeShape As Boolean = True) As String
         Dim lReturnValue As String = ""
         Dim lSaveAs As String = aSaveAsBaseFilename & "_" & aStationDataType.Tag & ".rdb"
@@ -101,8 +102,8 @@ TryDownload:
     ''' <param name="aStationDataType">field from NWIS.LayerSpecifications specifying which type of data to find stations for</param>
     ''' <returns>True on successful download</returns>
     ''' <remarks></remarks>
-    Public Shared Function GetStationsInRegion(ByVal aRegion As Region, _
-                                               ByVal aSaveAs As String, _
+    Public Shared Function GetStationsInRegion(ByVal aRegion As Region,
+                                               ByVal aSaveAs As String,
                                                ByVal aStationDataType As LayerSpecification) As Boolean
         Dim lWestLongitude As Double
         Dim lNorthLatitude As Double
@@ -218,7 +219,7 @@ BadFile:
         Return False
     End Function
 
-    Public Shared Function GetStation(ByVal aStationID As String, _
+    Public Shared Function GetStation(ByVal aStationID As String,
                                       ByVal aSaveAs As String) As Boolean
 
         Dim lURL As String = "http://waterdata.usgs.gov/nwis/inventory?search_site_no=" & aStationID & "&search_site_no_match_type=exact" _
@@ -252,14 +253,14 @@ BadFile:
     '   "(2) the number of observations, " & _
     '   "(3) the date of the first observation, and " & _
     '   "(4) the date of the last observation of the given parameter, for that station.")> _
-    Private Shared Function GetStationsWithWQParameter( _
-        ByVal aNWLat As String, _
-        ByVal aNWLong As String, _
-        ByVal aSELat As String, _
-        ByVal aSELong As String, _
-        ByVal aStartDate As String, _
-        ByVal aEndDate As String, _
-        ByVal aParameterCode As String, _
+    Private Shared Function GetStationsWithWQParameter(
+        ByVal aNWLat As String,
+        ByVal aNWLong As String,
+        ByVal aSELat As String,
+        ByVal aSELong As String,
+        ByVal aStartDate As String,
+        ByVal aEndDate As String,
+        ByVal aParameterCode As String,
         Optional ByVal MinCount As Integer = 1) As String
 
         '---------------------------------------------------------------------------------------------------
@@ -372,9 +373,9 @@ BadFile:
         'XmlTextWriter.Close()
     End Function
 
-    Friend Shared Function MakeStationShapefile(ByVal aProject As Project, _
-                                         ByVal aStationDataType As LayerSpecification, _
-                                         ByVal aAllStations As atcTableRDB, _
+    Friend Shared Function MakeStationShapefile(ByVal aProject As Project,
+                                         ByVal aStationDataType As LayerSpecification,
+                                         ByVal aAllStations As atcTableRDB,
                                          ByVal aSaveAs As String) As String
         Try
             Dim lLongField As Integer = aAllStations.FieldNumber("dec_long_va")
@@ -392,7 +393,7 @@ BadFile:
                 MkDirPath(PathNameOnly(aSaveAs))
                 TryDeleteShapefile(aSaveAs)
 
-                Dim lNewShapefile As New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Point)
+                Dim lNewShapefile As New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Point)
 
                 lNewShapefile.Projection = D4EM.Data.Globals.GeographicProjection
                 For lCurField = 0 To lLastField
@@ -436,8 +437,8 @@ BadFile:
                         Try
                             Dim lX As Double = aAllStations.Value(lLongField)
                             Dim lY As Double = aAllStations.Value(lLatField)
-                            Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                            Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
+                            Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
+                            Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
                             Dim lFeature As DotSpatial.Data.IFeature = lNewShapefile.AddFeature(lPoint)
                             For lCurField = 0 To lLastField
                                 'Debug.Print(lCurField & " " & lNewShapefile.Field(lCurField).Name & " " & lNewShapefile.Field(lCurField).Width & " " & aAllStations.Value(lCurField + 1).Length & " " & aAllStations.Value(lCurField + 1))

@@ -77,7 +77,8 @@ Public Class SDMParameters
     Public SimulationStartYear As Integer = 1990
     Public SimulationEndYear As Integer = 2000
 
-    Public HspfOutputInterval As D4EM.Model.HSPF.HspfOutputInterval = D4EM.Model.HSPF.HspfOutputInterval.Hourly
+    'KW
+    'Public HspfOutputInterval As D4EM.Model.HSPF.HspfOutputInterval = D4EM.Model.HSPF.HspfOutputInterval.Hourly
     Public HspfSnowOption As Integer = 0 '0 = default (no snow), 1 = Energy Balance, 2 = Temperature Index (Degree Day)
     Public HspfBacterialOption As Boolean = False 'True to include bacteria in HSPF
     Public HspfChemicalOption As Boolean = False 'True to include land-applied chemical in HSPF
@@ -166,7 +167,8 @@ Public Class SDMParameters
                 sb.AppendLine("    <ChemicalDegradationRateUpper>" & HspfChemicalDegradationRate(1) & "</ChemicalDegradationRateUpper>")
                 sb.AppendLine("    <ChemicalDegradationRateLower>" & HspfChemicalDegradationRate(2) & "</ChemicalDegradationRateLower>")
                 sb.AppendLine("    <ChemicalDegradationRateGround>" & HspfChemicalDegradationRate(3) & "</ChemicalDegradationRateGround>")
-                sb.AppendLine("    <OutputInterval>" & [Enum].GetName(HspfOutputInterval.GetType, HspfOutputInterval) & "</OutputInterval>")
+                'KW
+                'sb.AppendLine("    <OutputInterval>" & [Enum].GetName(HspfOutputInterval.GetType, HspfOutputInterval) & "</OutputInterval>")
                 sb.AppendLine("    <SegmentationOption>" & HspfSegmentationOption & "</SegmentationOption>")
                 sb.AppendLine("</HSPF>")
             End If
@@ -246,8 +248,9 @@ Public Class SDMParameters
                     'Case "Latitude" : PourPointLatitude = Convert.ToDouble(lArg.InnerText)
                     'Case "Longitude" : PourPointLongitude = Convert.ToDouble(lArg.InnerText)
                     'Case "MaxKm" : PourPointMaxKm = Convert.ToDouble(lArg.InnerText)
-                Case "OutputInterval"
-                    [Enum].TryParse(lArg.InnerText, HspfOutputInterval)
+                    'KW
+                    'Case "OutputInterval"
+                '    [Enum].TryParse(lArg.InnerText, HspfOutputInterval)
                 Case "SnowOption" : HspfSnowOption = Convert.ToInt32(lArg.InnerText)
                 Case "BacterialOption" : HspfBacterialOption = Convert.ToBoolean(lArg.InnerText)
                 Case "ChemicalOption" : HspfChemicalOption = Convert.ToBoolean(lArg.InnerText)

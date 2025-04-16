@@ -3,6 +3,7 @@ Imports MapWinUtility
 Imports System.Collections.Generic
 Imports System.Collections.ObjectModel
 Imports D4EM.Data
+Imports NTS = NetTopologySuite
 
 Public Class OverlayReclassify
 
@@ -176,7 +177,8 @@ Public Class OverlayReclassify
                 lCount += 1
                 Logger.Progress(lCount, lMaxCount)
 
-                Dim lProjCoord As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lSlopeRaster, lRow, lCol)
+                'Dim lProjCoord As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lSlopeRaster, lRow, lCol)
+                Dim lProjCoord As NTS.Geometries.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lSlopeRaster, lRow, lCol)
                 Dim lKey As String = ""
                 Dim lKeyParts As New Generic.List(Of String)
                 Dim lRequired As Boolean = False
@@ -187,11 +189,13 @@ Public Class OverlayReclassify
                     Dim lKeyPart As String = ""
                     If lLayersThisRow.Contains(lLayerIndex) AndAlso lCol >= lLayerMinCells(lLastLayerIndex).Column AndAlso lCol <= lLayerMaxCells(lLastLayerIndex).Column Then
                         'Find the part of the key for this layer at this lRow, lCol
-                        Dim lUseCoord As DotSpatial.Topology.Coordinate = Nothing
+                        'Dim lUseCoord As DotSpatial.Topology.Coordinate = Nothing
+                        Dim lUseCoord As NTS.Geometries.Coordinate = Nothing
                         If lLayerSameProjection(lLayerIndex) Then
                             lUseCoord = lProjCoord
                         Else
-                            lUseCoord = lProjCoord.Clone  'Reproject a copy of the coordinates
+                            'lUseCoord = lProjCoord.Clone
+                            lUseCoord = lProjCoord.Copy()  'Reproject a copy of the coordinates
                             D4EM.Geo.SpatialOperations.ProjectPoint(lUseCoord.X, lUseCoord.Y, lRasterProjection, lLayerProjection(lLayerIndex))
                         End If
                         If lLayer.IsFeatureSet() Then
@@ -400,7 +404,8 @@ Public Class OverlayReclassify
                     lCount += 1
                     Logger.Progress(lCount, lMaxCount)
 
-                    Dim lProjCoord As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lInputRaster, lRow, lCol)
+                    'Dim lProjCoord As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lInputRaster, lRow, lCol)
+                    Dim lProjCoord As NetTopologySuite.Geometries.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lInputRaster, lRow, lCol)
                     Dim lKey As String = lInputRaster.Value(lRow, lCol)
                     Dim lKeyParts As New Generic.List(Of String)
                     lKeyParts.Add(lKey.Clone)
@@ -541,7 +546,7 @@ Public Class OverlayReclassify
             If lRow >= lLayerMinCell.Row AndAlso lRow <= lLayerMaxCell.Row Then
                 For lCol = 0 To lLastCol
                     If lCol >= lLayerMinCell.Column AndAlso lCol <= lLayerMaxCell.Column Then
-                        Dim lProjCoord As DotSpatial.Topology.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lReferenceRaster, lRow, lCol)
+                        Dim lProjCoord As NetTopologySuite.Geometries.Coordinate = DotSpatial.Data.RasterExt.CellToProj(lReferenceRaster, lRow, lCol)
                         D4EM.Geo.SpatialOperations.ProjectPoint(lProjCoord.X, lProjCoord.Y, lReferenceRaster.Projection, lOriginalRaster.Projection)
                         With DotSpatial.Data.RasterExt.ProjToCell(lOriginalRaster, lProjCoord)
                             If .Row < 0 OrElse .Column < 0 OrElse .Row > lOriginalRaster.EndRow OrElse .Column > lOriginalRaster.EndColumn Then

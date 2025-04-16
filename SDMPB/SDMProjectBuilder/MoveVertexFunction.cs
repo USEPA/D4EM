@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using DotSpatial.Controls;
 using DotSpatial.Data;
 using DotSpatial.Symbology;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 using Point = System.Drawing.Point;
 using System;
 
@@ -99,7 +99,7 @@ namespace SDMProjectBuilder
             Rectangle mouseRect = new Rectangle(_mousePosition.X - 3, _mousePosition.Y - 3, 6, 6);
             if (_selectedFeature != null)
             {
-                foreach (Coordinate c in _selectedFeature.Coordinates)
+                foreach (Coordinate c in _selectedFeature.Geometry.Coordinates)
                 {
                     Point pt = e.GeoGraphics.ProjToPixel(c);
                     if (e.GeoGraphics.ImageRectangle.Contains(pt))
@@ -166,7 +166,7 @@ namespace SDMProjectBuilder
                     Map.Invalidate();
                 }
             }
-            foreach (Coordinate c in _selectedFeature.Coordinates)
+            foreach (Coordinate c in _selectedFeature.Geometry.Coordinates)
             {
                 if (ext.Contains(c))
                 {
@@ -190,7 +190,7 @@ namespace SDMProjectBuilder
             Extent ext = Map.PixelToProj(mouseRect);
             MapPointLayer mpl = _layer as MapPointLayer;
             bool requiresInvalidate = false;
-            IPolygon env = ext.ToEnvelope().ToPolygon();
+            Envelope env = ext.ToEnvelope();
             if (mpl != null)
             {
                 int w = 3;
@@ -205,7 +205,7 @@ namespace SDMProjectBuilder
                     }
                 }
                 Rectangle rect = new Rectangle(e.Location.X - (w / 2), e.Location.Y - (h / 2), w * 2, h * 2);
-                if (!rect.Contains(Map.ProjToPixel(_activeFeature.Coordinates[0])))
+                if (!rect.Contains(Map.ProjToPixel(_activeFeature.Geometry.Coordinates[0])))
                 {
                     mpl.SetCategory(_activeFeature, _oldCategory);
                     _activeFeature = null;
@@ -238,7 +238,7 @@ namespace SDMProjectBuilder
 
             Rectangle mouseRect = new Rectangle(_mousePosition.X - 3, _mousePosition.Y - 3, 6, 6);
             Extent ext = Map.PixelToProj(mouseRect);
-            IPolygon env = ext.ToEnvelope().ToPolygon();
+            Envelope env = ext.ToEnvelope();
             bool requiresInvalidate = false;
             foreach (IFeature feature in _featureSet.Features)
             {
@@ -260,7 +260,7 @@ namespace SDMProjectBuilder
                             }
                         }
                         _imageRect = new Rectangle(e.Location.X - (w / 2), e.Location.Y - (h / 2), w, h);
-                        if (_imageRect.Contains(Map.ProjToPixel(feature.Coordinates[0])))
+                        if (_imageRect.Contains(Map.ProjToPixel(feature.Geometry.Coordinates[0])))
                         {
                             _activeFeature = feature;
                             _oldCategory = mpl.GetCategory(feature);
@@ -361,15 +361,16 @@ namespace SDMProjectBuilder
         private bool CheckForVertexDrag(GeoMouseArgs e)
         {
             Rectangle mouseRect = new Rectangle(_mousePosition.X - 3, _mousePosition.Y - 3, 6, 6);
-            IEnvelope env = Map.PixelToProj(mouseRect).ToEnvelope();
+            Envelope env = Map.PixelToProj(mouseRect).ToEnvelope();
             if (e.Button == MouseButtons.Left)
             {
                 if (_layer.DataSet.FeatureType == FeatureType.Polygon)
                 {
-                    for (int prt = 0; prt < _selectedFeature.NumGeometries; prt++)
+                    for (int prt = 0; prt < _selectedFeature.Geometry.NumGeometries; prt++)
                     {
-                        IBasicGeometry g = _selectedFeature.GetBasicGeometryN(prt);
-                        IList<Coordinate> coords = g.Coordinates;
+                        //IBasicGeometry g = _selectedFeature.Geometry.GetBasicGeometryN(prt);
+                        //IList<Coordinate> coords = g.Coordinates;
+                        IList<Coordinate> coords = _selectedFeature.Geometry.Coordinates;
                         for (int ic = 0; ic < coords.Count; ic++)
                         {
                             Coordinate c = coords[ic];
@@ -403,10 +404,11 @@ namespace SDMProjectBuilder
                 }
                 else if (_layer.DataSet.FeatureType == FeatureType.Line)
                 {
-                    for (int prt = 0; prt < _selectedFeature.NumGeometries; prt++)
+                    for (int prt = 0; prt < _selectedFeature.Geometry.NumGeometries; prt++)
                     {
-                        IBasicGeometry g = _selectedFeature.GetBasicGeometryN(prt);
-                        IList<Coordinate> coords = g.Coordinates;
+                        //IBasicGeometry g = _selectedFeature.GetBasicGeometryN(prt);
+                        //IList<Coordinate> coords = g.Coordinates;
+                        IList<Coordinate> coords = _selectedFeature.Geometry.Coordinates;
                         for (int ic = 0; ic < coords.Count; ic++)
                         {
                             Coordinate c = coords[ic];
@@ -459,12 +461,12 @@ namespace SDMProjectBuilder
                 {
                     Rectangle mouseRect = new Rectangle(_mousePosition.X - 3, _mousePosition.Y - 3, 6, 6);
 
-                    IEnvelope env = Map.PixelToProj(mouseRect).ToEnvelope();
+                    Envelope env = Map.PixelToProj(mouseRect).ToEnvelope();
 
                     if (CheckForVertexDrag(e)) { return; }
 
                     // No vertex selection has occured.
-                    if (!_selectedFeature.Intersects(env.ToPolygon()))
+                    if (!_selectedFeature.Intersects(env))
                     {
                         // We are clicking down outside of the given polygon, so clear our selected feature
                         DeselectFeature();
@@ -506,7 +508,7 @@ namespace SDMProjectBuilder
                     {
                         _dragging = true;
                         Map.IsBusy = true;
-                        _dragCoord = _activeFeature.Coordinates[0];
+                        _dragCoord = _activeFeature.Geometry.Coordinates[0];
                         MapPointLayer mpl = _layer as MapPointLayer;
                         if (mpl != null)
                         {

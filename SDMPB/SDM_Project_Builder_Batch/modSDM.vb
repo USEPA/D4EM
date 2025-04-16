@@ -2,6 +2,7 @@
 Imports MapWinUtility
 Imports MapWinUtility.Strings
 Imports D4EM.Geo.NetworkOperations
+Imports System.Windows.Forms
 
 
 Public Module modSDM
@@ -17,10 +18,10 @@ Public Module modSDM
     Public Sub main()
         Dim lParametersFilename As String = Command()
         If Not IO.File.Exists(lParametersFilename) Then
-            Dim lOpenDialog As New Windows.Forms.OpenFileDialog()
+            Dim lOpenDialog = New OpenFileDialog()
             lOpenDialog.Title = "Select SDM Project Builder Parameter File"
             lOpenDialog.FileName = PARAMETER_FILE
-            If lOpenDialog.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If lOpenDialog.ShowDialog = DialogResult.OK Then
                 lParametersFilename = lOpenDialog.FileName
             End If
         End If
@@ -125,8 +126,8 @@ Public Module modSDM
 
     Friend Sub ClipCatchmentsToShape(ByVal aCatchmentsToUseFileName As String,
                                      ByVal aCatchments As DotSpatial.Data.Shapefile,
-                                     ByVal aShapeOfInterest As DotSpatial.Topology.Geometry)
-        Dim lCatchmentsToUse As New DotSpatial.Data.Shapefile
+                                     ByVal aShapeOfInterest As NetTopologySuite.Geometries.Geometry)
+        Dim lCatchmentsToUse As New DotSpatial.Data.PolygonShapefile
         Dim lLargestFractionInsideLeftOut As Double = 0
         Dim lSmallestFractionInsideKept As Double = 1
         Dim lLargestToUse As Double = atcUtility.GetNaN
@@ -143,9 +144,10 @@ Public Module modSDM
         For lCatchmentShapeIndex As Integer = 0 To aCatchments.Features.Count - 1
             Dim lCatchmentFeature As DotSpatial.Data.Feature = aCatchments.Features(lCatchmentShapeIndex)
             Dim lCatchmentShape As New DotSpatial.Data.Shape(lCatchmentFeature)
-            Dim lIntersection As DotSpatial.Topology.Geometry = lCatchmentShape.ToGeometry.Intersection(aShapeOfInterest)
+            Dim lIntersection As NetTopologySuite.Geometries.Geometry = lCatchmentShape.ToGeometry.Intersection(aShapeOfInterest)
             If lIntersection IsNot Nothing AndAlso lIntersection.NumPoints > 0 Then
-                Dim lCatchmentArea As Double = DotSpatial.Data.FeatureExt.Area(lCatchmentFeature)
+                'Dim lCatchmentArea As Double = DotSpatial.Data.FeatureExt.Area(lCatchmentFeature)
+                Dim lCatchmentArea As Double = lCatchmentFeature.Geometry.Area
                 If lCatchmentArea > 0 Then
                     Dim lIntersectionArea As Double = lIntersection.Area
                     Dim lFractionInside As Double = lIntersectionArea / lCatchmentArea
@@ -179,7 +181,7 @@ Public Module modSDM
         lCatchmentsToUse.Save()
         lCatchmentsToUse.Close()
         lCatchmentsToUseDBF.WriteFile(IO.Path.ChangeExtension(aCatchmentsToUseFileName, "dbf"))
-        TryCopy(IO.Path.ChangeExtension(aCatchments.Filename, "mwsr"), _
+        TryCopy(IO.Path.ChangeExtension(aCatchments.Filename, "mwsr"),
                 IO.Path.ChangeExtension(aCatchmentsToUseFileName, "mwsr"))
     End Sub
 
@@ -194,7 +196,7 @@ Public Module modSDM
         Dim lCatchmentsToUseDBF As atcUtility.atcTableDBF = lCatchmentsDBF.Cousin
         lCatchmentsToUseDBF.InitData()
 
-        Dim lCatchmentsToUse As New DotSpatial.Data.Shapefile
+        Dim lCatchmentsToUse As New DotSpatial.Data.PolygonShapefile
         lCatchmentsToUse.Filename = aCatchmentsToUseFileName
         lCatchmentsToUse.FeatureType = aCatchments.FeatureType
 

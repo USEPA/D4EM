@@ -301,21 +301,21 @@ Public Class SWATmodel
             For lShapeIndex As Integer = 0 To lLastCatchment
                 Dim lX As Double
                 Dim lY As Double
-                Dim lCatchmentGeometry As DotSpatial.Topology.Geometry = lCatchments.Features(lShapeIndex).BasicGeometry
+                Dim lCatchmentGeometry As NetTopologySuite.Geometries.Geometry = lCatchments.Features(lShapeIndex).Geometry
                 If lCatchmentGeometry.NumPoints < 1 Then
                     Logger.Dbg("CalculateCatchmentProperty: Catchment index " & lShapeIndex & " could not be converted into a BasicGeometry, not adding it to Catchments.txt")
                 Else
-                    With lCatchmentGeometry.Envelope
+                    With lCatchmentGeometry.EnvelopeInternal
                         'Default to using elevation at middle of bounding box in case centroid calculation does not work
-                        lX = (.Maximum.X + .Minimum.X) / 2
-                        lY = (.Maximum.Y + .Minimum.Y) / 2
+                        lX = (.MaxX + .MinX) / 2
+                        lY = (.MaxY + .MinY) / 2
                         Try
-                            Dim lCentroidCalculator As New DotSpatial.Topology.Algorithm.CentroidArea
-                            lCentroidCalculator.Add(lCatchmentGeometry)
-                            Dim lCentroid As DotSpatial.Topology.Coordinate = lCentroidCalculator.Centroid
+                            'Dim lCentroidCalculator As New NetTopologySuite.Algorithm.CentroidArea
+                            'lCentroidCalculator.Add(lCatchmentGeometry)
+                            Dim lCentroid As NetTopologySuite.Geometries.Coordinate = lCatchmentGeometry.Coordinate
 
-                            If lCentroid.X >= .Minimum.X AndAlso lCentroid.X <= .Maximum.X AndAlso _
-                               lCentroid.Y >= .Minimum.Y AndAlso lCentroid.Y <= .Maximum.Y Then
+                            If lCentroid.X >= .MinX AndAlso lCentroid.X <= .MaxX AndAlso
+                               lCentroid.Y >= .MinY AndAlso lCentroid.Y <= .MaxY Then
                                 lX = lCentroid.X
                                 lY = lCentroid.Y
                             Else
@@ -415,19 +415,25 @@ Public Class SWATmodel
                         Catch
                         End Try
                     Else
-                        Dim lFlowlineGeometry As DotSpatial.Topology.Geometry = lFlowline.ToShape.ToGeometry
-                        Dim lCentroidCalculator As New DotSpatial.Topology.Algorithm.CentroidLine
-                        lCentroidCalculator.Add(lFlowlineGeometry)
-                        Dim lCentroid As DotSpatial.Topology.Coordinate = lCentroidCalculator.Centroid
+                        Dim lFlowlineGeometry As NetTopologySuite.Geometries.Geometry = lFlowline.ToShape.ToGeometry
+                        'KW 2022-11-08
+                        'I think think this is doing the same thing as commented out code
+                        Dim lCentroid As NetTopologySuite.Geometries.Coordinate = lFlowline.Geometry.Coordinate
+                        'Dim lCentroidCalculator As New DotSpatial.Topology.Algorithm.CentroidLine
+                        'Dim lCentroidCalculator As New NetTopologySuite.Algorithm.CentroidLine
+                        'lCentroidCalculator.Add(lFlowlineGeometry)
+                        'Dim lCentroid As NetTopologySuite.Geometries.Coordinate = lCentroidCalculator.Centroid
+
+
                         Dim lX As Double = lCentroid.X
                         Dim lY As Double = lCentroid.Y
-                        With lFlowlineGeometry.Envelope
-                            If lX < .Minimum.X OrElse lX > .Maximum.X OrElse _
-                               lY < .Minimum.Y OrElse lY > .Maximum.Y Then
+                        With lFlowlineGeometry.EnvelopeInternal
+                            If lX < .MinX OrElse lX > .MaxX OrElse
+                               lY < .MinY OrElse lY > .MaxY Then
                                 'MapWinGeoProc.Statistics.Centroid failed, probably a multi-polygon
                                 'Use elevation at middle of bounding box
-                                lX = (.Maximum.X + .Minimum.X) / 2
-                                lY = (.Maximum.Y + .Minimum.Y) / 2
+                                lX = (.MaxX + .MinX) / 2
+                                lY = (.MaxY + .MinY) / 2
                             End If
                         End With
 

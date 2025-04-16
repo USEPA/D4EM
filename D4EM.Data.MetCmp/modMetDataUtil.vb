@@ -12,82 +12,82 @@ Public Module modMetDataUtil
     Friend MetComputeLatitudeMin As Double = -66.5
     Friend Const DegreesToRadians As Double = 0.01745329252
 
-    Private X1() As Double = {0, 10.00028, 41.0003, 69.22113, 100.5259, 130.8852, 161.2853, _
+    Private X1() As Double = {0, 10.00028, 41.0003, 69.22113, 100.5259, 130.8852, 161.2853,
                           191.7178, 222.1775, 253.66, 281.1629, 309.6838, 341.221}
-    Private c(,) As Double = { _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 4.0, 2.0, -1.5, -3.0, -2.0, 1.0, 3.0, 2.5, 1.0, 1.0, 2.0, 1.0}, _
-      {0, 3.0, 4.0, 0.0, -3.0, -2.5, 0.0, 2.0, 3.0, 2.0, 1.5, 2.0, 1.0}, _
-      {0, 0.0, 3.5, 1.5, -1.0, -2.0, -1.0, 1.5, 3.0, 3.0, 1.5, 2.0, 1.0}, _
-      {0, -2.0, 2.5, 3.5, 0.0, -2.0, -1.0, 0.5, 3.0, 3.0, 2.0, 2.0, 1.0}, _
-      {0, -4.0, 0.5, 3.0, 1.0, -0.5, -1.0, 0.0, 2.0, 2.5, 2.5, 2.0, 1.0}, _
-      {0, -5.0, -1.5, 2.0, 3.0, 0.5, -1.0, -0.5, 1.0, 2.5, 2.5, 2.0, 1.0}, _
-      {0, -5.0, -3.5, 1.0, 3.0, 1.5, 0.0, -0.5, 1.0, 2.0, 2.0, 2.0, 1.0}, _
-      {0, -4.0, -4.5, -1.0, 2.5, 3.0, 1.0, 0.0, 0.0, 1.5, 2.0, 2.0, 1.0}, _
-      {0, -2.0, -4.0, -3.0, 1.0, 3.0, 2.0, 0.5, 0.0, 1.5, 2.0, 1.0, 1.0}, _
+    Private c(,) As Double = {
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 4.0, 2.0, -1.5, -3.0, -2.0, 1.0, 3.0, 2.5, 1.0, 1.0, 2.0, 1.0},
+      {0, 3.0, 4.0, 0.0, -3.0, -2.5, 0.0, 2.0, 3.0, 2.0, 1.5, 2.0, 1.0},
+      {0, 0.0, 3.5, 1.5, -1.0, -2.0, -1.0, 1.5, 3.0, 3.0, 1.5, 2.0, 1.0},
+      {0, -2.0, 2.5, 3.5, 0.0, -2.0, -1.0, 0.5, 3.0, 3.0, 2.0, 2.0, 1.0},
+      {0, -4.0, 0.5, 3.0, 1.0, -0.5, -1.0, 0.0, 2.0, 2.5, 2.5, 2.0, 1.0},
+      {0, -5.0, -1.5, 2.0, 3.0, 0.5, -1.0, -0.5, 1.0, 2.5, 2.5, 2.0, 1.0},
+      {0, -5.0, -3.5, 1.0, 3.0, 1.5, 0.0, -0.5, 1.0, 2.0, 2.0, 2.0, 1.0},
+      {0, -4.0, -4.5, -1.0, 2.5, 3.0, 1.0, 0.0, 0.0, 1.5, 2.0, 2.0, 1.0},
+      {0, -2.0, -4.0, -3.0, 1.0, 3.0, 2.0, 0.5, 0.0, 1.5, 2.0, 1.0, 1.0},
       {0, 0.0, -3.5, -4.0, -0.5, 3.0, 3.0, 1.5, 1.0, 1.0, 2.0, 1.0, 1.0}}
-    Private XLax(,) As Double = { _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, -9, -9, -9, -9, -9, -9}, _
-      {-9, 616.17, -147.83, -27.17, -3.17, 11.84, 2.02}, _
-      {-9, 609.97, -154.71, -27.49, -2.97, 12.04, 1.3}, _
-      {-9, 603.69, -161.55, -27.69, -2.78, 12.22, 0.64}, _
-      {-9, 597.29, -168.33, -27.78, -2.6, 12.38, 0.02}, _
-      {-9, 590.81, -175.05, -27.74, -2.43, 12.53, -0.56}, _
-      {-9, 584.21, -181.72, -27.57, -2.28, 12.67, -1.1}, _
-      {-9, 577.53, -188.34, -27.29, -2.14, 12.8, -1.6}, _
-      {-9, 570.73, -194.91, -26.89, -2.02, 12.92, -2.05}, _
-      {-9, 563.85, -201.42, -26.37, -1.91, 13.03, -2.45}, _
-      {-9, 556.85, -207.29, -25.72, -1.81, 13.13, -2.8}, _
-      {-9, 549.77, -214.29, -24.96, -1.72, 13.22, -3.1}, _
-      {-9, 542.57, -220.65, -24.07, -1.64, 13.3, -3.35}, _
-      {-9, 535.3, -226.96, -23.07, -1.59, 13.36, -3.58}, _
-      {-9, 527.9, -233.22, -21.95, -1.55, 13.4, -3.77}, _
-      {-9, 520.44, -239.43, -20.7, -1.52, 13.42, -3.92}, _
-      {-9, 512.84, -245.59, -19.33, -1.51, 13.42, -4.03}, _
-      {-9, 505.19, -251.69, -17.83, -1.51, 13.41, -4.1}, _
-      {-9, 497.4, -257.74, -16.22, -1.52, 13.39, -4.13}, _
-      {-9, 489.52, -263.74, -14.49, -1.54, 13.36, -4.12}, _
-      {-9, 481.53, -269.7, -12.63, -1.57, 13.32, -4.07}, _
-      {-9, 473.45, -275.6, -10.65, -1.63, 13.27, -3.98}, _
-      {-9, 465.27, -281.45, -8.55, -1.71, 13.21, -3.85}, _
-      {-9, 456.99, -287.25, -6.33, -1.8, 13.14, -3.68}, _
-      {-9, 448.61, -292.99, -3.98, -1.9, 13.07, -3.47}, _
-      {-9, 440.14, -298.68, -1.51, -2.01, 13.0#, -3.3}, _
-      {-9, 431.55, -304.32, 1.08, -2.13, 12.92, -3.17}, _
+    Private XLax(,) As Double = {
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9}, {-9, -9, -9, -9, -9, -9, -9},
+      {-9, -9, -9, -9, -9, -9, -9},
+      {-9, 616.17, -147.83, -27.17, -3.17, 11.84, 2.02},
+      {-9, 609.97, -154.71, -27.49, -2.97, 12.04, 1.3},
+      {-9, 603.69, -161.55, -27.69, -2.78, 12.22, 0.64},
+      {-9, 597.29, -168.33, -27.78, -2.6, 12.38, 0.02},
+      {-9, 590.81, -175.05, -27.74, -2.43, 12.53, -0.56},
+      {-9, 584.21, -181.72, -27.57, -2.28, 12.67, -1.1},
+      {-9, 577.53, -188.34, -27.29, -2.14, 12.8, -1.6},
+      {-9, 570.73, -194.91, -26.89, -2.02, 12.92, -2.05},
+      {-9, 563.85, -201.42, -26.37, -1.91, 13.03, -2.45},
+      {-9, 556.85, -207.29, -25.72, -1.81, 13.13, -2.8},
+      {-9, 549.77, -214.29, -24.96, -1.72, 13.22, -3.1},
+      {-9, 542.57, -220.65, -24.07, -1.64, 13.3, -3.35},
+      {-9, 535.3, -226.96, -23.07, -1.59, 13.36, -3.58},
+      {-9, 527.9, -233.22, -21.95, -1.55, 13.4, -3.77},
+      {-9, 520.44, -239.43, -20.7, -1.52, 13.42, -3.92},
+      {-9, 512.84, -245.59, -19.33, -1.51, 13.42, -4.03},
+      {-9, 505.19, -251.69, -17.83, -1.51, 13.41, -4.1},
+      {-9, 497.4, -257.74, -16.22, -1.52, 13.39, -4.13},
+      {-9, 489.52, -263.74, -14.49, -1.54, 13.36, -4.12},
+      {-9, 481.53, -269.7, -12.63, -1.57, 13.32, -4.07},
+      {-9, 473.45, -275.6, -10.65, -1.63, 13.27, -3.98},
+      {-9, 465.27, -281.45, -8.55, -1.71, 13.21, -3.85},
+      {-9, 456.99, -287.25, -6.33, -1.8, 13.14, -3.68},
+      {-9, 448.61, -292.99, -3.98, -1.9, 13.07, -3.47},
+      {-9, 440.14, -298.68, -1.51, -2.01, 13.0#, -3.3},
+      {-9, 431.55, -304.32, 1.08, -2.13, 12.92, -3.17},
       {-9, 431.55, -304.32, 1.08, -2.13, 12.92, -3.17}}
-    Private Triang(,) As Double = { _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.1, 0.11}, _
-      {0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.08, 0.09, 0.45, 0.55}, _
-      {0, 0, 0, 0, 0, 0.01, 0.01, 0.06, 0.07, 0.28, 0.36, 1.2, 1.65}, _
-      {0, 0, 0, 0.01, 0.01, 0.04, 0.05, 0.15, 0.21, 0.56, 0.84, 2.1, 3.3}, _
-      {0, 0.01, 0.01, 0.02, 0.03, 0.06, 0.1, 0.2, 0.35, 0.7, 1.26, 2.52, 4.62}, _
-      {0, 0, 0.01, 0.01, 0.03, 0.04, 0.1, 0.15, 0.35, 0.56, 1.26, 2.1, 4.62}, _
-      {0, 0, 0, 0, 0.01, 0.01, 0.05, 0.06, 0.21, 0.28, 0.84, 1.2, 3.3}, _
-      {0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.07, 0.08, 0.36, 0.45, 1.65}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.09, 0.1, 0.55}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.11}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, _
+    Private Triang(,) As Double = {
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.1, 0.11},
+      {0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.08, 0.09, 0.45, 0.55},
+      {0, 0, 0, 0, 0, 0.01, 0.01, 0.06, 0.07, 0.28, 0.36, 1.2, 1.65},
+      {0, 0, 0, 0.01, 0.01, 0.04, 0.05, 0.15, 0.21, 0.56, 0.84, 2.1, 3.3},
+      {0, 0.01, 0.01, 0.02, 0.03, 0.06, 0.1, 0.2, 0.35, 0.7, 1.26, 2.52, 4.62},
+      {0, 0, 0.01, 0.01, 0.03, 0.04, 0.1, 0.15, 0.35, 0.56, 1.26, 2.1, 4.62},
+      {0, 0, 0, 0, 0.01, 0.01, 0.05, 0.06, 0.21, 0.28, 0.84, 1.2, 3.3},
+      {0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.07, 0.08, 0.36, 0.45, 1.65},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.09, 0.1, 0.55},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.11},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
     Private Sums() As Double = {0, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56, 5.12, 10.24, 20.48}
 
@@ -222,8 +222,8 @@ Public Module modMetDataUtil
         tsfil(3) = aSRadTS.Attributes.GetValue("TSFILL", -999)
 
         For i = 1 To lCmpTs.numValues
-            If Math.Abs(aTMinTS.Value(i) - tsfil(1)) < 0.000001 Or _
-               Math.Abs(aTMaxTS.Value(i) - tsfil(2)) < 0.000001 Or _
+            If Math.Abs(aTMinTS.Value(i) - tsfil(1)) < 0.000001 Or
+               Math.Abs(aTMaxTS.Value(i) - tsfil(2)) < 0.000001 Or
                Math.Abs(aSRadTS.Value(i) - tsfil(3)) < 0.000001 Then
                 'missing data
                 lPanEvp(i) = tsfil(1)
@@ -252,10 +252,10 @@ Public Module modMetDataUtil
     ''' <param name="aCTS"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function PanEvaporationTimeseriesComputedByHamonX(ByVal aTemperature As atcTimeseries, _
-                            ByVal aSource As atcTimeseriesSource, _
-                            ByVal aDegF As Boolean, _
-                            ByVal aLatDeg As Double, _
+    Public Function PanEvaporationTimeseriesComputedByHamonX(ByVal aTemperature As atcTimeseries,
+                            ByVal aSource As atcTimeseriesSource,
+                            ByVal aDegF As Boolean,
+                            ByVal aLatDeg As Double,
                             ByVal aCTS() As Double) As atcTimeseries
 
         Dim lMinTemperatureTS As atcTimeseries = Aggregate(aTemperature, atcTimeUnit.TUDay, 1, atcTran.TranMin, aSource)
@@ -357,7 +357,7 @@ Public Module modMetDataUtil
         Dim lDate(5) As Integer
         Dim lPoint As Boolean = aTMinTS.Attributes.GetValue("point", False)
         For lValueIndex As Integer = 1 To lPanEvapTimeSeries.numValues
-            If Math.Abs(aTMinTS.Value(lValueIndex) - lMissingValue(1)) < 0.000001 OrElse _
+            If Math.Abs(aTMinTS.Value(lValueIndex) - lMissingValue(1)) < 0.000001 OrElse
                Math.Abs(aTMaxTS.Value(lValueIndex) - lMissingValue(2)) < 0.000001 Then
                 'missing source data
                 lPanEvp(lValueIndex) = lMissingValue(1)
@@ -410,10 +410,10 @@ Public Module modMetDataUtil
 
         Dim lPanEvapValues(aTMinTS.numValues) As Double
         For lValueIndex As Integer = 1 To lPanEvapTimeSeries.numValues
-            If Math.Abs(aTMinTS.Value(lValueIndex) - lMissingValue(1)) < 0.000001 OrElse _
-               Math.Abs(aTMaxTS.Value(lValueIndex) - lMissingValue(2)) < 0.000001 OrElse _
-               Math.Abs(aSRadTS.Value(lValueIndex) - lMissingValue(3)) < 0.000001 OrElse _
-               Math.Abs(aDewPTS.Value(lValueIndex) - lMissingValue(4)) < 0.000001 OrElse _
+            If Math.Abs(aTMinTS.Value(lValueIndex) - lMissingValue(1)) < 0.000001 OrElse
+               Math.Abs(aTMaxTS.Value(lValueIndex) - lMissingValue(2)) < 0.000001 OrElse
+               Math.Abs(aSRadTS.Value(lValueIndex) - lMissingValue(3)) < 0.000001 OrElse
+               Math.Abs(aDewPTS.Value(lValueIndex) - lMissingValue(4)) < 0.000001 OrElse
                Math.Abs(aWindTS.Value(lValueIndex) - lMissingValue(5)) < 0.000001 Then
                 'missing source data
                 lPanEvapValues(lValueIndex) = lMissingValue(1)
@@ -669,7 +669,7 @@ Public Module modMetDataUtil
                     lCurMax = lPreMax
                 End If
             End If
-            If Not Double.IsNaN(lCurMin) AndAlso Not Double.IsNaN(lNxtMin) AndAlso _
+            If Not Double.IsNaN(lCurMin) AndAlso Not Double.IsNaN(lNxtMin) AndAlso
                Not Double.IsNaN(lPreMax) AndAlso Not Double.IsNaN(lCurMax) Then
                 'values not missing, so distribute
                 Call DISTRB(lPreMax, lCurMin, lCurMax, lNxtMin, lHrVals)
@@ -821,10 +821,10 @@ Public Module modMetDataUtil
             Dim lDewSJD As Double = lDisTs.Dates.Value(1)
             Dim lDewEJD As Double = lDisTs.Dates.Value(lDisTs.numValues)
             If lAirEJD < lDewSJD Or lAirSJD > lDewEJD Then 'no overlap
-                Logger.Dbg("WARNING: Temperature Timeseries period does not overlap Dewpoint Timeseries period." & vbCrLf & _
-                           "The Dewpoint data have been disaggregated, but not checked" & vbCrLf & _
-                           "to see that they don't fall below the current temperature." & vbCrLf & _
-                           "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf & _
+                Logger.Dbg("WARNING: Temperature Timeseries period does not overlap Dewpoint Timeseries period." & vbCrLf &
+                           "The Dewpoint data have been disaggregated, but not checked" & vbCrLf &
+                           "to see that they don't fall below the current temperature." & vbCrLf &
+                           "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf &
                            "Julian Start/End of Dewpoint: " & lDewSJD & " : " & lDewEJD)
             Else
                 If lAirSJD <= lDewSJD Then 'move up in airtemp TSer
@@ -833,19 +833,19 @@ Public Module modMetDataUtil
                         lDewPos = 1
                     End If
                     If lAirEJD < lDewEJD Then 'not a full overlap
-                        Logger.Dbg("WARNING: Temperature Timeseries period does not completely overlap Dewpoint Timeseries period." & vbCrLf & _
-                                   "The Dewpoint data have been disaggregated, but portions have not been" & vbCrLf & _
-                                   "checked to see that they don't fall below the current temperature." & vbCrLf & _
-                                   "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf & _
+                        Logger.Dbg("WARNING: Temperature Timeseries period does not completely overlap Dewpoint Timeseries period." & vbCrLf &
+                                   "The Dewpoint data have been disaggregated, but portions have not been" & vbCrLf &
+                                   "checked to see that they don't fall below the current temperature." & vbCrLf &
+                                   "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf &
                                    "Julian Start/End of Dewpoint: " & lDewSJD & " : " & lDewEJD)
                     End If
                 ElseIf lAirSJD < lDewEJD Then 'overlap begins at start of airtemp, not a full overlap
                     lAirPos = 0
                     lDewPos = (lAirSJD - lDewSJD) / JulianHour + 1
-                    Logger.Dbg("WARNING: Temperature Timeseries period does not completely overlap Dewpoint Timeseries period." & vbCrLf & _
-                               "The Dewpoint data have been disaggregated, but portions have not been" & vbCrLf & _
-                               "checked to see that they don't fall below the current temperature." & vbCrLf & _
-                               "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf & _
+                    Logger.Dbg("WARNING: Temperature Timeseries period does not completely overlap Dewpoint Timeseries period." & vbCrLf &
+                               "The Dewpoint data have been disaggregated, but portions have not been" & vbCrLf &
+                               "checked to see that they don't fall below the current temperature." & vbCrLf &
+                               "Julian Start/End of Temperature: " & lAirSJD & " : " & lAirEJD & vbCrLf &
                                "Julian Start/End of Dewpoint: " & lDewSJD & " : " & lDewEJD)
                 End If
                 For i As Integer = lDewPos To lDisTs.numValues
@@ -860,9 +860,9 @@ Public Module modMetDataUtil
                 Next i
             End If
         Else
-            Logger.Dbg("WARNING: Temperature Timeseries for Dewpoint Disaggregation is not Hourly." & vbCrLf & _
-                       "The Dewpoint data have been disaggregated, but not checked" & vbCrLf & _
-                       "to see that they don't fall below the current temperature." & vbCrLf & _
+            Logger.Dbg("WARNING: Temperature Timeseries for Dewpoint Disaggregation is not Hourly." & vbCrLf &
+                       "The Dewpoint data have been disaggregated, but not checked" & vbCrLf &
+                       "to see that they don't fall below the current temperature." & vbCrLf &
                        "Temperature Time Units should be '3', but are " & aAirTemp.Attributes.GetValue("TU"))
         End If
         Return lDisTs
@@ -1748,227 +1748,238 @@ Public Module modMetDataUtil
         Dim lTriDistGT3Cnt As Integer = 0
         Dim lNVals As Integer
 
-        On Error GoTo DisPrecipErrHnd
+
+        'On Error GoTo DisPrecipErrHnd        
         lUsedTriang = 0
-        lRndOff = 0.001
-        If Len(aSumFile) > 0 Then
-            lOutSumm = True
-            lOutFil = FreeFile()
-            FileOpen(lOutFil, aSumFile, OpenMode.Output)
-        Else
-            lOutSumm = False
-        End If
-        If aTolerance > 1.0 Then 'assume tolerance passed as percentage if greater than 1
-            lTolerance = aTolerance / 100
-        Else 'assume tolerance passed as fraction
-            lTolerance = aTolerance
-        End If
-
-        CopyBaseAttributes(aDyTSer, lDisTs)
-        lDisTs.SetInterval(atcTimeUnit.TUHour, 1)
-        lDisTs.Attributes.SetValue("Scenario", "COMPUTED")
-        lDisTs.Attributes.SetValue("Constituent", "PREC")
-        lDisTs.Attributes.SetValue("TSTYPE", "PREC")
-        lDisTs.Attributes.SetValue("Description", "Hourly Precipitation disaggregated from Daily")
-        lDisTs.Attributes.AddHistory("Disaggregated Precipitation - inputs: DPRC, HPCP, Observation Hour, Data Tolerance")
-        lDisTs.Attributes.Add("DPRC", aDyTSer.ToString)
-        lDisTs.Attributes.Add("HPCP", aHrTSer.ToString)
-        lDisTs.Attributes.Add("Observation Timeseries", aObsTimeTS.ToString)
-        lDisTs.Attributes.Add("Data Tolerance", aTolerance)
-
-        'build new date array for hourly TSer, set start date to previous day's Obs Time
-        lSDt = aDyTSer.Attributes.GetValue("SJDAY") - 1
-        Call J2Date(lSDt, lDate)
-        lDate(3) = CurrentObsTime(aObsTimeTS, 1)
-        'aDyTSer.Attributes.SetValue("SJDAY", Date2J(lDate))
-        'need to set first date value to shift back to previous day's Obs Time
-        aDyTSer.Dates.Values(0) = Date2J(lDate)
-        lDisTs.Dates = DisaggDates(aDyTSer, aDataSource)
-        lDisTs.numValues = lDisTs.Dates.numValues
-
-        'set initial start date, back up one day
-        lEDt = aDyTSer.Dates.Value(1) - 1
-        Call J2Date(lEDt, lDate)
-        'now set hour value to initial Obs Time
-        lDate(3) = CurrentObsTime(aObsTimeTS, 1)
-        lEDt = Date2J(lDate)
-        lSDt = lEDt - 1
-
-        Dim lHrVals(lDisTs.numValues) As Double
-        lHrPos = 0
-        For lDyInd = 1 To aDyTSer.numValues
-            If lOutSumm Then 'output summary message to file
-                Call J2Date(aDyTSer.Dates.Value(lDyInd) - 1, lDate)
-                WriteLine(lOutFil, "Distributing Daily Data for " & lDate(0) & "/" & lDate(1) & "/" & lDate(2) & ":  Value is " & SignificantDigits(aDyTSer.Value(lDyInd), 4))
+            lRndOff = 0.001
+            If Len(aSumFile) > 0 Then
+                lOutSumm = True
+                lOutFil = FreeFile()
+                FileOpen(lOutFil, aSumFile, OpenMode.Output)
+            Else
+                lOutSumm = False
             End If
-            'determine end date, start by backing up to previous day's end
-            lEDt = aDyTSer.Dates.Value(lDyInd) - 1
+            If aTolerance > 1.0 Then 'assume tolerance passed as percentage if greater than 1
+                lTolerance = aTolerance / 100
+            Else 'assume tolerance passed as fraction
+                lTolerance = aTolerance
+            End If
+
+            CopyBaseAttributes(aDyTSer, lDisTs)
+            lDisTs.SetInterval(atcTimeUnit.TUHour, 1)
+            lDisTs.Attributes.SetValue("Scenario", "COMPUTED")
+            lDisTs.Attributes.SetValue("Constituent", "PREC")
+            lDisTs.Attributes.SetValue("TSTYPE", "PREC")
+            lDisTs.Attributes.SetValue("Description", "Hourly Precipitation disaggregated from Daily")
+            lDisTs.Attributes.AddHistory("Disaggregated Precipitation - inputs: DPRC, HPCP, Observation Hour, Data Tolerance")
+            lDisTs.Attributes.Add("DPRC", aDyTSer.ToString)
+            lDisTs.Attributes.Add("HPCP", aHrTSer.ToString)
+            lDisTs.Attributes.Add("Observation Timeseries", aObsTimeTS.ToString)
+            lDisTs.Attributes.Add("Data Tolerance", aTolerance)
+
+            'build new date array for hourly TSer, set start date to previous day's Obs Time
+            lSDt = aDyTSer.Attributes.GetValue("SJDAY") - 1
+            Call J2Date(lSDt, lDate)
+            lDate(3) = CurrentObsTime(aObsTimeTS, 1)
+            'aDyTSer.Attributes.SetValue("SJDAY", Date2J(lDate))
+            'need to set first date value to shift back to previous day's Obs Time
+            aDyTSer.Dates.Values(0) = Date2J(lDate)
+            lDisTs.Dates = DisaggDates(aDyTSer, aDataSource)
+            lDisTs.numValues = lDisTs.Dates.numValues
+
+            'set initial start date, back up one day
+            lEDt = aDyTSer.Dates.Value(1) - 1
             Call J2Date(lEDt, lDate)
-            'now add obs hour to get actual end of 24-hour period
-            lDate(3) = CurrentObsTime(aObsTimeTS, lDyInd)
+            'now set hour value to initial Obs Time
+            lDate(3) = CurrentObsTime(aObsTimeTS, 1)
             lEDt = Date2J(lDate)
-            lNVals = Math.Round(24 * (lEDt - lSDt))
-            If aDyTSer.Value(lDyInd) > 0 Then 'something to disaggregate
-                lClosestRatio = 0
-                For Each lHrTSer As atcTimeseries In aHrTSer
-                    lDaySumHrTser = SubsetByDate(lHrTSer, lSDt, lEDt, Nothing)
-                    lDaySum = 0
-                    For lHrInd = 1 To lDaySumHrTser.numValues
-                        lDaySum = lDaySum + lDaySumHrTser.Value(lHrInd)
-                    Next lHrInd
-                    If lDaySum > 0 Then
-                        lRatio = aDyTSer.Value(lDyInd) / lDaySum
-                        If lRatio > 1 Then lRatio = 1 / lRatio
-                        If lRatio > lClosestRatio Then
-                            lClosestRatio = lRatio
-                            lClosestHrTser = lDaySumHrTser
-                            lClosestDaySum = lDaySum
-                        End If
+            lSDt = lEDt - 1
+
+            Dim lHrVals(lDisTs.numValues) As Double
+            Try
+                lHrPos = 0
+                For lDyInd = 1 To aDyTSer.numValues
+                    If lOutSumm Then 'output summary message to file
+                        Call J2Date(aDyTSer.Dates.Value(lDyInd) - 1, lDate)
+                        WriteLine(lOutFil, "Distributing Daily Data for " & lDate(0) & "/" & lDate(1) & "/" & lDate(2) & ":  Value is " & SignificantDigits(aDyTSer.Value(lDyInd), 4))
                     End If
-                Next
-                If lClosestRatio >= 1 - lTolerance Then 'hourly data found to do disaggregation
-                    lRatio = aDyTSer.Value(lDyInd) / lClosestDaySum
-                    lMaxHrVal = 0
-                    lDaySum = 0
-                    lCarry = 0
-                    For lHrInd = 1 To lClosestHrTser.numValues
-                        i = lHrPos + lHrInd
-                        lHrVals(i) = lRatio * lClosestHrTser.Value(lHrInd) + lCarry
-                        If lHrVals(i) > 0.00001 Then
-                            lCarry = lHrVals(i) - (Math.Round(lHrVals(i) / lRndOff) * lRndOff)
-                            lHrVals(i) = lHrVals(i) - lCarry
-                            WriteLine(lOutFil, " Hour " & lHrInd + lDate(3) & " " & DumpDate(lClosestHrTser.Dates.Values(lHrInd).ToString) & " " & lHrVals(i))
-                        Else
-                            lHrVals(i) = 0.0#
-                        End If
-                        If lHrVals(i) > lMaxHrVal Then
-                            lMaxHrVal = lHrVals(i)
-                            lMaxHrInd = i
-                        End If
-                        lDaySum = lDaySum + lHrVals(i)
-                    Next lHrInd
-                    If lCarry > 0 Then 'add remainder to max hourly value
-                        lDaySum = lDaySum - lHrVals(lMaxHrInd)
-                        lHrVals(lMaxHrInd) = lHrVals(lMaxHrInd) + lCarry
-                        lDaySum = lDaySum + lHrVals(lMaxHrInd)
-                    End If
-                    If lOutSumm Then
-                        WriteLine(lOutFil, "  Using Data-set:  " & lClosestHrTser.ToString & ", daily sum = " & SignificantDigits(lClosestDaySum, 4))
-                    End If
-                    If Math.Abs(lDaySum - aDyTSer.Value(lDyInd)) > lRndOff Then
-                        'values not distributed properly
-                        s = "PROBLEM distributing " & aDyTSer.Value(lDyInd) & " on " & lDate(1) & "/" & lDate(2) & "/" & lDate(0) & vbCrLf & _
-                            "Daily value: " & aDyTSer.Value(lDyInd) & vbCrLf & _
-                            "Hourly sum:  " & lDaySum
-                        If lOutSumm Then
-                            WriteLine(lOutFil, s)
-                        End If
-                        Logger.Dbg(s)
-                        'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
-                        'If rsp = MsgBoxResult.Cancel Then
-                        '    'lDisTs.errordescription = s
-                        '    Err.Raise(vbObjectError + 513)
-                        'End If
-                    End If
-                Else 'no data available at hourly stations,
-                    'distribute using triangular distribution
-                    Dim lTmpHrVals(24) As Double
-                    Call DistTriang(aDyTSer.Value(lDyInd), lTmpHrVals, retcod)
-                    lTriDistCnt += 1
-                    Select Case aDyTSer.Value(lDyInd)
-                        Case Is < 1 : lTriDist0To1Cnt += 1
-                        Case Is < 2 : lTriDist1To2Cnt += 1
-                        Case Is < 3 : lTriDist2To3Cnt += 1
-                        Case Else : lTriDistGT3Cnt += 1
-                    End Select
-                    If lNVals < 24 Then 'obs time moved to earlier in day, don't have full day to distribute values
-                        Dim lNumNonZero As Integer = 0
-                        For i = 1 To 24
-                            If lTmpHrVals(i) > 0 Then lNumNonZero += 1
+                    'determine end date, start by backing up to previous day's end
+                    lEDt = aDyTSer.Dates.Value(lDyInd) - 1
+                    Call J2Date(lEDt, lDate)
+                    'now add obs hour to get actual end of 24-hour period
+                    lDate(3) = CurrentObsTime(aObsTimeTS, lDyInd)
+                    lEDt = Date2J(lDate)
+                    lNVals = Math.Round(24 * (lEDt - lSDt))
+                    If aDyTSer.Value(lDyInd) > 0 Then 'something to disaggregate
+                        lClosestRatio = 0
+                        For Each lHrTSer As atcTimeseries In aHrTSer
+                            lDaySumHrTser = SubsetByDate(lHrTSer, lSDt, lEDt, Nothing)
+                            lDaySum = 0
+                            For lHrInd = 1 To lDaySumHrTser.numValues
+                                lDaySum = lDaySum + lDaySumHrTser.Value(lHrInd)
+                            Next lHrInd
+                            If lDaySum > 0 Then
+                                lRatio = aDyTSer.Value(lDyInd) / lDaySum
+                                If lRatio > 1 Then lRatio = 1 / lRatio
+                                If lRatio > lClosestRatio Then
+                                    lClosestRatio = lRatio
+                                    lClosestHrTser = lDaySumHrTser
+                                    lClosestDaySum = lDaySum
+                                End If
+                            End If
                         Next
-                        If lNumNonZero > lNVals Then 'can't fit disaggregated values in available space
-                            s = "PROBLEM - Unable to fit distributed values in available hours due to change in Obs Time"
-                            retcod = -3
-                        Else
-                            Dim lSPos As Integer = Math.Truncate((24 - lNVals) / 2)
-                            For i = 1 To lNVals
-                                lHrVals(lHrPos + i) = lTmpHrVals(lSPos + i)
-                            Next
+                        If lClosestRatio >= 1 - lTolerance Then 'hourly data found to do disaggregation
+                            lRatio = aDyTSer.Value(lDyInd) / lClosestDaySum
+                            lMaxHrVal = 0
+                            lDaySum = 0
+                            lCarry = 0
+                            For lHrInd = 1 To lClosestHrTser.numValues
+                                i = lHrPos + lHrInd
+                                lHrVals(i) = lRatio * lClosestHrTser.Value(lHrInd) + lCarry
+                                If lHrVals(i) > 0.00001 Then
+                                    lCarry = lHrVals(i) - (Math.Round(lHrVals(i) / lRndOff) * lRndOff)
+                                    lHrVals(i) = lHrVals(i) - lCarry
+                                    WriteLine(lOutFil, " Hour " & lHrInd + lDate(3) & " " & DumpDate(lClosestHrTser.Dates.Values(lHrInd).ToString) & " " & lHrVals(i))
+                                Else
+                                    lHrVals(i) = 0.0#
+                                End If
+                                If lHrVals(i) > lMaxHrVal Then
+                                    lMaxHrVal = lHrVals(i)
+                                    lMaxHrInd = i
+                                End If
+                                lDaySum = lDaySum + lHrVals(i)
+                            Next lHrInd
+                            If lCarry > 0 Then 'add remainder to max hourly value
+                                lDaySum = lDaySum - lHrVals(lMaxHrInd)
+                                lHrVals(lMaxHrInd) = lHrVals(lMaxHrInd) + lCarry
+                                lDaySum = lDaySum + lHrVals(lMaxHrInd)
+                            End If
+                            If lOutSumm Then
+                                WriteLine(lOutFil, "  Using Data-set:  " & lClosestHrTser.ToString & ", daily sum = " & SignificantDigits(lClosestDaySum, 4))
+                            End If
+                            If Math.Abs(lDaySum - aDyTSer.Value(lDyInd)) > lRndOff Then
+                                'values not distributed properly
+                                s = "PROBLEM distributing " & aDyTSer.Value(lDyInd) & " on " & lDate(1) & "/" & lDate(2) & "/" & lDate(0) & vbCrLf &
+                                "Daily value: " & aDyTSer.Value(lDyInd) & vbCrLf &
+                                "Hourly sum:  " & lDaySum
+                                If lOutSumm Then
+                                    WriteLine(lOutFil, s)
+                                End If
+                                Logger.Dbg(s)
+                                'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
+                                'If rsp = MsgBoxResult.Cancel Then
+                                '    'lDisTs.errordescription = s
+                                '    Err.Raise(vbObjectError + 513)
+                                'End If
+                            End If
+                        Else 'no data available at hourly stations,
+                            'distribute using triangular distribution
+                            Dim lTmpHrVals(24) As Double
+                            Call DistTriang(aDyTSer.Value(lDyInd), lTmpHrVals, retcod)
+                            lTriDistCnt += 1
+                            Select Case aDyTSer.Value(lDyInd)
+                                Case Is < 1 : lTriDist0To1Cnt += 1
+                                Case Is < 2 : lTriDist1To2Cnt += 1
+                                Case Is < 3 : lTriDist2To3Cnt += 1
+                                Case Else : lTriDistGT3Cnt += 1
+                            End Select
+                            If lNVals < 24 Then 'obs time moved to earlier in day, don't have full day to distribute values
+                                Dim lNumNonZero As Integer = 0
+                                For i = 1 To 24
+                                    If lTmpHrVals(i) > 0 Then lNumNonZero += 1
+                                Next
+                                If lNumNonZero > lNVals Then 'can't fit disaggregated values in available space
+                                    s = "PROBLEM - Unable to fit distributed values in available hours due to change in Obs Time"
+                                    retcod = -3
+                                Else
+                                    Dim lSPos As Integer = Math.Truncate((24 - lNVals) / 2)
+                                    For i = 1 To lNVals
+                                        lHrVals(lHrPos + i) = lTmpHrVals(lSPos + i)
+                                    Next
+                                End If
+                            Else
+                                Dim lNGap As Integer = lNVals - 24
+                                If lNGap > 0 Then 'obs time moved to later in day, fill "gap" with 0
+                                    For i = 1 To lNGap
+                                        lHrVals(lHrPos + i) = 0
+                                    Next
+                                End If
+                                'now fill final 24 hours with triangular distributed values
+                                For lHrInd = 1 To 24
+                                    lHrVals(lHrPos + lNGap + lHrInd) = lTmpHrVals(lHrInd)
+                                Next lHrInd
+                            End If
+                            If retcod = -1 Then
+                                s = "PROBLEM - Unable to distribute this much rain (" & lDaySum & ") using triangular distribution." & "Hourly values will be set to -9.98"
+                                Logger.Dbg(s)
+                                'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
+                            ElseIf retcod = -2 Then
+                                s = "PROBLEM distributing " & aDyTSer.Value(lDyInd) & " using triangular distribution on " & lDate(1) & "/" & lDate(2) & "/" & lDate(0)
+                                Logger.Dbg(s)
+                                'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
+                            End If
+                            If lOutSumm Then
+                                WriteLine(lOutFil, "  *** No hourly total within tolerance - " & SignificantDigits(aDyTSer.Value(lDyInd), 4) & "  distributed using triangular distribution ***")
+                                If retcod <> 0 Then
+                                    WriteLine(lOutFil, "  *** " & s & " ***")
+                                End If
+                            End If
+                            'If rsp = MsgBoxResult.Cancel Then
+                            '    'lDisTs.errordescription = s
+                            '    Err.Raise(vbObjectError + 513 + System.Math.Abs(retcod))
+                            'End If
                         End If
-                    Else
-                        Dim lNGap As Integer = lNVals - 24
-                        If lNGap > 0 Then 'obs time moved to later in day, fill "gap" with 0
-                            For i = 1 To lNGap
-                                lHrVals(lHrPos + i) = 0
-                            Next
-                        End If
-                        'now fill final 24 hours with triangular distributed values
-                        For lHrInd = 1 To 24
-                            lHrVals(lHrPos + lNGap + lHrInd) = lTmpHrVals(lHrInd)
+                        lDistCnt += 1
+                    Else 'no daily value to distribute, fill hourly
+                        For lHrInd = lHrPos + 1 To lHrPos + lNVals '24
+                            lHrVals(lHrInd) = 0
                         Next lHrInd
                     End If
-                    If retcod = -1 Then
-                        s = "PROBLEM - Unable to distribute this much rain (" & lDaySum & ") using triangular distribution." & "Hourly values will be set to -9.98"
-                        Logger.Dbg(s)
-                        'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
-                    ElseIf retcod = -2 Then
-                        s = "PROBLEM distributing " & aDyTSer.Value(lDyInd) & " using triangular distribution on " & lDate(1) & "/" & lDate(2) & "/" & lDate(0)
-                        Logger.Dbg(s)
-                        'rsp = MsgBox(s, MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "Precipitation Disaggregation Problem")
-                    End If
-                    If lOutSumm Then
-                        WriteLine(lOutFil, "  *** No hourly total within tolerance - " & SignificantDigits(aDyTSer.Value(lDyInd), 4) & "  distributed using triangular distribution ***")
-                        If retcod <> 0 Then
-                            WriteLine(lOutFil, "  *** " & s & " ***")
-                        End If
-                    End If
-                    'If rsp = MsgBoxResult.Cancel Then
-                    '    'lDisTs.errordescription = s
-                    '    Err.Raise(vbObjectError + 513 + System.Math.Abs(retcod))
-                    'End If
-                End If
-                lDistCnt += 1
-            Else 'no daily value to distribute, fill hourly
-                For lHrInd = lHrPos + 1 To lHrPos + lNVals '24
-                    lHrVals(lHrInd) = 0
-                Next lHrInd
+                    lHrPos = lHrPos + lNVals '24
+                    lSDt = lEDt 'set next periods start date to end date of this period
+                Next lDyInd
+                Exit Try
+            Catch
+
+            End Try
+
+
+        'DisPrecipErrHnd:
+        'On Error GoTo OuttaHere 'in case there's an error in these statements
+        Try
+            Array.Copy(lHrVals, 1, lDisTs.Values, 1, lDisTs.numValues)
+            If lOutSumm Then
+                WriteLine(lOutFil, "")
+                WriteLine(lOutFil, "  Total Number of Values Distributed: " & lDistCnt)
+                WriteLine(lOutFil, "  Number of Triangular Distributed Values : " & lTriDistCnt)
+                WriteLine(lOutFil, "  Percentage of Triangular Distributed Values: " & lTriDistCnt / lDistCnt * 100)
+                WriteLine(lOutFil, "    Breakdown of Triangular Distributions:")
+                WriteLine(lOutFil, "      Number used for < 1 inch: " & lTriDist0To1Cnt)
+                WriteLine(lOutFil, "      Number used for 1 to 2 inches: " & lTriDist1To2Cnt)
+                WriteLine(lOutFil, "      Number used for 2 to 3 inches: " & lTriDist2To3Cnt)
+                WriteLine(lOutFil, "      Number used for > 3 inches: " & lTriDistGT3Cnt)
+                WriteLine(lOutFil, "")
+                WriteLine(lOutFil, "  QA Checks")
+                WriteLine(lOutFil, "    Average Annual")
+                WriteLine(lOutFil, "      Original Daily:  " & SignificantDigits(aDyTSer.Attributes.GetValue("SumAnnual"), 4))
+                WriteLine(lOutFil, "      Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("SumAnnual"), 4))
+                WriteLine(lOutFil, "    Total Sum ")
+                WriteLine(lOutFil, "      Original Daily:  " & SignificantDigits(aDyTSer.Attributes.GetValue("Sum"), 6))
+                WriteLine(lOutFil, "      Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("Sum"), 6))
+                FileClose(lOutFil)
             End If
-            lHrPos = lHrPos + lNVals '24
-            lSDt = lEDt 'set next periods start date to end date of this period
-        Next lDyInd
+            If aDyTSer.Attributes.GetValue("SumAnnual") - lDisTs.Attributes.GetValue("SumAnnual") > 0.1 OrElse
+                   aDyTSer.Attributes.GetValue("Sum") - lDisTs.Attributes.GetValue("Sum") > 1 Then
+                'significant difference between original and disaggregated timeseries
+                Logger.Dbg("PROBLEM: Average Annual or Total Sum values don't match between original daily and disaggregated hourly timeseries")
+                Logger.Dbg("         Average Annual - Original Daily: " & SignificantDigits(aDyTSer.Attributes.GetValue("SumAnnual"), 4) & "   Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("SumAnnual"), 4))
+                Logger.Dbg("         Total Sum      - Original Daily: " & SignificantDigits(aDyTSer.Attributes.GetValue("Sum"), 6) & "   Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("Sum"), 6))
+            End If
+        Catch
 
-DisPrecipErrHnd:
-        On Error GoTo OuttaHere 'in case there's an error in these statements
-        Array.Copy(lHrVals, 1, lDisTs.Values, 1, lDisTs.numValues)
-        If lOutSumm Then
-            WriteLine(lOutFil, "")
-            WriteLine(lOutFil, "  Total Number of Values Distributed: " & lDistCnt)
-            WriteLine(lOutFil, "  Number of Triangular Distributed Values : " & lTriDistCnt)
-            WriteLine(lOutFil, "  Percentage of Triangular Distributed Values: " & lTriDistCnt / lDistCnt * 100)
-            WriteLine(lOutFil, "    Breakdown of Triangular Distributions:")
-            WriteLine(lOutFil, "      Number used for < 1 inch: " & lTriDist0To1Cnt)
-            WriteLine(lOutFil, "      Number used for 1 to 2 inches: " & lTriDist1To2Cnt)
-            WriteLine(lOutFil, "      Number used for 2 to 3 inches: " & lTriDist2To3Cnt)
-            WriteLine(lOutFil, "      Number used for > 3 inches: " & lTriDistGT3Cnt)
-            WriteLine(lOutFil, "")
-            WriteLine(lOutFil, "  QA Checks")
-            WriteLine(lOutFil, "    Average Annual")
-            WriteLine(lOutFil, "      Original Daily:  " & SignificantDigits(aDyTSer.Attributes.GetValue("SumAnnual"), 4))
-            WriteLine(lOutFil, "      Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("SumAnnual"), 4))
-            WriteLine(lOutFil, "    Total Sum ")
-            WriteLine(lOutFil, "      Original Daily:  " & SignificantDigits(aDyTSer.Attributes.GetValue("Sum"), 6))
-            WriteLine(lOutFil, "      Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("Sum"), 6))
-            FileClose(lOutFil)
-        End If
-        If aDyTSer.Attributes.GetValue("SumAnnual") - lDisTs.Attributes.GetValue("SumAnnual") > 0.1 OrElse _
-           aDyTSer.Attributes.GetValue("Sum") - lDisTs.Attributes.GetValue("Sum") > 1 Then
-            'significant difference between original and disaggregated timeseries
-            Logger.Dbg("PROBLEM: Average Annual or Total Sum values don't match between original daily and disaggregated hourly timeseries")
-            Logger.Dbg("         Average Annual - Original Daily: " & SignificantDigits(aDyTSer.Attributes.GetValue("SumAnnual"), 4) & "   Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("SumAnnual"), 4))
-            Logger.Dbg("         Total Sum      - Original Daily: " & SignificantDigits(aDyTSer.Attributes.GetValue("Sum"), 6) & "   Disagged Hourly: " & SignificantDigits(lDisTs.Attributes.GetValue("Sum"), 6))
-        End If
+        End Try
 
-OuttaHere:
+        'OuttaHere:
         If lUsedTriang > 0 Then
             'inform calling routine that automatic triangular distribution was used
             s = "WARNING:  Automatic Triangular Distribution was used " & lUsedTriang & " times." & vbCrLf
@@ -2076,8 +2087,8 @@ OuttaHere:
             If aDPrecTSer.Value(lDyInd) > 0 Then 'something to disaggregate
                 lHrDay = DisCliGenPrecDay(aDPrecTSer.Value(lDyInd), aDurTSer.Value(lDyInd), aTimePkTSer.Value(lDyInd), aPeakTSer.Value(lDyInd))
                 If Math.Abs(lHrDay(0) - aDPrecTSer.Value(lDyInd)) > 0.0001 Then
-                    Logger.Dbg("Daily CliGen precip value not properly disaggregated." & vbCrLf & _
-                               "Daily value: " & aDPrecTSer.Value(lDyInd) & vbCrLf & _
+                    Logger.Dbg("Daily CliGen precip value not properly disaggregated." & vbCrLf &
+                               "Daily value: " & aDPrecTSer.Value(lDyInd) & vbCrLf &
                                "Sum of Hourly values: " & lHrDay(0))
                 End If
                 'subtract .001 for to make sure whole Dur value (e.g. 12.0) ends up as same duration length (e.g. 12)
@@ -2099,7 +2110,7 @@ OuttaHere:
     'into hourly values - assumes 1 storm per day
     'borrowed from WEPP code
     'Note: Sum of distributed hourly values is placed in 0th position of returning array
-    Public Function DisCliGenPrecDay(ByVal aPrec As Double, ByVal aDur As Double, _
+    Public Function DisCliGenPrecDay(ByVal aPrec As Double, ByVal aDur As Double,
                                      ByVal aPkTime As Double, ByVal aPkIntensity As Double) As Double()
         Dim lNInt As Integer = 11
         Dim lDeltFq As Double = 1 / (lNInt - 1)
@@ -2192,7 +2203,7 @@ OuttaHere:
         Return lHrVals
     End Function
 
-    Private Sub ConstInt(ByVal aNint As Integer, ByVal aDeltFq As Double, _
+    Private Sub ConstInt(ByVal aNint As Integer, ByVal aDeltFq As Double,
                          ByRef aTimeDl() As Double, ByRef aIntDl() As Double)
         Dim lFqx As Double '- temporarily holds DELTFQ*I.
         Dim i As Integer
@@ -2206,8 +2217,8 @@ OuttaHere:
         Next
 
     End Sub
-    Private Sub DblEx(ByVal aPkIntensity As Double, ByVal aPkTime As Double, _
-                      ByVal aNInt As Integer, ByVal aDeltFq As Double, _
+    Private Sub DblEx(ByVal aPkIntensity As Double, ByVal aPkTime As Double,
+                      ByVal aNInt As Integer, ByVal aDeltFq As Double,
                       ByRef aTimeDl As Double(), ByRef aIntDl As Double())
         Dim lErr As Integer '0 - equation solved; 1 - no solution for given A
         Dim i As Integer
