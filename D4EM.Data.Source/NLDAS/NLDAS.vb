@@ -14,25 +14,31 @@ Public Class NLDAS
             Tag:="NLDAS.GridSquares", Role:=D4EM.Data.LayerSpecification.Roles.OtherBoundary, Source:=GetType(NLDAS))
     End Class
 
+    ' PBD revisions to accomodate end of grib format!!!
+    ' see https://ldas.gsfc.nasa.gov/nldas/news/nldas-2-grib-1-files-no-longer-updated-1-august-2024
+    ' switching to https://disc.gsfc.nasa.gov/information/tools?title=Hydrology%20Data%20Rods
+
     'Parameters available (Short_Name is used to specify)
     'PDS_IDs Short_Name Full_Name [Unit]
-    '63      ACPCPsfc   Convective precipitation hourly total [kg/m^2]
-    '61      APCPsfc    Precipitation hourly total [kg/m^2]
+    '63      ACPCPsfc   Convective precipitation hourly total [kg/m^2]                          
+    '61      APCPsfc    Precipitation hourly total [kg/m^2]                                     Rainf
     '118     BRTMPsfc   Surface brightness temperature from GOES-UMD Pinker [K]
     '157     CAPEsfc    Convective Available Potential Energy [J/kg]
-    '205     DLWRFsfc   LW radiation flux downwards (surface) [W/m^2]
-    '204     DSWRFsfc   SW radiation flux downwards (surface) [W/m^2]
+    '205     DLWRFsfc   LW radiation flux downwards (surface) [W/m^2]                           LWdown
+    '204     DSWRFsfc   SW radiation flux downwards (surface) [W/m^2]                           SWdown
     '101     PARsfc     PAR Photosynthetically Active Radiation from GOES-UMD Pinker [W/m^2]
     '201     PEDASsfc   Precipitation hourly total from EDAS [kg/m^2]
     '202     PRDARsfc   Precipitation hourly total from StageII [kg/m^2]
-    '1       PRESsfc    Surface pressure [Pa]
+    '1       PRESsfc    Surface pressure [Pa]                                                   PSurf
     '206     RGOESsfc   SW radiation flux downwards (surface) from GOES-UMD Pinker [W/m^2]
-    '51      SPFH2m     2-m above ground Specific humidity [kg/kg]
-    '11      TMP2m      2-m above ground Temperature [K]
-    '33      UGRD10m    10-m above ground Zonal wind speed [m/s]
-    '34      VGRD10m    10-m above ground Meridional wind speed [m/s]
+    '51      SPFH2m     2-m above ground Specific humidity [kg/kg]                              Qair
+    '11      TMP2m      2-m above ground Temperature [K]                                        Tair
+    '33      UGRD10m    10-m above ground Zonal wind speed [m/s]                                Wind_E
+    '34      VGRD10m    10-m above ground Meridional wind speed [m/s]                           Wind_N
+    '                   potential evaporation [kg/m^2]                                          PotEvap
 
-    Public DefaultParameters As New List(Of String) From {"APCPsfc", "PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"}
+    'Public DefaultParameters As New List(Of String) From {"APCPsfc", "PEVAPsfc", "TMP2m", "UGRD10m", "VGRD10m", "DSWRFsfc", "SPFH2m"}
+    Public DefaultParameters As New List(Of String) From {"Rainf", "PotEvap", "Tair", "Wind_E", "Wind_N", "SWdown", "Qair"}
 
     Private Const pDefaultStationsBaseFilename As String = "NLDAS_Grid"
     Private Const pDegreesPerGridCell As Double = 1 / 8
@@ -138,6 +144,24 @@ Public Class NLDAS
         Return cell
 
     End Function
+
+    ''' <summary>
+    ''' Determine lat/long of NLDAS grid cell
+    ''' </summary>
+    ''' <param name="lY"></param>
+    ''' <param name="lX"></param>
+    ''' <param name="lLatitude"></param>
+    ''' <param name="lLongitude"></param>
+    ''' <remarks></remarks>
+    Public Shared Sub GetLatLonFromGridCell(ByVal lY As Integer, ByVal lX As Integer, ByRef lLatitude As Double, ByRef lLongitude As Double)
+        Try
+            lLongitude = pWestmostGridCenter + ((lX) * pDegreesPerGridCell)
+            lLatitude = pSouthmostGridCenter + ((lY) * pDegreesPerGridCell)
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
 
     ''' <summary>
     ''' Compute which NLDAS grid cells are within the specified region
@@ -334,6 +358,10 @@ Public Class NLDAS
                                Optional ByVal aTimeZoneShift As Integer = 0) As String
         Dim lResults As String = ""
 
+        If aEndDate.Year - aStartDate.Year > 20 Then
+            Return "<error>NLDAS requires no more than 20 years of data in a single download</error>"
+        End If
+
         If aCells Is Nothing OrElse aCells.Count = 0 Then
             Return "<error>Could not find any NLDAS cells, unable to download data</error>"
         End If
@@ -417,24 +445,34 @@ Public Class NLDAS
 
                 Dim lX As String = Format(lCell.X, "000")
                 Dim lY As String = Format(lCell.Y, "000")
+                Dim lLatitude As Double = 0.0
+                Dim lLongitude As Double = 0.0
+                GetLatLonFromGridCell(lCell.Y, lCell.X, lLatitude, lLongitude)
+                Dim lLat As String = lLatitude.ToString() 'Format(lLatitude, "000")
+                Dim lLng As String = lLongitude.ToString() 'Format(lLongitude, "000")
+
                 Try
-                    Dim lFilenameBase As String = aDataType & ".X" & lX & ".Y" & lY
+                    'Dim lFilenameBase As String = aDataType & ".X" & lX & ".Y" & lY
+                    Dim lFilenameBase As String = aDataType & ".Lng" & lLng & ".Lat" & lLat
                     Dim lCacheFilename As String = IO.Path.Combine(lCacheFolder, lFilenameBase)
 
                     Dim lStartDateString As String = lDateFormat.JDateToString(aStartDate.ToOADate) ' .Year & "-" & aStartDate.Month & "-" & aStartDate.Day & "T" & aStartDate.Hour
                     Dim lEndDateString As String = lDateFormat.JDateToString(aEndDate.ToOADate) ' .Year & "-" & aStartDate.Month & "-" & aStartDate.Day & "T" & aStartDate.Hour
-
-                    If aStartDate > pFirstAvailableDate OrElse aEndDate < lDefaultEndDate Then
-                        lCacheFilename &= "_" & lStartDateString _
-                                       & "to" & lEndDateString
+                    If lEndDateString.Substring(lEndDateString.Length - 2) = "24" Then
+                        lEndDateString = lEndDateString.Substring(0, lEndDateString.Length - 1) + "3"
                     End If
+
+                    'If aStartDate > pFirstAvailableDate OrElse aEndDate < lDefaultEndDate Then
+                    lCacheFilename &= "_" & lStartDateString _
+                                       & "to" & lEndDateString
+                    'End If
                     lCacheFilename &= ".nldas.txt"
 
                     'TODO: find data we want and have already retrieved for any overlapping period
                     'Dim lExistingCacheFilenames() As String = IO.Directory.GetFiles(lCacheFolder, lFilenameBase & "*")
                     'Array.Sort(lExistingCacheFilenames)
 
-                    If aProject.GetEvenIfCached AndAlso IO.File.Exists(lCacheFilename) Then TryDelete(lCacheFilename)
+                    'If aProject.GetEvenIfCached AndAlso IO.File.Exists(lCacheFilename) Then TryDelete(lCacheFilename)
 
                     Dim lGDS As atcTimeseriesGDS.atcTimeseriesGDS = Nothing
 
@@ -458,18 +496,34 @@ Public Class NLDAS
                         D4EM.Data.Download.DisableHttpsCertificateCheck()  'the website has an invalid certificate, but go ahead and get it anyway.
                         D4EM.Data.Download.SetSecurityProtocol()
                         Using lLevel As New ProgressLevel(True)
-                            Dim lURL As String = "https://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:" & aDataType
-                            If aDataType = "EVPsfc" Then
-                                lURL = "https://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_NOAH0125_H.002:" & aDataType
-                            End If
-                            If aStartDate > pFirstAvailableDate Then
-                                lURL &= "&startDate=" & lStartDateString
-                            End If
-                            If aEndDate < lDefaultEndDate Then
-                                lURL &= "&endDate=" & lEndDateString
-                            End If
-                            lURL &= "&location=NLDAS:X" & lX & "-Y" & lY & "&type=asc2"
+                            ' the following works   pbd 7/2025
+                            ' daacURL = ['https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?'
+                            '         'variable=NLDAS2:NLDAS_FORA0125_H_v2.0:Tair&'
+                            '         'startDate=2024-01-01T00&endDate=2025-01-01T00&'
+                            '         'location=GEOM:POINT(-96.1875,%2043.9375)&type=asc2'
+                            'Dim lURL As String = "https://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:" & aDataType
+                            Dim lURL As String = "https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS2:NLDAS_FORA0125_H_v2.0:" & aDataType
+                            'If aDataType = "EVPsfc" Then
+                            'lURL = "https://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_NOAH0125_H.002:" & aDataType
+                            'End If
+                            'If aStartDate > pFirstAvailableDate Then
+                            lURL &= "&startDate=" & lStartDateString
+                            'End If
+                            'If aEndDate < lDefaultEndDate Then
+                            lURL &= "&endDate=" & lEndDateString
+                            'End If
+                            'lURL &= "&location=NLDAS:X" & lX & "-Y" & lY & "&type=asc2"
+                            lURL &= "&location=GEOM:POINT(" & lLng & ",%20" & lLat & ")&type=asc2"
+                            'Logger.Msg(lURL, "D4EM URL")                   ' for debug
+                            'Logger.Msg(lCacheFilename, "D4EM filename")    ' for debug
                             D4EM.Data.Download.DownloadURL(lURL, lCacheFilename)
+                            'Logger.Msg(lURL, "D4EM URL")
+                            If Not IO.File.Exists(lCacheFilename) Then
+                                '    Return "<error>NLDAS file download failed on " + lCacheFilename + " </Error>"
+                                '    Logger.Msg("file does Not exist", "D4EM URL")
+                                '    Dim lResp As String = D4EM.Data.Download.DownloadURL(lURL)
+                                Logger.Msg(lURL & vbCrLf & lCacheFilename & " not downloaded", "D4EM URL")                   ' for debug
+                            End If
                         End Using
                     End If
 
@@ -479,7 +533,7 @@ Public Class NLDAS
                                 lGDS = New atcTimeseriesGDS.atcTimeseriesGDS
                                 If Not lGDS.Open(lCacheFilename) Then
                                     lGDS = Nothing
-                                    Logger.Dbg("Unable to open '" & lCacheFilename & "' as timeseries so not adding data from it to WDM.")
+                                    Logger.Dbg("Unable To open '" & lCacheFilename & "' as timeseries so not adding data from it to WDM.")
                                 End If
                             Else
                                 'file does not exist, there was a problem (over water?)
@@ -489,7 +543,7 @@ Public Class NLDAS
                         If lGDS IsNot Nothing Then
                             For Each lTimeseriesUnshifted As atcData.atcTimeseries In lGDS.DataSets
                                 Dim lTimeseries As atcTimeseries = D4EM.Data.MetCmp.ShiftDates(lTimeseriesUnshifted, atcTimeUnit.TUHour, -1 * aTimeZoneShift)
-                                If aDataType = "APCPsfc" Then
+                                If aDataType = "APCPsfc" Or aDataType = "Rainf" Then
                                     Dim lInchesTimeseries As atcTimeseries = lTimeseries / 25.4
                                     With lInchesTimeseries.Attributes
                                         .SetValue("ID", lNextDestinationDSN)
@@ -526,27 +580,27 @@ Public Class NLDAS
                                     Dim lCons As String = ""
                                     Dim lDesc As String = ""
                                     Dim lConvertedTimeseries As atcTimeseries = lTimeseries
-                                    If aDataType = "PEVAPsfc" Or aDataType = "EVPsfc" Then
+                                    If aDataType = "PEVAPsfc" Or aDataType = "EVPsfc" Or aDataType = "PotEvap" Then
                                         lNewDsn = lBaseDsn + 5
                                         lCons = "PEVT"
                                         lDesc = "Hourly Potential Evapotranspiration in Inches"
                                         lConvertedTimeseries = lTimeseries / 25.4
-                                    ElseIf aDataType = "TMP2m" Then
+                                    ElseIf aDataType = "TMP2m" Or aDataType = "Tair" Then
                                         lNewDsn = lBaseDsn + 2
                                         lCons = "ATEM"
                                         lDesc = "Hourly Air Temperature in Degrees F"
                                         lConvertedTimeseries = (lTimeseries * 9 / 5) - 459.67
-                                    ElseIf aDataType = "UGRD10m" Then
+                                    ElseIf aDataType = "UGRD10m" Or aDataType = "Wind_E" Then
                                         lNewDsn = lBaseDsn + 9 'use 3 for actual wind timeseries computed from windu and windv
                                         lCons = "WINDU"
                                         lDesc = "Hourly Zonal Wind in m/s"
                                         lConvertedTimeseries = lTimeseries.Clone '* 2.237 for mph
-                                    ElseIf aDataType = "VGRD10m" Then
+                                    ElseIf aDataType = "VGRD10m" Or aDataType = "Wind_N" Then
                                         lNewDsn = lBaseDsn + 8
                                         lCons = "WINDV"
                                         lDesc = "Hourly Meridional Wind in m/s"
                                         lConvertedTimeseries = lTimeseries.Clone '* 2.237 for mph
-                                    ElseIf aDataType = "DSWRFsfc" Then
+                                    ElseIf aDataType = "DSWRFsfc" Or aDataType = "SWdown" Then
                                         lNewDsn = lBaseDsn + 4
                                         lCons = "SOLR"
                                         lDesc = "Hourly Solar Radiation in Langleys"
@@ -586,7 +640,7 @@ Public Class NLDAS
                                             End If
                                         Next lValueIndex
                                         lConvertedTimeseries.Attributes.SetValue("TSTYPE", lCons)
-                                    ElseIf aDataType = "SPFH2m" Then
+                                    ElseIf aDataType = "SPFH2m" Or aDataType = "Qair" Then
                                         lNewDsn = lBaseDsn + 6
                                         lCons = "DEWP"
                                         lDesc = "Hourly Dew Point Temperature"
@@ -619,7 +673,7 @@ Public Class NLDAS
                                         Logger.Dbg("AddDataset failed when adding NLDAS " & lTimeseries.ToString)
                                     End If
 
-                                    If aDataType = "VGRD10m" Then
+                                    If aDataType = "VGRD10m" Or aDataType = "Wind_N" Then
                                         'if we have both VGRD10m and UGRD10m, compute WIND
                                         'find UGRD10m
                                         Dim lVWINDTimeseries = lConvertedTimeseries
