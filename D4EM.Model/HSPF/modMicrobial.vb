@@ -776,7 +776,7 @@ Module modMicrobial
                 Dim lRowToUse As Integer = -1
                 If Not aDirectData Is Nothing Then
                     For lRow As Integer = 0 To aDirectData.Rows.Count - 1
-                        If aDirectData(lRow)(0) = lRchresOperation.Id Then
+                        If aDirectData.Rows(lRow)(0) = lRchresOperation.Id Then
                             lRowToUse = lRow
                             Exit For
                         End If
@@ -786,7 +786,7 @@ Module modMicrobial
                         Dim lMonthDataTable As New HspfMonthDataTable
                         With lMonthDataTable
                             For lMonthIndex As Integer = 1 To 12
-                                .MonthValue(lMonthIndex) = aDirectData(lRowToUse)(lMonthIndex)
+                                .MonthValue(lMonthIndex) = aDirectData.Rows(lRowToUse)(lMonthIndex)
                             Next
                             .Comment = "***  atmospheric dry deposition fluxes" & vbCrLf & _
                                        "***  used to input loads from cattle in stream and leaky septics (counts/day)" & vbCrLf & _
@@ -845,20 +845,20 @@ Module modMicrobial
             If Not aBuiltupData Is Nothing Then
                 For Each lSubbasin As Integer In lContributingSubbasins
                     For lRow As Integer = 0 To aBuiltupData.Rows.Count - 1
-                        If aBuiltupData(lRow)(0) = lSubbasin Then
+                        If aBuiltupData.Rows(lRow)(0) = lSubbasin Then
                             lRowsToUse.Add(lRow)
                         End If
                     Next
                 Next
                 For Each lRow As Integer In lRowsToUse
                     Dim lArea As Double = 1.0
-                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aBuiltupData(lRow)(0))) Is Nothing Then
-                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aBuiltupData(lRow)(0)))
+                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aBuiltupData.Rows(lRow)(0))) Is Nothing Then
+                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aBuiltupData.Rows(lRow)(0)))
                     End If
                     lTotalArea += lArea
                     For lMonth As Integer = 1 To 12
-                        lAccumulationRate(lMonth) += (aBuiltupData(lRow)(lMonth) * lArea)
-                        lStorageLimit(lMonth) += (aBuiltupData(lRow)(lMonth + 12) * lArea)
+                        lAccumulationRate(lMonth) += (aBuiltupData.Rows(lRow)(lMonth) * lArea)
+                        lStorageLimit(lMonth) += (aBuiltupData.Rows(lRow)(lMonth + 12) * lArea)
                     Next
                 Next
             End If
@@ -866,20 +866,20 @@ Module modMicrobial
             If Not aForestData Is Nothing Then
                 For Each lSubbasin As Integer In lContributingSubbasins
                     For lRow As Integer = 0 To aForestData.Rows.Count - 1
-                        If aForestData(lRow)(0) = lSubbasin Then
+                        If aForestData.Rows(lRow)(0) = lSubbasin Then
                             lRowsToUse.Add(lRow)
                         End If
                     Next
                 Next
                 For Each lRow As Integer In lRowsToUse
                     Dim lArea As Double = 1.0
-                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aForestData(lRow)(0))) Is Nothing Then
-                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aForestData(lRow)(0)))
+                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aForestData.Rows(lRow)(0))) Is Nothing Then
+                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aForestData.Rows(lRow)(0)))
                     End If
                     lTotalArea += lArea
                     For lMonth As Integer = 1 To 12
-                        lAccumulationRate(lMonth) += (aForestData(lRow)(lMonth) * lArea)
-                        lStorageLimit(lMonth) += (aForestData(lRow)(lMonth + 12) * lArea)
+                        lAccumulationRate(lMonth) += (aForestData.Rows(lRow)(lMonth) * lArea)
+                        lStorageLimit(lMonth) += (aForestData.Rows(lRow)(lMonth + 12) * lArea)
                     Next
                 Next
             End If
@@ -887,20 +887,20 @@ Module modMicrobial
             If Not aPastureData Is Nothing Then
                 For Each lSubbasin As Integer In lContributingSubbasins
                     For lRow As Integer = 0 To aPastureData.Rows.Count - 1
-                        If aPastureData(lRow)(0) = lSubbasin Then
+                        If aPastureData.Rows(lRow)(0) = lSubbasin Then
                             lRowsToUse.Add(lRow)
                         End If
                     Next
                 Next
                 For Each lRow As Integer In lRowsToUse
                     Dim lArea As Double = 1.0
-                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aPastureData(lRow)(0))) Is Nothing Then
-                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aPastureData(lRow)(0)))
+                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aPastureData.Rows(lRow)(0))) Is Nothing Then
+                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aPastureData.Rows(lRow)(0)))
                     End If
                     lTotalArea += lArea
                     For lMonth As Integer = 1 To 12
-                        lAccumulationRate(lMonth) += (aPastureData(lRow)(lMonth) * lArea)
-                        lStorageLimit(lMonth) += (aPastureData(lRow)(lMonth + 12) * lArea)
+                        lAccumulationRate(lMonth) += (aPastureData.Rows(lRow)(lMonth) * lArea)
+                        lStorageLimit(lMonth) += (aPastureData.Rows(lRow)(lMonth + 12) * lArea)
                     Next
                 Next
             End If
@@ -908,20 +908,20 @@ Module modMicrobial
             If Not aCropData Is Nothing Then
                 For Each lSubbasin As Integer In lContributingSubbasins
                     For lRow As Integer = 0 To aCropData.Rows.Count - 1
-                        If aCropData(lRow)(0) = lSubbasin Then
+                        If aCropData.Rows(lRow)(0) = lSubbasin Then
                             lRowsToUse.Add(lRow)
                         End If
                     Next
                 Next
                 For Each lRow As Integer In lRowsToUse
                     Dim lArea As Double = 1.0
-                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aCropData(lRow)(0))) Is Nothing Then
-                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aCropData(lRow)(0)))
+                    If Not lContributingAreasBySubbasin.ItemByKey(CInt(aCropData.Rows(lRow)(0))) Is Nothing Then
+                        lArea = lContributingAreasBySubbasin.ItemByKey(CInt(aCropData.Rows(lRow)(0)))
                     End If
                     lTotalArea += lArea
                     For lMonth As Integer = 1 To 12
-                        lAccumulationRate(lMonth) += (aCropData(lRow)(lMonth) * lArea)
-                        lStorageLimit(lMonth) += (aCropData(lRow)(lMonth + 12) * lArea)
+                        lAccumulationRate(lMonth) += (aCropData.Rows(lRow)(lMonth) * lArea)
+                        lStorageLimit(lMonth) += (aCropData.Rows(lRow)(lMonth + 12) * lArea)
                     Next
                 Next
             End If

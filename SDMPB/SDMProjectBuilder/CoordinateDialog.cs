@@ -23,7 +23,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using DotSpatial.Symbology.Forms;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 
 namespace SDMProjectBuilder
 {
@@ -227,7 +227,9 @@ namespace SDMProjectBuilder
         {
             get
             {
-                Coordinate c = _showZ ? new Coordinate(_dbxX.Value, _dbxY.Value, _dbxZ.Value) : new Coordinate(_dbxX.Value, _dbxY.Value);
+                //KW - dont know how to handle Z value
+                //Coordinate c = _showZ ? new Coordinate(_dbxX.Value, _dbxY.Value, _dbxZ.Value) : new Coordinate(_dbxX.Value, _dbxY.Value);
+                Coordinate c = _showZ ? new Coordinate(_dbxX.Value, _dbxY.Value) : new Coordinate(_dbxX.Value, _dbxY.Value);
                 if (_showM)
                 {
                     c.M = _dbxM.Value;

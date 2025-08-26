@@ -34,8 +34,6 @@ Public Module Download
     ''' <returns>True if download was successful, False if it was not.</returns>
     ''' <remarks>Creates directory if SaveAs includes a directory and it does not exist</remarks>
     Public Function DownloadURL(ByVal aURL As String, ByVal aSaveAs As String) As Boolean
-        D4EM.Data.Download.DisableHttpsCertificateCheck()
-        D4EM.Data.Download.SetSecurityProtocol()
         Try
             DownloadURLProgress(aURL, aSaveAs, AddressOf DefaultProgressHandler, AddressOf DefaultCompleteHandler)
             Layer.AddProcessStepToFile("Downloaded from " & aURL, aSaveAs)
@@ -84,8 +82,8 @@ Public Module Download
         Logger.Dbg("Downloaded " & Format(aDownloadInfo.BytesProcessed, "#,##0") & " bytes from " & aDownloadInfo.Url)
     End Sub
 
-    Private Sub DownloadURLProgress(ByVal URL As String, ByVal SaveAs As String, _
-                                    ByVal progressHandler As DownloadProgressHandler, _
+    Private Sub DownloadURLProgress(ByVal URL As String, ByVal SaveAs As String,
+                                    ByVal progressHandler As DownloadProgressHandler,
                                     ByVal completeHandler As DownloadCompleteHandler)
         Dim lURLserver As String = URL.Substring(URL.IndexOf("/") + 2)
         lURLserver = lURLserver.Substring(0, lURLserver.IndexOf("/"))

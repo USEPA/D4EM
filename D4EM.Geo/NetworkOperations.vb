@@ -1,4 +1,6 @@
-﻿Imports MapWinUtility
+﻿Imports System.Data
+Imports MapWinUtility
+Imports NetTopologySuite
 
 Public Class NetworkOperations
     ' ''' <summary>
@@ -142,19 +144,19 @@ Public Class NetworkOperations
     ''' <param name="aNewFlowlinesFilename">Save this new shapefile</param>
     ''' <returns>True on success, False on failure</returns>
     ''' <remarks>Only .dbf of catchments is opened for searching, not .shp</remarks>
-    Public Shared Function ClipFlowLinesToCatchments(ByVal aCatchmentsFilename As String, _
-                                                     ByVal aFlowLines As DotSpatial.Data.FeatureSet, _
-                                                     ByVal aNewFlowlinesFilename As String, _
+    Public Shared Function ClipFlowLinesToCatchments(ByVal aCatchmentsFilename As String,
+                                                     ByVal aFlowLines As DotSpatial.Data.FeatureSet,
+                                                     ByVal aNewFlowlinesFilename As String,
                                                      ByVal aFields As FieldIndexes) As Boolean
         Try
             Dim lFlowLinesDBF As New atcUtility.atcTableDBF
-            lFlowLinesDBF.OpenFile(IO.Path.ChangeExtension(aFlowLines.Filename, "dbf"))
+            lFlowLinesDBF.OpenFile(System.IO.Path.ChangeExtension(aFlowLines.Filename, "dbf"))
             'Field indexes +1 because atcDBF is 1-based, FieldIndexes is zero-based
             Dim lFlowLinesComIdField As Integer = aFields.FlowlinesComId + 1
             Dim lFlowLinesDownstreamField As Integer = aFields.FlowlinesDownstreamComId + 1
 
             Dim lCatchmentsDBF As New atcUtility.atcTableDBF
-            lCatchmentsDBF.OpenFile(IO.Path.ChangeExtension(aCatchmentsFilename, "dbf"))
+            lCatchmentsDBF.OpenFile(System.IO.Path.ChangeExtension(aCatchmentsFilename, "dbf"))
             Dim lCatchmentsComIdField As Integer = aFields.CatchmentComId + 1
 
             Dim lFlowLinesToUseDBF As atcUtility.atcTableDBF = lFlowLinesDBF.Cousin
@@ -173,7 +175,7 @@ Public Class NetworkOperations
                     If lCatchmentsDBF.FindFirst(lCatchmentsComIdField, lComId) Then
                         'Logger.Dbg("Found " & lComId & " addShape " & lFlowLinesToUse.Features.Count)
                         Dim lFlowLineShape As DotSpatial.Data.Feature = aFlowLines.Features.Item(lFlowLinesShapeIndex)
-                        lFlowLinesToUse.AddFeature(lFlowLineShape)
+                        lFlowLinesToUse.AddFeature(lFlowLineShape.Geometry)
                         lFlowLinesToUseDBF.CurrentRecord = lFlowLinesToUseDBF.NumRecords + 1
                         lFlowLinesToUseDBF.RawRecord = lFlowLinesDBF.RawRecord
                     Else
@@ -201,9 +203,9 @@ Public Class NetworkOperations
             Logger.Dbg("Writing '" & lFlowLinesToUse.Features.Count & "' flowlines, leaving out " & aFlowLines.Features.Count - lFlowLinesToUse.Features.Count)
             lFlowLinesToUse.Projection = aFlowLines.Projection
             lFlowLinesToUse.SaveAs(aNewFlowlinesFilename, True)
-            lFlowLinesToUseDBF.WriteFile(IO.Path.ChangeExtension(aNewFlowlinesFilename, "dbf"))
-            TryCopy(IO.Path.ChangeExtension(aFlowLines.Filename, "mwsr"), _
-                    IO.Path.ChangeExtension(aNewFlowlinesFilename, "mwsr"))
+            lFlowLinesToUseDBF.WriteFile(System.IO.Path.ChangeExtension(aNewFlowlinesFilename, "dbf"))
+            TryCopy(System.IO.Path.ChangeExtension(aFlowLines.Filename, "mwsr"),
+                    System.IO.Path.ChangeExtension(aNewFlowlinesFilename, "mwsr"))
 
             Return True
         Catch lEx As Exception
@@ -219,9 +221,9 @@ Public Class NetworkOperations
     ''' <param name="aCatchmentLayer">source catchment shape layer</param>
     ''' <returns>True on success, False on failure</returns>
     ''' <remarks></remarks>
-    Public Shared Function RemoveBraidedFlowlines(ByVal aFlowlinesLayer As D4EM.Data.Layer, _
-                                                  ByVal aCatchmentLayer As D4EM.Data.Layer, _
-                                                  ByVal aFields As FieldIndexes, _
+    Public Shared Function RemoveBraidedFlowlines(ByVal aFlowlinesLayer As D4EM.Data.Layer,
+                                                  ByVal aCatchmentLayer As D4EM.Data.Layer,
+                                                  ByVal aFields As FieldIndexes,
                                                   ByVal aOutletComIDs As Generic.List(Of Long)) As Boolean
         Dim lSaveIntermediate As Integer = 500
 
@@ -480,12 +482,12 @@ Public Class NetworkOperations
     ''' <param name="aKeepCosmeticRemovedLine">True to keep a flowline in the layer even when it is removed from connectivity</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function CombineFlowlines(ByRef aFlowlinesShapeFile As DotSpatial.Data.FeatureSet, _
-                                            ByVal aSourceBaseIndex As Integer, _
-                                            ByVal aSourceDeletingIndex As Integer, _
-                                            ByVal aMergeShapes As Boolean, _
-                                            ByVal aKeepCosmeticRemovedLine As Boolean, _
-                                            ByVal aFields As FieldIndexes, _
+    Public Shared Function CombineFlowlines(ByRef aFlowlinesShapeFile As DotSpatial.Data.FeatureSet,
+                                            ByVal aSourceBaseIndex As Integer,
+                                            ByVal aSourceDeletingIndex As Integer,
+                                            ByVal aMergeShapes As Boolean,
+                                            ByVal aKeepCosmeticRemovedLine As Boolean,
+                                            ByVal aFields As FieldIndexes,
                                             ByVal aOutletComIDs As Generic.List(Of Long)) As Boolean
         Try
 
@@ -575,19 +577,19 @@ Public Class NetworkOperations
                                     'Case "THINNERCOD"
                                     'Case "UPMINHYDRO"
                                     'Case "DNMINHYDRO"
-                                Case "CUMDRAINAG", "CUMLENKM", _
-                                     "CUMNLCD_11", "CUMNLCD_12", _
-                                     "CUMNLCD_21", "CUMNLCD_22", "CUMNLCD_23", _
-                                     "CUMNLCD_31", "CUMNLCD_32", "CUMNLCD_33", _
-                                     "CUMNLCD_41", "CUMNLCD_42", "CUMNLCD_43", _
-                                     "CUMNLCD_51", _
-                                     "CUMNLCD_61", _
-                                     "CUMNLCD_71", _
-                                     "CUMNLCD_81", "CUMNLCD_82", "CUMNLCD_83", "CUMNLCD_84", "CUMNLCD_85", _
-                                     "CUMNLCD_91", "CUMNLCD_92", _
-                                     "CUMPCT_CN", "CUMPCT_MX", "CUMSUM_PCT", _
-                                     "MAFLOWU", "MAFLOWV", "MAVELU", "MAVELV", _
-                                     "AREAWTMAP", "AREAWTMAT", _
+                                Case "CUMDRAINAG", "CUMLENKM",
+                                     "CUMNLCD_11", "CUMNLCD_12",
+                                     "CUMNLCD_21", "CUMNLCD_22", "CUMNLCD_23",
+                                     "CUMNLCD_31", "CUMNLCD_32", "CUMNLCD_33",
+                                     "CUMNLCD_41", "CUMNLCD_42", "CUMNLCD_43",
+                                     "CUMNLCD_51",
+                                     "CUMNLCD_61",
+                                     "CUMNLCD_71",
+                                     "CUMNLCD_81", "CUMNLCD_82", "CUMNLCD_83", "CUMNLCD_84", "CUMNLCD_85",
+                                     "CUMNLCD_91", "CUMNLCD_92",
+                                     "CUMPCT_CN", "CUMPCT_MX", "CUMSUM_PCT",
+                                     "MAFLOWU", "MAFLOWV", "MAVELU", "MAVELV",
+                                     "AREAWTMAP", "AREAWTMAT",
                                      "REACHCODE", "TONODE", "HYDROSEQ", "LEVELPATHI", "GRID_CODE", "DNLEVELPAT", "DNMINHYDRO", "DNDRAINCOU"
                                     If lDeletingDownstream Then
                                         lNewFieldValues.Add(lValueFromDeleting)
@@ -675,10 +677,11 @@ Public Class NetworkOperations
                     'Logger.Dbg(lFieldName & ": " & aFlowlinesShapeFile.CellValue(lFieldIndex, aSourceDeletingIndex) & ", " & aFlowlinesShapeFile.CellValue(lFieldIndex, lSourceBaseIndex) & " -> " & lNewFieldValues(lNewFieldValues.Count - 1))
                 Next
                 If aMergeShapes Then
-                    Dim lMergedFeature As DotSpatial.Data.Feature = DotSpatial.Data.FeatureExt.Union(lDeleteFeature, lKeepFeature)
-                    Dim lSaveDataRow As DataRow = lKeepFeature.DataRow
+                    Dim lMergedFeature As DotSpatial.Data.Feature = DotSpatial.Data.FeatureExt.Union(lDeleteFeature, lKeepFeature.Geometry)
+                    Dim lSaveDataRow As System.Data.DataRow = lKeepFeature.DataRow
                     Logger.Dbg("FlowlineMerge " & lSourceBaseIndex & " and " & aSourceDeletingIndex)
-                    .Features(aSourceBaseIndex).Coordinates = lMergedFeature.Coordinates
+                    '.Features(aSourceBaseIndex).Coordinates = lMergedFeature.Coordinates
+                    .Features(aSourceBaseIndex).Geometry = lMergedFeature.Geometry
                     '.Features.Remove(lKeepFeature)
                     '.Features.Add(lMergedFeature)
                     lKeepFeature = .Features(aSourceBaseIndex)
@@ -715,9 +718,9 @@ Public Class NetworkOperations
         End Try
     End Function
 
-    Private Shared Sub ReconnectUpstreamToDownstream(ByVal aFlowlinesShapeFile As DotSpatial.Data.FeatureSet, _
-                                                     ByVal aDeletedComId As Long, _
-                                                     ByVal aDownstreamComId As Long, _
+    Private Shared Sub ReconnectUpstreamToDownstream(ByVal aFlowlinesShapeFile As DotSpatial.Data.FeatureSet,
+                                                     ByVal aDeletedComId As Long,
+                                                     ByVal aDownstreamComId As Long,
                                                      ByVal aFields As FieldIndexes)
         With aFlowlinesShapeFile
             Dim lFlowlinesRecord As Integer = 0
@@ -798,7 +801,7 @@ Public Class NetworkOperations
     ''' </summary>
     ''' <param name="aFlowlinesShapeFile">Flowlines of stream network</param>
     ''' <param name="aFields">Field Indexes</param>
-    Public Shared Function CheckConnectivity(ByVal aFlowlinesShapeFile As DotSpatial.Data.FeatureSet, _
+    Public Shared Function CheckConnectivity(ByVal aFlowlinesShapeFile As DotSpatial.Data.FeatureSet,
                                              ByVal aFields As FieldIndexes) As Generic.List(Of Long)
         Logger.Dbg("*** CheckConnectivity Begin")
         Dim lOutletComIDs As New Generic.List(Of Long)
@@ -853,9 +856,9 @@ Public Class NetworkOperations
         Return lOutletComIDs
     End Function
 
-    Public Shared Function CombineCatchments(ByRef aCatchmentShapeFile As DotSpatial.Data.FeatureSet, _
-                                             ByVal aKeptComId As Long, _
-                                             ByVal aAddingComId As Long, _
+    Public Shared Function CombineCatchments(ByRef aCatchmentShapeFile As DotSpatial.Data.FeatureSet,
+                                             ByVal aKeptComId As Long,
+                                             ByVal aAddingComId As Long,
                                              ByVal aFields As FieldIndexes) As Boolean
         Try
             Dim lRecordKeptIndex As Integer = FindRecord(aCatchmentShapeFile, aFields.CatchmentComId, aKeptComId)
@@ -933,12 +936,12 @@ Public Class NetworkOperations
                                         lAreaTotal = lAreaBase + lAreaAdding
                                         lNewFieldValues.Add(lAreaTotal)
 
-                                    Case "NLCD_11", "NLCD_12", _
-                                         "NLCD_21", "NLCD_22", "NLCD_23", _
-                                         "NLCD_31", "NLCD_32", "NLCD_33", _
-                                         "NLCD_41", "NLCD_42", "NLCD_43", _
-                                         "NLCD_51", "NLCD_61", "NLCD_71", _
-                                         "NLCD_81", "NLCD_82", "NLCD_83", "NLCD_84", "NLCD_85", _
+                                    Case "NLCD_11", "NLCD_12",
+                                         "NLCD_21", "NLCD_22", "NLCD_23",
+                                         "NLCD_31", "NLCD_32", "NLCD_33",
+                                         "NLCD_41", "NLCD_42", "NLCD_43",
+                                         "NLCD_51", "NLCD_61", "NLCD_71",
+                                         "NLCD_81", "NLCD_82", "NLCD_83", "NLCD_84", "NLCD_85",
                                          "NLCD_91", "NLCD_92", "PCT_CN", "PCT_MX"
                                         Dim lNewValue As Double = 0
                                         If IsDBNull(lValueFromAdding) Then
@@ -946,7 +949,7 @@ Public Class NetworkOperations
                                         ElseIf IsDBNull(lValueFromKept) Then
                                             lNewValue = lValueFromAdding
                                         ElseIf lAreaTotal > 0 Then
-                                            lNewValue = ((lValueFromKept * lAreaBase) + _
+                                            lNewValue = ((lValueFromKept * lAreaBase) +
                                                          (lValueFromAdding * lAreaAdding)) / lAreaTotal
                                         Else
                                             lNewFieldValues.Add(0)
@@ -961,7 +964,7 @@ Public Class NetworkOperations
                                         ElseIf IsDBNull(lValueFromKept) Then
                                             lNewFieldValues.Add(lValueFromAdding)
                                         ElseIf lAreaTotal > 0 Then
-                                            Dim lNewValue As Double = (lValueFromKept * lAreaBase) + _
+                                            Dim lNewValue As Double = (lValueFromKept * lAreaBase) +
                                                                       (lValueFromAdding * lAreaAdding) / lAreaTotal
                                             lNewFieldValues.Add(lNewValue)
                                         Else
@@ -985,11 +988,11 @@ Public Class NetworkOperations
 
                     Dim lTargetShape As DotSpatial.Data.IFeature = Nothing
                     Try
-                        lTargetShape = DotSpatial.Data.FeatureExt.Union(lKept, lAdding)
+                        lTargetShape = DotSpatial.Data.FeatureExt.Union(lKept, lAdding.Geometry)
                     Catch e As Exception
                         Logger.Dbg("Error: CombineCatchments:ClipTargetShape " & e.Message)
                         Try
-                            lTargetShape = DotSpatial.Data.FeatureExt.Union(lKept, lAdding)
+                            lTargetShape = DotSpatial.Data.FeatureExt.Union(lKept, lAdding.Geometry)
                         Catch ex As Exception
                             Logger.Dbg("Error: CombineCatchments:MergeShapes " & ex.Message)
                         End Try
@@ -1033,12 +1036,12 @@ Public Class NetworkOperations
         End Try
     End Function
 
-    Public Shared Sub CombineMissingOutletCatchments(ByVal aFlowlines As DotSpatial.Data.FeatureSet, _
-                                                     ByVal aCatchments As DotSpatial.Data.FeatureSet, _
-                                                     ByVal aMinCatchmentKM2 As Double, _
-                                                     ByVal aMinLengthKM As Double, _
-                                                     ByVal aFields As FieldIndexes, _
-                                                     ByVal aOutletComIDs As Generic.List(Of Long), _
+    Public Shared Sub CombineMissingOutletCatchments(ByVal aFlowlines As DotSpatial.Data.FeatureSet,
+                                                     ByVal aCatchments As DotSpatial.Data.FeatureSet,
+                                                     ByVal aMinCatchmentKM2 As Double,
+                                                     ByVal aMinLengthKM As Double,
+                                                     ByVal aFields As FieldIndexes,
+                                                     ByVal aOutletComIDs As Generic.List(Of Long),
                                                      ByVal aDontCombineComIDs As Generic.List(Of Long))
         Logger.Dbg("CombineMissingOutletCatchments Count " & aOutletComIDs.Count)
         Dim lCheckArea As Boolean = (aMinCatchmentKM2 > 0)
@@ -1054,8 +1057,9 @@ Public Class NetworkOperations
                     'Dim lOutletCumArea As Double = aFlowlines.CellValue(pFlowlinesCumDrainAreaIndex, lOutletComIdRecordIndex)
                     'If lOutletCumArea < aMinCatchmentKM2 Then 'TODO: is this an appropriate check?
                     'whats most likely downstream - assume flowline is upstream to downstream
-                    Dim lFlowLineNumPoints As Integer = aFlowlines.Features(lFlowlineIndex).NumPoints
-                    Dim lFlowlinePoint = aFlowlines.Features(lFlowlineIndex).Coordinates(lFlowLineNumPoints - 1)
+                    'Dim lFlowLineNumPoints As Integer = aFlowlines.Features(lFlowlineIndex).NumPoints
+                    Dim lFlowLineNumPoints As Integer = aFlowlines.Features(lFlowlineIndex).ToShape().Range.NumPoints
+                    Dim lFlowlinePoint = aFlowlines.Features(lFlowlineIndex).Geometry.Coordinates(lFlowLineNumPoints - 1)
                     Dim lNearestIndex As Integer = NearestNeighbor(lFlowlinePoint, aCatchments, aFields.CatchmentComId, lOutletComID)
                     If lNearestIndex < 0 Then
                         Logger.Dbg("No nearest neighbor found to merge at end of flowline: " & lFlowlinePoint.ToString)
@@ -1078,7 +1082,7 @@ Public Class NetworkOperations
                         End If
                     End If
                 Else
-                        'LogMessage(aLog, "Big Enough " & lOutletComID & " Area " & lOutletCumArea)
+                    'LogMessage(aLog, "Big Enough " & lOutletComID & " Area " & lOutletCumArea)
                 End If
             Else
                 Logger.Dbg("Missing OutletComID " & lOutletComID)
@@ -1100,9 +1104,9 @@ Public Class NetworkOperations
     ''' <param name="aPoint"></param>
     ''' <param name="aPolygons"></param>
     ''' <returns>zero-based index of closest feature, or -1 if no feature found</returns>
-    Private Shared Function NearestNeighbor(ByVal aPoint As DotSpatial.Topology.Coordinate, _
-                                            ByVal aPolygons As DotSpatial.Data.FeatureSet, _
-                                            ByVal aKeyColumn As Integer, _
+    Private Shared Function NearestNeighbor(ByVal aPoint As NetTopologySuite.Geometries.Coordinate,
+                                            ByVal aPolygons As DotSpatial.Data.FeatureSet,
+                                            ByVal aKeyColumn As Integer,
                                             ByVal aSkipValue As String) As Integer
         Dim lNearestNeighbor As Integer = -1
         Select Case aPolygons.Features.Count
@@ -1127,8 +1131,10 @@ Public Class NetworkOperations
                         If lFeature.DataRow(aKeyColumn).ToString() = aSkipValue Then Continue For
                     End If
 
-                    Dim lCentroid As DotSpatial.Topology.Point = lFeature.ToShape.ToGeometry.Centroid
-                    Dim lDistance As Double = lCentroid.Distance(aPoint)
+                    'Dim lCentroid As DotSpatial.Topology.Point = lFeature.ToShape.ToGeometry.Centroid
+                    Dim lCentroid As NetTopologySuite.Geometries.Point = lFeature.ToShape.ToGeometry.Centroid
+                    Dim lPt As NetTopologySuite.Geometries.Point = New Geometries.Point(aPoint)
+                    Dim lDistance As Double = lCentroid.Distance(lPt)
                     If lDistance < lNearestDistance Then
                         lNearestDistance = lDistance
                         lNearestNeighbor = lFeatureIndex
@@ -1229,7 +1235,9 @@ Public Class NetworkOperations
         If lLength = 0 Then 'Cumulative length not yet set, so set it to sum of main channel cumulative + outlet length
             UpdateValueIfNotNull(lLength, aFlowlines.Features(lOutletFlowlineIndex).DataRow(aFields.FlowlinesLength))
             If lLength <= 0 Then
-                lLength = DotSpatial.Topology.LineString.FromBasicGeometry(aFlowlines.Features(lOutletFlowlineIndex).BasicGeometry).Length
+                'lLength = DotSpatial.Topology.LineString.FromBasicGeometry(aFlowlines.Features(lOutletFlowlineIndex).BasicGeometry).Length
+                lLength = aFlowlines.Features(lOutletFlowlineIndex).Geometry.Length
+                'lLength = NetTopologySuite.Geometries.LineString FromBasicGeometry(aFlowlines.Features(lOutletFlowlineIndex).Geometry).Length
                 lLength *= aFlowlines.Projection.Unit.Meters / 1000 'Convert to kilometers
                 Logger.Dbg("Length missing for stream " & aOutletComId & ", computed " & atcUtility.DoubleToString(lLength) & " km")
                 aFlowlines.Features(lOutletFlowlineIndex).DataRow(aFields.FlowlinesLength) = lLength
@@ -1252,7 +1260,8 @@ Public Class NetworkOperations
             Else
                 Dim lCatchmentIndex As Integer = FindRecord(aCatchments, aFields.CatchmentComId, aOutletComId)
                 If lCatchmentIndex > 0 Then
-                    lContribArea = DotSpatial.Topology.LineString.FromBasicGeometry(aCatchments.Features(lCatchmentIndex).BasicGeometry).Area
+                    lContribArea = aCatchments.Features(lCatchmentIndex).Geometry.Area
+                    'lContribArea = DotSpatial.Topology.LineString.FromBasicGeometry(aCatchments.Features(lCatchmentIndex).Geometry).Area
                     lContribArea *= aCatchments.Projection.Unit.Meters / 1000000 'Convert to square kilometers
                     Logger.Dbg("Area missing for stream " & aOutletComId & ", computed " & atcUtility.DoubleToString(lContribArea) & " square km")
                     aFlowlines.Features(lOutletFlowlineIndex).DataRow(aFields.FlowlinesLocDrainArea) = lContribArea

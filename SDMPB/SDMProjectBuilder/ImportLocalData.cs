@@ -6,7 +6,7 @@ using System.IO;
 using System.Data;
 using DotSpatial.Controls;
 using DotSpatial.Data;
-using DotSpatial.Topology;
+using NetTopologySuite.Geometries;
 using DotSpatial.Projections;
 using atcUtility;
 
@@ -141,7 +141,7 @@ namespace SDMProjectBuilder
                     //Shape shpPt = new Shape(coord);
                     Reproject.ReprojectPoints(pts, null, KnownCoordinateSystems.Geographic.World.WGS1984, _map.Projection, 0, 1);
 
-                    DotSpatial.Topology.Point pt = new DotSpatial.Topology.Point(pts[0], pts[1]);
+                    NetTopologySuite.Geometries.Point pt = new NetTopologySuite.Geometries.Point(pts[0], pts[1]);
                     IFeature feature = _fs.AddFeature(pt);
                     for (int j = 0; j < dt.Columns.Count; j++)
                         feature.DataRow[dt.Columns[j].ColumnName] = dt.Rows[i][j].ToString();
@@ -172,8 +172,8 @@ namespace SDMProjectBuilder
                 for (int i = 0; i < _fs.Features.Count; i++)
                 {
                     IFeature feature = _fs.Features[i];
-                    double x = feature.BasicGeometry.Coordinates[0].X;
-                    double y = feature.BasicGeometry.Coordinates[0].Y;
+                    double x = feature.Geometry.Coordinates[0].X;
+                    double y = feature.Geometry.Coordinates[0].Y;
 
                     double[] pts = { x, y };
                     Reproject.ReprojectPoints(pts, null, _map.Projection, KnownCoordinateSystems.Geographic.World.WGS1984, 0, 1);
@@ -243,7 +243,7 @@ namespace SDMProjectBuilder
 
                 double longitude = Convert.ToDouble(aTable.get_Value(aLonField));
                 double latitude = Convert.ToDouble(aTable.get_Value(aLatField));
-                Coordinate lPoint = new DotSpatial.Topology.Coordinate(longitude, latitude);
+                Coordinate lPoint = new NetTopologySuite.Geometries.Coordinate(longitude, latitude);
                 Shape lShape = new DotSpatial.Data.Shape(lPoint);
                 Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, KnownCoordinateSystems.Geographic.World.WGS1984, aDesiredProjection, 0, 1);
                 lLayer.AddShape(lShape);

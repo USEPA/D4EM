@@ -1,5 +1,8 @@
 ﻿Imports atcUtility
 Imports MapWinUtility
+Imports DotSpatial.Data
+Imports NTS = NetTopologySuite
+Imports NetTopologySuite.Geometries
 Imports System.Collections.Generic
 Imports System.Collections.ObjectModel
 
@@ -266,8 +269,9 @@ Public Class Layer
     End Function
 
     Public Function PointInShape(ByVal aFeatureIndex As Integer, ByVal aX As Double, ByVal aY As Double) As Boolean
-        Dim lGeometry As DotSpatial.Topology.Geometry = AsFeatureSet.Features(aFeatureIndex).BasicGeometry
-        Return lGeometry.Intersects(aX, aY)
+        Dim lGeometry As NetTopologySuite.Geometries.Geometry = AsFeatureSet.Features(aFeatureIndex).Geometry
+        Dim lPoint = New NetTopologySuite.Geometries.Point(aX, aY)
+        Return lGeometry.Intersects(lPoint)
     End Function
 
     Private pLastCoordinateIndex As Integer = -1
@@ -296,7 +300,7 @@ Public Class Layer
         'Next
         With AsFeatureSet()
             If .Extent.Intersects(aX, aY) Then
-                Dim lCoordinate As New DotSpatial.Topology.Coordinate(aX, aY)
+                Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(aX, aY)
                 Dim lShapeIndices = .ShapeIndices
 
                 If pLastCoordinateIndex > -1 AndAlso lShapeIndices(pLastCoordinateIndex).Intersects(lCoordinate) Then
@@ -759,7 +763,9 @@ Public Class Layer
         Dim lSmall As DotSpatial.Data.FeatureSet = aShapeFileSmallAreas.DataSet
         Dim lSmallKeyFieldIndex As Integer = aShapeFileSmallAreas.FieldIndex(aShapeFileSmallAreas.Specification.IdFieldName)
         For Each lSmallFeature As DotSpatial.Data.IFeature In lSmall.Features
-            Dim lCentroid As DotSpatial.Topology.IPoint = lSmallFeature.ToShape.ToGeometry.Centroid
+            '###
+            'Dim lCentroid As DotSpatial.Topology.IPoint = lSmallFeature.ToShape.ToGeometry.Centroid
+            Dim lCentroid As NetTopologySuite.Geometries.Point = lSmallFeature.ToShape.ToGeometry.Centroid
             Dim lBigShapeIndex As Integer = 0
             For Each lMyFeature As DotSpatial.Data.Shape In lBig.Features
                 If lMyFeature.ToGeometry.Contains(lCentroid) Then
@@ -865,12 +871,16 @@ Public Class Layer
     ''' <returns>List of values from IdFieldIndex of shapes overlapping aShape</returns>
     Public Overridable Function GetKeysOfOverlappingShapes(ByVal aShape As DotSpatial.Data.Shape, Optional ByVal aIgnoreBelowFraction As Double = 0.02) As Generic.List(Of String)
         Dim lKeys As New Generic.List(Of String)
-        Dim lRegionGeometry As DotSpatial.Topology.Geometry = aShape.ToGeometry
+        '###
+        'Dim lRegionGeometry As DotSpatial.Topology.Geometry = aShape.ToGeometry
+        Dim lRegionGeometry As NetTopologySuite.Geometries.Geometry = aShape.ToGeometry
         Dim lRegionArea As Double = lRegionGeometry.Area
 
         For Each lFeature As DotSpatial.Data.IFeature In AsFeatureSet.Features
             Dim lShape As DotSpatial.Data.Shape = lFeature.ToShape
-            Dim lGeometry As DotSpatial.Topology.IGeometry = lShape.ToGeometry
+            '###
+            'Dim lGeometry As DotSpatial.Topology.IGeometry = lShape.ToGeometry
+            Dim lGeometry As Geometry = lShape.ToGeometry
             'If lGeometry.Intersects(lRegionGeometry) Then
             ''TODO: different intersection, maybe: If lShape.Range.Intersects(lRegionShape) Then
             '    If lRegionArea > 0 Then
@@ -897,7 +907,8 @@ Public Class Layer
 
             If lRegionArea > 0 Then
                 Try
-                    Dim lIntersection As DotSpatial.Topology.Geometry = lGeometry.Intersection(lRegionGeometry)
+                    Dim lIntersection As NetTopologySuite.Geometries.Geometry = lGeometry.Intersection(lRegionGeometry)
+                    'Dim lIntersection As DotSpatial.Topology.Geometry = lGeometry.Intersection(lRegionGeometry)
                     If lIntersection IsNot Nothing AndAlso lIntersection.NumPoints > 0 Then
                         Dim lIntersectionArea As Double = lIntersection.Area
                         'If intersection area is at all significant to either the region or the feature, include it.

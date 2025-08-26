@@ -58,7 +58,7 @@ namespace SDMProjectBuilder
             selectedPanel = new StatusPanel { Width = 180 };
             appManager.ProgressHandler.Add(selectedPanel);
 
-            map.GeoMouseMove += Map_GeoMouseMove;
+            //map.GeoMouseMove += Map_GeoMouseMove;
             //appManager.Map.MapFrame.LayerSelected += MapFrame_LayerSelected;
         }
 
@@ -340,13 +340,13 @@ namespace SDMProjectBuilder
             
             if (Directory.Exists(srcNationalDataPath))
             {
-                appManager.ProgressHandler.Progress(string.Empty, (int)0, "Copying Local data template files.");
+                appManager.ProgressHandler.Progress((int)0, "Copying Local data template files.");
                 string destLocalDataPath = Path.Combine(destFilePath, "LocalData");
                 if (!Directory.Exists(destLocalDataPath))
                     Directory.CreateDirectory(destLocalDataPath);
 
                 DirectoryCopy(srcNationalDataPath, destLocalDataPath, true);
-                appManager.ProgressHandler.Progress(string.Empty, (int)0, "Ready");
+                appManager.ProgressHandler.Progress((int)0, "Ready");
             }
 
 
@@ -403,14 +403,14 @@ namespace SDMProjectBuilder
                     percent = aCurrentPosition / (aLastPosition / 100);
                 else
                     percent = aCurrentPosition * 100 / aLastPosition;
-            appManager.ProgressHandler.Progress(string.Empty, (int)0, percent + "%");
+            appManager.ProgressHandler.Progress((int)0, percent + "%");
             Application.DoEvents();
         }
 
         void MapWinUtility.IProgressStatus.Status(string aStatusMessage)
         {
             if (!aStatusMessage.StartsWith("PROGRESS"))
-                appManager.ProgressHandler.Progress(string.Empty, (int)0, aStatusMessage);
+                appManager.ProgressHandler.Progress((int)0, aStatusMessage);
             Application.DoEvents();
         }
 

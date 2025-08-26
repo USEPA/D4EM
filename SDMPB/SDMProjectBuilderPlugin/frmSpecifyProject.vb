@@ -128,7 +128,8 @@ NoMatch:
         g_AddLayers = chkAddLayers.Checked
         params.SetupHSPF = chkHSPF.Checked
         params.HspfSnowOption = Math.Max(0, comboHspfSnow.SelectedIndex)
-        [Enum].TryParse(comboHspfOutputInterval.Text, params.HspfOutputInterval)
+        'KW
+        '[Enum].TryParse(comboHspfOutputInterval.Text, params.HspfOutputInterval)
         params.HspfBacterialOption = chkMicrobes.Checked
         params.HspfChemicalOption = chkLandAppliedChemical.Checked
         params.HspfSegmentationOption = Math.Max(0, cboSegmentation.SelectedIndex)
@@ -257,7 +258,7 @@ NoMatch:
 
     Private Sub btnNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNext.Click
         SelectingCatchments = False
-        Dim lNewGroup As Windows.Forms.GroupBox = Nothing
+        Dim lNewGroup As System.Windows.Forms.GroupBox = Nothing
         If groupSelectAreaOfInterest.Visible Then
             If Not IsRegionSelected() Then
                 MapWinUtility.Logger.Msg("Area of interest must be selected before proceeding", Me.Text)
@@ -275,7 +276,7 @@ NoMatch:
 
     Private Sub btnPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrevious.Click
         SelectingCatchments = False
-        Dim lNewGroup As Windows.Forms.GroupBox = Nothing
+        Dim lNewGroup As System.Windows.Forms.GroupBox = Nothing
         If groupParameters.Visible Then
             lNewGroup = groupSelectAreaOfInterest
         ElseIf groupData.Visible Then
@@ -287,7 +288,7 @@ NoMatch:
         SetCurrentStep(lNewGroup)
     End Sub
 
-    Private Sub SetCurrentStep(ByVal aGroup As Windows.Forms.GroupBox)
+    Private Sub SetCurrentStep(ByVal aGroup As System.Windows.Forms.GroupBox)
         If Me.Height < 400 Then Me.Height = 400
         If Me.Width < 700 Then Me.Width = 700
 
@@ -304,8 +305,8 @@ NoMatch:
         aGroup.Top = pMargin
         aGroup.Width = Math.Max(Me.ClientSize.Width - pMargin * 2, 200)
         aGroup.Height = Math.Max(btnCancel.Top - pMargin * 2, 200)
-        aGroup.Anchor = Windows.Forms.AnchorStyles.Bottom + Windows.Forms.AnchorStyles.Top _
-                      + Windows.Forms.AnchorStyles.Left + Windows.Forms.AnchorStyles.Right
+        aGroup.Anchor = System.Windows.Forms.AnchorStyles.Bottom + System.Windows.Forms.AnchorStyles.Top _
+                      + System.Windows.Forms.AnchorStyles.Left + System.Windows.Forms.AnchorStyles.Right
         aGroup.Visible = True
 
         If aGroup Is groupSelectAreaOfInterest Then
@@ -399,12 +400,12 @@ NoMatch:
     End Sub
 
     Private Sub radioSelctionLayer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
-        radioSelectHUC12.CheckedChanged, _
-        radioSelectHUC8.CheckedChanged, _
-        radioSelectCatchment.CheckedChanged, _
-        radioSelectCounty.CheckedChanged, _
-        radioSelectCurrent.CheckedChanged, _
-        radioSelectPourPoint.CheckedChanged, _
+        radioSelectHUC12.CheckedChanged,
+        radioSelectHUC8.CheckedChanged,
+        radioSelectCatchment.CheckedChanged,
+        radioSelectCounty.CheckedChanged,
+        radioSelectCurrent.CheckedChanged,
+        radioSelectPourPoint.CheckedChanged,
         radioSelectBox.CheckedChanged
 
         If radioSelectBox.Checked Then
@@ -509,9 +510,9 @@ NoMatch:
 
                                 For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                     If lSelectionExtent Is Nothing Then
-                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                     Else
-                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                     End If
                                     If lSelectionSpec = D4EM.Data.Region.RegionTypes.polygon Then
                                         'Selection on arbitrary layer, implemented as bounding box of all selected features
@@ -679,9 +680,9 @@ LoadedOtherLayer:
                                     For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                         params.Catchments.Add(lFeature.DataRow(lCatchmentLayer.IdFieldIndex))
                                         If lSelectionExtent Is Nothing Then
-                                            lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                            lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                         Else
-                                            lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                            lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                         End If
                                     Next
                                 End If
@@ -690,9 +691,9 @@ LoadedOtherLayer:
                                 For Each lFeature In lFeatureLayer.Selection.ToFeatureList
                                     lAllSelectedFeatures.Add(lFeature)
                                     If lSelectionExtent Is Nothing Then
-                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Envelope)
+                                        lSelectionExtent = New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal)
                                     Else
-                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Envelope))
+                                        lSelectionExtent.ExpandToInclude(New DotSpatial.Data.Extent(lFeature.Geometry.EnvelopeInternal))
                                     End If
                                 Next
 
@@ -744,7 +745,7 @@ LoadedOtherLayer:
 
                             'Case D4EM.Data.Region.RegionTypes.polygon
                         Case Else
-                            Dim lCentroid As DotSpatial.Topology.IPoint = lSelectedFeature.ToShape.ToGeometry.Centroid
+                            Dim lCentroid As NetTopologySuite.Geometries.Point = lSelectedFeature.ToShape.ToGeometry.Centroid
                             Dim lHuc8Index As Integer = lNationalHuc8.CoordinatesInShapefile(lCentroid.X, lCentroid.Y)
                             If lHuc8Index >= 0 Then
                                 lHUC8string = lNationalHuc8.AsFeatureSet.Features(lHuc8Index).DataRow(lNationalHuc8.IdFieldIndex)
@@ -799,7 +800,8 @@ LoadedOtherLayer:
         chkMicrobes.Checked = params.HspfBacterialOption
         chkLandAppliedChemical.Checked = params.HspfChemicalOption
         cboSegmentation.SelectedIndex = params.HspfSegmentationOption
-        comboHspfOutputInterval.Text = [Enum].GetName(params.HspfOutputInterval.GetType, params.HspfOutputInterval)
+        'KW
+        'comboHspfOutputInterval.Text = [Enum].GetName(params.HspfOutputInterval.GetType, params.HspfOutputInterval)
         chkSWAT.Checked = params.SetupSWAT
         atxSize.ValueDouble = params.MinCatchmentKM2
         atxLength.ValueDouble = params.MinFlowlineKM
@@ -932,13 +934,13 @@ LoadedOtherLayer:
                     SelectingPourPoint = False
                     btnSelectPourPoint.Visible = True
                     g_Map.Cursor = System.Windows.Forms.Cursors.WaitCursor
-                    Dim lPourPointMaxKm = 0
+                    Dim lPourPointMaxKm As Double = 0.0
                     If Not Double.TryParse(txtPourPointKm.Text, lPourPointMaxKm) Then
                         MapWinUtility.Logger.Dbg("Non-numeric pour point maximum km, defaulting to 20.")
                         lPourPointMaxKm = 20
                     End If
 
-                    Dim lPointMapProjection As DotSpatial.Topology.Coordinate = g_Map.PixelToProj(New System.Drawing.Point(e.X, e.Y))
+                    Dim lPointMapProjection As NetTopologySuite.Geometries.Coordinate = g_Map.PixelToProj(New System.Drawing.Point(e.X, e.Y))
                     Dim lPourPointLatitude = lPointMapProjection.Y
                     Dim lPourPointLongitude = lPointMapProjection.X
                     D4EM.Geo.SpatialOperations.ProjectPoint(lPourPointLongitude, lPourPointLatitude, g_Map.Projection, DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984)
@@ -1021,7 +1023,7 @@ LoadedOtherLayer:
                 Catch ex As Exception
 
                 Finally
-                    g_Map.Cursor = Windows.Forms.Cursors.Default
+                    g_Map.Cursor = System.Windows.Forms.Cursors.Default
                     UpdateSelectedFeatures()
                 End Try
             ElseIf SelectingCatchments Then
@@ -1060,13 +1062,13 @@ LoadedOtherLayer:
     End Sub
 
     Private Sub btnSaveProjectAs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveProjectAs.Click
-        Dim lSaveAs As New Windows.Forms.SaveFileDialog()
+        Dim lSaveAs As New System.Windows.Forms.SaveFileDialog()
         With lSaveAs
             .Title = "Save new SDM Project As..."
             .FileName = txtSaveProjectAs.Text
             If String.IsNullOrEmpty(.FileName) Then .FileName = params.NewProjectFileName
             .Filter = "MapWindow Project (*.mwprj)|*.mwprj"
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            If .ShowDialog = System.Windows.Forms.DialogResult.OK Then
                 params.Project.ProjectFilename = .FileName
                 params.Project.ProjectFolder = IO.Path.GetDirectoryName(.FileName)
             End If

@@ -1,7 +1,10 @@
+Imports System.IO
 Imports atcUtility
 Imports MapWinUtility
 Imports D4EM.Data.LayerSpecification
 Imports DotSpatial.Data
+Imports NTS = NetTopologySuite
+Imports NetTopologySuite
 
 Public Class Region
     Implements IEquatable(Of Region)
@@ -51,10 +54,10 @@ Public Class Region
 
     Public Shared MatchAllKeys() As String = {"*"}
 
-    Public Sub New(ByVal aNorth As Double, _
-                   ByVal aSouth As Double, _
-                   ByVal aWest As Double, _
-                   ByVal aEast As Double, _
+    Public Sub New(ByVal aNorth As Double,
+                   ByVal aSouth As Double,
+                   ByVal aWest As Double,
+                   ByVal aEast As Double,
                    ByVal aProjection As DotSpatial.Projections.ProjectionInfo)
         pRegionSpecification = RegionTypes.box
         pNorth = aNorth
@@ -99,12 +102,12 @@ Public Class Region
         SetKeys(pRegionSpecification, aKeys)
     End Sub
 
-    Public Sub New(ByVal aPolygon As DotSpatial.Data.Shape, _
+    Public Sub New(ByVal aPolygon As DotSpatial.Data.Shape,
                    ByVal aProjection As DotSpatial.Projections.ProjectionInfo)
         pRegionSpecification = RegionTypes.polygon
         pPolygon = aPolygon
         pPolygonProjection = aProjection
-        SetBoundsFromEnvelope(aPolygon.ToGeometry.Envelope, aProjection)
+        SetBoundsFromEnvelope(aPolygon.ToGeometry.EnvelopeInternal, aProjection)
     End Sub
 
     Public Overloads Function Equals(ByVal aCompareTo As Region) As Boolean Implements IEquatable(Of D4EM.Data.Region).Equals
@@ -336,15 +339,15 @@ Public Class Region
                             lLayerFilenames.Add(National.ShapeFilename(aKeyType))
                         End If
                     Case RegionTypes.huc12
-                        Dim lHuc8Folder As String = IO.Path.GetDirectoryName(National.ShapeFilename(RegionTypes.huc8))
+                        Dim lHuc8Folder As String = System.IO.Path.GetDirectoryName(National.ShapeFilename(RegionTypes.huc8))
                         For Each lHuc8 In GetKeys(RegionTypes.huc8)
-                            lLayerFilenames.Add(IO.Path.Combine(lHuc8Folder, "huc12", lHuc8, "huc12.shp"))
+                            lLayerFilenames.Add(Path.Combine(lHuc8Folder, "huc12", lHuc8, "huc12.shp"))
                         Next
                     Case Else
                         lLayerFilenames.Add(National.ShapeFilename(aKeyType))
                 End Select
                 For Each lLayerFilename In lLayerFilenames
-                    If IO.File.Exists(lLayerFilename) Then
+                    If File.Exists(lLayerFilename) Then
                         lKeys.AddRange(GetKeysOfOverlappingShapes(New D4EM.Data.Layer(lLayerFilename, aKeyType)))
                         Logger.Dbg("Found " & lKeys.Count & " " & aKeyType.Name, True)
                     Else
@@ -367,7 +370,7 @@ Public Class Region
     ''' <remarks>aGridProjection is available for cases where grid projection is not available with the file
     ''' TODO: change to using Layer object for incoming grid and returning Layer as function
     ''' </remarks>
-    Public Overridable Sub ClipGrid(ByVal aGridFilename As String, ByVal aClippedFilename As String, _
+    Public Overridable Sub ClipGrid(ByVal aGridFilename As String, ByVal aClippedFilename As String,
                            Optional ByVal aGridProjection As DotSpatial.Projections.ProjectionInfo = Nothing)
         Dim lGridToClip As DotSpatial.Data.IRaster = DotSpatial.Data.Raster.OpenFile(aGridFilename, False)
         If lGridToClip.Projection Is Nothing Then lGridToClip.Projection = aGridProjection
@@ -403,12 +406,17 @@ Public Class Region
         'Dim output As DotSpatial.Data.IRaster = DotSpatial.Analysis.ClipRaster.ClipRasterWithPolygon(Me.ToShape(aRaster.Projection), aRaster, aClippedFilename)
 
         Dim lClipPolygon As New DotSpatial.Data.Feature
-        Dim lClipGeometry As DotSpatial.Topology.IBasicGeometry = Me.ToShape(aRaster.Projection).ToGeometry
-        lClipPolygon.BasicGeometry = lClipGeometry
+        '###
+        'Dim lClipGeometry As DotSpatial.Topology.IBasicGeometry = Me.ToShape(aRaster.Projection).ToGeometry
+        'lClipPolygon.BasicGeometry = lClipGeometry
+        Dim lClipGeometry As NetTopologySuite.Geometries.Geometry = Me.ToShape(aRaster.Projection).ToGeometry
+        'lClipPolygon.Geometry = lClipGeometry
 
         Dim cellWidth As Double = aRaster.CellWidth
         Dim cellHeight As Double = aRaster.CellHeight
-        Dim lPolyExtent = lClipPolygon.Envelope.ToExtent
+        '###
+        'Dim lPolyExtent = lClipPolygon.Envelope.ToExtent
+        Dim lPolyExtent = lClipPolygon.Geometry.EnvelopeInternal.ToExtent
         Dim SharedExtent As DotSpatial.Data.Extent = aRaster.Bounds.Extent.Intersection(lPolyExtent)
 
         Dim lNewMinRow As Integer, lNewMinColumn As Integer
@@ -416,8 +424,8 @@ Public Class Region
         D4EM.Data.Layer.CellBoundsRaster(aRaster, SharedExtent.MinX, SharedExtent.MaxY, SharedExtent.MaxX, SharedExtent.MinY,
                                          lNewMinRow, lNewMinColumn, lNewMaxRow, lNewMaxColumn)
 
-        Dim lNewMinCoord = DotSpatial.Data.RasterBoundsExt.CellBottomLeft_ToProj(aRaster.Bounds, lNewMaxRow, lNewMinColumn)
-        Dim lNewMaxCoord = DotSpatial.Data.RasterBoundsExt.CellTopRight_ToProj(aRaster.Bounds, lNewMinRow, lNewMaxColumn)
+        Dim lNewMinCoord = DotSpatial.Data.RasterBoundsExt.CellBottomLeftToProj(aRaster.Bounds, lNewMaxRow, lNewMinColumn)
+        Dim lNewMaxCoord = DotSpatial.Data.RasterBoundsExt.CellTopRightToProj(aRaster.Bounds, lNewMinRow, lNewMaxColumn)
 
         Dim lNewNumCols As Integer = lNewMaxColumn - lNewMinColumn + 1
         Dim lNewNumRows As Integer = lNewMaxRow - lNewMinRow + 1
@@ -470,11 +478,11 @@ Public Class Region
             Logger.Dbg("Empty FeatureSet, not selecting to " & aClipFilename)
             Return Nothing
         Else
-            Dim lRegionGeometry As DotSpatial.Topology.Geometry = Me.ToShape(lDestinationFeatureSet.Projection).ToGeometry
+            Dim lRegionGeometry As NTS.Geometries.Geometry = Me.ToShape(lDestinationFeatureSet.Projection).ToGeometry
             Dim lFeature As DotSpatial.Data.IFeature
             For lIndex As Integer = lDestinationFeatureSet.Features.Count - 1 To 0 Step -1
                 lFeature = lDestinationFeatureSet.Features(lIndex)
-                Dim lGeometry As DotSpatial.Topology.IGeometry = lFeature.BasicGeometry
+                Dim lGeometry As NTS.Geometries.Geometry = lFeature.Geometry
                 If Not lGeometry.Intersects(lRegionGeometry) Then
                     lDestinationFeatureSet.Features.RemoveAt(lIndex)
                 End If
@@ -518,10 +526,10 @@ Public Class Region
                                 ExpandPolygon(lSelectFromLayer, lKeys)
                             End If
                         ElseIf pRegionSpecification = National.LayerSpecifications.huc12 Then
-                            Dim lNationalFolder As String = IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
+                            Dim lNationalFolder As String = System.IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
                             Dim lDictHUC8s As System.Collections.Generic.Dictionary(Of String, Generic.List(Of String)) = DictHuc8_12(lKeys)
                             For Each lHuc8 In lDictHUC8s
-                                lShapeFilename = IO.Path.Combine(lNationalFolder, "huc12", lHuc8.Key, "huc12.shp")
+                                lShapeFilename = System.IO.Path.Combine(lNationalFolder, "huc12", lHuc8.Key, "huc12.shp")
                                 lSelectFromLayer = DotSpatial.Data.FeatureSet.OpenFile(lShapeFilename)
                                 If lSelectFromLayer IsNot Nothing Then
                                     ExpandPolygon(lSelectFromLayer, lHuc8.Value)
@@ -535,7 +543,7 @@ Public Class Region
                             Next
                         Else
                             lShapeFilename = National.ShapeFilename(RegionSpecification)
-                            If IO.File.Exists(lShapeFilename) Then
+                            If System.IO.File.Exists(lShapeFilename) Then
                                 lSelectFromLayer = DotSpatial.Data.FeatureSet.OpenFile(lShapeFilename)
                                 If lSelectFromLayer IsNot Nothing Then
                                     pRegionLayer = New D4EM.Data.Layer(lSelectFromLayer, pRegionSpecification)
@@ -567,7 +575,7 @@ Public Class Region
     Private Sub ExpandPolygon(ByVal lSelectFromLayer As DotSpatial.Data.FeatureSet, ByVal lKeys As Generic.List(Of String))
         If lSelectFromLayer IsNot Nothing Then
             Dim lSearchDBF As New atcTableDBF
-            If lSearchDBF.OpenFile(IO.Path.ChangeExtension(lSelectFromLayer.Filename, "dbf")) Then
+            If lSearchDBF.OpenFile(System.IO.Path.ChangeExtension(lSelectFromLayer.Filename, "dbf")) Then
                 Dim lKeyField As Integer = lSearchDBF.FieldNumber(RegionSpecification.IdFieldName)
                 If lKeyField > 0 Then
                     For Each lKey As String In lKeys
@@ -575,12 +583,12 @@ Public Class Region
                             If pPolygon Is Nothing Then
                                 pPolygon = lSelectFromLayer.Features(lSearchDBF.CurrentRecord - 1).ToShape
                             Else
-                                pPolygon.AddPart(lSelectFromLayer.Features(lSearchDBF.CurrentRecord - 1).Coordinates, lSelectFromLayer.CoordinateType)
+                                pPolygon.AddPart(lSelectFromLayer.Features(lSearchDBF.CurrentRecord - 1).Geometry.Coordinates, lSelectFromLayer.CoordinateType)
                             End If
                             pPolygonProjection = lSelectFromLayer.Projection
                             If pPolygonProjection Is Nothing Then Throw New ApplicationException("Projection not found for '" & lSelectFromLayer.Filename & "'")
                             While lSearchDBF.FindNext(lKeyField, lKey)
-                                pPolygon.AddPart(lSelectFromLayer.Features(lSearchDBF.CurrentRecord - 1).Coordinates, lSelectFromLayer.CoordinateType)
+                                pPolygon.AddPart(lSelectFromLayer.Features(lSearchDBF.CurrentRecord - 1).Geometry.Coordinates, lSelectFromLayer.CoordinateType)
                             End While
                         End If
                     Next
@@ -642,20 +650,20 @@ Public Class Region
     Private Sub SetBoundsIfMissing()
         If Double.IsNaN(pNorth) Then
             If pRegionSpecification = RegionTypes.polygon AndAlso pPolygon IsNot Nothing AndAlso pPolygonProjection IsNot Nothing Then
-                SetBoundsFromEnvelope(pPolygon.ToGeometry.Envelope, pPolygonProjection)
+                SetBoundsFromEnvelope(pPolygon.ToGeometry.EnvelopeInternal, pPolygonProjection)
             ElseIf pKeys.Count > 0 Then
                 SetBoundsFromKeys(pRegionSpecification)
             End If
         End If
     End Sub
 
-    Private Sub SetBoundsFromEnvelope(ByVal aEnvelope As DotSpatial.Topology.Envelope, _
+    Private Sub SetBoundsFromEnvelope(ByVal aEnvelope As NetTopologySuite.Geometries.Envelope,
                                       ByVal aProjection As DotSpatial.Projections.ProjectionInfo)
         With aEnvelope
-            pNorth = .Maximum.Y
-            pSouth = .Minimum.Y
-            pWest = .Minimum.X
-            pEast = .Maximum.X
+            pNorth = .MaxY
+            pSouth = .MinY
+            pWest = .MinX
+            pEast = .MaxX
         End With
         pProjection = aProjection
     End Sub
@@ -674,13 +682,13 @@ Public Class Region
                 Dim lShapeFilename As String
                 Dim lSelectFromLayer As DotSpatial.Data.FeatureSet
                 If aKeyType = National.LayerSpecifications.huc12 Then
-                    Dim lNationalFolder As String = IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
-                    If IO.Directory.Exists(lNationalFolder) Then
+                    Dim lNationalFolder As String = System.IO.Path.GetDirectoryName(National.ShapeFilename(National.LayerSpecifications.huc8))
+                    If System.IO.Directory.Exists(lNationalFolder) Then
                         'Group HUC-12s by HUC8, then for each HUC8 expand the bounds to accomodate all the HUC-12 in that HUC-8
                         Dim lDictHUC8s As System.Collections.Generic.Dictionary(Of String, Generic.List(Of String)) = DictHuc8_12(lKeys)
 
                         For Each lkvPair In lDictHUC8s
-                            lShapeFilename = IO.Path.Combine(lNationalFolder, "huc12", lkvPair.Key, "huc12.shp")
+                            lShapeFilename = System.IO.Path.Combine(lNationalFolder, "huc12", lkvPair.Key, "huc12.shp")
                             lSelectFromLayer = DotSpatial.Data.FeatureSet.OpenFile(lShapeFilename)
                             SetBoundsFromKeys(lSelectFromLayer, aKeyType.IdFieldName, lkvPair.Value)
                             If aKeyType = pRegionSpecification AndAlso lDictHUC8s.Count = 1 Then
@@ -692,7 +700,7 @@ Public Class Region
                     End If
                 Else
                     lShapeFilename = National.ShapeFilename(aKeyType)
-                    If IO.File.Exists(lShapeFilename) Then
+                    If System.IO.File.Exists(lShapeFilename) Then
                         lSelectFromLayer = DotSpatial.Data.FeatureSet.OpenFile(lShapeFilename)
                         SetBoundsFromKeys(lSelectFromLayer, aKeyType.IdFieldName, lKeys)
                         lSelectFromLayer.Close()
@@ -713,7 +721,7 @@ Public Class Region
             Next
         Else
             Dim lSearchDBF As New atcTableDBF
-            If lSearchDBF.OpenFile(IO.Path.ChangeExtension(aSelectFromLayer.Filename, "dbf")) Then
+            If lSearchDBF.OpenFile(System.IO.Path.ChangeExtension(aSelectFromLayer.Filename, "dbf")) Then
                 Dim lKeyField As Integer = lSearchDBF.FieldNumber(aKeyFieldName)
                 If lKeyField > 0 Then
                     ClearBounds()
@@ -738,11 +746,11 @@ Public Class Region
     End Sub
 
     Private Sub ExpandBounds(ByVal aFeature As DotSpatial.Data.Feature, ByVal aSetPolygon As Boolean)
-        With aFeature.Envelope
+        With aFeature.Geometry.Coordinate
             If Double.IsNaN(pNorth) OrElse .Y > pNorth Then pNorth = .Y
-            If Double.IsNaN(pSouth) OrElse .Y - .Height < pSouth Then pSouth = .Y - .Height
+            'If Double.IsNaN(pSouth) OrElse .Y - .Height < pSouth Then pSouth = .Y - .Height
             If Double.IsNaN(pWest) OrElse .X > pWest Then pWest = .X
-            If Double.IsNaN(pEast) OrElse .X + .Width > pEast Then pEast = .X + .Width
+            'If Double.IsNaN(pEast) OrElse .X + .Width > pEast Then pEast = .X + .Width
             If aSetPolygon Then
                 pPolygon = aFeature.ToShape
                 pPolygonProjection = pProjection

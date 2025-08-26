@@ -1,252 +1,98 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>
-    </SchemaVersion>
-    <ProjectGuid>{D84BAE9D-AE01-490A-856E-56DB6E846629}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>D4EM.Model.HSPF</RootNamespace>
-    <AssemblyName>D4EM.Model.HSPF</AssemblyName>
-    <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\bin\Debug\</OutputPath>
     <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <Optimize>true</Optimize>
     <OutputPath>bin\AnyRelease\</OutputPath>
     <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionExplicit>On</OptionExplicit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionCompare>Binary</OptionCompare>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionStrict>Off</OptionStrict>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionInfer>On</OptionInfer>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\x86Debug\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\x86Release\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\x64Debug\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\D4EM.Model.HSPF.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\x64Release\</OutputPath>
-    <DocumentationFile>D4EM.Model.HSPF.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\D4EM.Model.HSPF.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="atcControls">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcControls.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcControls.dll</HintPath>
     </Reference>
     <Reference Include="atcData">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcData.dll</HintPath>
+      <HintPath>..\..\BASINS\atcData.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcSegmentation">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcSegmentation.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcSegmentation.dll</HintPath>
     </Reference>
     <Reference Include="atcTimeseriesBinary">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesBinary.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcTimeseriesBinary.dll</HintPath>
     </Reference>
     <Reference Include="atcTimeseriesD4EM">
       <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesD4EM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="atcTimeseriesMath">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcTimeseriesMath.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcTimeseriesMath.dll</HintPath>
     </Reference>
     <Reference Include="atcUCI">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUCI.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcUCI.dll</HintPath>
     </Reference>
     <Reference Include="atcUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcUtility.dll</HintPath>
     </Reference>
     <Reference Include="atcWDM">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\atcWDM.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Analysis">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Analysis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Data">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Projections">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Projections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DotSpatial.Topology">
-      <HintPath>..\..\Externals\AnyCPU\DotSpatial\DotSpatial.Topology.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\BASINS\atcWDM.dll</HintPath>
     </Reference>
     <Reference Include="MapWinUtility">
-      <HintPath>..\..\Externals\AnyCPU\AquaTerraConsultants\MapWinUtility.dll</HintPath>
+      <HintPath>..\..\BASINS\MapWinUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MSM">
       <HintPath>..\..\Externals\x86Debug\MSM\MSM.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System" />
-    <Import Include="System.Collections" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="clsManDelinPlugin.vb" />
-    <Compile Include="GisUtil.vb" />
-    <Compile Include="HSPFmodel.vb" />
-    <Compile Include="modChemical.vb" />
-    <Compile Include="modIntermediatePoints.vb" />
-    <Compile Include="modMicrobial.vb" />
-    <Compile Include="modModelSetup.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Application.Designer.vb">
+    <Compile Update="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
+    <Compile Update="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Settings.Designer.vb">
+    <Compile Update="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="My Project\Application.myapp">
+    <None Update="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
-    <None Include="My Project\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>My</CustomToolNamespace>
-      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj">
-      <Project>{06768E3A-87AE-4D46-A45A-C43C6109D43F}</Project>
-      <Name>D4EM.Data</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj">
-      <Project>{573A99FB-08DE-4B28-8628-AC7089348D96}</Project>
-      <Name>D4EM.Geo</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\..\D4EM.Data\D4EM.Data.vbproj" />
+    <ProjectReference Include="..\..\D4EM.Geo\D4EM.Geo.vbproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="DotSpatial.Analysis" Version="4.0.656" />
+    <PackageReference Include="DotSpatial.Data" Version="4.0.656" />
+    <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.346202">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
+  </ItemGroup>
 </Project>

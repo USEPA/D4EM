@@ -91,7 +91,7 @@ Public Class HSPFmodel
             Logger.Status("Overlay Land Use and Soil")
             Dim lHRUGridFileName As String = IO.Path.Combine(aProject.ProjectFolder, "LUSoil.tif")
             Dim lHruTableFilename As String = IO.Path.ChangeExtension(lHRUGridFileName, ".table.txt")
-            Dim lHruTable As D4EM.Geo.HRUTable = D4EM.Geo.OverlayReclassify.OverlayLandUseSoils( _
+            Dim lHruTable As D4EM.Geo.HRUTable = D4EM.Geo.OverlayReclassify.OverlayLandUseSoils(
                 lHRUGridFileName, aLandUseLayer, aSoilsLayer, "HSG")
             pLandUseLayerName = lHRUGridFileName
             aProject.Layers.Add(New D4EM.Data.Layer(lHRUGridFileName, aLandUseLayer.Specification))
@@ -115,17 +115,17 @@ Public Class HSPFmodel
         If Not GisUtil.IsField(GisUtil.LayerIndex(pStreamLayerName), pStreamFields(1)) Then
             'assign subbasin numbers to each reach segment
             Dim lMinField As Integer = 9999
-            ManDelinPlugIn.CalculateReachSubbasinIds(pStreamLayerName, _
-                                                     pSubbasinLayerName, _
+            ManDelinPlugIn.CalculateReachSubbasinIds(pStreamLayerName,
+                                                     pSubbasinLayerName,
                                                      lMinField)
             'add downstream subbasin ids
-            ManDelinPlugIn.CalculateReachDownstreamSubbasinIds(pStreamLayerName, _
+            ManDelinPlugIn.CalculateReachDownstreamSubbasinIds(pStreamLayerName,
                                                                lMinField)
             'calculate required reach parameters
-            ManDelinPlugIn.CalculateReachParameters(pStreamLayerName, _
-                                                    pSubbasinLayerName, _
-                                                    aDemGridLayer.FileName, _
-                                                    lElevationUnitsName, _
+            ManDelinPlugIn.CalculateReachParameters(pStreamLayerName,
+                                                    pSubbasinLayerName,
+                                                    aDemGridLayer.FileName,
+                                                    lElevationUnitsName,
                                                     lMinField)
         End If
 
@@ -144,7 +144,7 @@ Public Class HSPFmodel
         Dim lUniqueModelSegmentNames As New atcCollection
         Dim lSubbasinsLayerIndex As Integer = GisUtil.LayerIndex(pSubbasinLayerName)
         If GisUtil.IsField(lSubbasinsLayerIndex, pSubbasinSegmentName) Then
-            FindUniqueMetSegments(lUniqueModelSegmentNames, lUniqueModelSegmentIds, _
+            FindUniqueMetSegments(lUniqueModelSegmentNames, lUniqueModelSegmentIds,
                                   pSubbasinLayerName, pSubbasinFieldName, pSubbasinSegmentName, aSegmentationOption)
         Else
             'if the ModelSeg field doesn't exist (using NCDC), set it to blank
@@ -250,17 +250,17 @@ Public Class HSPFmodel
         'If PreProcessChecking(lOutputPath, pBaseOutputName, "HSPF", pLUType, pMetStations.Count, _
         '                      pSubbasinLayerName, pLandUseLayerName) Then 'early checks OK
         Logger.Status("Preparing HSPF Setup")
-        If SetupHSPF(lPerviousGridSource, _
-                     lMetBaseDsns, lMetWdmIds, _
-                     lUniqueModelSegmentNames, lUniqueModelSegmentIds, _
-                     lOutputPath, pBaseOutputName, _
-                     pSubbasinLayerName, pSubbasinFieldName, pSubbasinSlopeName, _
-                     pStreamLayerName, pStreamFields, _
-                     pLUType, pLandUseLayerName, pLUInclude, _
-                     pOutletsLayerName, pPointFieldName, pPointYear, _
-                     pLandUseFieldName, pLandUseClassFile, _
-                     pSubbasinSegmentName, _
-                     pPSRCustom, pPSRCustomFile, pPSRCalculate, aSnowOption, aDemGridLayer, lElevationUnitsName, _
+        If SetupHSPF(lPerviousGridSource,
+                     lMetBaseDsns, lMetWdmIds,
+                     lUniqueModelSegmentNames, lUniqueModelSegmentIds,
+                     lOutputPath, pBaseOutputName,
+                     pSubbasinLayerName, pSubbasinFieldName, pSubbasinSlopeName,
+                     pStreamLayerName, pStreamFields,
+                     pLUType, pLandUseLayerName, pLUInclude,
+                     pOutletsLayerName, pPointFieldName, pPointYear,
+                     pLandUseFieldName, pLandUseClassFile,
+                     pSubbasinSegmentName,
+                     pPSRCustom, pPSRCustomFile, pPSRCalculate, aSnowOption, aDemGridLayer, lElevationUnitsName,
                      aSegmentationOption) Then
             lMetWdmNames.Clear()
             lMetWdmNames.Add(pMetWDM)
@@ -315,7 +315,7 @@ Public Class HSPFmodel
                 lDBF.Value(lFieldIndex) = aTable.Value(lFieldIndex)
             Next
 
-            Dim lPoint As New DotSpatial.Topology.Coordinate(aTable.Value(aLonField), aTable.Value(aLatField))
+            Dim lPoint As New NetTopologySuite.Geometries.Coordinate(aTable.Value(aLonField), aTable.Value(aLatField))
             Dim lShape As New DotSpatial.Data.Shape(lPoint)
             DotSpatial.Projections.Reproject.ReprojectPoints(lShape.Vertices, lShape.Z, D4EM.Data.Globals.GeographicProjection, aDesiredProjection, 0, 1)
             lLayer.AddShape(lShape)
@@ -330,9 +330,9 @@ Public Class HSPFmodel
         Return lShpFileName
     End Function
 
-    Public Sub UpstreamInstreamLocations(ByVal aSubbasinLayerName As String, _
-                                         ByVal aSubbasinFieldName As String, _
-                                         ByVal aLocationFieldName As String, _
+    Public Sub UpstreamInstreamLocations(ByVal aSubbasinLayerName As String,
+                                         ByVal aSubbasinFieldName As String,
+                                         ByVal aLocationFieldName As String,
                                          ByRef aLocationIds As atcCollection)
 
         If Not String.IsNullOrEmpty(aLocationFieldName) Then

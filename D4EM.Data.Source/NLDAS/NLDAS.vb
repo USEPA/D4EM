@@ -1,4 +1,5 @@
-﻿Imports atcData
+﻿Imports NetTopologySuite.Geometries
+Imports atcData
 Imports atcUtility
 Imports MapWinUtility
 Imports MapWinUtility.Strings
@@ -197,7 +198,7 @@ Public Class NLDAS
             lMaxX = Math.Min(lMaxX, pMaxGridX)
             lMaxY = Math.Min(lMaxY, pMaxGridY)
 
-            Dim lRegionGeometries As New Generic.List(Of DotSpatial.Topology.Geometry)
+            Dim lRegionGeometries As New Generic.List(Of NetTopologySuite.Geometries.Geometry)
 
             lRegionGeometries.Add(aRegion.ToShape(Globals.GeographicProjection).ToGeometry)
 
@@ -207,8 +208,8 @@ Public Class NLDAS
                 For lY As Integer = lMinY To lMaxY
                     If lMustSearchShapes Then
                         lOverlaps = False
-                        Dim lGridGeometry As DotSpatial.Topology.Geometry = CreateGridSquare(New NLDASGridCoords(lX, lY)).ToGeometry
-                        For Each lHucGeometry As DotSpatial.Topology.Geometry In lRegionGeometries
+                        Dim lGridGeometry As NetTopologySuite.Geometries.Geometry = CreateGridSquare(New NLDASGridCoords(lX, lY)).ToGeometry
+                        For Each lHucGeometry As NetTopologySuite.Geometries.Geometry In lRegionGeometries
                             If lHucGeometry.Intersects(lGridGeometry) Then
                                 lOverlaps = True
                                 Exit For
@@ -228,29 +229,30 @@ Public Class NLDAS
     Private Shared Function CreateGridSquare(ByVal aGrid As NLDASGridCoords,
                                     Optional ByVal aTargetProjection As DotSpatial.Projections.ProjectionInfo = Nothing) As DotSpatial.Data.Shape
 
-        Dim lCoordinates As New Generic.List(Of DotSpatial.Topology.Coordinate)
-        Dim lSouthwestLatLon As New DotSpatial.Topology.Coordinate(pWestmostGridEdge + ((aGrid.X) * pDegreesPerGridCell),
-                                                                   pSouthmostGridEdge + ((aGrid.Y) * pDegreesPerGridCell))
 
-        Dim lNextPoint As New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X,
+        Dim lCoordinates As New Generic.List(Of Coordinate)
+        Dim lSouthwestLatLon As New Coordinate(pWestmostGridEdge + ((aGrid.X - 1) * pDegreesPerGridCell),
+                                                                   pSouthmostGridEdge + ((aGrid.Y - 1) * pDegreesPerGridCell))
+        Dim lNextPoint As New Coordinate(lSouthwestLatLon.X,
                                                              lSouthwestLatLon.Y)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X,
                                                         lSouthwestLatLon.Y + pDegreesPerGridCell)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
                                                         lSouthwestLatLon.Y + pDegreesPerGridCell)
         lCoordinates.Add(lNextPoint)
 
-        lNextPoint = New DotSpatial.Topology.Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
+        lNextPoint = New Coordinate(lSouthwestLatLon.X + pDegreesPerGridCell,
                                                         lSouthwestLatLon.Y)
         lCoordinates.Add(lNextPoint)
 
         lCoordinates.Add(lSouthwestLatLon) 'Close the polygon
 
-        Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Topology.FeatureType.Polygon)
+        'Dim lShape As New DotSpatial.Data.Shape(DotSpatial.Topology.FeatureType.Polygon)        
+        Dim lShape As New DotSpatial.Data.Shape(New NetTopologySuite.Geometries.Polygon(Nothing), DotSpatial.Data.FeatureType.Polygon)
         lShape.AddPart(lCoordinates, DotSpatial.Data.CoordinateType.Regular)
 
         If aTargetProjection IsNot Nothing AndAlso Not (aTargetProjection.Equals(Globals.GeographicProjection)) Then
@@ -286,9 +288,10 @@ Public Class NLDAS
 
         Dim lFeatureSet As DotSpatial.Data.FeatureSet
         If aLayerType = LayerSpecifications.GridPoints Then
-            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Point)
+            'lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Point)
+            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Point)
         Else
-            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Topology.FeatureType.Polygon)
+            lFeatureSet = New DotSpatial.Data.FeatureSet(DotSpatial.Data.FeatureType.Polygon)
         End If
         lFeatureSet.Projection = Globals.GeographicProjection
 
@@ -301,10 +304,11 @@ Public Class NLDAS
         For Each lGrid As NLDASGridCoords In aAllCells
             Dim lFeature As DotSpatial.Data.IFeature
             If aLayerType = LayerSpecifications.GridPoints Then
-                Dim lX As Double = pWestmostGridCenter + ((lGrid.X) * pDegreesPerGridCell)
-                Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y) * pDegreesPerGridCell)
-                Dim lCoordinate As New DotSpatial.Topology.Coordinate(lX, lY)
-                Dim lPoint As New DotSpatial.Topology.Point(lCoordinate)
+
+                Dim lX As Double = pWestmostGridCenter + ((lGrid.X - 1) * pDegreesPerGridCell)
+                Dim lY As Double = pSouthmostGridCenter + ((lGrid.Y - 1) * pDegreesPerGridCell)
+                Dim lCoordinate As New NetTopologySuite.Geometries.Coordinate(lX, lY)
+                Dim lPoint As New NetTopologySuite.Geometries.Point(lCoordinate)
                 lFeature = lFeatureSet.AddFeature(lPoint)
             Else
                 lFeature = lFeatureSet.AddFeature(CreateGridSquare(lGrid).ToGeometry)
