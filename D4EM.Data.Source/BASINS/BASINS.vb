@@ -93,10 +93,10 @@ Public Class BASINS
     'Private Shared pBaseURL As String = "http://www.epa.gov/waterscience/ftp/basins/gis_data/huc/"
     'Private Shared pBaseMetURL As String = "http://www.epa.gov/waterscience/ftp/basins/met_data/"
     'Private Shared pBaseURL As String = "http://www3.epa.gov/ceampubl/basins/gis_data/huc/"
-    'Private Shared pBaseURLnew As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
+    Private Shared pBaseURLnew As String = "ftp://newftp.epa.gov/exposure/BasinsData/BasinsCoreData/"
     'Private Shared pBaseMetURL As String = "http://www3.epa.gov/ceampubl/basins/met_data/"
     Private Shared pBaseURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/BasinsCoreData/"
-    Private Shared pBaseURL As String = "https://usgs.osn.mghpcc.org/mdmf/epa_basins/BasinsCoreData/"
+    'Private Shared pBaseURL As String = "https://usgs.osn.mghpcc.org/mdmf/epa_basins/BasinsCoreData/"
     Private Shared pBaseMetURLnew As String = "ftp://newftp.epa.gov/Exposure/BasinsData/met_data/"
     Private Shared pBaseMetURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/met_data/"
 
@@ -893,7 +893,7 @@ MissingRequirement:
         End If
 Retry:
         If Not FileExists(lCacheFilename) Then
-            Dim lURL As String = pBaseURL & lFileNameOnly
+            Dim lURL As String = pBaseURLnew & aHUC8 & "/" & lFileNameOnly
             If lBaseDataType = LayerSpecifications.huc12 Then
                 'hspf.com is down for good, huc12 boundaries now found on epa ftp server
                 'lURL = "http://hspf.com/cgi-bin/finddata.pl?url=" & lURL

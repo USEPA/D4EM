@@ -51,11 +51,11 @@ Public Class NHDPlus
     'KW 10/2/2014 - above link no longing working.  Data has been moved to an Amazon EC2 site
     'Private Shared pBaseURL As String = "ftp://ec2-54-227-241-43.compute-1.amazonaws.com/NHDplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'PBD 9/16/2016 - above link no longing working.
-    'Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
+    Private Shared pBaseURL As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV1/NHDPlusExtensions/SubBasins/NHDPlus"
     'Private Shared pBaseURL2 As String = "https://s3.amazonaws.com/nhdplus/NHDPlusV2/NHDPlusExtensions/SubBasins/NHDPlus"
-    'Private Shared pBaseURLnew As String = "ftp://newftp.epa.gov/exposure/BasinsData/NHDPlus21/"
-    'Private Shared pBaseURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/NHDPlus21/"
-    Private Shared pBaseURL As String = "https://usgs.osn.mghpcc.org/mdmf/epa_basins/NHDPlus21/"
+    Private Shared pBaseURLnew As String = "ftp://newftp.epa.gov/exposure/BasinsData/NHDPlus21/"
+    Private Shared pBaseURLga As String = "https://gaftp.epa.gov/Exposure/BasinsData/NHDPlus21/"
+    'Private Shared pBaseURL As String = "https://usgs.osn.mghpcc.org/mdmf/epa_basins/NHDPlus21/"
 
     ''' <summary>
     ''' Download and unpack NHDPlus data (for v2.1)
@@ -155,7 +155,7 @@ Retry:
             Logger.Status("Downloading NHD Plus")
             Dim lBaseURL As String = pBaseURL & lHUC2
             If aVersion = 2 Then
-                lBaseURL = pBaseURL '& lHUC2
+                lBaseURL = pBaseURLnew '& lHUC2
             End If
             If lHUC2 = "10" And aVersion <> 2 Then
                 lURL = lBaseURL & "L/" & lBaseFilename
@@ -166,10 +166,10 @@ Retry:
                     End If
                 End If
             Else
-                lURL = lBaseURL & lBaseFilename
+                lURL = lBaseURL & "/" & lBaseFilename
                 If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                     If aVersion = 2 Then
-                        lURL = pBaseURL & lBaseFilename
+                        lURL = pBaseURLga & "/" & lBaseFilename
                         If Not D4EM.Data.Download.DownloadURL(lURL, lZipFilename) Then
                             Throw New ApplicationException("Unable to locate NHDPlus v2.1 for " & aHUC8)
                         End If
